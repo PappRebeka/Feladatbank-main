@@ -1,0 +1,80 @@
+reszek
+
+tanari
+    -kesz (nincsenek meg kepek)
+    feladatkezeles
+        feladat letrehozasa
+            A honlap navigációs tálcáján nyomjon rá a "+" gombra.
+            Adja meg a feladatnak a szükséges adatait és nyomjon a mentés gombra.
+        feladat szerkesztese
+            Nyomjon rá a szerkeszteni való feladatra.
+            A felugró ablak jobb felső sarkán található szerkesztés gombra nyomjon rá.
+            Töltse ki az ablak bevíteli mezőit a helyes adatokkal és nyomjon a mentés gombra.
+        feladat archivalasa és torlese
+            Nyomjon rá az archiválni vagy törölni való feladatra.
+            A felugró ablak alsó részén nyomjon rá az "Archiválás" gombra.
+            Ha törölni is akarja, akkor a honlap navigációs tálcáján nyomjon a menü gombra.
+            Válassza ki az "Archivált" fület és kattintson arra a feladatra amelyet törölni szeretne.
+            Nyomjon rá a "Töröl" gombra, így törölve a feladatot.
+        szuro hasznalata
+            A honlap jobb felső sarkán nyomjon rá a szűrő ikonra.
+            Tud nehézség, évfolyam, tantárgy szerint is szűrni.
+            Tud rendezni sokféle módon.
+            Alkalmazza a beállított szűrőt.
+        feladat kozzetevese
+            A honlapon nyomjon rá a "közzétevés" gombjára a feladatnak.
+            Állítsa be a megfelelő Google Classroom osztálytermet.
+            Opcionálisan állítsa be a határidőt és a tanulókat.
+            Nyomjon rá a közzététel gombra.
+        feladat megosztasa mas tanarral
+            A honlapon nyomjon rá a megosztandó feladatra.
+            A felugró ablakon nyomjon rá a Megosztás gombra.
+            Állítsa be a címzett tanárt és nyomjon rá a Megosztás gombra.
+        statisztikak megtekintese
+            A honlap navigációs tálcáján nyomjon a menü gombra.
+            Nyomjon a Statisztikák fülre, így megtekintheti őket.
+    kesz-
+
+
+    fiokkezeles
+        bejelentkezes
+        regisztracio
+        adatmodositas
+        jelszovaltas
+        fioktorles
+        kijelentkezes
+
+        temavaltas
+            A honlap navigációs tálcáján nyomjon a jobb oldalon található fiók gombra.
+            Nyomjon rá a "Téma" gombra, és az applikáció témája megváltozik.
+        hibajelentes
+            A honlap navigációs tálcáján nyomjon a menü gombra.
+            Nyomjon a Hibajelentés fülre és töltse ki az adatokat.
+            Nyomjon rá a "Küldés" gombra, hogy a hibajelentés véglegesítve legyen.
+
+admin
+    felhasznalok kezelese
+        A honlapon találhatja a felhasználókat. 
+        Egy kattintással megváltoztathatja a jogosultságokat.
+        Ha a felhasználóra kattint akkor meg tudja tekinteni a statisztikáit.
+        Itt törölheti is a felhasználót, és át tudja helyezni más intézménybe.
+    hibajelentesek kezelese
+        A honlap navigációs tálcáján nyomjon a menü gombra.
+        Nyomjon a Hibajelentés fülre.
+        Itt láthat kétféle listát is, a javított és a nem javított hibák listáját.
+        A nem javított listánál tudja javítottnak állítani a hibajelenségeket.
+        A javított listánál tudja véglegesen törölni a régebbi javított hibákat.
+    adatbazis muveletek
+        sql input
+            A honlap navigációs tálcáján nyomjon a menü gombra.
+            Nyomjon az Adatbázis műveletek fülre.
+            A kódszerkesztőbe beleírt SQL parancsokat futtathatja a backend adatbázisán.
+        intezmenyek kezelese
+            A honlap navigációs tálcáján nyomjon a menü gombra.
+            Nyomjon az Adatbázis műveletek fülre.
+            Az oldal tetején tud hozzáadni, módosítani és törölni intézményt.
+        backupok keszitese
+        backupok betoltese
+
+
+todo fix hibajelentes email username

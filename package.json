@@ -1,0 +1,35 @@
+{
+  "name": "feladatbank_ver2",
+  "version": "1.0.0",
+  "main": "node.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@xterm/xterm": "^5.5.0",
+    "ansi-to-html": "^0.7.2",
+    "child_process": "^1.0.2",
+    "cron": "^4.3.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "fs": "^0.0.1-security",
+    "googleapis": "^159.0.0",
+    "js-md5": "^0.8.3",
+    "logform": "^2.7.0",
+    "multer": "^2.0.2",
+    "mysql": "^2.18.1",
+    "mysqldump": "^3.2.0",
+    "node-cron": "^4.2.1",
+    "path": "^0.12.7",
+    "sharp": "^0.34.4",
+    "util": "^0.12.5",
+    "winston": "^3.18.3",
+    "ws": "^8.18.3"
+  },
+  "description": ""
+}

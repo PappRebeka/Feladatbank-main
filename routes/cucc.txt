@@ -1,0 +1,36 @@
+| Current                             | Better name                   | Notes                    |
+| ----------------------------------- | ----------------------------- | ------------------------ |
+| GET /redirect                       | GET /auth/redirect            | Auth navigation          | kész
+| GET /reg                            | GET /auth/register            | Registration page        | kész
+| POST /registerData                  | POST /auth/register           | Create user              | kész
+| POST /isRegistered                  | POST /auth/check-registration | Query registration state | kész
+| POST /loginUser                     | POST /auth/login              | Login                    | kész
+| POST /sendMailTo                    | POST /mail/send               | Email send               | kész
+| POST /updatePassword                | PUT /auth/password            | Update password          | kész
+| POST /GetUserData                   | GET /users/me                 | Get current user         | kész
+| POST /SendFeladatok                 | GET /tasks                    | Get all tasks            | kész
+| GET /letolt-fajl/:id                | GET /files/:id/               | File download            | kész
+| POST /SendAlFeladatok               | GET /tasks/subtasks           | Get subtasks             | kész
+| POST /updateUserdata                | PUT /users/me                 | Update user              | kész
+| POST /deleteUser                    | DELETE /users/me              | Delete user              | kész
+| POST /feladatTorol                  | DELETE /tasks/:id             | Delete task              | kész
+| POST /get-last-id                   | GET /tasks/last-id            | Fetch last task id       | kész
+| POST /ment-fajl                     | POST /files                   | Upload file              | kész
+| POST /ment-feladat                  | POST /tasks                   | Duplicate of POST /tasks | kész
+| POST /sendClassroomCourses          | GET /google/classroom/courses | Fetch courses            | kész
+| POST /saveClassroomFeladatKozzetett | POST /classroom/tasks/publish | Publish to classroom     | kész
+| POST /postClassroomFeladat          | POST /classroom/tasks         | Create classroom task    | kész
+| POST /removeClassroomFeladat        | DELETE /classroom/tasks/:id   | Remove classroom task    | kész
+| POST /feladatArchivalas             | PUT /tasks/:id/archive        | Archive                  | kész
+| POST /autocompleteArrayTolt         | GET /autocomplete/subjects    | Autocomplete subjects    | kész
+| POST /FeladatMegosztasaTanarral     | POST /tasks/:id/share/teacher | Share with teacher       | kész
+| POST /getTantargyForAuto            | GET /autocomplete/subjects    | Duplicate of above       | kész
+| POST /getFeladatNumber              | GET /tasks/count              | Count tasks              | kész
+
+auth.js
+mail.js
+users.js
+tasks.js
+files.js
+classroom.js
+auto.js

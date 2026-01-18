@@ -1,0 +1,12 @@
+login_screen.png
+login_screen_google_button.png
+google_screen_1.png
+google_screen_2.png
+google_screen_3.png
+register_screen_final.png
+
+1. Nyomjunk rá a 'Nincs fiókom: Regisztráció' linkre a regisztráláshoz.
+2. Az új képernyõn nyomjunk rá a 'Regisztrálj Google-val' gombra.
+3. Válasszuk ki a Google fiókot, amivel használni akarjuk a programot.
+4. Fogadjuk el az Adatvédelmi Irányelveket.
+5. Véglegesen nyomjunk rá a 'Regisztráció' gombra.

@@ -1,0 +1,137 @@
+{
+  "tartalomJegyzek": [
+    {
+      "cim": "Bejelentkezés és regisztráció",
+      "href": "tema-auth"
+    },
+    {
+      "cim": "Jelszó műveletek",
+      "href": "tema-jelszo"
+    },
+    {
+      "cim": "Munkamenet és kijelentkezés",
+      "href": "tema-session"
+    },
+    {
+      "cim": "Fiók törlése",
+      "href": "tema-fioktorles"
+    }
+  ],
+  "kerdesekValaszok": [
+    {
+      "id": "tema-auth",
+      "cim": "Bejelentkezés és regisztráció (áttekintés)",
+      "kepek": [],
+      "lepes": [
+        "Bejelentkezhet felhasználónév/e-mail + jelszó párossal, vagy Google-fiókkal.",
+        "Első belépésnél a rendszer regisztrációs űrlapot jeleníthet meg (felhasználónév + jelszó), majd intézményválasztást kérhet."
+      ]
+    },
+    {
+      "id": "bejelentkezes",
+      "cim": "Hogyan tudok bejelentkezni?",
+      "kepek": [],
+      "lepes": [
+        "Nyissa meg az alkalmazás kezdőoldalát.",
+        "Adja meg az e-mail címedét vagy felhasználónevét.",
+        "Adja meg a jelszavát.",
+        "Kattintson a 'Bejelentkezés' gombra.",
+        "Sikeres bejelentkezés után a saját feladatai oldalára kerül."
+      ]
+    },
+    {
+      "id": "google-belepes",
+      "cim": "Hogyan lépek be Google-fiókkal?",
+      "kepek": [],
+      "lepes": [
+        "Kattintson a 'Google-fiók használata' gombra.",
+        "Válassza ki a Google-fiókot, amellyel be szeretne lépni.",
+        "Fogadja el a szükséges jogosultságokat.",
+        "Ha a fiókja még nincs regisztrálva, a rendszer a regisztrációs űrlapra irányítjs.",
+        "Siker esetén automatikusan a kezdőoldalra kerül."
+      ]
+    },
+    {
+      "id": "regisztracio",
+      "cim": "Hogyan történik a regisztráció?",
+      "kepek": [],
+      "lepes": [
+        "A kezdőlapon kattintson a 'Google-fiók használata' gombra.",
+        "Válassza ki azt a Google-fiókot, amellyel regisztrálni szeretne.",
+        "Adja meg a kívánt felhasználónevet és jelszót.",
+        "Válasszon intézményt.",
+        "Sikeres regisztráció után automatikusan bejelentkezik."
+      ]
+    },
+    {
+      "id": "emlekezz-ram",
+      "cim": "Mit csinál az 'Emlékezz rám' opció?",
+      "kepek": [],
+      "lepes": [
+        "Bekapcsolva a rendszer eltárolhatja a belépési tokenét, hogy legközelebb ne kelljen újra bejelentkeznie.",
+        "Ha megosztott gépet használ, javasolt kikapcsolva tartani.",
+        "Ha furcsán viselkedik az automatikus belépés, jelentkezzen ki, majd próbálja újra."
+      ]
+    },
+    {
+      "id": "tema-jelszo",
+      "cim": "Jelszó műveletek (áttekintés)",
+      "kepek": [],
+      "lepes": [
+        "Jelszót módosítani jellemzően helyreállítással tud a elszó-visszaállító oldalon.",
+        "A rendszer e-mailben küld linket, amin megadhat új jelszót."
+      ]
+    },
+    {
+      "id": "jelszoVisszaallitas",
+      "cim": "Mit tehetek, ha elfelejtettem a jelszavamat?",
+      "kepek": [],
+      "lepes": [
+        "A bejelentkezési oldalon kattintson az 'Elfelejtett jelszó' lehetőségre.",
+        "Adja meg azt az e-mail címet, amellyel regisztrált.",
+        "E-mailben kap egy jelszó-visszaállító üzenetet.",
+        "Az e-mailben található linkre kattintva megadhat egy új jelszót.",
+        "Az új jelszó mentése után ismét be tud jelentkezni."
+      ]
+    },
+    {
+      "id": "tema-session",
+      "cim": "Munkamenet és kijelentkezés (áttekintés)",
+      "kepek": [],
+      "lepes": [
+        "Bejelentkezés után a rendszer munkamenetet (session) használ, és sütikben tárolhat kiegészítő beállításokat (pl. téma).",
+        "Ha gépet vált vagy gond van a belépéssel, a kijelentkezés gyakran megoldja."
+      ]
+    },
+    {
+      "id": "kijelentkezes",
+      "cim": "Hogyan tudok kijelentkezni?",
+      "kepek": [],
+      "lepes": [
+        "A felső navigációs sávban kattintson a felhasználói ikonra.",
+        "Válassza a 'Kijelentkezés' opciót.",
+        "A rendszer törli az aktív munkamenetet és visszairányítja a kezdőoldalra."
+      ]
+    },
+    {
+      "id": "tema-fioktorles",
+      "cim": "Fiók törlése (áttekintés)",
+      "kepek": [],
+      "lepes": [
+        "A fiók törlése végleges művelet. Ha bizonytalan, előbb inkább kérjen segítséget egy admintól.",
+        "Törlés után az adatok visszaállítása általában nem lehetséges."
+      ]
+    },
+    {
+      "id": "fiokTorles",
+      "cim": "Hogyan törölhetem a fiókomat?",
+      "kepek": [],
+      "lepes": [
+        "A felső navigációs sávban kattintson a felhasználói ikonra.",
+        "Keresse meg a 'Fiók törlése' lehetőséget.",
+        "Erősítse meg a műveletet a megjelenő figyelmeztetésben.",
+        "A fiók törlése végleges, az adatok nem állíthatók vissza."
+      ]
+    }
+  ]
+}

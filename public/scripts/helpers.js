@@ -1,0 +1,272 @@
+
+/* ------ CONTENT ------
+helpers.js -------------
+  - ajax_get 
+  - ajax_post
+  - mezoCheck         -BBB
+  - sizeCheck         -BBB
+  - isBackgroundDark  -PR
+  - LogSession        -PR
+  - borderColor       -PR, BBB
+  - getField          -PR
+  - showErrorMsg      -BBB
+  - toastMsg          -PR
+  - hslSzinGeneral    -RD
+  - tulKozel          -RD
+  - rnd               -PR
+  - randomHatterszin  -PR
+  - EvfolyamCheck     -PR
+  - formatFileSize    -BBB
+  - FileSizeCheck     -BBB, PR
+*/
+
+function ajax_get( urlsor, hova, tipus, aszinkron ) { //KA // html oldalak beszúrására használjuk
+    $.ajax({url: urlsor, type:"get", async:aszinkron, cache:false, dataType:tipus===0?'html':'json',
+        beforeSend:function(xhr) { },
+        success: function(data) { $(hova).html(data); },
+        error: function(jqXHR, textStatus, errorThrown) {
+            //console.log("ajax_get error:")
+            //console.log(jqXHR.responseText, "danger");
+            //console.log(`textStatus: ${textStatus}`);
+            //console.log(`error: ${errorThrown}`)
+        },
+        complete: function() { }
+    });
+    return true;
+};
+
+function ajax_post( urlsor, tipus, data ) { //KA // json restapi-hoz használjuk
+    var s = "";
+    var ajaxConfig = {
+        url: urlsor, 
+        type: "post", 
+        async: false, 
+        cache: false, 
+        dataType: tipus===0?'html':'json',
+        beforeSend: function(xhr) { },
+        success: function(response) { s = response; },
+        error: function(jqXHR, textStatus, errorThrown) {
+            //console.log("ajax_post error:")
+            //console.log(jqXHR.responseText, "danger");
+            //console.log(`textStatus: ${textStatus}`);
+            //console.log(`error: ${errorThrown}`)
+        },
+        complete: function() { }
+    };
+    
+    if (data) {
+        ajaxConfig.contentType = 'application/json';
+        ajaxConfig.data = JSON.stringify(data);
+    }
+    
+    $.ajax(ajaxConfig);
+    return s;
+};
+
+function mezoCheck() { // BBB
+    jo = true
+    reasonok = []
+
+    // pattern arra hogy van e spec karakter: "'\";˛\\/*+%&()=?<>[]"
+    const pattern = /['";˛\\/*+%&()=?<>\[\]]/; 
+    $("#feladat").find("input[type='text']").each(function() {
+        const text = $(this).val();
+        const id   = $(this).attr("id");
+        
+        if (text.length === 0) {
+            jo = false;
+            reasonok.push(`A(z) ${id} mező hossza nem lehet nulla.`);
+        }
+        if (pattern.test(text)) {
+            jo = false;
+            reasonok.push(`A(z) ${id} mező nem tartalmazhatja a következő karaktereket: '\";˛\\/*+%&()=?<>[]`);
+        }
+    })
+    return [jo, reasonok];
+}
+
+function sizeCheck() {//BBB
+    let vw = window.innerWidth;
+    let vh = window.innerHeight;
+
+    if ((vw < 300) || (vh < 300)) {
+        $("#tooSmall").removeClass("d-none");
+    } else {
+        $("#tooSmall").addClass("d-none");
+    }
+}
+
+function isBackgroundDark(rgb) {//PR
+    // determine if a background color is dark or light. found it on the internet
+
+    // Uses the ITU-R BT.601 luminance formula to estimate perceived brightness
+
+    const [r, g, b] = rgb.substring(4, rgb.length - 1).split(" ").map(Number);
+    const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+    return brightness < 128;
+    
+    // Source: standard perceptual luminance formula (0.299R + 0.587G + 0.114B)
+    // Commonly used in accessibility and theming utilities
+
+}
+
+function borderColor(nehezseg){ //PR, BBB
+    //easy visualization of difficulty levels
+    const szinek = [
+        "rgb(0,255,0)",
+        "rgb(57,232,0)",
+        "rgb(113,208,0)",
+        "rgb(170,185,0)",
+        "rgb(227,162,0)",
+        "rgb(253,133,0)",
+        "rgb(249,100,0)",
+        "rgb(245,67,0)",
+        "rgb(241,33,0)",
+        "rgb(237,0,0)"
+    ]//green orange and red, expanded into gradient by BBB
+
+    return szinek[nehezseg - 1];
+}
+
+function getField(idBase, hol) {//PR
+    //get the value of an input field, compicated by some call/id name shenanigans
+    var edit = idBase.includes("-s") ? idBase.substring(0, idBase.length -2) : idBase; //task creation has slim (-s sufix) version, but we just need the base
+    return hol.includes("alfeladatBox") ? $(`#${idBase}`).val().toString() : $(`#${edit}Edit`).val().toString(); //return the value of the correct field
+}                                               //creation                      //editing
+
+function showErrorMsg(msg) {//BBB
+    $("#errorMsg").css("opacity", 1.0);
+    $("#errorMsg").html(msg)
+
+    $("#errorMsg").show()
+
+    setTimeout(() => {
+        $("#errorMsg").css("opacity", 0.0);
+    }, 3000);
+}
+
+function toastMsg(title, msg, type) {//PR
+    //toast message for user feedback, its pretty self explanatory
+    let piritos = document.getElementById("toast")
+    
+    piritos.querySelector('#toast-tile').textContent = title;
+    piritos.querySelector('.toast-body').textContent = msg;
+
+        //type = success, danger, warning, info (bootstrap colors)
+    let color = `bg-${type}`;
+    piritos.querySelector(".toast-header").classList.remove(piritos.querySelector(".toast-header").classList[1]);
+    piritos.querySelector(".toast-header").classList.add(color);    //remove the old color and add the new one
+
+    piritos.classList.add("show");
+    setTimeout(() => { //show it for 5 seconds
+        piritos.classList.remove("show");
+    }, 5000);
+}
+
+function rnd(min, max) {//PR
+    //random number between min and max inclusive
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+function randomHatterszin(){ //PR
+    //random rgb value
+    return `rgb(${rnd(0, 255)} ${rnd(0, 255)} ${rnd(0, 255)})`;
+}
+
+function EvfolyamCheck(input){  //PR
+    input.value = input.value.replace(/\D/g,'')         //regex meaning all non-digit characters  (d -> digit, D -> !digit)
+    if(parseInt(input.value) > 13) input.value = 13     //max
+    else if(parseInt(input.value) < 1) input.value = '' //clear       
+}
+
+function formatFileSize(bytes) { // BBB
+    if (bytes === null || bytes === undefined || isNaN(bytes)) return '0 B';
+    const negative = bytes < 0;
+    let value = Math.abs(Number(bytes));
+
+    const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB'];
+    let i = 0;
+    while (value >= 1024 && i < units.length - 1) {
+        value /= 1024;
+        i++;
+    }
+
+    // choose precision: no decimals for large numbers, more for small
+    const precision = value >= 100 ? 0 : value >= 10 ? 1 : 2;
+    let str = value.toFixed(precision);
+    // strip trailing zeros and possible trailing dot
+    str = str.replace(/(\.\d*?[1-9])0+$|\.0+$/,'$1');
+
+    return (negative ? '-' : '') + str + ' ' + units[i];
+}
+
+function FileSizeCheck(fileInput, fakeFileName = null){//BBB, PR
+    const file = fileInput.files[0];
+
+    if (file && file.size > max_fajl_meret) { // dont let the user upload too large files
+        toastMsg('Túl nagy a fájl', `A fájl mérete nem haladhatja meg a ${formatFileSize(max_fajl_meret)}-t.`, 'warning');
+        fileInput.value = ''; //clear value and fake value
+        if (fakeFileName) document.getElementById(fakeFileName).textContent = "Nincs fájl kiválsztva";
+    }
+}
+
+
+//--- DOM tools ---//
+
+const $bind = (container, key) => 
+    container.querySelector(`[data-bind="${key}"]`);
+
+
+function showElement(container, key, show) {
+    const element = $bind(container, key);
+    if (element) {
+        element.classList.toggle('d-none', !show);
+    }
+}
+
+function setBgColor(container, key, rgb) {
+    const element = $bind(container, key);
+    if (element) {
+        element.style.backgroundColor = rgb;
+    }
+}
+
+function preventParentClick(btn){
+    btn.addEventListener('click', function(e){
+        e.stopPropagation();
+    })
+}
+
+function highlightKeresettText(keres, text, textHely){
+    if(keres) {
+        const regex = new RegExp(`(${escapeRegex(keres)})`, 'gi')
+
+        let lastIndex = 0;
+        for (const match of text.matchAll(regex)) {
+            const start = match.index;
+            const end = start + match[0].length;
+
+            // normal text before match
+            if (start > lastIndex) {
+                textHely.appendChild(document.createTextNode(text.slice(lastIndex, start)));
+            }
+
+            // highlighted part
+            const mark = document.createElement("mark");
+            mark.textContent = text.slice(start, end);
+            textHely.appendChild(mark);
+
+            lastIndex = end;
+        }
+
+        // remaining text after last match
+        if (lastIndex < text.length) {
+            textHely.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+      }
+    else textHely.textContent = text
+}
+
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}

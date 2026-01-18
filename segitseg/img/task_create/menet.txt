@@ -1,0 +1,12 @@
+taskcreate_homepage.png
+taskcreate_menu.png
+taskcreate_menu_filled.png
+taskcreate_homepage_finished.png
+taskcreate_finsihed_show.png
+
+1. Nyomjunk rá a fő oldalon található '+' gombra a felső sávban.
+2. A gomb megnyomása után láthatjuk az új feladat menüjét.
+3. Ezt a menüt szükség alapján töltsük ki adatokkal, fájlokkal.
+4. Kitöltés után nyomjunk rá a 'Hozzáadás' gombra a menü alján.
+5. Ezután a fő oldalon látható a feladat a megfelelő adataival.
+6. Rányomva részletesen is megtekinthetjük a feladat adatait.

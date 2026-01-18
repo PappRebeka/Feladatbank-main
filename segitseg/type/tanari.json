@@ -1,0 +1,238 @@
+{
+  "tartalomJegyzek": [
+    {
+      "cim": "Feladatműveletek",
+      "href": "tema-feladatmuveletek"
+    },
+    {
+      "cim": "Szűrés, keresés, rendezés",
+      "href": "tema-szures"
+    },
+    {
+      "cim": "Megosztás és közzététel",
+      "href": "tema-megosztas"
+    },
+    {
+      "cim": "Statisztikák",
+      "href": "tema-statisztikak"
+    },
+    {
+      "cim": "Fiókműveletek",
+      "href": "tema-fiok"
+    },
+    {
+      "cim": "Hibajelentés és gyakori hibák",
+      "href": "tema-hibak"
+    }
+  ],
+  "kerdesekValaszok": [
+    {
+      "id": "tema-feladatmuveletek",
+      "cim": "Feladatműveletek (áttekintés)",
+      "kepek": [],
+      "lepes": [
+        "Ebben a részben a feladatok teljes életciklusát találja: létrehozás, alfeladatok/fájlok, szerkesztés, archiválás és törlés.",
+        "A részletes kérdések lejjebb, ugyanebben az oldalon vannak (a címsorokra kattintva nyithatók)."
+      ]
+    },
+    {
+      "id": "feladat-letrehozas",
+      "cim": "Hogyan hozok létre új feladatot?",
+      "kepek": [],
+      "lepes": [
+        "A 'Feladataim' oldalon a felső sávban kattintson a '+' gombra.",
+        "Töltse ki a feladat alapadatait: Név, Leírás, Évfolyam, Tantárgy, Téma, Nehézség.",
+        "(Opcionális) Adjon hozzá alfeladatokat a pontozáshoz és fájl csatoláshoz.",
+        "Kattintson a 'Hozzáadás' / 'Mentés' gombra a feladat rögzítéséhez.",
+        "A mentés után a feladat megjelenik a listában, és rákattintva részleteiben is megnyitható."
+      ]
+    },
+    {
+      "id": "alfeladatok",
+      "cim": "Hogyan kezelem az alfeladatokat és csatolok fájlt?",
+      "kepek": [],
+      "lepes": [
+        "Feladat létrehozásakor vagy szerkesztésekor kattintson az 'Alfeladat hozzáadása' gombra.",
+        "Minden alfeladathoz adjon meg leírást és pontszámot.",
+        "Fájl csatolásához kattintson a 'Fájl kiválasztása' gombra, majd válasszon fájlt a gépéről.",
+        "A rendszer ellenőrzi a fájl méretét (túl nagy fájlt nem enged feltölteni).",
+        "Mentéskor a fájl feltöltődik; közzétételkor a Classroom feladatban is csatolásra kerülhet."
+      ]
+    },
+    {
+      "id": "feladat-szerkesztes",
+      "cim": "Hogyan szerkesztek egy meglévő feladatot?",
+      "kepek": [],
+      "lepes": [
+        "Kattintson a szerkeszteni kívánt feladat kártyájára.",
+        "A felugró ablakban kattintson a 'Szerkesztés' gombra.",
+        "A mezők szerkeszthetővé válnak — módosítsa a szükséges adatokat.",
+        "Alfeladatoknál módosíthat leírást/pontot, és hozzáadhat vagy eltávolíthat alfeladatot.",
+        "Kattintson a 'Mentés' gombra. Siker esetén a lista frissül és a kártya adatai is módosulnak."
+      ]
+    },
+    {
+      "id": "archivalas-torles",
+      "cim": "Hogyan archiválok vagy törlök egy feladatot?",
+      "kepek": [],
+      "lepes": [
+        "Archiváláshoz: nyissa meg a feladatot (kattintson a kártyára), majd válassza az 'Archiválás' lehetőséget.",
+        "Az archivált feladat eltűnik a 'Feladataim' listából, és az 'Archívum' oldalon jelenik meg.",
+        "Törléshez: nyissa meg az 'Archívum' oldalt a bal oldali menüből.",
+        "Kattintson a törölni kívánt archivált feladatra.",
+        "A felugró ablakban válassza a 'Törlés' gombot. (A törlés végleges.)"
+      ]
+    },
+    {
+      "id": "tema-szures",
+      "cim": "Szűrés, keresés, rendezés (áttekintés)",
+      "kepek": [],
+      "lepes": [
+        "Ebben a részben a listák kezelése van: keresés, szűrők (évfolyam/tantárgy/nehézség), rendezés és irány.",
+        "Tipp: mobilon a kereső a menüben is megjelenhet (kijelzőmérettől függ)."
+      ]
+    },
+    {
+      "id": "szures-rendezes",
+      "cim": "Hogyan használom a keresést, szűrést és rendezést?",
+      "kepek": [],
+      "lepes": [
+        "Keresés: írjon a felső keresősávba, majd kattintson a nagyító ikonra (vagy Enter).",
+        "Szűrés: kattintson a szűrő ikonra (jobb felső rész).",
+        "Állíthat szűrőt évfolyamra, tantárgyra és nehézségre (könnyű/közepes/nehéz).",
+        "Választhat rendezést is (pl. név, nehézség, évfolyam, id) és az irányt (növekvő/csökkenő).",
+        "Alkalmazza a szűrőt — a lista újratöltődik a kiválasztott feltételek alapján."
+      ]
+    },
+    {
+      "id": "tema-megosztas",
+      "cim": "Megosztás és közzététel (áttekintés)",
+      "kepek": [],
+      "lepes": [
+        "Feladatot megoszthatsz más tanárral (belső megosztás), illetve közzétehetsz Google Classroomban.",
+        "Megosztás után a címzett a 'Velem megosztott' oldalon látja a feladatot."
+      ]
+    },
+    {
+      "id": "megosztas",
+      "cim": "Hogyan osztok meg feladatot egy másik tanárral?",
+      "kepek": [],
+      "lepes": [
+        "Nyissa meg a megosztani kívánt feladatot (kattintson a kártyára).",
+        "A felugró ablakban válassza a 'Megosztás' lehetőséget.",
+        "Írja be a címzett tanár nevét vagy e-mail címét. (Az automatikus kiegészítés segít.)",
+        "Kattintson a 'Megosztás' gombra a véglegesítéshez.",
+        "A címzett a bal oldali menüben a 'Velem megosztott' oldalon fogja látni a feladatot."
+      ]
+    },
+    {
+      "id": "kozzetetel",
+      "cim": "Hogyan teszek közzé feladatot Google Classroomban?",
+      "kepek": [],
+      "lepes": [
+        "A 'Feladataim' listában kattintson a feladat kártyáján lévő 'közzétevés' gombra.",
+        "Válassza ki a Classroom kurzust/osztályt a listából.",
+        "(Opcionális) Állítson be határidőt a dátumválasztóval.",
+        "(Opcionális) Válasszon ki konkrét tanulókat a listából, ha nem az egész osztálynak szánja.",
+        "Kattintson a 'Közzététel' gombra. A rendszer létrehozza a feladatot a Classroom kurzusban, és csatolja a fájlokat, ha vannak."
+      ]
+    },
+    {
+      "id": "tema-statisztikak",
+      "cim": "Statisztikák (áttekintés)",
+      "kepek": [],
+      "lepes": [
+        "A statisztikák segítenek átlátni a létrehozott/megosztott/közzétett feladatok mennyiségét és eloszlását.",
+        "Ha nincs elég adat, a rendszer 'Még nincsenek adatok!' üzenetet jelenít meg."
+      ]
+    },
+    {
+      "id": "statisztikak",
+      "cim": "Hol találom a statisztikákat és mit jelentenek?",
+      "kepek": [],
+      "lepes": [
+        "Nyissa meg a bal oldali menüt (hamburger ikon).",
+        "Kattintson a 'Statisztikák' menüpontra.",
+        "Itt kártyákon/diagramokon láthatja például a létrehozott, megosztott és közzétett feladatok számát, illetve egyéb összesítéseket.",
+        "Jogosultságtól függően az összesítések intézményi nézetben is megjelenhetnek.",
+        "Ha nincs elég adat, a rendszer 'Még nincsenek adatok!' üzenetet jelenít meg."
+      ]
+    },
+    {
+      "id": "tema-fiok",
+      "cim": "Fiókműveletek (áttekintés)",
+      "kepek": [],
+      "lepes": [
+        "Ide tartozik a fiók adatok módosítása, jelszó módosítás (helyreállítás), téma váltás és kijelentkezés.",
+        "Ezek a jobb felső felhasználó ikonon keresztül érhetők el."
+      ]
+    },
+    {
+      "id": "fiok-beallitasok",
+      "cim": "Hogyan módosítom a fiók adataimat vagy a jelszavamat?",
+      "kepek": [],
+      "lepes": [
+        "Kattintson a jobb felső sarokban lévő felhasználó ikonra (kerek avatar).",
+        "Válassza a 'Fiók beállítások' menüpontot.",
+        "A név vagy e-mail módosításához kattintson a ceruza ikonra a mező mellett, írja át, majd kattintson/klikkeljen ki a mezőből.",
+        "Mentéshez kattintson a 'Mentés' gombra.",
+        "Jelszó módosításhoz kattintson a 'Jelszó módosítás' gombra — ez a jelszó-visszaállító oldalra visz."
+      ]
+    },
+    {
+      "id": "tema",
+      "cim": "Hogyan váltok témát (világos/sötét mód)?",
+      "kepek": [],
+      "lepes": [
+        "Kattintson a jobb felső sarokban lévő felhasználó ikonra (kerek avatar).",
+        "A jobb oldali panelen kattintson a 'Téma' gombra.",
+        "A nap/hold ikon jelzi az aktuális módot.",
+        "A beállítás cookie-ban elmentésre kerül, ezért a következő belépésnél is megmarad."
+      ]
+    },
+    {
+      "id": "kijelentkezes",
+      "cim": "Hogyan jelentkezek ki?",
+      "kepek": [],
+      "lepes": [
+        "Kattintson a jobb felső sarokban lévő felhasználó ikonra (kerek avatar).",
+        "A panel alján kattintson a 'Kijelentkezés' gombra.",
+        "A rendszer kijelentkezteti a sessionből és törli a szükséges cookie-kat.",
+        "Ezután visszakerül a bejelentkezési oldalra."
+      ]
+    },
+    {
+      "id": "tema-hibak",
+      "cim": "Hibajelentés és gyakori hibák (áttekintés)",
+      "kepek": [],
+      "lepes": [
+        "Ha hibát találsz, a 'Hibajelentés' oldalon tudod elküldeni. A rendszer a nevedet és e-mail címedet is rögzíti, hogy vissza tudjunk jelezni.",
+        "Itt találsz néhány tipikus problémát és gyors megoldást is."
+      ]
+    },
+    {
+      "id": "hibajelentes",
+      "cim": "Hogyan küldök hibajelentést?",
+      "kepek": [],
+      "lepes": [
+        "Nyissa meg a bal oldali menüt (hamburger ikon).",
+        "Kattintson a 'Hibajelentés' menüpontra.",
+        "A rendszer automatikusan kitölti a fiókhoz tartozó nevet és e-mail címet.",
+        "Írja le röviden a hibajelenséget (mit csinált, mit várt, mi történt).",
+        "Kattintson a 'Küldés' gombra. Siker esetén a rendszer visszajelzést ad."
+      ]
+    },
+    {
+      "id": "tanar-gyik",
+      "cim": "Gyakori hibák és tippek Tanároknak",
+      "kepek": [],
+      "lepes": [
+        "A kereső/szűrő nem hoz találatot: állítsa vissza a szűrőket, majd próbálja újra.",
+        "Nem látszik a 'közzétevés' gomb: a gomb csak a 'Feladataim' oldalon jelenik meg.",
+        "Fájl nem tölthető fel: ellenőrizze a fájl méretét (a túl nagy fájlokat a rendszer tiltja).",
+        "Classroom közzététel hibás: ellenőrizze, hogy van-e elérhető kurzus és megfelelő Google jogosultság.",
+        "Ha valami furán néz ki fejlesztés közben: frissítsen (Ctrl+R), vagy törölje a cache-t."
+      ]
+    }
+  ]
+}

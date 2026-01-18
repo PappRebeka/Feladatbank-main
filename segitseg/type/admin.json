@@ -1,0 +1,192 @@
+{
+  "tartalomJegyzek": [
+    {
+      "cim": "Felhasználókezelés",
+      "href": "tema-user"
+    },
+    {
+      "cim": "Hibajelentések kezelése",
+      "href": "tema-hibajelentes"
+    },
+    {
+      "cim": "Intézményi hatókör",
+      "href": "tema-intezmeny"
+    },
+    {
+      "cim": "Főadmin funkciók",
+      "href": "tema-foadmin"
+    }
+  ],
+  "kerdesekValaszok": [
+    {
+      "id": "tema-user",
+      "cim": "Felhasználókezelés (áttekintés)",
+      "kepek": [],
+      "lepes": [
+        "Adminként a 'Felhasználók' oldalon tud tanári fiókokat kezelni az intézményén belül.",
+        "Tipikus műveletek: jogosultság váltás (Tanár/Admin), áthelyezés intézménybe, törlés."
+      ]
+    },
+    {
+      "id": "felhasznalok",
+      "cim": "Hol találom a Felhasználók oldalt?",
+      "kepek": [],
+      "lepes": [
+        "Nyissa meg a menüt (bal felső menü ikon).",
+        "Kattintson a 'Felhasználók' menüpontra.",
+        "Megjelenik a felhasználók listája kártyákon (név, e-mail, jogosultság, szín/monogram)."
+      ]
+    },
+    {
+      "id": "felhasznalok-lapozas",
+      "cim": "Hogyan működik a lista és a lapozás?",
+      "kepek": [],
+      "lepes": [
+        "A lista kártyákban jelenik meg; a soronkénti elemszám képernyőszélességtől függ.",
+        "Az alsó lapozó gombokkal tud első/előző/következő/utolsó oldalra lépni.",
+        "Ha átméretezi az ablakot, az oldalankénti limit változhat, és a lista újratöltődhet."
+      ]
+    },
+    {
+      "id": "jogosultsag",
+      "cim": "Hogyan módosítok jogosultságot (Tanár/Admin)?",
+      "kepek": [],
+      "lepes": [
+        "Menjen a 'Felhasználók' oldalra.",
+        "A felhasználó kártyáján kattintson a 'Tanár' vagy 'Admin' gombra.",
+        "A jogosultság azonnal frissül (mentés automatikus).",
+        "Megjegyzés: a saját felhasználója jogosultságát nem tudja átállítani."
+      ]
+    },
+    {
+      "id": "jogosultsag-mikor",
+      "cim": "Mikor érdemes Admin jogosultságot adni?",
+      "kepek": [],
+      "lepes": [
+        "Ha valakinek kezelnie kell a tanári fiókokat (új admin kijelölése, jogosultság visszavonása).",
+        "Ha valaki intézményen belül felel a fiókok karbantartásáért (törlés/áthelyezés).",
+        "Ha csak feladatokat kezel, elég a Tanár jogosultság."
+      ]
+    },
+    {
+      "id": "athelyezes",
+      "cim": "Hogyan helyezek át felhasználót más intézménybe?",
+      "kepek": [],
+      "lepes": [
+        "Menjen a 'Felhasználók' oldalra.",
+        "Nyissa meg a felhasználó adatlapját (kattintás a kártyára).",
+        "A megnyíló ablakban válassza az 'Áthelyezés' opciót.",
+        "Válassza ki a cél intézményt a listából, majd erősítse meg."
+      ]
+    },
+    {
+      "id": "torles",
+      "cim": "Hogyan törlök felhasználót?",
+      "kepek": [],
+      "lepes": [
+        "Menjen a 'Felhasználók' oldalra.",
+        "Nyissa meg a felhasználó adatlapját (kattintás a kártyára).",
+        "Kattintson a 'Törlés' gombra.",
+        "Törlés előtt mindig egyeztessen: a művelet végleges lehet."
+      ]
+    },
+    {
+      "id": "torles-kovetkezmeny",
+      "cim": "Mi történik törléskor a feladatokkal és megosztásokkal?",
+      "kepek": [],
+      "lepes": [
+        "A felhasználóhoz tartozó feladatok és kapcsolódó rekordok (megosztások, alfeladatok) eltávolításra kerülhetnek.",
+        "Ha közzétett feladatok is voltak, a Classroom oldali feladat ettől még létezhet, de a Feladatbankból kikerül.",
+        "Ha nem biztos benne, előbb inkább jogosultságot vegyen el, ne töröljön."
+      ]
+    },
+    {
+      "id": "tema-hibajelentes",
+      "cim": "Hibajelentések kezelése (áttekintés)",
+      "kepek": [],
+      "lepes": [
+        "Az Admin/Főadmin a hibajelentéseket listában látja, és státuszt állíthat: 'Javítva' vagy 'Törlés'.",
+        "A hibajelentés tartalmazza a küldő nevét és e-mail címét is (visszajelzéshez)."
+      ]
+    },
+    {
+      "id": "hibajelentesek",
+      "cim": "Hibajelentések: hogyan kezelem őket?",
+      "kepek": [],
+      "lepes": [
+        "Nyissa meg a 'Hibajelentés' oldalt a menüből.",
+        "Admin/Főadmin esetén megjelenik a hibajelentések listája.",
+        "Váltson a 'Nem javított' és 'Javított' listák között.",
+        "Használja a 'Javítva' gombot lezáráshoz, vagy a 'Törlés' gombot eltávolításhoz."
+      ]
+    },
+    {
+      "id": "hibajelentesek-adatok",
+      "cim": "Milyen adatokat tartalmaz egy hibajelentés?",
+      "kepek": [],
+      "lepes": [
+        "Hibajelenség szövege (a felhasználó leírása).",
+        "A felhasználó neve és e-mail címe (hogy vissza lehessen jelezni).",
+        "Dátum/idő (mikor küldték)."
+      ]
+    },
+    {
+      "id": "admin-gyik",
+      "cim": "Gyakori problémák hibajelentések kapcsán",
+      "kepek": [],
+      "lepes": [
+        "Nem frissül a lista: frissítse az oldalt, vagy váltson a 'Nem javított' és 'Javított' fülek között.",
+        "Üres a lista: lehet, hogy nincs beérkezett hibajelentés, vagy nincs Admin jogosultság.",
+        "Hiányzó név/e-mail: ez fejlesztés alatt állhat — rögzítse a hibát és jelezze a fejlesztőknek."
+      ]
+    },
+    {
+      "id": "tema-intezmeny",
+      "cim": "Intézményi hatókör (áttekintés)",
+      "kepek": [],
+      "lepes": [
+        "Az Admin alapból csak a saját intézményéhez tartozó felhasználókat látja.",
+        "Ha valaki 'eltűnik' a listából, gyakran intézményváltás vagy rossz intézménybe léptetés az ok."
+      ]
+    },
+    {
+      "id": "intezmenyi-hataskor",
+      "cim": "Miért nem látok minden felhasználót?",
+      "kepek": [],
+      "lepes": [
+        "Az Admin csak a saját intézményéhez tartozó felhasználókat látja.",
+        "Bizonyos technikai fiókok (pl. Főadmin) nem feltétlenül jelennek meg.",
+        "Ha úgy véli, rossz intézményben van, kérjen intézményfrissítést vagy jelentkezzen ki/be."
+      ]
+    },
+    {
+      "id": "athelyezes-mitjelent",
+      "cim": "Mit jelent az áthelyezés? Mit fog látni a felhasználó?",
+      "kepek": [],
+      "lepes": [
+        "Áthelyezés után a felhasználó az új intézmény adatait és felhasználóit fogja látni.",
+        "Ha a korábbi intézményének már nem tagja, bejelentkezéskor a rendszer intézményválasztást kérhet.",
+        "Ha a cél intézmény nem található, azt jellemzően a Főadmin kezeli (intézmény felvétel)."
+      ]
+    },
+    {
+      "id": "tema-foadmin",
+      "cim": "Főadmin funkciók (áttekintés)",
+      "kepek": [],
+      "lepes": [
+        "Ezek a funkciók csak Főadmin jogosultsággal érhetők el.",
+        "Ide tartozik: SQL futtatás, backup készítés/visszaállítás, intézmények központi kezelése."
+      ]
+    },
+    {
+      "id": "foadmin",
+      "cim": "Mely funkciók tartoznak a Főadminhoz?",
+      "kepek": [],
+      "lepes": [
+        "Adatbázis műveletek: SQL futtatás felületről, backup készítés és visszaállítás.",
+        "Intézmények központi kezelése: hozzáadás/módosítás/törlés.",
+        "Rendszerszintű karbantartás és teljes hozzáférés (intézményfüggetlen)."
+      ]
+    }
+  ]
+}

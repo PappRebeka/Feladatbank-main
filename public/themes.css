@@ -1,0 +1,307 @@
+/*----------------------*/
+/*   Light Theme        */
+/*----------------------*/
+
+html:not(.darkMode) .fakeFileText {
+  color: black;
+}
+
+html:not(.darkMode) .file-wrapper {
+  border: none;
+  border-radius: 6px;
+  background: #bdc4ca33;
+}
+
+.bg-dark{
+  background: #f9f9f9!important;
+}
+
+body {
+  /*--bg-tile-url: url("/img/LogoLight.png");*/
+  background: linear-gradient(135deg, rgba(190, 211, 233), rgba(210, 215, 218));
+}
+
+html:not(.darkMode) .hazy {
+  background: linear-gradient(135deg, rgba(114, 114, 133, 0.8), rgba(117, 117, 128, 0.5));
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.75) !important;
+}
+
+html:not(.darkMode) .card-body {
+  background-color: #78879630;
+}
+
+html:not(.darkMode) .btn-outline-light {
+  border-color: #050B15;
+  color: #050B15;
+}
+
+html:not(.darkMode) .btn-outline-light:disabled {
+  border-color: #2c3138;
+  color: #2c3138;
+}
+
+html:not(.darkMode) .btn-outline-light:hover {
+  border-color: #8b949ea9;
+  background-color: #8b949ea9;
+  color: #050B15;
+}
+
+.bg-alfeladatBox {
+  background-color: #c8d3ee69;
+  border: #1226497c;
+}
+
+html:not(.darkMode) .btn-dark {
+  background-color: rgb(134, 139, 151) !important;
+}
+
+html:not(.darkMode) .btn-dark:hover {
+  background-color: #687181 !important;
+}
+
+html:not(.darkMode) .btn-dark:disabled {
+  background-color: #a5aaaf !important;
+}
+
+/* NOT FOUND BY COPILOT - .ss-selected class not used */
+html:not(.darkMode) .ss-selected {
+  background-color: #d6dde4;
+}
+
+.btn-hover:hover{
+  background-color: #161f2e25;
+}
+
+/*----------------------*/
+/*   Dark Theme         */
+/*----------------------*/
+
+.darkMode .btn-hover:hover{
+  background-color: #c4c4c425;
+}
+
+
+.darkMode #splash {
+  background: linear-gradient(135deg, #24283b, #35414e);
+  text-shadow: 3px 3px #61666d80;
+}
+
+.darkMode .bg-dark{
+  background: #131a28 !important;
+}
+
+.fakeFileText {
+  color: white;
+  padding: 8px 12px;
+}
+
+.file-wrapper {
+  border: 1px solid #444;
+  border-radius: 6px;
+  background: #111827;
+}
+
+.darkMode body {
+  /*--bg-tile-url: url("/img/LogoDark.png");*/
+  background: linear-gradient(135deg, #111827, #27324e);
+  color: #F9FAFB;
+}
+
+.darkMode .hazy {
+  background: linear-gradient(135deg, #212b42, #414d6b);
+}
+
+.darkMode .card {
+  background-color: #1e293bc5 !important;
+  color: #F9FAFB;
+}
+
+.darkMode .offcanvas, .darkMode .modal-content, .darkMode .navbar {
+  background-color: #1E293B !important;
+  color: #F9FAFB;
+}
+
+.darkMode .btn-light, .darkMode .bg-light, .darkMode #visszagomb .btn {
+  background-color: #2D3748 !important;
+  border: none;
+  color: #F9FAFB;
+}
+
+.darkMode .table-striped>tbody>tr>*, .darkMode #headers>* {
+  background-color: #2D3748 !important;
+  color: #F9FAFB;
+}
+
+.darkMode .table-striped>tbody>tr:nth-of-type(odd)>* {
+  --bs-table-striped-bg: #232d3d !important;
+}
+
+.darkMode .bg-login {
+  background-color: rgba(28, 32, 46, 0.85);
+  backdrop-filter: blur(3px);
+}
+
+.darkMode .text-muted {
+  color: #adb5c2 !important;
+}
+
+.darkMode .text-dark {
+  color: lightgray !important;
+}
+
+.darkMode .btn-primary {
+  background: #6c63ff !important;
+  border: none;
+  color: black;
+}
+
+.darkMode .btn-primary:hover {
+  background: #7f7ae0 !important;
+  border: none;
+}
+
+.darkMode .btn-dark:hover {
+  background-color: #2a2f36 !important;
+}
+
+.darkMode .link-secondary {
+  color: #adb5c2 !important;
+  text-decoration: underline #a1a6ad !important;
+}
+
+.darkMode .link-secondary:hover {
+  color: #8a96a3 !important;
+  text-decoration: none !important;
+}
+
+.darkMode .btn-warning {
+  background-color: #FBBF24;
+  border-color: #FBBF24;
+  color: #111827;
+}
+
+.darkMode .btn-secondary {
+  background-color: #050B15 !important;
+  border: none;
+}
+
+.darkMode .navbar .btn, .darkMode input.form-control, .darkMode .bi-pencil-square {
+  color: #F9FAFB !important;
+}
+
+.darkMode .btn-light:hover, .darkMode #visszagomb .btn:hover {
+  background-color: #535b68 !important;
+}
+
+.darkMode .bg-light-seethrough {
+  background-color: #111827d0 !important;
+  backdrop-filter: blur(5px);
+}
+
+.darkMode .navbar .btn:hover {
+  background-color: #374151;
+}
+
+.darkMode input.form-control, .darkMode textarea, .darkMode .form-select, .darkMode .slim-select {
+  background-color: #111827 !important;
+  border: 1px solid #374151;
+  color: #F9FAFB !important;
+}
+
+.darkMode input.form-control:disabled, .darkMode .form-select:disabled, .darkMode .slim-select:disabled {
+  background-color: #262e3f;
+  color: #c4c4c4;
+}
+
+.darkMode input.form-control::placeholder, .darkMode textarea::placeholder {
+  color: #9CA3AF;
+}
+
+.darkMode .bg-success {
+  background-color: #198754 !important;
+}
+
+.darkMode .btn-outline-light:hover {
+  color: black !important;
+}
+
+.darkMode .accordion {
+  --bs-accordion-bg: #232a33 !important;
+  --bs-accordion-btn-bg: #1b232c !important;
+  --bs-accordion-color: white !important;
+  --bs-accordion-btn-color: white !important;
+}
+
+.darkMode .flatpickr-calendar, .darkMode .flatpickr-monthDropdown-months {
+  background: #161f2e !important;
+  color: #F9FAFB;
+}
+
+.darkMode .flatpickr-day:hover {
+  background: #91919133;
+  border: none;
+}
+
+.darkMode .flatpickr-months .flatpickr-month, .darkMode .flatpickr-day {
+  color: #F9FAFB;
+}
+
+.darkMode .flatpickr-day.nextMonthDay,
+.darkMode .flatpickr-day.prevMonthDay {
+  color: #586170;
+}
+
+.darkMode .flatpickr-day.nextMonthDay:hover,
+.darkMode .flatpickr-day.prevMonthDay:hover {
+  background: #636f7a83;
+  border: none;
+  color: #929aa7;
+}
+
+.darkMode .flatpickr-day.flatpickr-disabled {
+  color: #2f3b4e !important;
+}
+
+.darkMode .flatpickr-day.flatpickr-disabled:hover {
+  background: #161f2e00 !important;
+  cursor: not-allowed !important;
+}
+
+.darkMode span.flatpickr-weekday {
+  color: #9CA3AF;
+}
+
+/* NOT FOUND BY COPILOT - .ss-selected class not used */
+.darkMode .ss-selected {
+  background-color: #eef5ff16 !important;
+}
+
+.darkMode .bg-alfeladatBox {
+  background-color: #070e1f69;
+  border: #050b157c;
+}
+
+/* NOT FOUND BY COPILOT - .ss-option class not used */
+.darkMode option, .darkMode .option, .darkMode .ss-option {
+  background-color: #111827;
+  color: #F9FAFB !important;
+}
+
+.darkMode option:nth-of-type(odd), .darkMode .option:nth-of-type(odd), .darkMode .recommendItems div:nth-of-type(odd) {
+  background: #1d273ac4;
+}
+
+.darkMode .numInput, .darkMode .flatpickr-time-separator {
+  color: rgb(192, 191, 204) !important;
+}
+
+.darkMode .numInput:focus, .darkMode .numInput:hover, .darkMode .numInputWrappper > span:hover {
+  background-color: #47505e;
+}
+
+.darkMode .flatpickr-months > span > svg, .darkMode .numInputWrapper > span:hover {
+  fill: #535b68;
+}

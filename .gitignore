@@ -1,0 +1,16 @@
+# BBB
+# (Githubhoz kell, hogy ne legyenek a szenzitív adatok és más dolgok commitelve)
+
+# Ne legyenek commitelve a szenzitív adatok
+.server-config.json          
+
+# Ne legyenek commitelve a feltöltött fájlok
+uploads/
+!uploads/.gitkeep    
+
+# Ne legyen semmilyen log fájl commitelve
+logs/
+!logs/.gitkeep
+!logs/info/.gitkeep
+!logs/error/.gitkeep
+!logs/normal/.gitkeep

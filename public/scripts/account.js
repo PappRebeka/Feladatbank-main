@@ -1,0 +1,230 @@
+/* ------ CONTENT ------
+account.js -------------
+    - setUserData          -PR 
+    - AlapFrissit          -PR 
+    - AlapVisszaalit       -PR 
+    - fiokBealitasok       -PR
+    - changeField          -PR
+    - setField             -PR, BBB
+    - saveUserData         -PR
+    - DeleteThisUser       -PR
+    - PageOptionsFor       -PR
+*/
+
+function setUserData(){//PR
+    if (!CurrentUserData.id)
+        CurrentUserData = ajax_post("/GetUserData", 1, { UserToken: getCookie("userToken") }).dataset
+    
+    let rgb = `${CurrentUserData.HatterSzin}`;
+    document.querySelectorAll(".letter").forEach(a => {a.textContent = CurrentUserData.Nev[0].toUpperCase();
+                                                        a.classList.add(`text-${isBackgroundDark(rgb) ? "light" : "dark"}-important`)})
+
+    document.getElementById("usernev").textContent = CurrentUserData.Nev;
+    document.getElementById("emailcim").textContent = CurrentUserData.Email;
+    if(document.getElementById("jogosultsag")) document.getElementById("jogosultsag").textContent = CurrentUserData.Jogosultsag;
+
+    document.getElementById("hatter").style.backgroundColor = rgb;
+    document.getElementById("Hatter").style.backgroundColor = rgb;
+
+    let {id, Nev, Email, Jogosultsag} = CurrentUserData;
+    CurrentUserData = {id, Nev, Email, Jogosultsag}
+
+    AlapFrissit();
+}
+
+function AlapFrissit(){//PR
+    OptionsVissza = document.getElementById("options").innerHTML;
+    ButtonVissza = document.getElementById("visszagomb").innerHTML;
+}
+
+function AlapVisszaalit(){//PR
+
+    document.getElementById("details").innerHTML = `<div id="jogosultsag" class="big"></div>
+                                                    <div id="usernev" class="fw-semibold"></div>
+                                                    <div id="emailcim" class="text-muted small"></div>`
+    document.getElementById("jogosultsag").textContent = CurrentUserData.Jogosultsag;
+    document.getElementById("usernev").textContent     = CurrentUserData.Nev;
+    document.getElementById("emailcim").textContent    = CurrentUserData.Email;
+
+    document.getElementById("visszagomb").innerHTML = ButtonVissza;
+    document.getElementById("options").innerHTML = OptionsVissza;
+    
+    var isDark = getCookie("darkMode") == "1";
+    document.getElementById("themeIndicator").classList.toggle("bi-sun-fill", !isDark); 
+    document.getElementById("themeIndicator").classList.toggle("bi-moon-fill", isDark);
+    AlapFrissit();
+}
+  
+function buildButtonWithIcon(iconType, otherClasses){
+    const button = document.createElement('button')
+    button.type = 'button'
+    button.classList.add('btn')
+
+    const i = document.createElement('i')
+    i.classList.add('bi', iconType)
+    if(otherClasses) i.classList.add(otherClasses)
+
+    button.appendChild(i)
+    return button
+}
+
+function fiokBealitasok(){ //PR
+    // let the users data to be edited on buttonclick
+    
+    const cancelButton = buildButtonWithIcon('bi-x-lg', ['fs-5'])
+    cancelButton.addEventListener('click', () => AlapVisszaalit())
+    cancelButton.classList.add('ms-3')
+    document.getElementById("visszagomb").replaceChildren(cancelButton);
+
+    const editNameButton = buildButtonWithIcon('bi-pencil-square', ['fs-5'])
+    editNameButton.addEventListener('click', () => changeField('usernev'))
+
+    const editEmailButton = buildButtonWithIcon('bi-pencil-square')
+    editEmailButton.addEventListener('click', () => changeField('emailcim'))
+
+    document.getElementById("details").innerHTML = //the stuff that can be edited -- name email
+        `<div id="usernev" class="fw-semibold h3">
+        
+        </div>
+        <div id="emailcim" class="text-muted small">
+
+        </div>
+        <div id="errorMsg" class="text-danger small"></div>`;
+
+    document.querySelector('#details #usernev').textContent = CurrentUserData.Nev
+    document.querySelector('#details #usernev').appendChild(editNameButton)
+
+    document.querySelector('#details #emailcim').textContent = CurrentUserData.Email
+    document.querySelector('#details #emailcim').appendChild(editEmailButton)
+                   
+    const options = document.getElementById("options")
+    options.innerHTML = // change pw via sending email, save changes, delete account
+        `<button class="btn btn-light w-100 my-2">Jelszó módosítás</button>
+         <button class="btn btn-success w-100 my-2">Mentés</button>
+         <button data-bs-toggle="modal" data-bs-target="#UserDel" class="btn btn-secondary w-100 my-2">Fiók törlése</button>`;
+
+    options.children[1].addEventListener('click', () => saveUserData())
+    options.children[0].addEventListener('click', () =>{window.location.href=`/passreset.html?email=${CurrentUserData.Email}`;
+                                                         toastMsg('Helyreállító email külve.', '')})
+}
+
+function changeField(which){//PR
+    // change the name or email field to input field
+    const input = document.createElement('input')
+    input.type = 'text'
+    input.id = 'mezo'
+    input.classList.add('form-control')
+    input.addEventListener('blur', () => setField(which))
+    input.value = which == "usernev" ? CurrentUserData.Nev : CurrentUserData.Email
+    
+    document.getElementById(which).replaceChildren(input);
+    document.getElementById('mezo').focus() // force focus
+}
+
+function setField(what){//PR, BBB
+    // set the now changed name or email field back to normal text
+    const target = document.getElementById(what) 
+    const button = buildButtonWithIcon('bi-pencil-square', ['fs-5'])
+
+    const mezo = document.getElementById("mezo").value;
+    if (what == "usernev") { //if its just a name change its simple
+        CurrentUserData.Nev = mezo // update global data
+        button.addEventListener('click', () => changeField('usernev'))
+
+        target.textContent = mezo
+
+        document.getElementById("letter").textContent = mezo[0].toUpperCase();              //set the input back to text
+        document.getElementById("Letter").textContent = mezo[0].toUpperCase();             //and update the user icons 
+    } else {
+        // input ellenőzés
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ //regex by BBB
+
+        var van = ajax_post("/isRegistered", 0, { email: mezo }) //check if email is taken
+        if(emailPattern.test(mezo.value) && van == 'false') {   //if email format is ok and its not taken
+            CurrentUserData.Email = mezo;        // update global data and set the input back to text
+            button.addEventListener('click', () => changeField('emailcim'))
+
+            target.textContent = mezo
+            
+        } else {    //if we have issues choose your pick
+            if (van) toastMsg("Az email használatban van", "Nem sikerült az emailcím megváltoztatása, mivel ez az emailcím már használatban van", "warning"); 
+            else showErrorMsg("Nem megfelő formátum", "A megadott emailcím formátuma helytelen", "warning")  
+            button.addEventListener('click', () => changeField('emailcim'))
+            target.textContent = CurrentUserData.Email //and set back to old email
+        }              
+    }
+    target.appendChild(button)
+}
+
+function saveUserData(){//PR
+    // update the user data in the database
+    let newNev = document.getElementById("usernev").innerText;
+    let newEmail = document.getElementById("emailcim").innerText;
+
+    const result = ajax_post("/updateUserdata", 1, { userToken: getCookie("userToken"), newNev: newNev, newEmail: newEmail });
+
+    if (result.error === 'username_exists') {
+        showErrorMsg("Felhasználónév foglalt", "Ezt a felhasználónevet már használja valaki! Kérjük válasszon másikat");
+        return;
+    }
+
+    if (result.error) {
+        showErrorMsg("Hiba", "Az adatok frissítése során hiba történt");
+        return;
+    }
+
+    if (!result.success) {
+        toastMsg("Hiba", result.error || "Az adatok frissítése sikertelen volt", "danger");
+        return;
+    }
+
+    toastMsg("Sikeres művelet", "A felhasználói adatok frissítve lettek", "success");
+    AlapVisszaalit();// set the UI back to normal
+}
+
+function DeleteThisUser(){//PR
+    if(CurrentUserData.Jogosultsag == "Főadmin"){  // prevent deleting main admin
+        toastMsg("Tiltott művelet!", "Az főadmin nem törölhető", "danger")
+        setTimeout(() => {      // is this really necessary?
+            window.location.href = "homepage.html"
+        }, 2000);
+    }
+    else{   // proceed with deletion
+        const result = ajax_post("/deleteUser", 1, { id: CurrentUserData.id });
+        
+        if (result.success) {
+            toastMsg("Sikeres művelet!", "A felhasználó törölve lett, nemsokára átirányítjuk a bejelentkezési oldalra", "success")
+        } else {
+            toastMsg("Hiba", result.error || "Nem sikerült törölni a felhasználót", "danger")
+            return;
+        }
+        
+        setTimeout(() => { // redirect to login page
+            window.location.href = "index.html"
+        }, 2000);
+    }
+}
+
+
+function PageOptionsFor(jog){ //PR
+    var minors = [];
+    
+    for (const key in AvailablePages) {
+        if (!Object.hasOwn(AvailablePages, key)) continue;
+        
+        const element = AvailablePages[key];
+        if (element.requredJogosultsag.includes(jog)){
+            let div = document.createElement('div')
+            div.classList.add('navOptionButton','btn','btn-light','w-100', 'my-2')
+            div.setAttribute('data-bs-dismiss', 'offcanvas')
+            div.addEventListener('click', () => switchTo(key, div.id))
+            div.id = element.pageId
+            if(key == ActiveLocation) div.classList.add('disabled')
+            div.textContent = key
+
+            minors.push(div)
+        }
+        
+    }
+    return minors
+}

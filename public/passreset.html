@@ -1,0 +1,103 @@
+<!DOCTYPE html> <!--PR-->
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="themes.css">
+
+    <script src="scripts/globals.js"></script>
+    <script src="scripts/cookie.js"></script>
+    <script src="scripts/helpers.js"></script>
+
+    <script>DarkModeCheck();</script>
+
+    <title>Feladatbank - Jelszó visszaállítás</title>
+</head>
+<script>
+
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get('email');
+
+    $(document).ready(function(){
+        var isDark = getCookie("darkMode") == "1";
+        if(getCookie("darkMode") == null) setThemeCookie(false);
+        else if(isDark) htmlElement.classList.add('darkMode'); 
+
+        document.getElementById('password').addEventListener('click', () => pswCheck())
+        document.getElementById('passwordAgain').addEventListener('click', () => pswCheck())
+        document.getElementById('frissites').addEventListener('click', () => updatePass())
+    });
+
+    function jelszoValidal(jelszoInput) { // BBB
+        const jelszo = jelszoInput;
+        const jelszoPattern = /['";˛\\/*+%&()=?<>\[\]]/;
+
+        if (jelszoPattern.test(jelszo) || jelszo.length > 32 || jelszo.length < 3) {
+            //error("A megadott jelszó nem hiteles");
+            return false;
+        }
+
+        return true;
+    }
+
+    function pswCheck() { //PR
+        if(password.value !== "" && passwordAgain.value !== ""){
+            if (password.value !== passwordAgain.value){
+                errorMessage.classList.remove("d-none");
+                errorMessage.textContent = "A jelszó nem egyezik!";
+            } 
+            else if (!jelszoValidal(password.value)){
+                errorMessage.classList.remove("d-none"); 
+                errorMessage.textContent = "A megadott jelszó nem hiteles";
+            }
+            else { 
+                errorMessage.classList.add("d-none");
+                errorMessage.textContent = "";
+            }
+        }
+    }
+
+    function updatePass() { //PR
+        if(password.value === "" || passwordAgain.value === ""){
+            errorMessage.classList.remove("d-none");
+            errorMessage.textContent = "Kérem, töltse ki a mezőket!";
+            return;
+        }
+        if (password.value !== passwordAgain.value){
+            errorMessage.classList.remove("d-none");
+            errorMessage.textContent = "A jelszó nem egyezik!";
+            return;
+        }
+        ajax_post(`/updatePassword`, 1, { email: email, password: password.value });
+        box.innerHTML = `<h1 id="title" class="text-center mb-4 text-secondary">Sikeres jelszó frissítés! Átirányítás a bejelentkezési oldalra...</h1>`;
+        setTimeout(function() {window.location.href = "/index.html"}, 2000);
+        
+}
+
+</script>
+<body class="hazy">
+    <div class="container d-flex min-vh-100 justify-content-center align-items-center">
+        <div id="box" class="col-11 col-sm-8 col-md-6 col-lg-4">
+            <div class="bg-light-seethrough border-0 rounded-4 p-4">
+                <h1 class="text-center mb-4 text-secondary" id="title">Feladatbank</h1>
+                <form id="form">
+                    <div class="mb-3">  
+                        <label for="password"  class="form-label">Jelszó</label> 
+                        <input type="password" class="form-control" id="password">  
+                    </div>  
+                    <div class="mb-3">  
+                        <label for="password"  class="form-label">Jelszó újra</label> 
+                        <input type="password" class="form-control" id="passwordAgain">  
+                    </div>  
+                    <button type="button" id="frissites" class="btn btn-primary w-100">Jelszó frissítése</button>
+                    <div id="errorMessage" class="alert alert-danger mt-3 d-none" role="alert"></div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>

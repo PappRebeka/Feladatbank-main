@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/sql/sql.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+    <script src="https://unpkg.com/slim-select@latest/dist/slimselect.js"></script>
+    <link href="https://unpkg.com/slim-select@latest/dist/slimselect.css" rel="stylesheet"></link>
+
+    <script src="scripts/globals.js"></script>
+    <script src="scripts/cookie.js"></script>
+    <script src="scripts/helpers.js"></script>
+    <script src="scripts/templates.js"></script>
+    
+    <script src="scripts/externals.js"></script>
+    <script src="scripts/account.js"></script>
+    
+    <script src="scripts/task_scripts/load.js"></script>
+    <script src="scripts/task_scripts/modify.js"></script>
+    <script src="scripts/task_scripts/post.js"></script>
+    <script src="scripts/task_scripts/share.js"></script>
+
+    <script src="scripts/pagination.js"></script>
+    <script src="scripts/filters.js"></script>
+    <script src="scripts/stats.js"></script>
+    <script src="scripts/backup.js"></script>
+
+    <script src="scripts/users.js"></script>
+    <script src="scripts/intitution.js"></script>
+
+    <script>DarkModeCheck(); // called so the site doesnt flicker</script>
+
+    <link rel="stylesheet" href="main.css"> 
+    <link rel="stylesheet" href="themes.css"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="icon" type="image/x-icon" href="img/fav.png">
+    <title>Feladatbank - Home</title>
+</head>
+<script>
+
+/* ------------------------------------- - Document ready - ----------------------------------------*/
+
+    $(document).ready(function(){
+        //try{
+            DarkModeCheck() // called to update the theme button
+            setUserData();
+            setEvents()
+            let opt = document.getElementById('menuOptions')
+            switch (CurrentUserData.Jogosultsag) {
+                
+                case "Admin":
+                    ActiveLocation = 'Feladataim'
+                    opt.innerHTML +=  `<p class="h3 mt-2">Tanár</p>
+                                        <div class="px-3" data-bind='tanarPages'>
+                                            
+                                        </div>
+                                        <p class="h3 mt-2 ms-0">Admin</p>
+                                        <div class="px-3" data-bind='adminPages'>
+                                            
+                                        </div>`
+
+                    Array.from(PageOptionsFor('Tanár')).forEach(e => {
+                        $bind(opt, 'tanarPages').appendChild(e)
+                    }) 
+                    Array.from(PageOptionsFor('Admin')).forEach(e => {
+                        $bind(opt, 'adminPages').appendChild(e)
+                    }) 
+                    break;
+
+                case "Főadmin":
+                    ActiveLocation = 'Felhasználók'
+                    Array.from(PageOptionsFor('Admin')).forEach(e => {
+                        opt.appendChild(e)
+                    });
+                    Array.from(PageOptionsFor('Főadmin')).forEach(e => {
+                        opt.appendChild(e)
+                    });
+                    
+                    break;
+            
+                default:
+                    ActiveLocation = 'Feladataim'
+                    Array.from(PageOptionsFor('Tanár')).forEach(e => {
+                        opt.appendChild(e)
+                    });
+                    break;
+            }
+
+
+            try{
+                if(getCookie("currentPage") == 'null' || getCookie("currentKikapcsId") == 'undefined' || getCookie("currentKikapcsId") == "null" 
+                || (typeof getCookie("currentPage")).toString() != 'string' || (typeof getCookie("currentKikapcsId")).toString() != 'string'){
+                    console.log("No saved location exists in cookies")
+                    setLocationCookie('null', 'null');
+                }
+                else switchTo(getCookie("currentPage"), getCookie("currentKikapcsId"))
+            }
+
+            catch{
+                switchTo(CurrentUserData.Jogosultsag == "Főadmin" ? "Felhasználók" : "Feladataim", 
+                         CurrentUserData.Jogosultsag == "Főadmin" ? "user_page"    : "fel_page")
+            }
+            
+            getCourses();
+
+            responsivity();
+            window.addEventListener("resize", responsivity);
+
+            document.getElementById("splash").remove();
+            
+            flatpickerSet("DateAndTimePicker");
+
+            $('#slim-select-wrapper').on('click', function(e) {
+                e.stopPropagation(); // ne kérdezd // fuck you mean 'ne kérdezd' kys
+                                    // brother nincs is ilyen idjű elem a kurva anyádat
+             })
+            
+            //marker
+            CreateSlimSelect2('tanulokSelect', valtozottTanulokSelect)
+            CreateSlimSelect2('tantargySzuro', tantargyChanged)
+            CreateSlimSelect2('ujIntezmeny', AthelyezTeszt)
+            //CreateSlimSelect2('vevoInputText', )
+            setPageContent();
+            
+       /*}
+        catch (err){
+            //toastMsg("Megdöglött", err, "danger")
+            //setTimeout(() => {
+            hibaIndex = 2;
+            //window.location.href= 'hiba.html'
+            //}, 5000);
+        }
+            */
+        sizeCheck();
+
+        window.addEventListener("resize", () => {
+            sizeCheck();
+        })
+    })
+ 
+    function switchTo(where, kikapcsId){ //PR, RD
+        ActiveLocation = where
+        document.getElementById("placeTitle").textContent = where;
+        
+        document.getElementById("hozzaadas").classList.add("d-none")
+        document.getElementById('filter-recieved').classList.add("d-none")
+        document.getElementById('filter-shared').classList.add("d-none")
+
+        switch (where) {
+            case 'Feladataim':
+                document.getElementById("hozzaadas").classList.remove("d-none")
+                break;
+            case 'Velem megosztott':
+                document.getElementById('filter-recieved').classList.remove("d-none")
+                CreateSlimSelect2('tanarSzuro', tanarChanged)
+                break;
+            case 'Általam közzétett':
+                document.getElementById('filter-shared').classList.remove("d-none")
+                CreateSlimSelect2('kurzusSzuro', kurzusChanged)
+                break;
+        }
+
+        try{
+            keresoVissza()
+            szuroVissza()
+            rendezesVissza()
+        } catch{}
+
+        setLocationCookie(where, kikapcsId)
+        setPageContent();
+        
+        for (const item of document.querySelectorAll(".navOptionButton")) item.classList.remove("disabled") 
+        document.getElementById(`${kikapcsId}`).classList.add("disabled");
+    }
+
+
+
+    function updateReport(action, id, javitott) { //BBB
+        let res = ajax_post("/update-report", 1, { action: action, id: id });
+
+        if (res.error) {
+            toastMsg(`Hiba`, `Hiba történt a hibajelentés frissítésekor`, `danger`);
+        } else {
+            toastMsg(`Sikeres frissítés`, `Hibajelentés státusza sikeresen frissítve`, `success`);
+        }        
+
+        loadReports(javitott)
+    }
+
+    function reportToggle(i) { //BBB
+        let $nemjavitott = $("#nemjavitott");
+        let $javitott = $("#javitott");
+
+        if (i === 1) {
+            $nemjavitott.removeClass("active");
+            $nemjavitott.removeClass("btn-outline-warning");
+            $nemjavitott.addClass("btn-outline-secondary");
+
+            $javitott.addClass("active");
+            $javitott.addClass("btn-outline-success");
+            $javitott.removeClass("btn-outline-secondary")
+        } else {
+            $javitott.removeClass("active");
+            $javitott.removeClass("btn-outline-success");
+            $javitott.addClass("btn-outline-secondary");
+
+            $nemjavitott.addClass("active");
+            $nemjavitott.addClass("btn-outline-warning");
+            $nemjavitott.removeClass("btn-outline-secondary");
+        }
+
+        loadReports(i);
+    }
+
+    function loadReports(javitott) { // BBB
+
+        if (!javitott) {
+            javitott = 0;
+        }
+
+        let $reportContainer = $("#reportContainer");
+        let adat = ajax_post("/get-reports", 1, { javitott: javitott });
+        $reportContainer.empty();
+
+        if(adat.results.length === 0) {
+            $reportContainer.addClass("justify-content-evenly");
+            $reportContainer.html(`<h1 class="display-6 text-center col-12 my-5">Nincs megjelenítendő hibajelentés!</h1>`);
+            return;
+        } else {
+            $reportContainer.removeClass("justify-content-evenly");
+        }
+
+        for (report of adat.results) {
+            let buttons = [];
+            let difference = {good: {text:'Javítva', action: 'correct', buttonClass: 'success', bi: 'bi-check',},
+                              bad:  {text:'Törlés',  action: 'delete',  buttonClass: 'danger',  bi: 'bi-trash-fill',}}
+
+            if (javitott) {
+                let div = buildReportButton(difference['bad'], report.id, javitott)
+                div.classList.add('col-md-12', 'p-1')
+                
+                buttons.push(div)
+
+            } else {
+                
+                let div = buildReportButton(difference['good'], report.id, javitott)
+                div.classList.add('col-md-6', 'p-1')
+                
+                buttons.push(div)
+
+                div = buildReportButton(difference['bad'], report.id, javitott)
+                div.classList.add('col-md-6', 'p-1')
+                
+                buttons.push(div)
+            }
+
+            const div = reportTemplate()
+            div.id = `report-${report.id}`
+            $bind(div, 'reportInfo').textContent = `#${report.id} - ${report.ido}`
+            div.querySelector("#reportMessage").textContent = report.message
+            div.querySelector("#reportMail")   .textContent = report.email
+            div.querySelector("#reportName")   .textContent = report.nev
+            Array.from(buttons).forEach(e => {
+                $bind(div, 'buttons').appendChild(e)
+            });
+
+            
+
+            $reportContainer.append(div); 
+        }
+    }
+
+    function buildReportButton(specs, id, javitott){
+        let btn = buildButtonWithIcon(specs.bi)
+        btn.innerText += specs.text
+        btn.classList.add(`btn-${specs.buttonClass}`, `text-${specs.buttonClass}-emphasis`,'w-100')
+        btn.addEventListener('click', () => updateReport(specs.action, id, javitott))
+
+        let div = document.createElement('div')
+        div.appendChild(btn)
+
+        return div
+    }
+    
+    function setPageContent() { //PR, RD, BBB
+        document.getElementById("BigDih").replaceChildren()
+        console.log("(setPageContent) oldal: "+ ActiveLocation)
+        if (!AvailablePages[ActiveLocation]) {
+            hibaIndex = 3
+            //window.location.href= 'hiba.html'
+            return;
+        }
+        document.getElementById("placeTitle").textContent = ActiveLocation
+
+        if(!AvailablePages[ActiveLocation]?.hideElements){
+            kicsiMeretu = false //force large size then it can sort itself out
+            document.querySelector(".searchbarInNav").classList.remove("d-none");
+            showNeededSearchbar();
+        } 
+        else {
+            document.querySelector(".searchbarInNav").classList.add("d-none");
+            $("#searchbar_mobile").addClass("d-none");
+        }
+
+        if(AvailablePages[ActiveLocation]?.hideElements){
+            document.getElementById("bottom").classList.add("d-none");
+            document.getElementById("mainContainer").children[0].classList.add("d-none");
+            document.getElementById("fullpageSize").classList.remove("d-none");
+            
+            //document.querySelector(".searchbarInNav").classList.add("d-none");
+            var html;
+            let runAfterDOM = null;
+            switch (ActiveLocation) {
+                case "Adatbázis műveletek":
+                    html = databasePageTemplate()
+                    for (let i = 0; i < 3; i++) {
+                        let id = ['I_Hozzaad', 'I_Modosit', 'I_Torol'][i]
+                        let btn = html.querySelector(`#${id}`)
+                        
+                        btn.addEventListener('click', () => {IntezmenyRadioToggle(btn); setIntezmenyOption(i)})
+                    }
+
+
+                    let runBtn = $bind(html, 'sqlBtn')
+                    runBtn.addEventListener('click', () => runSql())
+                    let mentBtn = $bind(html, 'backupMentBtn')
+                    mentBtn.addEventListener('click', () => backupMent())
+
+                    runAfterDOM = sqlStuff;
+                    document.querySelector("#fullpageSize").replaceChildren(html)
+                    break;
+                case "Statisztikák":
+                    html = `<div class="p-3 bg-light rounded mx-auto shadow" style="width: 90%;">
+                                <h3>Ön statisztikái:</h3>
+                                
+                                <hr class="p-3">
+
+                                <div id="statsHere" class="container row mx-auto g-3 align-items-stretch">
+                                </div> 
+                            </div>`;
+                        $("#fullpageSize").html(html);
+                    break;
+                case "Hibajelentés":
+                    if (CurrentUserData.Jogosultsag === "Főadmin") {
+                       html = hibajelentesFoadminTemplate()
+                       html.querySelector("#nemjavitott").addEventListener('click', () => reportToggle(0))
+                       html.querySelector("#javitott").addEventListener('click', () => reportToggle(1))
+                       runAfterDOM = loadReports;
+                    } else {
+                        html = hibajelentesDefaultTemplate();
+                        $bind(html, 'sendBtn').addEventListener('click', () => sendFeedback())
+                        //runAfterDOM = feedbackStuff;
+                        
+                    }
+                    document.querySelector("#fullpageSize").replaceChildren(html);
+                    break;
+            }
+            
+            if(ActiveLocation == "Adatbázis műveletek")backupTolt();
+            if(ActiveLocation == "Statisztikák")StatisztikaOnLoad();
+            // runAfterDOM egy funkciót tartalmaz ami a html beillesztése után fut le
+            if (runAfterDOM != null) { runAfterDOM(); } // quick hack de jól működik
+            
+            return;
+        }
+        else{
+            document.getElementById("bottom").classList.remove("d-none");
+            document.getElementById("mainContainer").children[0].classList.remove("d-none");
+            document.getElementById("fullpageSize").classList.add("d-none");
+            document.getElementById("filterBtn").classList.remove("d-none")
+            //document.querySelector(".searchbarInNav").classList.remove("d-none");
+            
+            if(ActiveLocation == "Felhasználók") document.getElementById("filterBtn").classList.add("d-none")
+            else                                 document.getElementById("filterBtn").classList.remove("d-none")
+
+            loadPageData();
+            
+        }
+
+        
+    }
+
+    function loadPageData(){ //PR, RD
+        let userpage = ActiveLocation == "Felhasználók"
+        let oldal = Object.keys(AvailablePages).indexOf(ActiveLocation).toString()
+        
+        let temp = {tanarId: CurrentUserData.id,
+                    oldal: oldal,
+
+                    evfolyam: ActiveFilters.evfolyam,
+                    tantargy: ActiveFilters.tantargy,
+                    nehezseg: ActiveFilters.nehezseg,
+                    tanar:    ActiveFilters.tanar,
+                    kereso:   ActiveFilters.kereso,
+
+                    tema: ActiveFilters.order.field,
+                    desc: ActiveFilters.order.desc,
+
+                    limit: limit,
+                    offset: offset
+                }
+        const par    = new URLSearchParams(temp).toString();
+        var results      = userpage ? ajax_post("/SendUsers", 1, { limit: limit, offset: offset, kereso: ActiveFilters.kereso }).results : 
+                                      ajax_post("/SendFeladatok", 1, temp).results    
+            resultsCount = userpage ? ajax_post("/getUserCount", 1, { kereso: ActiveFilters.kereso }).db : 
+                                      ajax_post("/getFeladatNumber", 1, temp).db       
+                                   
+        LimitOffset();
+        talalatSzam.textContent = resultsCount
+        maxPageNumber = Math.max(1, Math.ceil(resultsCount / limit))
+
+        updateGombok()
+        document.getElementById("oldal").textContent = activePageNumber
+        document.getElementById("maxPageNumber").textContent = maxPageNumber
+        var tantargyak = [];
+
+        document.getElementById("BigDih").replaceChildren()
+        if (talalatSzam.innerText == "0") toastMsg("Nem találtunk feladatokat!", "A megadott paraméterek alapján nem találtunk önhöz tartozó feladatokat.", "warning")
+        if(results){ if(results.length!= undefined) {
+            for (const adat of results) {
+                tantargyak.push(adat.Tantargy)
+                let felhasznalo = (oldal == "2" || oldal == '3' ? adat.Felhasznalo: "")
+                let felhasznaloColor = (oldal == "2" || oldal == '3' ? adat.FelhasznaloColor: "")
+                let kurzusnev = (oldal == "4" ? adat.Kurzus: "")
+                let kurzusId = (oldal == "4" ? adat.kurzusId: "")
+                let kurzusFeladatId = (oldal == "4" ? adat.kurzusFeladatId: "")
+                
+                userpage ? felhasznalokTolt(adat) :
+                           ClassroomGetCourses(adat, felhasznalo, felhasznaloColor, kurzusnev, kurzusId, kurzusFeladatId)
+            }
+        }}
+        updateTantargySzuro(tantargyak.filter((value, index, array) => array.indexOf(value) === index));
+    }
+
+    function munkaTorol(kurzusId, kurzusFeladatId){ //RD
+        ajax_post("/removeClassroomFeladat", 1, { kurzusId: kurzusId, kurzusFeladatId: kurzusFeladatId })
+        setPageContent()
+    }
+    
+    function responsivity() { // PR
+        if(AvailablePages[ActiveLocation]?.hideElements) return;
+        offset = 0
+        activePageNumber = 1
+        var valtozott = LimitOffset();
+        if(valtozott){  // if the limit changed, only then call the function
+            //loadPageData()
+            setPageContent(); 
+        }
+        
+        //showNeededTaskcreate();
+        showNeededSearchbar();
+    }  
+
+    function showNeededSearchbar(){ //PR
+        let width = window.innerWidth;
+        if(!AvailablePages[ActiveLocation]?.hideElements){
+            if (width < 576 && !kicsiMeretu) { // smaller than bootstrap sm and not yet in small size
+                kicsiMeretu = true
+                document.querySelector(".searchbarInNav").classList.add("d-none"); 
+                document.querySelector("#searchbar_mobile").classList.remove("d-none");
+                kereso(null) // reset the search
+            } 
+            else if (width >= 576 && kicsiMeretu){  // larger than bootstrap sm and still in small size
+                kicsiMeretu = false
+                document.querySelector(".searchbarInNav").classList.remove("d-none");
+                document.querySelector("#searchbar_mobile").classList.add("d-none");
+                kereso(null)
+            }
+        }
+    } 
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var offcanvas = document.getElementById('userOptions');
+        offcanvas.addEventListener('hidden.bs.offcanvas', function () {
+            AlapVisszaalit();
+        });        
+    });
+
+    function sqlStuff() { //BBB
+        editor = CodeMirror.fromTextArea(document.getElementById("sql-input"), {
+            mode: "text/x-mysql",
+            lineNumbers: true,
+            matchBrackets: true,
+            theme: getCookie("darkMode") === "1" ? "dracula" : "default",
+        });
+
+        
+    }
+
+    function runSql() { //BBB
+
+        const icon = `<i class="bi bi-exclamation-triangle-fill"></i>&nbsp;`;
+        const sql = editor.getValue().trim();
+        let $sql_data = $("#sql-data");
+        let $sql_headers = $("#headers");
+        let $sql_error = $("#sql-error");
+
+
+        $("#sql-table").removeClass("d-none");
+        $("#sql-placeholder").addClass("d-none");
+
+        $sql_data.empty();
+        $sql_headers.empty();
+        $sql_error.empty();
+
+        if ((!sql) || (sql === "")) {
+            showErrorMsg("Nincs semmi az SQL bevíteli mezőben!")
+            return;
+        } else {
+            let adat = ajax_post("/customSql", 1, { sql: sql });
+            if (adat.error) {
+                $sql_error.html(icon + adat["error"])
+                return;
+            }
+
+            $sql_headers.append(`<th scope="col">#</th>`)
+
+            for (const head of Object.keys(adat.results[0])) {
+                let th = document.createElement('th')
+                th.scope = 'col'
+                th.textContent = head
+                $("#headers").appendChild(th)
+            }
+
+            for (let i = 0; i < adat.results.length; i++) {
+                const row = adat.results[i];
+                let id = false;
+                
+                let html = document.createElement('tr')
+                let th = document.createElement('th')
+                th.scope = 'row'
+                th.textContent = i + 1
+                
+                html.appendChild(th)
+                
+                for (const data of Object.values(row)) {
+                    let td = document.createElement('td')
+                    td.setAttribute('title', data)
+                    td.textContent = data
+
+                    html.appendChild(td)
+                }
+
+                $sql_data.appendChild(html);
+            }
+        }
+    }
+
+    function sendFeedback() { //BBB
+        $("#feedback-email").text(CurrentUserData.Email)
+        $("#feedback-nev").text(CurrentUserData.Nev)
+
+        var feedbackForm = document.getElementById('feedback-form');
+        const message = document.getElementById("hiba-reszletek").value.trim();
+        const email = CurrentUserData.Email || "nincs megadva";
+        const nev = CurrentUserData.Nev || "nincs megadva";
+        const ido = (new Date()).toUTCString();
+        
+        if ((message == "") || !message) {
+            return;
+        } else {
+            ajax_post("/send-report", 1, { email: email, nev: nev, message: message, ido: ido });
+            toastMsg("Köszönjük a visszajelzését!", "A hibajelentés sikeresen elküldve.", "success");
+        
+            document.getElementById("feedback-form").reset();
+        }
+    }
+
+
+    /* ------ ----------------------- ------    Téma   ------ ----------------------- ------ */
+    
+    
+    
+    function logout(){ //PR
+        killCookie('stayLoggedIn'); killCookie('userToken'); killCookie('currentPage'); killCookie('currentKikapcsId');
+        window.location.href='/index.html'
+        ajax_post("/logout", 1)
+    }
+
+    function setEvents(){
+        //kereső
+        document.getElementById('keresoButton').addEventListener('click', () => 
+            kereso(document.getElementById('searchbar_nav').value))
+        document.getElementById('keresoButtonOffcanvas').addEventListener('click', () => 
+            kereso(document.getElementById('searchbar_offcanvas').value))
+        
+        //fiók lehetőségek
+        const optionsDiv = document.getElementById('options').children
+        optionsDiv[0].addEventListener('click', () => fiokBealitasok())
+        optionsDiv[1].addEventListener('click', () => themeSwitch())
+        optionsDiv[2].addEventListener('click', () => {window.location.href = `/segitseg/sugo.html?role=${CurrentUserData.Jogosultsag == 'Tanár' ? 'tanár' : 'admin'}`})
+        optionsDiv[3].addEventListener('click', () => logout())
+
+        //szűrő
+        document.getElementById('filterBtn').addEventListener('click', () => autocompleteFilters())
+
+        var radios = document.querySelectorAll('#nehezsegekSzuresReszen input')
+        for (let i = 0; i < 3; i++) radios[i].addEventListener('click', () => NehezsegRadioToggle(radios[i]))
+            
+        document.getElementById('evfolyamSzuro').addEventListener('input', () => EvfolyamCheck(document.getElementById('evfolyamSzuro')))
+        document.getElementById('sortValues').addEventListener('change', () => getRendezes())
+        document.getElementById('sortAsc').addEventListener('click', () => setSortDirection(0))
+        document.getElementById('sortDesc').addEventListener('click', () => setSortDirection(1))
+
+        var buttons = $bind(document.getElementById('szuro'), 'buttons').children
+        buttons[0].addEventListener('click', () => {szuroVissza(); szuroClick()})
+        buttons[1].addEventListener('click', () => szuroClick())
+
+        //lapozás
+        var buttons = document.querySelectorAll('#bottom button')
+        buttons[0].addEventListener('click', () => Lapozz('vissza', 'elso'))
+        buttons[1].addEventListener('click', () => Lapozz('vissza', '1'))
+        buttons[2].addEventListener('click', () => Lapozz('tovabb', '1'))
+        buttons[3].addEventListener('click', () => Lapozz('tovabb', 'utolso'))
+
+        //új feladat
+        document.getElementById('evfolyam').addEventListener('input', () => EvfolyamCheck(document.getElementById('evfolyam')))
+        document.getElementById('nehezseg').addEventListener('input', () => {
+                document.getElementById('Difficulty').textContent = 'Nehézség - ' + document.getElementById('nehezseg').value
+        })
+        $bind(document.getElementById('newFeladat'), 'hozzaadButton').addEventListener('click', () => AlfeladatHozzaad('alfeladatBox'))
+        document.querySelector('#newFeladat .modal-footer').firstChild.addEventListener('click', () => mentFeladat('alfeladatBox'))
+
+        //tanár adatai
+        var radios = document.querySelectorAll('#chips input')
+        for (let i = 0; i < 3; i++) radios[i].addEventListener('click', () => statToggle(radios[i], i + 1))
+        
+        //egyéb
+        document.querySelector('#UserDel .btn-warning').addEventListener('click', () => DeleteThisUser())
+        document.querySelector('#shareFeladat .modal-footer').firstChild.addEventListener('click', () => FeladatKozzetesz())
+        document.querySelector('#megosztFeladat .btn-warning').addEventListener('click', () => megosztFeladatTanarral())
+        
+
+        
+        document.getElementById('ujIntezmeny').addEventListener('click', () => AthelyezHova())
+        document.querySelector('#intezmenyValt .btn-info').addEventListener('click', () => AthelyezUser())
+        
+        //backup betöltése
+        document.querySelector('#BiztosBackup .btn-warning').addEventListener('click', () => restoreBackup())
+    }
+   
+</script>
+
+<body class="min-vh-100 d-flex flex-column"> <!-- PR -->
+        <!-------------------------------------------------------- - Töltőképernyő - ----------------------------------------------------------->
+      <div id="splash" class="d-flex flex-column justify-content-center align-items-center">
+          <h1 id="title" class="text-center mb-4 text-secondary">Üdvözöljük!</h1>
+          <div class="spinner-border fs-2 text-light"role="status"> </div>
+      </div>
+    
+        <nav class="navbar bg-body-tertiary shadow-sm top-0 m-0 row sticky-top w-100">
+                <!-- ## Menü és title ## -->
+            <div id="head" class="col-sm-4 col-6 p-3 justify-content-start d-flex align-items-center">
+                <button id="menuButton" class="btn" data-bs-toggle="offcanvas" data-bs-target="#navigationOptions">
+                    <i class="bi bi-list fs-5"></i> 
+                </button>
+                <span id="placeTitle" class="fs-5 fw-semibold p-2">Feladataim</span>
+                <button id="hozzaadas" class="btn" data-bs-toggle="modal" data-bs-target="#newFeladat"><i class="bi bi-plus-lg fs-5"></i></button>
+            </div>
+           
+                <!-- ## searchbar része ## -->
+            <div class="col-sm-6 col-4 search-wrapper d-flex mx-auto searchbarInNav">
+                <input type="text"  class="form-control" id="searchbar_nav" placeholder="Keresés..." />
+                <button id="keresoButton" class="btn btn-light mx-1"><i class="bi bi-search"></i></button>
+            </div>
+
+            <!-- ## user icon ## -->
+            <div class="col-sm-1 col-1 d-flex justify-content-end align-items-center">
+                <div id="hatter" class="btn m-3 d-flex align-items-center rounded-circle border-0 border-light" data-bs-toggle="offcanvas" data-bs-target="#userOptions">
+                    <div id="letter" class="letter">U</div>
+                </div>
+            </div>
+        </nav>
+
+        <!------------------------------------------------------- - Bal oldali fül - ----------------------------------------------------------->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="navigationOptions">
+            <div class="offcanvas-header">
+                <h4 class="offcanvas-title" id="offcanvasLabel">Menü</h4>
+                <button type="button" class="btn btn-close" data-bs-dismiss="offcanvas"></button>
+            </div>
+            <div id="menuOptions" class="offcanvas-body d-flex flex-column">
+                <div class="col-12 search-wrapper d-flex mx-auto searchbarInOffcanvas my-2 d-none" id="searchbar_mobile">
+                    <input type="text" class="form-control" id="searchbar_offcanvas" placeholder="Keresés..." />
+                    <button id="keresoButtonOffcanvas" class="btn btn-light mx-1" data-bs-dismiss="offcanvas"><i class="bi bi-search"></i></button>
+                </div>
+                
+            </div>
+        </div>
+
+        
+        <!------------------------------------------------------ - Jobb oldali fül - ----------------------------------------------------------->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="userOptions">
+            <div class="offcanvas-header position-relative">
+                <div class="offcanvas-title d-flex justify-content-center align-items-center w-100 position-relative" id="userDetails">
+  
+                        <!-- ## Visszagomb ## -->
+                     <div id="visszagomb" class="position-absolute start-0 translate-middle-y">
+                        <button class="btn ms-3" data-bs-dismiss="offcanvas">
+                            <i class="bi bi-caret-right-fill fs-5"></i>
+                        </button>
+                     </div>
+                    
+
+                    <div class="d-flex flex-column align-items-center text-center">
+                            <!-- ## Avatar ## -->
+                        <div id="Hatter" class="m-3 p-0 d-flex justify-content-center align-items-center rounded-circle border-2 border-light"
+                            style="aspect-ratio: 1 / 1; max-width: 64px; width: 100%;">
+                            <span id="Letter" class="letter" style="font-size: 1.5rem; line-height: 1;">U</span>
+                        </div>
+
+                            <!-- ## User Details ## -->
+                        <div id="details">
+                            <div id="jogosultsag" class="big">Jogosultság</div>
+                            <div id="usernev" class="fw-semibold">Usernév</div>
+                            <div id="emailcim" class="text-muted small">example@example.com</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="w-75 align-self-center">
+
+                <!-- ##  Options  ## -->
+            <div id="options" class="offcanvas-body">
+                <div class="btn btn-light w-100 my-2"><i class="bi bi-gear-fill me-1"></i>Fiók beállítások</div>
+                <div class="btn btn-light w-100 my-2"><i id="themeIndicator" class="bi bi-sun-fill me-1"></i>Téma</div>
+                <div class="btn btn-light w-100 my-2"><i class="bi bi-question-circle me-1"></i>Súgó</div>
+                <div class="btn btn-light w-100 my-2"><i class="bi bi-door-open me-1"></i>Kijelentkezés</div>
+            </div>
+        </div>
+
+
+        <!---------------------------------------------------- - Nagy div a feladatoknak - ----------------------------------------------------->
+        <div class="container-fluid p-3 d-flex flex-column flex-grow-1" id="mainContainer">
+            <div class="flex-grow-1">
+                <div class="my-2 row flex-grow-0" id="filter-top">
+                    <div class="col-8">
+                        <span class="fs-4 fw-semibold">Találatok: </span><span id="talalatSzam" class="fs-5 fw-normal">0</span>
+                    </div>
+                    <div class="col-4 d-flex justify-content-end">
+
+                                <!-- ## Szűrő Dropdown ## -->
+                        <div class="dropdown" id="szuro">
+                            <button class="btn btn-light mx-2" data-bs-auto-close="outside" data-bs-target="#szuro" id="filterBtn" data-bs-toggle="dropdown">
+                                <i class="bi bi-funnel"></i>
+                            </button>
+                            
+                            <div class="dropdown-menu bg-light p-3 shadow" style="min-width: 300px;">
+                                
+                                <div class="mb-3">
+                                    <label for="priorityRange" class="form-label">Nehézség</label>
+                                    <div class="row g-1 justipy-content-center align-items-center" id="nehezsegekSzuresReszen">
+                                        <div class="col-12 col-sm-4">
+                                            <label class="btn w-100 btn-outline-success" id="konnyuGomb" for="konnyu">Könnyű</label>
+                                            <input class="btn-check" name="nehezsegRadio" type="checkbox" id="konnyu">
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <label class="btn w-100 btn-outline-warning" id="kozepesGomb" for="kozepes">Közepes</label>
+                                            <input class="btn-check" name="nehezsegRadio" type="checkbox" id="kozepes">
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <label class="btn w-100 btn-outline-danger" id="nehezGomb" for="nehez">Nehéz</label>
+                                            <input class="btn-check" name="nehezsegRadio" type="checkbox"  id="nehez">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr> 
+
+                                <div class="form mt-2">
+                                    <label class="form-label">Évfolyam</label>
+                                    <input class="form-control" type="text" inputmode="numeric" id="evfolyamSzuro" min="1" max="13" >
+                                </div>
+
+                                <div class="form mt-2">
+                                    <label class="form-label">Tantárgy</label>
+                                    <div class="slim-select-wrapper">
+                                        <select class="slim-select" id="tantargySzuro"></select>
+                                    </div>
+                                </div>
+
+                                <div class="form mt-2 d-none" id="filter-recieved">
+                                    <label class="form-label">Tanár</label>
+                                    <div class="slim-select-wrapper">
+                                        <select class="slim-select" id="tanarSzuro"></select>
+                                    </div>
+                                </div>
+
+                                <div class="form mt-2 d-none" id="filter-shared">
+                                    <label class="form-label">Kurzus</label>
+                                    <div class="slim-select-wrapper">
+                                        <select class="slim-select" id="kurzusSzuro"></select>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <div class="mt-2" id="rendezes">
+                                    <label class="form-label mb-2"><i class="bi bi-list-ul"></i> Rendezés</label>
+
+                                    <div class="d-flex gap-2">
+                                        <select class="form-select" id="sortValues">
+                                            <option class="p-1" value="id">Keletkezés</option>
+                                            <option class="p-1" value="Nev">ABC</option>
+                                            <option class="p-1" value="Nehezseg">Nehézség</option>
+                                            <option class="p-1" value="Evfolyam">Évfolyam</option>
+                                        </select>
+
+                                        <div class="btn-group sort-dir" role="group">
+                                            <button type="button" class="btn btn-outline-secondary sortDirectionButton active" id="sortAsc">
+                                                <i class="bi bi-arrow-up"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary sortDirectionButton" id="sortDesc">
+                                                <i class="bi bi-arrow-down"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="text-end mt-3" data-bind="buttons">
+                                    <button class="btn btn-sm btn-secondary">Visszaálítás</button>
+                                    <button class="btn btn-sm btn-primary">Alkalmaz</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="BigDih" class="row m-0 mb-5 flex-grow-1">
+
+                </div>
+            </div>
+
+            <div id="fullpageSize" class="m-0 flex-grow-1 d-none">
+                
+            </div>
+            
+            <div class = "col-12 justify-content-center d-flex my-2 flex-grow-0 mt-auto" id="bottom">
+                <button id="elso" class="btn btn-outline-light" disabled><<</button>
+                <button id="elozo" class="btn btn-outline-light" disabled><</button>
+                <span class="mx-3 align-self-center"><span id="oldal">1</span> / <span id = "maxPageNumber">10</span></span>
+                <button id="kovetkezo" class="btn btn-outline-light">></button>
+                <button id="utolso" class="btn btn-outline-light">>></button>
+            </div>
+        </div>
+
+        <!------------------------------------------------------- - Új feladatad  - ------------------------------------------------------------>
+        <div class="modal modal-lg fade"  id="newFeladat" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                
+                <div class="modal-header mb-2">
+                   <h5 class="modal-title d-flex align-items-center gap-2">
+                        Új feladat hozzáadása
+                        <i class="bi bi-plus-lg fs-4"></i>
+                    </h5>
+                </div>
+                
+                <div class="modal-body hozzaad-slim p-2">
+                    <div class="container-fluid">
+                        <div class="row align-items-stretch">
+                            <!--   LEFT   -->
+                            <form class="col-12 col-lg-6 d-flex flex-column h-100">
+                                <div class="mb-2">
+                                    <label class="form-label" for="feladatNev">Feladat Neve</label>
+                                    <input class="form-control" type="text" id="feladatNev" placeholder="Adja meg a feladat nevét" required>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label" for="tantargy">Tantárgy</label>
+                                    <input class="form-control" type="text" id="tantargy" placeholder="Pl.: Matematika" required>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label" for="tema">Téma</label>
+                                    <input class="form-control" type="text" id="tema" placeholder="Pl.: Algebra" required>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label" for="evfolyam">Évfolyam</label>
+                                    <input class="form-control" type="text" inputmode="numeric" id="evfolyam" placeholder="Pl.: 10" required>
+                                </div>
+                                <div class="mb-2">
+                                    <label id="Difficulty" class="form-label">Nehézség - 5</label>
+                                    <input class="form-range nehezseg" id="nehezseg" type="range" value="5" min="1" max="10">
+                                </div>
+                                <div class="mt-2 mb-3 flex-grow-1 d-flex flex-column">
+                                    <label class="form-label" for="leiras">Leírás</label>
+                                    <textarea id="leiras" class="form-control flex-grow-1" placeholder="Jellemezze a feladatot" style="resize: none;" type="text" required></textarea>
+                                </div>
+                            </form>
+
+                            <!--  DIVIDER  -->
+                            <div class="d-none d-lg-flex col-lg-1 ">
+                                <div class="vr h-100"></div>
+                            </div>
+
+                            <!--   RIGHT   -->
+                            <div class="col-12 col-lg-5 d-flex flex-column">
+                                <div class="align-items-center mb-4 mx-auto">
+                                    <button class="btn d-flex text-dark align-items-center btn-light" data-bind="hozzaadButton">
+                                        <i class="bi bi-plus-circle fs-5 me-2"></i>
+                                        <span>Alfeladat Hozzáadása</span>
+                                    </button>
+                                </div>
+                                <div class="overflow-auto flex-grow-1 shadow rounded px-2 bg-alfeladatBox mb-2" id="alfeladatBox" style="max-height: 50vh;">
+                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer footer-normal">
+                    <button class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-save"></i> Hozzáadás</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezár</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        
+
+        <!-------------------------------------------------------- - Feladat adatai - ---------------------------------------------------------->
+        <div class="modal fade" id="editFeladat" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                
+                <div class="modal-header" id="felcim">
+                  
+                </div>
+                
+                <div class="modal-body">
+                  <div id="modalFeladatContent" class="mb-3"></div>
+                </div>
+                
+                <div class="modal-footer">
+                    
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <!-------------------------------------------------------- - Tanár adatai - ---------------------------------------------------------->
+        <div class="modal fade" id="tanarAdatai" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                
+                <div class="modal-header" id="felcim">
+                  
+                </div>
+                
+                <div class="modal-body">
+
+                    <div id="chips" class="row w-100 mx-auto">
+                        <div class="col-12 col-sm-4">
+                            <label class="btn w-100 btn-outline-light" id="LetrehozottStat" for="Letrehozott">Feladatok</label>
+                            <input class="btn-check" name="statRadio" type="checkbox" id="Letrehozott">
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <label class="btn w-100 btn-light" id="MegosztottStat" for="Megosztott">Megoszott</label>
+                            <input class="btn-check" name="statRadio" type="checkbox" id="Megosztott">
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <label class="btn w-100 btn-light" id="KozzetettStat" for="Kozzetett">Közzétett</label>
+                            <input class="btn-check" name="statRadio" type="checkbox" id="Kozzetett">
+                        </div>
+                    </div>
+                  <div id="modalTanarContent" class="mt-3"></div>
+                  <canvas id="diagramHely" style="max-height: 30vh;"></canvas>
+                </div>
+
+                
+                <div class="modal-footer">
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+        <!-------------------------------------------------- - User törlése confirm - --------------------------------------------------------->
+        <div class="modal fade" id="UserDel" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                
+                <div class="modal-header">
+                  <h5 class="modal-title">Biztos törölni akarja a felhasználót?</h5>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning">Igen</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nem</button>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <!--------------------------------------------------------- - Közzététel - ------------------------------------------------------------->
+        <div class="modal fade" id="shareFeladat" tabindex="-1" data-bs-focus="false">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                
+                <div id="megosztasId" class="modal-header dropdown-center">
+                  
+                </div>
+                
+                <div class="modal-body">
+
+                    <div class="form">
+                        <label class="form-label fw-semibold">Határidő</label><br>
+                        <input type="date" id="DateAndTimePicker" class="form-control" placeholder="Opcionális">
+                    </div>
+                    
+                    <div class="form mt-2">
+                        <label class="form-label fw-semibold">Tanulók</label>
+                        <select id="tanulokSelect" class="slim-select" multiple> </select>
+                    </div>
+                    
+                </div>
+
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Közzététel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezárás</button>
+                </div>
+              </div>
+            </div>
+        </div>
+
+         <!----------------------------------------------------- - Feladat megosztása - -------------------------------------------------------->
+         <div class="modal fade" id="megosztFeladat" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Feladat megosztása tanárral</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form">
+                            <label for="vevoInputText" class="form-label fw-semibold">Címzett:</label>
+                            <div class="form">
+                                <input class="form-control" type="select" id="vevoInputText">
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Megosztás</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!----------------------------------------------------- - Intézmény áthelyezés - -------------------------------------------------------->
+        <div class="modal fade" data-bs-focus="false" id="intezmenyValt" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Intézmény változtatása</h5>
+                    </div>
+                    <div class="modal-body">
+                            
+                            <label for="ujIntezmeny" class="form-label fw-semibold">Hová:</label>
+                            <select id="ujIntezmeny" class="slim-select"></select>
+                        <div id="local"></div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info"      data-bs-dismiss="modal">Áthelyezés</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezárás</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" data-bs-focus="false" id="BiztosBackup" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning text-dark-important">
+                        <h4 class="modal-title">Be akarja tölteni a mentést?</h4>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <p><strong><i class="bi bi-exclamation-triangle"></i> Figyelmeztetés:</strong></p>
+
+                        <p>A mentés visszaállítása után az adatbázis az utolsó mentés idején készült állapotba kerül, és a mentés utáni adatok elvesznek!</p>
+                    </div>
+
+                    <div class="gap-2 mb-3 mx-3 d-flex justify-content-end">
+                        <button type="button" class="btn btn-warning w-25"   data-bs-dismiss="modal">Betöltés</button>
+                        <button type="button" class="btn btn-secondary w-25" data-bs-dismiss="modal">Mégse</button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!---------------------------------------------------------- -  Pirítós  - ------------------------------------------------------------->
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="toast" class="toast bg-light" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header bg-info">
+                    <div class="rounded me-2  d-flex justify-content-center align-items-center" style="width: 20px; height: 20px;">
+                        <i class="bi bi-bell text-white"></i>
+                    </div>
+                    <strong class="me-auto" id="toast-tile"></strong>
+                    <button type="button" class="btn btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    
+                </div>
+            </div>
+        </div>
+
+        <div id="tooSmall" class="container-fluid m-0 p-2 bg-dark d-none position-absolute top-50 start-50 translate-middle w-100 h-100 z-1080">
+            <div class="text-muted position-absolute top-50 start-50 m-0 p-0 translate-middle w-75 p-4 d-flex justify-content-center align-items-center flex-column">
+                <h1 class="h-1"><i class="bi bi-sign-stop-fill"></i></h1>
+                <p>A készülék képernyője túl kicsi a weboldal megtekintéséhez.</p>
+            </div>
+        </div>
+</body>
+</html>

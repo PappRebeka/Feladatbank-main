@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="main.css"> 
+    <link rel="stylesheet" href="themes.css">
+
+    <script src="scripts/globals.js"></script>
+    <script src="scripts/cookie.js"></script>
+    <script src="scripts/helpers.js"></script>
+    <script src="scripts/templates.js"></script>
+
+    <link rel="icon" type="image/x-icon" href="img/fav.png">
+    <script>DarkModeCheck();</script>
+    <title>Feladatbank - Bejelentkezés</title>
+</head>
+<script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+    // ---------- Small utilities ----------
+    function showError(msg) {
+      const box = document.getElementById("errorMessage");
+      box.textContent = msg;
+      box.classList.remove("d-none");
+    }
+
+    function clearError() {
+      const box = document.getElementById("errorMessage");
+      box.textContent = "";
+      box.classList.add("d-none");
+    }
+
+    function isValidEmail(email) {
+        // Source - https://stackoverflow.com/a
+      const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/; // {any} + @ + {any} + . + {any}
+      if(emailRegex.test(String(email).trim())) return true
+
+      showError("A megadott email cím formátuma érvénytelen");
+      return false;
+    }
+
+    function isNameValid(input) {
+      if (!input || String(input).trim().length < 3) {
+        showError("A megadott név nem hiteles");
+        return false;
+      }
+      return true;
+    }
+
+    function jelszoValidal(input) {
+      const jelszo = String(input || "");
+      
+      const pattern = /['";˛\\/*+%&()=?<>\[\]]/; // Prevents SQL injection and special character conflicts by not allowing special characters
+      if (pattern.test(jelszo) || jelszo.length > 32 || jelszo.length < 3) {
+        showError("A megadott jelszó nem hiteles");
+        return false;
+      }
+      return true;
+    }
+
+    function emlekezz() {
+      const rememberMe = document.getElementById("rememberMe");
+      if (!rememberMe) return;
+      const date = new Date();
+      date.setDate(date.getDate() + 14);
+      document.cookie = `stayLoggedIn=${rememberMe.checked ? "1" : "0"}; expires=${date.toUTCString()}`;
+    }
+
+    function jelszoVisibility(btn, id) {
+        const input = $(id);
+        const $btn = $(btn);
+
+        if (input.attr("type") == "password") {
+            input.attr("type", "text");
+            $btn.html('<i class="bi bi-eye-slash"></i>');
+        } else {
+            input.attr("type", "password");
+            $btn.html('<i class="bi bi-eye"></i>');
+        }
+    }
+
+    // ---------- UI rendering ----------
+    let email = null; // set when Google redirect gives it
+    let pendingUserToken = null;
+
+    function renderLogin() {
+      clearError();
+      const form = document.getElementById('form')
+      form.innerHTML = loginFormTemplate()
+
+      $bind(form, 'redirect').addEventListener('click', () => window.location.href = '/redirect')
+      form.querySelector('#user')  .addEventListener('keyup', () => {if (event.key === 'Enter') tryLogin()})
+      form.querySelector('#jelszo').addEventListener('keyup', () => {if (event.key === 'Enter') tryLogin()})
+
+      form.querySelector('#passwordButton').addEventListener('click', () => jelszoVisibility(form.querySelector('#passwordButton'), '#jelszo'))
+      
+      $bind(form, 'passReset').addEventListener('click', () => renderPassReset())
+      form.querySelector('#bejelentkezes').addEventListener('click', () => tryLogin())
+    }
+
+    function renderRegister(nameFromGoogle, emailFromGoogle) {
+      clearError();
+      const form = document.getElementById('form')
+      form.innerHTML = registerFormTemplate();
+      form.querySelector("#username").value = nameFromGoogle || "";
+
+      email = emailFromGoogle || null;
+
+      form.querySelector("#passwordAgain").addEventListener("input", pswCheck());
+      form.querySelector("#password").addEventListener("input", pswCheck());
+
+      const buttons = form.querySelectorAll('button')
+      buttons[0].addEventListener('click', () => jelszoVisibility(buttons[0], '#password'))
+      buttons[1].addEventListener('click', () => jelszoVisibility(buttons[1], '#passwordAgain'))
+      buttons[2].addEventListener('click', () => register())
+
+      form.querySelector('#rememberMe').addEventListener('change', () => emlekezz())
+      form.querySelector('a').addEventListener('click', () => formReset())
+    }
+
+    function pswCheck() {
+        const p1 = form.querySelector("#password")?.value || "";
+        const p2 = form.querySelector("#passwordAgain")?.value || "";
+        if(p1 != "" && p2 != ""){
+            if (p1 != p2) showError("A jelszó nem egyezik!");
+            else clearError();
+        }
+    }
+
+    function renderSelectInstitute(existingUser) {
+      clearError();
+      const btnText = Boolean(existingUser) ? 'Bejelentkezés' : 'Regisztráció'
+      const form = document.getElementById('form')
+      form.innerHTML = `
+        <h4 class="text-center display-6 mb-4">Válasszon intézményt</h4>
+        ${Boolean(existingUser) ? `<p class="mb-4 lead text-break">Korábbi intézményének <strong>már nem tagja.</strong><br>
+                                    Kérjük válassza ki az intézmény nevét amelyhez tartozik.</p>
+                                    <hr class="mb-4 w75 mx-auto">` : ""}
+
+        <div class="mb-3">
+          <label class="text-muted form-label">Intézmény</label>
+          <select class="form-select slim-select text-truncate" id="intezmenySelect"></select>
+
+          <p class="mb-4 text-muted text-break">
+            <i class="bi bi-exclamation-diamond-fill"></i>&nbsp;
+            Szíveskedjék felkeresni a rendszergazdát amennyiben <strong>nem találja az intézményt</strong>, amelynek tagja.
+          </p>
+        </div>
+
+        <button type="button" class="btn btn-primary w-100">
+          ${btnText}
+        </button>
+
+        <div class="mt-2">
+          <a href="#">Vissza</a>
+        </div>
+      `;
+      
+      form.querySelector('button').addEventListener('click', () => Boolean(existingUser) ? registerIntezmeny() : loginIntezmeny())
+      form.querySelector('a').addEventListener('click', () => renderLogin())
+
+      IntezmenyArrayTolt();
+    }
+
+    function renderPassReset() {
+      clearError();
+      const form = document.getElementById('form')
+      form.innerHTML = elfelejtettJelszoFormTemplate()
+
+      form.querySelector('button').addEventListener('click', () => emailCheck())
+      form.querySelector('a').addEventListener('click', () => renderLogin())
+    }
+
+    // ---------- Data fetch helpers ----------
+    function IntezmenyArrayTolt() {
+      const corporation = ajax_post("/SendIntezmeny", 1, {});
+      const sel = document.getElementById("intezmenySelect");
+
+      sel.replaceChildren();
+      if (!corporation.results) return;
+
+      for (const item of corporation.results) {
+        const opt = document.createElement("option");
+        opt.value = item.id;
+        opt.textContent = item.IntezmenyNev;
+        sel.appendChild(opt);
+      }
+    }
+
+    // ---------- Actions ----------
+    function getRegisterData() {
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get("name");
+      const mail = params.get("email");
+
+      renderLogin();
+
+      if (mail && name) {
+        email = mail;
+        if (ajax_post("/isRegistered", 0, { email: mail }) == "false") {
+          renderRegister(name, mail);
+        } else {
+          tryLogin(mail);
+        }
+      }
+    }
+
+    function tryLogin(mail) {
+      clearError();
+
+      const loginWithGoogle = Boolean(mail);
+      const user = document.getElementById("user")?.value || "";
+      const passwd = document.getElementById("jelszo")?.value || "";
+
+      if (!loginWithGoogle) {
+        if (!isNameValid(user) || !jelszoValidal(passwd)) return;
+      } else {
+        if (!isValidEmail(mail)) {
+          showError("Érvénytelen email cím!");
+          return;
+        }
+      }
+
+      const result = ajax_post("/loginUser", 1, { user: user, passwd: passwd, userToken: "", mail: loginWithGoogle ? mail : "" });
+
+      if (result.db == 1) {
+        const intezmenyCount = ajax_post("/VanIntezmeny", 1, {});
+
+        emlekezz();
+
+        const date = new Date();
+        date.setDate(date.getDate() + 14);
+        document.cookie = `userToken=${result.UserToken}; expires=${date.toUTCString()};`;
+
+        if (intezmenyCount?.results?.[0]?.Db >= 1) {
+          window.location.href = "/homepage.html";
+        } else {
+          pendingUserToken = result.UserToken;
+          renderSelectInstitute(true);
+        }
+      } else {
+        showError("Hibás felhasználónév vagy jelszó!");
+      }
+    }
+
+    function registerNext() {
+      clearError();
+
+      const username = document.getElementById("username").value;
+      const p1 = document.getElementById("password").value;
+      const p2 = document.getElementById("passwordAgain").value;
+
+      if (p1 != p2) {
+        showError("A jelszó nem egyezik!");
+        return;
+      }
+
+      if (!isNameValid(username) || !isValidEmail(email) || !jelszoValidal(p1)) return;
+
+      const data = ajax_post("/registerData", 1, { username: username, email: email, password: p1 });
+
+      if (data.error == 'username_exists') {
+        showError("Ezt a felhasználónevet már foglalta valaki! Kérjük válasszon másikat.");
+        return;
+      }
+
+      if (data.error) {
+        showError("Hiba történt a regisztráció során!");
+        return;
+      }
+
+      const date = new Date();
+      date.setFullYear(date.getFullYear() + 10);
+      document.cookie = `userToken=${data.userToken}; expires=${date.toUTCString()};`;
+
+      renderSelectInstitute(false);
+    }
+
+    function registerIntezmeny() {
+      const sel = document.getElementById("intezmenySelect");
+      const intezmId = sel.value;
+
+      ajax_post("/setIntezmeny", 1, { email: email, intezmeny: intezmId });
+      window.location.href = "/homepage.html";
+    }
+
+    function loginIntezmeny() {
+      const sel = document.getElementById("intezmenySelect");
+      const intezmId = sel.value;
+
+      ajax_post("/updateUserIntezmeny", 1, { ujIntezmId: intezmId });
+      toastMsg("Sikeres frissítés", "Sikeresen frissítettük az ön fiókjához tartozó intézményt", "success");
+      setTimeout(() => window.location.href = "/homepage.html", 1500);
+    }
+
+    
+
+    function emailCheck() {
+      clearError();
+      const mail = document.getElementById("email").value;
+
+      if (!isValidEmail(mail)) {
+        showError("Kérem adjon meg egy érvényes email címet!");
+        return;
+      }
+
+      if (ajax_post("/isRegistered", 0, { email: mail }) == "true") {
+        ajax_post("/sendMailTo", 1, { email: mail });
+        toastMsg("Email elküldve", "Ha létezik fiók ezzel az emaillel, küldtünk helyreállító linket.", "success");
+      } else {
+        showError("Nincs ilyen email című felhasználó!");
+      }
+    }
+
+    
+    $(document).ready(function() {
+       DarkModeCheck();
+
+      const stay = getCookie("stayLoggedIn");
+      if (stay == "1") {
+        const van = ajax_post("/loginUser", 1, { user: "", passwd: "", userToken: getCookie("userToken") || "" });
+        if (van?.db == 1) {
+          window.location.href = "/homepage.html";
+          return;
+        }
+      }
+
+      getRegisterData();
+    });
+  </script>
+<body class="hazy">
+    <i data-bs-toggle="modal" data-bs-target="#help" class="bi m-4 bi-question-circle-fill position-absolute end-0 border-0 cursor-pointer" title="Súgó"></i> 
+    
+    <div class="container d-flex min-vh-100 justify-content-center align-items-center">
+        <div id="box" class="col-11 col-sm-8 col-md-6 col-lg-4">
+            <div class="bg-login border-0 rounded-4 p-4">
+                <h1 class="text-center mb-4 text-secondary fs-1" style="font-variant: small-caps; font-weight: bolder;" id="title">Feladatbank</h1>
+                <form id="form">
+                    
+                </form>
+                <div id="errorMessage" class="alert alert-danger mt-3 d-none" role="alert"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-------------------------------------------------------- - Segitség - ---------------------------------------------------------->
+        <div class="modal fade" id="help" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3>Súgó</h3>
+                  <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="accordion m-3 rounded" id="loginKerdesek">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="regisztralas-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#regisztralas-collapse" 
+                                        aria-expanded="false" aria-controls="regisztralas-collapse">
+                                    Hogyan regisztrálok egy új felhasználót?
+                                </button>
+                            </h2>
+
+                            <div id="regisztralas-collapse" class="accordion-collapse collapse" aria-labelledby="regisztralas-header" data-bs-parent="#loginKerdesek">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>Nyomjon rá a 'Google fiók használata' gombra.</li>
+                                        <li>Válassza ki a Google fiókot, amit regisztráli szeretne az oldalra.</li>
+                                        <li>Fogadja el az Adatvédelmi Irányelveket.</li>
+                                        <li>Adja meg a felhasználó nevet és a jelszót amit használni szeretne.</li>
+                                        <li>Nyomjon rá a 'Tovább' gombra.</li>
+                                        <li>Adja meg az intézményt amelyben tanít.</li>
+                                        <li>Nyomjon rá a 'Regisztáció' gombra.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="bejelentkezes-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bejelentkezes-collapse" 
+                                        aria-expanded="false" aria-controls="bejelentkezes-collapse">
+                                    Hogyan tudok bejelentkezni?
+                                </button>
+                            </h2>
+
+                            <div id="bejelentkezes-collapse" class="accordion-collapse collapse" aria-labelledby="bejelentkezes-header" data-bs-parent="#loginKerdesek">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>Adja meg a felhasználónevét vagy az email címét amivel korábban regisztrált.</li>
+                                        <li>Adja meg a jelszavát.</li>
+                                        <li>Kitöltés után nyomjon rá a 'Bejelentkezés' gombra.</li>
+                                    </ul>
+                                    <div class="w-100 row align-content-center mx-auto my-3">
+                                        <div class="col-4 col-sm-5 my-auto bg-secondary relative opacity-50" style="height:1px;"></div>
+                                        <p class="col-4 col-sm-2 my-auto text-center p-0">vagy</p>
+                                        <div class="col-4 col-sm-5 my-auto bg-secondary relative opacity-50" style="height:1px;"></div>
+                                    </div>
+                                    <ul>
+                                        <li>Kattintson a 'Google fiók használata' gombra.</li>
+                                        <li>Válassza ki a használi kívánt Google fiókot.</li>
+                                        <li>Fogadja el az Adatvédelmi Irányelveket.</li>
+                                        <li>Az oldal néhány másodperc után betölt.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="elfelejtettJelszo-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#elfelejtettJelszo-collapse" 
+                                        aria-expanded="false" aria-controls="elfelejtettJelszo-collapse">
+                                    Mit csináljak, ha elfelejtettem a jelszavamat?
+                                </button>
+                            </h2>
+
+                            <div id="elfelejtettJelszo-collapse" class="accordion-collapse collapse" aria-labelledby="elfelejtettJelszo-header" data-bs-parent="#loginKerdesek">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>Kattintson a 'Bejelentkezés' gomb felett található 'Elfelejtett jelszó' linkre.</li>
+                                        <li>Irja be a fiókjához tartozó email címet.</li>
+                                        <li>Kattintson a 'Jelszó visszaállító link küldése' gombra.</li>
+                                        <li>Nyissa mega a megadott email címre külött jelszó visszaálító emailt.</li>
+                                        <li>Kattinson az emailben talált gombra.</li>
+                                        <li>Adja meg az új jelszót amit használni szeretne.</li>
+                                        <li>Jelentkezzen be.</li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="toast" class="toast bg-light" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header bg-info">
+                    <div class="rounded me-2  d-flex justify-content-center align-items-center" style="width: 20px; height: 20px;">
+                        <i class="bi bi-bell text-white"></i>
+                    </div>
+                    <strong class="me-auto" id="toast-tile"></strong>
+                    <button type="button" class="btn btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    
+                </div>
+            </div>
+        </div>
+    
+</body>
+</html>
