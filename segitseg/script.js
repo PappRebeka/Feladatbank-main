@@ -8,7 +8,7 @@ const Base = "/segitseg/";
 var tocState = true
 
 $(document).ready(async function() {
-  setThemeInditators();
+  setThemeIndicators(getCookie("darkMode") == "1");
 
   setEvents()
   const params = new URLSearchParams(window.location.search)
