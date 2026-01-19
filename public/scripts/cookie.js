@@ -3,7 +3,6 @@ helpers.js -------------
     - killCookie        -PR
     - getCookie         -RD?
     - setThemeCookie    -PR
-    - DarkModeCheck     -PR
     - thheeSwitch       -PR
     - setLocationCookie -PR
 */
@@ -28,19 +27,6 @@ function setThemeCookie(state){ //PR
     var date = new Date();
     date.setFullYear(date.getFullYear() + 10)
     document.cookie = `darkMode=${state ? "1" : "0"}; expires=${date.toUTCString()}`
-}
-
-function DarkModeCheck(){
-    var isDark = getCookie("darkMode") == "1";
-    if(getCookie("darkMode") == null) setThemeCookie(false);
-    else if(isDark) htmlElement.classList.add('darkMode'); 
-
-    try{
-        document.getElementById("themeIndicator").classList.toggle("bi-sun-fill", !isDark); 
-        document.getElementById("themeIndicator").classList.toggle("bi-moon-fill", isDark);
-    }
-    catch{}
-            
 }
 
 function themeSwitch(){ //PR
