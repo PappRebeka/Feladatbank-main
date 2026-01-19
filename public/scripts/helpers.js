@@ -58,6 +58,21 @@ function ajax_post( urlsor, tipus, data ) { //KA // json restapi-hoz használjuk
     return s;
 };
 
+function DarkModeCheck(){
+    var isDark = getCookie("darkMode") == "1";
+    if(getCookie("darkMode") == null) setThemeCookie(false);
+    else if(isDark) htmlElement.classList.add('darkMode');
+  setThemeIndicators(isDark)
+}
+
+function setThemeInditators(isDark){
+  try{
+        document.getElementById("themeIndicator").classList.toggle("bi-sun-fill", !isDark); 
+        document.getElementById("themeIndicator").classList.toggle("bi-moon-fill", isDark);
+    }
+    catch{}
+}
+
 function mezoCheck() { // BBB
     jo = true
     reasonok = []
