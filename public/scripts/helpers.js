@@ -37,12 +37,7 @@ function ajax_get( urlsor, hova, tipus, aszinkron ) { //KA // html oldalak besz√
 
 function ajax_post( urlsor, tipus, data ) { //KA // json restapi-hoz haszn√°ljuk
     var s = "";
-    var ajaxConfig = {
-        url: urlsor, 
-        type: "post", 
-        async: false, 
-        cache: false, 
-        dataType: tipus===0?'html':'json',
+    var ajaxConfig = {url: urlsor, type: "post", async: false, cache: false, dataType: tipus===0?'html':'json',
         beforeSend: function(xhr) { },
         success: function(response) { s = response; },
         error: function(jqXHR, textStatus, errorThrown) {
