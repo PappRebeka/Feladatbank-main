@@ -579,4 +579,36 @@ function carouselItemTemplate(){
           <span class="carousel-control-next-icon"></span>w
         </button>
     `
+    return div
+}
+
+function userDetailsTemplate(){
+    const div = document.createElement('div')
+    div.classList.add('offcanvas-title', 'd-flex', 'justify-content-center', 'align-items-center', 'w-100', 'position-relative')
+    div.id = 'userDetails'
+    div.innerHTML = ` <!-- ## Visszagomb ## -->
+                     <div id="visszagomb" class="position-absolute start-0 translate-middle-y">
+                        <button class="btn ms-3" data-bs-dismiss="offcanvas">
+                            <i class="bi bi-caret-right-fill fs-5"></i>
+                        </button>
+                     </div>
+
+                    <div class="d-flex flex-column align-items-center text-center">
+                    
+                            <!-- ## Avatar ## -->
+                        <div id="Hatter" class="m-3 p-0 d-flex justify-content-center align-items-center rounded-circle border-2 border-light"
+                            style="aspect-ratio: 1 / 1; max-width: 64px; width: 100%;">
+                            <span id="Letter" class="letter" style="font-size: 1.5rem; line-height: 1;">U</span>
+                        </div>
+
+                            <!-- ## User Details ## -->
+                        <div id="details">
+                            <div id="jogosultsag" class="big">Jogosultság</div>
+                            <div id="usernev" class="fw-semibold">Usernév</div>
+                            <div id="emailcim" class="text-muted small">example@example.com</div>
+                        </div>
+                        
+                    </div>`
+    return div
+                
 }
