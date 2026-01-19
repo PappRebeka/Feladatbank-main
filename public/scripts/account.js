@@ -1,7 +1,6 @@
 /* ------ CONTENT ------
 account.js -------------
     - setUserData          -PR 
-    - AlapFrissit          -PR 
     - AlapVisszaalit       -PR 
     - fiokBealitasok       -PR
     - changeField          -PR
@@ -28,14 +27,9 @@ function setUserData(){//PR
 
     let {id, Nev, Email, Jogosultsag} = CurrentUserData;
     CurrentUserData = {id, Nev, Email, Jogosultsag}
-
-    AlapFrissit();
 }
 
-function AlapFrissit(){//PR
-    OptionsVissza = document.getElementById("options").innerHTML;
-    ButtonVissza = document.getElementById("visszagomb").innerHTML;
-}
+
 
 function AlapVisszaalit(){//PR
 
@@ -46,13 +40,9 @@ function AlapVisszaalit(){//PR
     document.getElementById("usernev").textContent     = CurrentUserData.Nev;
     document.getElementById("emailcim").textContent    = CurrentUserData.Email;
 
-    document.getElementById("visszagomb").innerHTML = ButtonVissza;
-    document.getElementById("options").innerHTML = OptionsVissza;
-    
-    var isDark = getCookie("darkMode") == "1";
-    document.getElementById("themeIndicator").classList.toggle("bi-sun-fill", !isDark); 
-    document.getElementById("themeIndicator").classList.toggle("bi-moon-fill", isDark);
-    AlapFrissit();
+    document.getElementById("visszagomb").innerHTML = userOptionsDefaultButton();
+    document.getElementById("options").innerHTML = userOptionsDefaultOptions();
+    setThemeIndictos(getCookie("darkMode") == "1")
 }
   
 function buildButtonWithIcon(iconType, otherClasses){
