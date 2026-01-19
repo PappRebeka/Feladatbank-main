@@ -590,7 +590,7 @@ function userOptionsDefaultButton(){
                 
 }
 
-function userOptionDefaultOptions(){
+function userOptionsDefaultOptions(){
     const content = `
                 <div class="btn btn-light w-100 my-2"><i class="bi bi-gear-fill me-1"></i>Fiók beállítások</div>
                 <div class="btn btn-light w-100 my-2"><i id="themeIndicator" class="bi bi-sun-fill me-1"></i>Téma</div>
