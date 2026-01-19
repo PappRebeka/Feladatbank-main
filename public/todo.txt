@@ -7,12 +7,18 @@ egyedi felhnév
 maybe csilagozva page?
 
 megosztás slimselect
+egy emberrel egy feladatot csak egyszer lehessen megosztani
+megosztottság indicator?
 
 loading indicator közzétevésnél
 
 google fiok -> mégse -> meghal
 
 hiba.html
+
+gombokhoz ikonok
+
+változó, funkció nevek egyértelműsítése
 
 while (teszteles.errors.lenght > 0){
 debug()
