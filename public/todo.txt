@@ -1,10 +1,21 @@
-backend ellenőrzés feladat archiválatlanságáért
-edit feladat nem irja felup a feladat nevet a modalban
-jogellenőrzés backenden
+backend ellenőrzés feladat tulajdonságaira (pl arch, megosztott) és user jogosultságára
+
+edit feladat nem irja felul a feladat nevet a modalban
 
 egyedi felhnév
 
-általam megosztott page!!!!
-maybe csilagozva page
+maybe csilagozva page?
 
-urer search
+megosztás slimselect
+
+loading indicator közzétevésnél
+
+google fiok -> mégse -> meghal
+
+hiba.html
+
+while (teszteles.errors.lenght > 0){
+debug()
+}
+
+dokumentálás
