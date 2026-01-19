@@ -15,7 +15,7 @@ helpers.js -------------
   - tulKozel          -RD
   - rnd               -PR
   - randomHatterszin  -PR
-  - EvfolyamCheck     -PR
+  - numberCheck     -PR
   - formatFileSize    -BBB
   - FileSizeCheck     -BBB, PR
 */
@@ -59,13 +59,14 @@ function ajax_post( urlsor, tipus, data ) { //KA // json restapi-hoz használjuk
 };
 
 function DarkModeCheck(){
-    var isDark = getCookie("darkMode") == "1";
-    if(getCookie("darkMode") == null) setThemeCookie(false);
-    else if(isDark) htmlElement.classList.add('darkMode');
-  setThemeIndicators(isDark)
+    var isDark = getCookie("darkMode") == "1" || false;
+
+    setThemeCookie(isDark);
+    htmlElement.classList.toggle('darkMode', isDark);
+    setThemeIndicators(isDark)
 }
 
-function setThemeInditators(isDark){
+function setThemeIndicators(isDark){
   try{
         document.getElementById("themeIndicator").classList.toggle("bi-sun-fill", !isDark); 
         document.getElementById("themeIndicator").classList.toggle("bi-moon-fill", isDark);
@@ -183,10 +184,10 @@ function randomHatterszin(){ //PR
     return `rgb(${rnd(0, 255)} ${rnd(0, 255)} ${rnd(0, 255)})`;
 }
 
-function EvfolyamCheck(input){  //PR
+function numberCheck(input, max){  //PR
     input.value = input.value.replace(/\D/g,'')         //regex meaning all non-digit characters  (d -> digit, D -> !digit)
-    if(parseInt(input.value) > 13) input.value = 13     //max
-    else if(parseInt(input.value) < 1) input.value = '' //clear       
+    if(Number(max) && parseInt(input.value) > max) input.value = max     //max
+    else if(parseInt(input.value) < 1)             input.value = '' //clear       
 }
 
 function formatFileSize(bytes) { // BBB

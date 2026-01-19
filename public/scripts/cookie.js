@@ -30,13 +30,10 @@ function setThemeCookie(state){ //PR
 }
 
 function themeSwitch(){ //PR
-        var classList = document.getElementById("themeIndicator").classList
-        const state = classList.contains("bi-sun-fill")
-        setThemeCookie(state)
-        htmlElement.classList.toggle('darkMode', state);
-        classList.toggle("bi-sun-fill")
-        classList.toggle("bi-moon-fill")
-    }
+    const state = document.getElementById("themeIndicator").classList.contains("bi-sun-fill") // if its light we're setting to dark
+    setThemeCookie(state)
+    DarkModeCheck()
+}
 
 
 function setLocationCookie(where, kikapcsId){ //PR

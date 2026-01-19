@@ -1,41 +1,38 @@
 function taskCardTemplate(){//PR
     const div = document.createElement('div');
     div.classList.add('feladatDiv', 'col-12', 'col-sm-6', 'col-md-4', 'col-lg-3', 'col-xl-2', 'p-2', 'm-0');
-    div.innerHTML = `
-         <div class="card h-100" data-bind="card" data-bs-toggle="modal" data-bs-target="#editFeladat">
-      <div class="card-body d-flex flex-column">
+    div.innerHTML = `<div class="card h-100" data-bind="card" data-bs-toggle="modal" data-bs-target="#editFeladat">
+                        <div class="card-body d-flex flex-column">
 
-        <h5 class="card-title text-overflow-hidden" data-bind="nev"></h5>
+                            <h5 class="card-title text-overflow-hidden" data-bind="nev"></h5>
 
-        <div class="d-none d-flex align-items-center mb-2 p-1 card-text" data-bind="felhasznaloRow">
-          <h6 class="mb-0 d-flex align-items-center">Tanár:</h6>
-          <div class="btn mx-1 rounded-circle border-0 d-inline-flex align-items-center justify-content-center"
-               style="width:24px;height:24px;" data-bind="felhasznaloCircle"></div>
-          <span class="text-truncate" data-bind="felhasznaloName"></span>
-        </div>
+                            <div class="d-none d-flex align-items-center mb-2 p-1 card-text" data-bind="felhasznaloRow">
+                            <h6 class="mb-0 d-flex align-items-center">Tanár:</h6>
+                            <div class="btn mx-1 rounded-circle border-0 d-inline-flex align-items-center justify-content-center"
+                                style="width:24px;height:24px;" data-bind="felhasznaloCircle"></div>
+                                <span class="text-truncate" data-bind="felhasznaloName"></span>
+                            </div>
 
-        <h6 class="d-none mb-2 p-1 card-text" data-bind="kurzusRow">
-          Kurzus: <span data-bind="kurzusName"></span>
-        </h6>
+                            <h6 class="d-none mb-2 p-1 card-text" data-bind="kurzusRow">Kurzus: <span data-bind="kurzusName"></span></h6>
 
-        <p class="mb-1 p-1 card-text"><strong>Tantárgy:</strong> <span data-bind="tantargy"></span></p>
-        <p class="mb-1 p-1 card-text"><strong>Téma:</strong> <span data-bind="tema"></span></p>
-        <p class="mb-1 p-1 card-text"><strong>Évfolyam:</strong> <span data-bind="evfolyam"></span></p>
-        <p class="mb-1 p-1 card-text"><strong>Nehézség:</strong> <span data-bind="nehezseg"></span></p>
-        <p class="mb-1 p-1 card-text my-3"><strong>Leírás:</strong> <span data-bind="leiras"></span></p>
+                            <p class="mb-1 p-1 card-text"><strong>Tantárgy:</strong> <span data-bind="tantargy"></span></p>
+                            <p class="mb-1 p-1 card-text"><strong>Téma:</strong> <span data-bind="tema"></span></p>
+                            <p class="mb-1 p-1 card-text"><strong>Évfolyam:</strong> <span data-bind="evfolyam"></span></p>
+                            <p class="mb-1 p-1 card-text"><strong>Nehézség:</strong> <span data-bind="nehezseg"></span></p>
+                            <p class="mb-1 p-1 card-text my-3"><strong>Leírás:</strong> <span data-bind="leiras"></span></p>
 
-        <p class="mb-1 p-1 card-text" data-bind="alfDb"></p>
+                            <p class="mb-1 p-1 card-text" data-bind="alfDb"></p>
 
-        <button class="d-none btn btn-sm btn-light btn-outline-secondary text-dark"
-                data-bind="postBtn" data-bs-toggle="modal" data-bs-target="#shareFeladat">
-          közzétevés
-        </button>
-        <button class="d-none btn btn-sm btn-light btn-outline-secondary text-dark"
-                data-bind="visszaBtn" data-bs-toggle="modal" data-bs-target="#shareFeladat">
-          visszavonás
-        </button>
-      </div>
-    </div>`
+                            <button class="d-none btn btn-sm btn-light btn-outline-secondary text-dark"
+                                    data-bind="postBtn" data-bs-toggle="modal" data-bs-target="#shareFeladat">
+                                közzétevés
+                            </button>
+                            <button class="d-none btn btn-sm btn-light btn-outline-secondary text-dark"
+                                    data-bind="visszaBtn" data-bs-toggle="modal" data-bs-target="#shareFeladat">
+                                visszavonás
+                            </button>
+                        </div>
+                    </div>`
 
     return div;
 }
@@ -93,17 +90,16 @@ function taskModal_AlfeladatTemplate(){//PR
 function subtaskCardTemplate(){//PR
     const div = document.createElement("div");
     div.classList.add('card', 'my-2', 'alfeladat', 'alf_id')
-    div.innerHTML = `
-            <div class="card-body">
-                <div class="d-flex mt-0 deleteButtonGoesHere align-items-center justify-content-between fw-semibold">
-                    <h6 class="mt-auto mb-3">Alfeladat</h6>
-                    <button class="btn text-danger" data-bind="removeButton"><i class="bi bi-x-circle fs-4"></i></button>
-                </div>
-                <p class="mb-1"><strong>Pont:</strong>
-                <input class="form-control alfeladatPont" type="text" inputmode="numeric" placeholder="Pontszám"></p>
-                <p class="mb-1"><strong>Leírás:</strong>
-                <input class="form-control alfeladatLeiras" type="text" placeholder="Leírás"></p>                
-            </div>`;
+    div.innerHTML = `<div class="card-body">
+                        <div class="d-flex mt-0 deleteButtonGoesHere align-items-center justify-content-between fw-semibold">
+                            <h6 class="mt-auto mb-3">Alfeladat</h6>
+                            <button class="btn text-danger" data-bind="removeButton"><i class="bi bi-x-circle fs-4"></i></button>
+                        </div>
+                        <p class="mb-1"><strong>Pont:</strong>
+                        <input class="form-control alfeladatPont" type="text" inputmode="numeric" placeholder="Pontszám"></p>
+                        <p class="mb-1"><strong>Leírás:</strong>
+                        <input class="form-control alfeladatLeiras" type="text" placeholder="Leírás"></p>                
+                    </div>`;
     return div
 }
 
@@ -510,32 +506,28 @@ function registerFormTemplate(){
 }
 
 function elfelejtettJelszoFormTemplate(){
-    const content = 
-        `<h3 class="text-center mb-4">Elfelejtett jelszó</h3>
-        <input type="text" class="form-control mb-3" id="email" placeholder="Emailcím" required>
-        <button type="button" class="btn btn-primary w-100">
-          Jelszó visszaállító link küldése
-        </button>
-        <p class="text-center text-secondary mt-3">
-          Van fiókja?
-          <a href="#" class="link-secondary">Jelentkezzen be</a>
-        </p>`
+    const content = `<h3 class="text-center mb-4">Elfelejtett jelszó</h3>
+                    <input type="text" class="form-control mb-3" id="email" placeholder="Emailcím" required>
+                    <button type="button" class="btn btn-primary w-100">Jelszó visszaállító link küldése</button>
+                    <p class="text-center text-secondary mt-3">
+                        Van fiókja?
+                        <a href="#" class="link-secondary">Jelentkezzen be</a>
+                    </p>`
     return content
 }
 
 function accordionItemTemplate(){
     const div = document.createElement('div')
     div.classList.add("accordion-item")
-    div.innerHTML = 
-            `<h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" aria-expanded="false">
-                
-                </button>
-            </h2>
+    div.innerHTML = `<h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" aria-expanded="false">
+                        
+                        </button>
+                    </h2>
 
-            <div class="accordion-collapse collapse" data-bs-parent="#regKerdesek">
-            
-            </div>`
+                    <div class="accordion-collapse collapse" data-bs-parent="#regKerdesek">
+                    
+                    </div>`
     return div
 }
 
@@ -543,21 +535,20 @@ function accordionNincsKepTemplate(){
     const div = document.createElement('div')
     div.classList.add("p-4", "text-center", "text-muted", "bg-light")
     div.innerHTML = `<div class="mb-2"><i class="bi bi-image"></i></div>
-                    <div>Képernyőkép hamarosan…</div>`
+                     <div>Képernyőkép hamarosan…</div>`
     return div
 }
 
 function accordionLepesekTemplate(){
     const div = document.createElement('div')
     div.classList.add("mt-2","p-2")
-    div.innerHTML = 
-          `<div class="d-flex align-items-center gap-2">
-              <i class="bi bi-check2-circle"></i>
-              <h3 class="h6 m-0">Lépések</h3>
-            </div>
-            <ol class="mt-2 mb-0">
-            
-            </ol>`
+    div.innerHTML = `<div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-check2-circle"></i>
+                        <h3 class="h6 m-0">Lépések</h3>
+                    </div>
+                    <ol class="mt-2 mb-0">
+                    
+                    </ol>`
     return div
 }
   
@@ -567,18 +558,15 @@ function carouselItemTemplate(){
     div.classList.add('carousel', 'slide')
     div.setAttribute('data-bs-wrap', 'false')
     div.setAttribute('data-bs-ride', 'carousel')
-    div.innerHTML = 
-    `
-        <div class="carousel-indicators m-auto"></div>
-        <div class="carousel-inner"></div>
+    div.innerHTML = `<div class="carousel-indicators m-auto"></div>
+                    <div class="carousel-inner"></div>
 
-        <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
-          <span class="carousel-control-next-icon"></span>w
-        </button>
-    `
+                    <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>w
+                    </button>`
     return div
 }
 
@@ -591,9 +579,9 @@ function userOptionsDefaultButton(){
 }
 
 function userOptionsDefaultOptions(){
-    const content = `
-                <div class="btn btn-light w-100 my-2"><i class="bi bi-gear-fill me-1"></i>Fiók beállítások</div>
-                <div class="btn btn-light w-100 my-2"><i id="themeIndicator" class="bi bi-sun-fill me-1"></i>Téma</div>
-                <div class="btn btn-light w-100 my-2"><i class="bi bi-question-circle me-1"></i>Súgó</div>
-                <div class="btn btn-light w-100 my-2"><i class="bi bi-door-open me-1"></i>Kijelentkezés</div>`
+    const content = `<div class="btn btn-light w-100 my-2"><i class="bi bi-gear-fill me-1"></i>Fiók beállítások</div>
+                    <div class="btn btn-light w-100 my-2"><i id="themeIndicator" class="bi bi-sun-fill me-1"></i>Téma</div>
+                    <div class="btn btn-light w-100 my-2"><i class="bi bi-question-circle me-1"></i>Súgó</div>
+                    <div class="btn btn-light w-100 my-2"><i class="bi bi-door-open me-1"></i>Kijelentkezés</div>`
     return content
+}

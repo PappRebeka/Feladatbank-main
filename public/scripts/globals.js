@@ -41,7 +41,7 @@ var ActiveFilters = {
 }
 
 var TempFilters = structuredClone(ActiveFilters); // temporary storage for filters until confirmation
- 
+const maxEvfolyamValue = 13
 // pagination
 var limit; 
 var offset = 0;

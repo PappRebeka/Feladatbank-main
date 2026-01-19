@@ -48,15 +48,18 @@ async function mentFeladat(hol) { //BBB, PR
     for (const item of items) {
         const $item = $(item);
         const fajlInput = $item.find(`.alfeladatFile`)[0]; 
-        const fileIdentifier = fajlInput ? fajlInput.className.split("fajl-")[1] : "null";
 
-        let file = (fajlInput && fajlInput.files.length != 0) 
-    //if !null              --> new file       --> upload
-    //if null && falj-null  --> no file        --> null
-    //if null && !fajl-null --> old file       --> fetch id
-        var fajlId = (file ? await fajlUpload(fajlInput) :
-                        !file && fileIdentifier == "null") ? null :
-                            fileIdentifier;
+        const existingId = fajlInput?.dataset.fileId ?? null;
+        const hasNewFile = Boolean(fajlInput && fajlInput.files && fajlInput.files.length > 0);
+
+        let fajlId = null;
+        if (hasNewFile) {
+            fajlId = await fajlUpload(fajlInput);
+        } 
+        else if (existingId) {
+            fajlId = existingId;
+        }
+
 
             
                     
@@ -100,6 +103,7 @@ async function mentFeladat(hol) { //BBB, PR
         return;
     }
 
+    console.log(feladat)
     err = false
 
     $.ajax({
@@ -139,19 +143,19 @@ function resetFeladathozzaad(){ //PR
 
 function AlfeladatHozzaad(hova){ //PR
     //creates a new subtask box
-    const container = subtaskCardTemplate()
-    container.id = `div${pId}`
+    const subtask = subtaskCardTemplate()
+    subtask.id = `div${pId}`
 
-    const button = $bind(container, 'removeButton')
+    const button = $bind(subtask, 'removeButton')
     button.addEventListener('click', () => AlfeladatEltavolit(`div${pId}`));
 
-    const input = container.querySelector('.alfeladatPont')
-    input.addEventListener('input',() => EvfolyamCheck(input))
+    const input = subtask.querySelector('.alfeladatPont')
+    input.addEventListener('input',() => numberCheck(input))
 
     const fakeFile = buildFakeFileInput(pId) 
 
-    container.firstChild.appendChild(fakeFile)
-    document.getElementById(hova).appendChild(container);
+    subtask.children[0].appendChild(fakeFile)
+    document.getElementById(hova).appendChild(subtask);
     pId++;
 }
 
@@ -162,13 +166,14 @@ function buildFakeFileInput(id, fileName, fileIdentifier){
     const text = fakeFile.children[1]
     const input = fakeFile.children[2]
 
+    label.setAttribute("for", input.id);
     
     label.id = `fakeFileButton${id}`
     text.id = `fakeFileText${id}`
     input.id = `alfFile${id}`
 
-    if(fileIdentifier) input.classList.add(fileIdentifier)
-    if(fileName) text.textContent = fileName
+    if(fileIdentifier) input.dataset.fileId = String(fileIdentifier)
+    if(fileName) text.textContent = fileName //show existing file name (if any)
 
     label.setAttribute("for", `alfFile${id}`);
     input.addEventListener('change', () => {
@@ -185,8 +190,9 @@ function AlfeladatEltavolit(id){//PR
 
 function updateFeladat(feladat, alfeladatok){//PR
     // update the task with the new data
+    feladatAdatai = {id: feladat.id, Nev: feladat.Nev, Leiras: feladat.Leiras, Tantargy: feladat.Tantargy, Tema: feladat.Tema, Evfolyam: feladat.Evfolyam, Nehezseg: feladat.Nehezseg, alfDb: feladat.alfDb}
     const container = buildTaskCardPrimaryData(feladat, null, null, null)
-    document.getElementById("thisDivHasAnIdOf"+feladat.id).appendChild(container.firstChild)         
+    document.getElementById("thisDivHasAnIdOf"+feladat.id).replaceChildren(container.querySelector('div'))         
     
     CancelEditingThisFeladat(true, ''); // and stop the editing process
 }
@@ -247,7 +253,7 @@ function editThisFeladat(){ // PR
     }
     addTextInputTo(spans, o)
     spans[2].firstChild.setAttribute('inputmode', 'numeric')
-    spans[2].firstChild.addEventListener('input', () => EvfolyamCheck(spans[2].firstChild))
+    spans[2].firstChild.addEventListener('input', () => numberCheck(spans[2].firstChild), maxEvfolyamValue)
 
 
     const {nehLabel, nehInput} = returnEditNehezsegSlider()
@@ -270,20 +276,25 @@ function editThisFeladat(){ // PR
         let alfeladatPlaceholderek = Array.from(thisOne.querySelectorAll("div span"))
 
         let fileName = alfeladatPlaceholderek[2].querySelector(".uploadedFileName")?.textContent || "Nincs fájl kiválsztva"
-        let fileIdentifier = "fajl-" + (thisOne.querySelector(".card") ? //if theres a file we save its id in the identifier
-                                thisOne.querySelector(".card").className.split("fajl-")[1] : "null")
+        let fileIdentifier = $bind(thisOne, 'alfeladatFajl')?.children[0]?.dataset.fileId || null
          
         var alfId = thisOne.querySelector("div").id.substring(15);
         thisOne.querySelector(".deleteButtonGoesHere").appendChild(buildDeleteButton(alfId))
         
         
         thisOne.querySelectorAll("p")[0].innerHTML = `<span><strong>Pont:</strong><input type="text" class="form-control alfeladatPont"></span>`;
-        thisOne.querySelectorAll("p")[0].querySelector('input').value = alfeladatPlaceholderek[0].innerText
+        thisOne.querySelectorAll("p")[0].querySelector('input').value = alfeladatPlaceholderek[0].textContent
 
-        thisOne.querySelectorAll("span")[1].innerHTML = `<input type="text" class="form-control alfeladatLeiras">`;
-        thisOne.querySelectorAll("span")[1].firstChild.value = alfeladatPlaceholderek[1].innerText
 
-        thisOne.querySelectorAll("span")[2].appendChild(buildFakeFileInput(db, fileName, fileIdentifier)) // replace the file input with a fake, because you cant set its value  
+        const spans = thisOne.querySelectorAll("span")
+        const inp = document.createElement('input')
+        inp.type = 'text'; inp.classList.add('form-control', 'alfeladatLeiras')
+        inp.value = alfeladatPlaceholderek[1].textContent
+
+        spans[1].replaceChildren(inp);
+
+        spans[2].classList.remove('d-none')
+        spans[2].replaceChildren(buildFakeFileInput(db, fileName, fileIdentifier)) // replace the file input with a fake, because you cant set its value  
     }
     const footer = editFeladat.querySelector(".modal-footer")
     footer.innerHTML = `<button type="button" class="btn btn-primary">Mentés</button>
@@ -322,10 +333,15 @@ function AlfFileChanged(fileInput, id) {//PR
 
 function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR 
     // set teh input fields back to texts and change the buttons
-    const footer = editFeladat.querySelectorAll(".modal-footer")[0]
-    const header = editFeladat.querySelectorAll(".modal-header")[0]
-    header.innerHTML = `<h5 class="modal-title fw-semibold" id="feladatCime">${feladatAdatai.Nev}</h5>`
-    footer.innerHTML = ""
+    const footer = editFeladat.querySelector(".modal-footer")
+    const header = editFeladat.querySelector(".modal-header")
+
+    const h5 = document.createElement('h5')
+    h5.classList.add('modal-title', 'fw-semibold')
+    h5.id = 'feladatCime'
+    h5.textContent = feladatAdatai.Nev
+    header.replaceChildren(h5)
+    footer.replaceChildren()
     if(document.getElementById("hozzaadGoesHere")) document.getElementById("HozzaadGoesHere").innerHTML = "" 
 
     if(ActiveLocation == "Feladataim") {

@@ -1,16 +1,16 @@
 backend ellenőrzés feladat tulajdonságaira (pl arch, megosztott) és user jogosultságára
 
-edit feladat nem irja felul a feladat nevet a modalban
-
 egyedi felhnév
-
-maybe csilagozva page?
 
 megosztás slimselect
 egy emberrel egy feladatot csak egyszer lehessen megosztani
-megosztottság indicator?
+megosztottság indicator a cardon/modalon?
+
+maybe csillagozva page?
 
 loading indicator közzétevésnél
+
+backup
 
 google fiok -> mégse -> meghal
 
@@ -20,8 +20,10 @@ gombokhoz ikonok
 
 változó, funkció nevek egyértelműsítése
 
+optimalizálás
+
 while (teszteles.errors.lenght > 0){
-debug()
+    debug()
 }
 
 dokumentálás

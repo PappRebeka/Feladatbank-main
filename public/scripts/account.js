@@ -41,8 +41,9 @@ function AlapVisszaalit(){//PR
     document.getElementById("emailcim").textContent    = CurrentUserData.Email;
 
     document.getElementById("visszagomb").innerHTML = userOptionsDefaultButton();
-    document.getElementById("options").innerHTML = userOptionsDefaultOptions();
-    setThemeIndictos(getCookie("darkMode") == "1")
+
+    document.getElementById("options").classList.remove('d-none')
+    document.getElementById("editUserOptions")?.remove()
 }
   
 function buildButtonWithIcon(iconType, otherClasses){
@@ -87,7 +88,10 @@ function fiokBealitasok(){ //PR
     document.querySelector('#details #emailcim').textContent = CurrentUserData.Email
     document.querySelector('#details #emailcim').appendChild(editEmailButton)
                    
-    const options = document.getElementById("options")
+    document.getElementById("options").classList.add('d-none')
+
+    const options = document.createElement("div")
+    options.className = "offcanvas-body"; options.id = 'editUserOptions'
     options.innerHTML = // change pw via sending email, save changes, delete account
         `<button class="btn btn-light w-100 my-2">Jelszó módosítás</button>
          <button class="btn btn-success w-100 my-2">Mentés</button>
@@ -96,6 +100,8 @@ function fiokBealitasok(){ //PR
     options.children[1].addEventListener('click', () => saveUserData())
     options.children[0].addEventListener('click', () =>{window.location.href=`/passreset.html?email=${CurrentUserData.Email}`;
                                                          toastMsg('Helyreállító email külve.', '')})
+
+    document.getElementById('userOptions').appendChild(options)
 }
 
 function changeField(which){//PR

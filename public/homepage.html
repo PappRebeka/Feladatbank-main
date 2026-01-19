@@ -56,7 +56,7 @@
 
     $(document).ready(function(){
         //try{
-            setThemeInditators()
+            setThemeIndicators(getCookie("darkMode") == "1")
             setUserData();
             setEvents()
             let opt = document.getElementById('menuOptions')
@@ -611,7 +611,7 @@
         var radios = document.querySelectorAll('#nehezsegekSzuresReszen input')
         for (let i = 0; i < 3; i++) radios[i].addEventListener('click', () => NehezsegRadioToggle(radios[i]))
             
-        document.getElementById('evfolyamSzuro').addEventListener('input', () => EvfolyamCheck(document.getElementById('evfolyamSzuro')))
+        document.getElementById('evfolyamSzuro').addEventListener('input', () => numberCheck(document.getElementById('evfolyamSzuro'), maxEvfolyamValue))
         document.getElementById('sortValues').addEventListener('change', () => getRendezes())
         document.getElementById('sortAsc').addEventListener('click', () => setSortDirection(0))
         document.getElementById('sortDesc').addEventListener('click', () => setSortDirection(1))
@@ -628,7 +628,7 @@
         buttons[3].addEventListener('click', () => Lapozz('tovabb', 'utolso'))
 
         //új feladat
-        document.getElementById('evfolyam').addEventListener('input', () => EvfolyamCheck(document.getElementById('evfolyam')))
+        document.getElementById('evfolyam').addEventListener('input', () => numberCheck(document.getElementById('evfolyam'), maxEvfolyamValue))
         document.getElementById('nehezseg').addEventListener('input', () => {
                 document.getElementById('Difficulty').textContent = 'Nehézség - ' + document.getElementById('nehezseg').value
         })

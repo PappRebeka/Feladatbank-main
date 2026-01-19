@@ -113,7 +113,7 @@ function setModalContent(adat, felhasznalo){ //PR, RD
             const fajlContainer = $bind(alfeladatDiv, "alfeladatFajl");
             fajlContainer.classList.toggle('d-none', !Boolean(fajl))
             if (fajl){ 
-                fajlContainer.firstChild.classList.add(`fajl-${fajl["identifier"]}`)
+                fajlContainer.children[0].dataset.fileId = fajl["identifier"]
 
                 $bind(alfeladatDiv, 'fajlIkon').innerHTML = ikonFunction(fajl)
                 $bind(alfeladatDiv, "fajlNev").textContent = fajl["nev"];
