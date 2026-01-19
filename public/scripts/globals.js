@@ -16,13 +16,7 @@ const AvailablePages = {
   "Statisztikák":        { hideElements: true,  pageId: 'stat_page',  requredJogosultsag: ['Tanár']} 
 };
 
-var ActiveLocation = ''; // current active page, default set onload
-
-// (issue!) kinda stupid way of doing it
-var DetaVissza;     // return value for user details 
-var OptionsVissza; // return value for user options 
-var ButtonVissza; // return value for user modal exit button 
-
+var ActiveLocation = ''; // current active page, default set onload 
 var feladatAdatai = [] // active task data
 
 // user's course data
