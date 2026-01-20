@@ -8,10 +8,22 @@ task_scripts/load.js ---------------
 */ 
 
 function kozzeteszClick(id){   //RD, PR
+    console.log("asd", ActiveLocation != "Feladataim" && ActiveLocation != "Velem megosztott")
+
+    if(ActiveLocation != "Feladataim" && ActiveLocation != "Velem megosztott"){
+        toastMsg("Hiba", "Ezzel a feladattal nem lehet ezt a műveletet végrehajtani", "warning")
+        return;
+    }
+
+    //$('#shareFeladat').modal('show');
+
     kozzetevesModalReset();
+    
     const select = document.createElement('select')
     select.addEventListener('change', () => selectedCourse())
     select.classList.add('slim-select', 'w-100', 'form-select-lg', 'mb-3')
+    select.id = 'kurzusSelect'
+
     document.getElementById("tanulokSelect").replaceChildren()
     
     for (let i = 0; i < kurzusok_nevek.length; i++) {
@@ -21,18 +33,18 @@ function kozzeteszClick(id){   //RD, PR
         
         select.appendChild(option)
     } 
-    document.getElementById("megosztasId").replaceChild(select);
+    document.getElementById("megosztasId").replaceChildren(select);
     selectedCourse()
 }
 
 function kozzetevesModalReset(){ //PR
         // clears the date and students inputs
-        fp.setDate(null)
+        flatPicker?.setDate(null)
         $("#tanulkoSelect").empty()
     }
 
 async function selectedCourse(){ //RD
-    var chosenOne = document.getElementById("kurzusSelect").value
+    var chosenOne = document.getElementById("kurzusSelect")?.value
     var kurzusId = chosenOne.split("-")[0]
     var tanulok = ajax_post("/getStudentList", 1, { kurzusId: kurzusId })
     var tanulokLista = tanulok.diakok

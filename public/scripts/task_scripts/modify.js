@@ -11,7 +11,7 @@ task_scripts/load.js ---------------
     - AlfFileChanged           -PR
     - CancelEditingThisFeladat -PR
     - TorolFeladat             -PR?
-*/ 
+*/
 
 async function fajlUpload(fajlInput) {//BBB
         
@@ -37,10 +37,10 @@ async function fajlUpload(fajlInput) {//BBB
     });
 }
 
-async function mentFeladat(hol) { //BBB, PR 
+async function mentFeladat(state) { //BBB, PR 
     let alfeladatok = [];
     let s = slim_felAdd ? "-s" : "" //whether slim mode is on or off
-    let ujFeladat = (hol.includes("alfeladatBox")) ? true : false;
+    const ujFeladat = Boolean(state)
 
     const items = ujFeladat ? $("#alfeladatBox"+s).find(".alf_id").toArray()    //get the items depending on where the function was called from
                             : document.getElementById("alfeladatokContainer").querySelectorAll(".alfeladat");
@@ -59,9 +59,6 @@ async function mentFeladat(hol) { //BBB, PR
         else if (existingId) {
             fajlId = existingId;
         }
-
-
-            
                     
         alfeladatok.push({
             "leiras": $item.find(`.alfeladatLeiras`)[0].value, 
@@ -95,7 +92,7 @@ async function mentFeladat(hol) { //BBB, PR
         "alfeladatok": alfeladatok,
         "alfDb": alfeladatok.length,
         "isInsert": (ujFeladat ? 1 : 0),
-        "id": feladatAdatai.id ?? null, // ?? -> if null or undfined
+        "id": ujFeladat ? feladatAdatai.id : null,
     }
 
     if (Object.values(feladat).some(a => a === "")) {
@@ -147,7 +144,7 @@ function AlfeladatHozzaad(hova){ //PR
     subtask.id = `div${pId}`
 
     const button = $bind(subtask, 'removeButton')
-    button.addEventListener('click', () => AlfeladatEltavolit(`div${pId}`));
+    button.addEventListener('click', () => AlfeladatEltavolit(subtask.id));
 
     const input = subtask.querySelector('.alfeladatPont')
     input.addEventListener('input',() => numberCheck(input))
@@ -183,9 +180,10 @@ function buildFakeFileInput(id, fileName, fileIdentifier){
     return fakeFile
 }
 
-
 function AlfeladatEltavolit(id){//PR
-    document.getElementById(`${id}`).parentElement.remove(); // and thats how batman came to be
+    console.log(id)
+    console.log(document.getElementById(`${id}`))
+    document.getElementById(`${id}`).remove(); 
 }
 
 function updateFeladat(feladat, alfeladatok){//PR
@@ -198,7 +196,9 @@ function updateFeladat(feladat, alfeladatok){//PR
 }
 
 function feladatArch(state){  //PR
+    console.log(`feladat state: ${state}`)
     talalatSzam.innerHTML = parseInt(talalatSzam.innerHTML)-1 
+    
     ajax_post("/feladatArchivalas", 1, { id: feladatAdatai.id, state: state })
     document.getElementById(`thisDivHasAnIdOf${feladatAdatai.id}`).remove(); 
 }
@@ -301,7 +301,7 @@ function editThisFeladat(){ // PR
                         <button type="button" class="btn btn-warning">Mégse</button>`
 
     const felhasznalo = "";                
-    footer.children[0].addEventListener('click', () => { mentFeladat('editFeladat', db), resetFeladathozzaad()})
+    footer.children[0].addEventListener('click', () => { mentFeladat(false, db), resetFeladathozzaad()})
     footer.children[1].addEventListener('click', () => CancelEditingThisFeladat(true, felhasznalo))
 }
 
@@ -346,24 +346,30 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR
 
     if(ActiveLocation == "Feladataim") {
         header.innerHTML += `<button class="btn"><i class="bi bi-pencil-square fs-5"></i></button>`
-        footer.innerHTML = `<button type="button" class="btn btn-warning" data-bs-dismiss="modal">Archiválás</button>
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#megosztFeladat">Megosztás</button>`
+        footer.innerHTML = `<button type="button" class="btn btn-warning" data-bind="arch" data-bs-dismiss="modal">Archiválás</button>
+                            <button type="button" class="btn btn-primary" data-bind="megoszt" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#megosztFeladat">Megosztás</button>`
     
 
         header.children[1].addEventListener("click", () => editThisFeladat());
-        footer.children[0].addEventListener("click", () => feladatArch(1));
-        footer.children[1].addEventListener("click", () => autocompleteArrayTolt());
+        $bind(footer, 'arch').addEventListener("click", () => feladatArch(1));
+        $bind(footer, 'megoszt').addEventListener("click", () => autocompleteArrayTolt());
     }
     
     if (ActiveLocation == "Archívum"){
-        footer.innerHTML += `<button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="TorolFeladat()">Töröl</button>
-                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="feladatArch(0)">Visszaálít</button>`
+        footer.innerHTML += `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Töröl</button>
+                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Visszaálít</button>`
         
         footer.children[0].addEventListener("click", () => TorolFeladat());
         footer.children[1].addEventListener("click", () => feladatArch(0));
     }
     
-    footer.innerHTML += `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezárás</button>`
+    const btn = document.createElement('button')
+    btn.type = 'button'
+    btn.classList.add('btn', 'btn-secondary')
+    btn.setAttribute('data-bs-dismiss', 'modal')
+    btn.textContent = 'Bezárás'
+
+    footer.appendChild(btn)
     
     if(call_setModal) setModalContent(feladatAdatai, felhasznalo)   
 }

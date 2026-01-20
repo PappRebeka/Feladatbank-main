@@ -124,12 +124,12 @@ function renderTask(taskData, author, authorColor, courseName) {
     card.addEventListener("click", () => openTaskEditor(card.dataset));
 
     // 4. Populate text data (SAFE - prevents injection)
-    setText(container, "nev", taskData.Nev);
-    setText(container, "tantargy", taskData.Tantargy);
-    setText(container, "tema", taskData.Tema);
-    setText(container, "evfolyam", `${taskData.Evfolyam}.`);
-    setText(container, "nehezseg", `${taskData.Nehezseg}/10`);
-    setText(container, "leiras", taskData.Leiras);
+    $bind(container, 'tantargy').textContent = adat.Tantargy;
+    $bind(container, 'tema')    .textContent = adat.Tema;
+    $bind(container, 'evfolyam').textContent = `${adat.Evfolyam}.`;
+    $bind(container, 'nehezseg').textContent = `${adat.Nehezseg}/10`;
+    $bind(container, 'leiras')  .textContent = adat.Leiras;
+
 
     // 5. Populate conditional elements
     const subtaskCount = Number(taskData.alfDb) || 0;

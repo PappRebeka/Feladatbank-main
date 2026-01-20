@@ -1,9 +1,13 @@
-backend ellenőrzés feladat tulajdonságaira (pl arch, megosztott) és user jogosultságára
+backend ellenőrzés feladat tulajdonságaira (pl arch, megosztott) és user jogosultságára1
 
-egyedi felhnév
+onload users tábla
 
-megosztás slimselect
-egy emberrel egy feladatot csak egyszer lehessen megosztani
+suti currentoldal
+
+egyedi felhnév(MÓDOSÍTÁS)
+
+megosztás slimselect MEGVAN
+egy emberrel egy feladatot csak egyszer lehessen megosztani MEGVAN
 megosztottság indicator a cardon/modalon?
 
 maybe csillagozva page?

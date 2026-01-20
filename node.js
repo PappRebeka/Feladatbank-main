@@ -514,47 +514,6 @@ app.post("/getUserCount", (req, res) =>{ //RD, a limit offset miatt a felhaszná
   })
 })
 
-app.post("/ChartDataGet", (req, res) =>{ //PR, a statisztikákhoz szükséges adatok megszerzése, lehet hogy nincs használva lol
-
-  const statCaller = req.body.statCaller //tanar id
-  const statLap = req.body.statLap //stat type
-  var sql = `SELECT Nehezseg, Evfolyam, COUNT(Alfeladat.id) as alfdb, Tantargy`;
-  
-  switch(statLap){
-    case "2": //megosztott
-      sql += ` FROM Megosztott INNER JOIN Feladatok ON Megosztott.FeladatId = Feladatok.id 
-					                LEFT JOIN Alfeladat ON Alfeladat.FeladatId = Feladatok.id `
-      break;
-    case "3": //közzétett 
-      sql += ` FROM Kozzetett INNER JOIN Feladatok ON Kozzetett.FeladatId = Feladatok.id
-                        LEFT JOIN Alfeladat ON Alfeladat.FeladatId = Feladatok.id `
-      break;
-    default: //feladatok
-      sql += ` FROM Feladatok left JOIN Alfeladat ON Alfeladat.FeladatId = Feladatok.id `
-      break;
-  }
-    sql += `WHERE Tanar = ${statCaller} GROUP BY Feladatok.id`;
-
-
-  conn.query(sql, (err, results) => {
-    if(err){
-      logger.log({
-        level: 'error',
-        message: `/ChartDataGet error=${err.message}`
-      });
-    }
-
-      logger.log({
-        level: 'info',
-        message: logFormat("Chart successfully created", "POST", req.ip),
-      })
-    
-    if(results == undefined) res.send(JSON.stringify({"results":{}} ))
-    else res.send(JSON.stringify({'results': results} ))
-    res.end();
-  })
-})
-
 app.post("/megosztottFeladatokData", (req, res) =>{ //RD, statok
   const felhId = req.body.felhId
   var sql = `SELECT Users.Nev, COUNT(Users.nev) AS Darabszam
@@ -1298,7 +1257,9 @@ app.post("/feladatArchivalas", (req, res) =>{ //PR
 
   var id = req.body.id;
   var state = req.body.state;
-  let sql = `UPDATE Feladatok SET Archivalva = ${state} WHERE id = `+id;
+  console.log(`archivalt feladat id${id}`)
+  console.log(`archivalt state${state}}`)
+  let sql = `UPDATE Feladatok SET Archivalva = ${state} WHERE id = `+id ;
   conn.query(sql, (err, results) => {
     if (err){
       logger.log({
@@ -1331,11 +1292,27 @@ app.post("/autocompleteArrayTolt", (req, res) =>{ //RD, a suggestion alapú inpu
   })
 })
 
-app.post("/FeladatMegosztasaTanarral", (req, res) =>{ //RD, tanárok közötti feladat megosztás 
+async function MegosztottFeladatAlreadyExists(cimzett, feladatId, felado){
+  let sql = `SELECT COUNT(id) AS db FROM Megosztott WHERE FeladoID = ${felado} AND FeladatId = ${feladatId} AND (SELECT id FROM Users WHERE Email = '${cimzett}' OR Nev = '${cimzett}')`
+  var c = await queryAsync(sql)
+  console.log(c)
+  console.log(c[0].db)
+  return c[0].db
+
+}
+
+app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok közötti feladat megosztás 
 
   const cimzett = req.body.cimzett
   const feladatId = req.body.feladatId
   const felado = req.session.userId
+  var dbszam = await MegosztottFeladatAlreadyExists(cimzett, feladatId, felado)
+  console.log("db létező feladat: " + dbszam)
+  if (dbszam > 0){
+    res.status(404)
+    res.end()
+    return
+  }
 
   let sql = `INSERT INTO Megosztott(FeladatId, FeladoId, VevoId)
             VALUES(?, ?, (SELECT id FROM Users WHERE Email = ? OR Nev = ?))`

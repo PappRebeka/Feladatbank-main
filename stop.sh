@@ -1,2 +1,2 @@
-pid=`ps aux | grep ./node.js | awk '{print $2}'`
+pid=`ps aux | grep node | awk '{print $2}'`
 kill -9 $pid

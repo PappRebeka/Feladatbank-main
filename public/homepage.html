@@ -133,7 +133,7 @@
             CreateSlimSelect2('tanulokSelect', valtozottTanulokSelect)
             CreateSlimSelect2('tantargySzuro', tantargyChanged)
             CreateSlimSelect2('ujIntezmeny', AthelyezTeszt)
-            //CreateSlimSelect2('vevoInputText', )
+            
             setPageContent();
             
        /*}
@@ -151,6 +151,10 @@
             sizeCheck();
         })
     })
+
+    function megosztSelectTeszt(e){
+        //console.log(e)
+    }
  
     function switchTo(where, kikapcsId){ //PR, RD
         ActiveLocation = where
@@ -633,7 +637,7 @@
                 document.getElementById('Difficulty').textContent = 'Nehézség - ' + document.getElementById('nehezseg').value
         })
         $bind(document.getElementById('newFeladat'), 'hozzaadButton').addEventListener('click', () => AlfeladatHozzaad('alfeladatBox'))
-        document.querySelector('#newFeladat .modal-footer').firstChild.addEventListener('click', () => mentFeladat('alfeladatBox'))
+        document.querySelector('#newFeladat .modal-footer').children[0].addEventListener('click', () => mentFeladat(true))
 
         //tanár adatai
         var radios = document.querySelectorAll('#chips input')
@@ -1047,7 +1051,7 @@
                         <div class="form">
                             <label for="vevoInputText" class="form-label fw-semibold">Címzett:</label>
                             <div class="form">
-                                <input class="form-control" type="select" id="vevoInputText">
+                                <select class="slim-select" id="vevoInputText"></select>
                             </div>
                         </div>
                         

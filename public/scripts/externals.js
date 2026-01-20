@@ -31,6 +31,7 @@ function valtozottTanulokSelect(e){//RD?
 }
 
 function CreateSlimSelect2(hovaId, functionNev){ //PR, RD
+    console.log(hovaId)
         document.getElementById(hovaId).selectedIndex = -1
         var ss = new SlimSelect({
                 select: document.getElementById(hovaId),

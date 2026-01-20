@@ -60,15 +60,23 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
     //Button 
     const which = ActiveLocation == "Archívum" ? '' : 
                   ActiveLocation == "Általam megosztott" ? 'visszaBtn' : 'postBtn'
-    showElement(container, 'postBtn',   which == 'postBtn')
-    showElement(container, 'visszaBtn', which == 'visszaBtn')
+
+    var p = $bind(container, 'postBtn')
+    var v = $bind(container, 'visszaBtn')
+    
+    p.classList.toggle('d-none', which != 'postBtn')
+    v.classList.toggle('d-none', which != 'visszaBtn')
+        
+    p.addEventListener('click', () => function(e){
+        kozzeteszClick(adat.id); 
+        e.stopPropagation();
+    })
+    v.addEventListener('click', () => function(e){
+        visszavonClick(adat.id, felhasznalo);
+        e.stopPropagation();
+    })
 
     
-    if (Boolean(which)){
-        const btn = $bind(container, which);
-        preventParentClick(btn);
-        btn.addEventListener('click', () => which == 'postBtn' ? kozzeteszClick(adat.id) : visszavonClick(adat.id, felhasznalo));
-    }
 
     return container
 }

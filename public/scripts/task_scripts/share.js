@@ -7,14 +7,21 @@ task_scripts/load.js ---------------
 function autocompleteArrayTolt(){ //RD
     const user_email = ajax_post("/autocompleteArrayTolt", 1, {})
     var tolteniValo = []; 
-    
+    var html = ""
     for (const alma of user_email.results) {
         var nev = alma.Nev
         var email = alma.Email
         tolteniValo.push(nev)
         tolteniValo.push(email)
+        var opt1 = document.createElement("option")
+        var opt2 = document.createElement("option")
+        opt1.textContent = nev
+        opt2.textContent = email
+        document.getElementById("vevoInputText").appendChild(opt1)
+        document.getElementById("vevoInputText").appendChild(opt2)
     }
-    autocomplete(document.getElementById("vevoInputText"), tolteniValo);
+    console.log(document.getElementById("vevoInputText"))
+    CreateSlimSelect2('vevoInputText', megosztSelectTeszt)
   }
 
   function megosztFeladatTanarral(){ //RD
