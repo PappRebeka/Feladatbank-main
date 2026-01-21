@@ -458,10 +458,11 @@ app.post("/updatePassword" , (req, res) => { //PR, jelszó reset esetén jelszó
 app.post("/GetUserData", async (req, res) => { //PR, az összes felhasználó fontos adatai, 
   
   if(req.session.Jog == undefined || req.session.userId == undefined || req.session.intezmenyId == undefined) {
-    let sessionValues = await queryAsync('select id, Jogosultsag, IntezmenyId from Users where UserToken = ?', [req.body.UserToken])[0];
-    req.session.Jog = sessionValues.Jogosultsag
-    req.session.userId = sessionValues.id
-    req.session.intezmenyId = sessionValues.IntezmenyId
+    let sessionValues = await queryAsync('select id, Jogosultsag, IntezmenyId from Users where UserToken = ?', [req.body.UserToken]);
+    console.log(sessionValues)
+    req.session.Jog = sessionValues[0].Jogosultsag
+    req.session.userId = sessionValues[0].id
+    req.session.intezmenyId = sessionValues[0].IntezmenyId
   }
 
   logger.log({
@@ -908,10 +909,13 @@ app.post("/deleteUser", (req, res) => { //PR, BBB
   })
 })
 
+function isArchived(id){
+  return Boolean(queryAsync('select Archivalva from Feladatok where id = ?', id)[0].Archivalva)
+}
+
 app.post("/feladatTorol", (req, res) => { //BBB
   const id = req.body.id
-  let isArchived = Boolean(queryAsync('select Archivalva from Feladatok where id = ?', id)[0].Archivalva)
-  if(!isArchived){
+  if(!isArchived(id)){
     res.status(405).end()
     return
   }
@@ -1124,10 +1128,13 @@ app.post("/saveClassroomFeladatKozzetett", (req, res) =>{ //RD adatbázisba a k�
 })
 
 app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom feladat létrehozása adott kurzusba(összeállítása)
-  
+  feladatId = req.body.feladatid
+  if(isArchived(feladatId)){
+    res.status(405).end();
+    return
+  }
 
   kurzusId = req.body.kurzusid
-  feladatId = req.body.feladatid
   dueDate = req.body.dueDate
   dueTime = req.body.dueTime
   tanulok = req.body.tanulok
@@ -1247,36 +1254,18 @@ async function createClassroomTask(title, description, maxPoints, year, month, d
   }
 }
 
-app.post("/removeClassroomFeladat", async (req, res) =>{ //RD, eltávolítás(nem használjuk, túl sok lehetőség user error-ra)
-
-  const kurzusId = req.body.kurzusId
-  const kurzusFeladatId = req.body.kurzusFeladatId
-
-  await classroom.courses.courseWork.delete({
-    courseId: kurzusId,
-    id: kurzusFeladatId
-  });
-
-  let sql = `DELETE FROM Kozzetett WHERE kurzusFeladatId = ${kurzusFeladatId}`
-  conn.query(sql, (err, results) => {
-    if (err){
-      logger.log({
-        level: 'error',
-        message: `(/removeClassroomFeladat) error=${err.message}`
-      });
-      logger.log({
-        level: 'info',
-        message: logFormat("Task removed from classroom", "POST", req.ip),
-      })
-      throw err;
-    }
-    res.end()
-  })
-})
+function doesUserOwnsThisTask(tanarid, feladatid){
+  return Boolean(queryAsync('select count(*) from Feladatok where Tanar = ? and id = ?', [tanarid, feladatid][0]))
+}
 
 app.post("/feladatArchivalas", (req, res) =>{ //PR
-
+  var user = req.session.userId
   var id = req.body.id;
+  if(!doesUserOwnsThisTask(user, id)){
+    res.status(403).end();
+    return;
+  }
+  
   var state = req.body.state;
   console.log(`archivalt feladat id${id}`)
   console.log(`archivalt state${state}}`)
@@ -1330,8 +1319,7 @@ app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok köz�
   var dbszam = await MegosztottFeladatAlreadyExists(cimzett, feladatId, felado)
   console.log("db létező feladat: " + dbszam)
   if (dbszam > 0){
-    res.status(404)
-    res.end()
+    res.status(406).end()
     return
   }
 
@@ -1358,9 +1346,6 @@ app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok köz�
 
 app.post("/getTantargyForAuto", (req, res) =>{//RD, autocomplete/suggestion cucc
 
-  /*SELECT Tantargy FROM Megosztott INNER JOIN Feladatok ON Feladatok.id = Megosztott.FeladatId
-WHERE Megosztott.VevoId = 164
-GROUP BY Tantargy*/
   const userId = req.session.userId
   const megosztott = req.body.megosztott
   var tabla = megosztott ? `FROM Megosztott INNER JOIN Feladatok ON Feladatok.id = Megosztott.FeladatId
@@ -1385,6 +1370,11 @@ GROUP BY Tantargy*/
 app.post('/megosztasVisszavon', (req, res) => {
   const feladatId = req.body.id
   const vevo = req.body.vevo
+  const user = req.session.userId;
+  if(isArchived(feladatId) || !doesUserOwnsThisTask(user, feladatId)){
+    res.status(403).end();
+    return;
+  }
 
   let sql = `DELETE FROM Megosztott where id 
             IN(select Megosztott.id FROM Megosztott INNER JOIN Users ON Megosztott.VevoId = Users.id
@@ -1610,7 +1600,10 @@ app.post("/modositIntezmeny", (req, res) =>{//RD, intézmény módosítása
 app.post("/customSql", (req, res) => {//??? -RD
   const sql = req.body.sql;
 
-  //['Főadmin']
+  if(!['Főadmin'].includes(req.session.Jog)){
+    res.status(403).end();
+    return;
+  }
   
   if ((!sql) || (sql === "")) {
     res.send(JSON.stringify({ error: "Üres lekérdezés" }));
@@ -1840,6 +1833,10 @@ app.post("/backupTolt", async (req, res) =>{
 })
 
 app.post("/MentBackup", async (req, res) =>{
+  if(!['Főadmin'].includes(req.session.Jog)){
+    res.status(403).end();
+    return;
+  }
   var cucc = await selectUpdate()
   /*console.log(cucc)*/
   res.send(JSON.stringify({"fajlok": cucc}))
@@ -1847,6 +1844,10 @@ app.post("/MentBackup", async (req, res) =>{
 })
 
 app.post("/RestoreBackup", (req, res) =>{
+  if(!['Főadmin'].includes(req.session.Jog)){
+    res.status(403).end();
+    return;
+  }
   const fajlNev = req.body.dumpNev
   var szamlalo = sessionCounter()
   if(szamlalo <= 1){

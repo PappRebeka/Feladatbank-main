@@ -18,6 +18,8 @@ function felhasznalokTolt(item){ //PR
 
     if (item.id == CurrentUserData.id) {
         div.firstChild.classList.add('noHover');
+    }
+    else{
         div.setAttribute('data-bs-toggle', 'modal')
         div.setAttribute('data-bs-target', '#tanarAdatai')
         div.addEventListener('click', () => FelhasznaloClick(item.id))
