@@ -285,7 +285,7 @@ function hibajelentesDefaultTemplate(){
                                 <div class="mb-3 d-flex flex-column flex-grow-1">
                                     <label for="hiba-reszletek" class="form-label">Hibajelenség részletei:</label>
                                     <textarea class="form-control flex-grow-1" id="hiba-reszletek"
-                                        style="resize: none;" required></textarea>
+                                        style="resize: none;"></textarea>
                                     <div class="invalid-feedback">Kérem töltse ki a szövegdobozt.</div>
                                 </div>
 
