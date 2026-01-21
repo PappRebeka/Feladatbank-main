@@ -8,14 +8,12 @@ task_scripts/load.js ---------------
 */ 
 
 function kozzeteszClick(id){   //RD, PR
-    console.log("asd", ActiveLocation != "Feladataim" && ActiveLocation != "Velem megosztott")
+    /*console.log("asd", ActiveLocation != "Feladataim" && ActiveLocation != "Velem megosztott")
 
     if(ActiveLocation != "Feladataim" && ActiveLocation != "Velem megosztott"){
         toastMsg("Hiba", "Ezzel a feladattal nem lehet ezt a műveletet végrehajtani", "warning")
         return;
-    }
-
-    //$('#shareFeladat').modal('show');
+    }*/
 
     kozzetevesModalReset();
     

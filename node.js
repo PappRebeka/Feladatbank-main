@@ -223,6 +223,7 @@ app.post("/registerData", async (req, res) =>{ //RD, PR
     const ujId = insertSql.insertId //user idjének kiszedése
     
     req.session.userId = ujId //tulajdonképpen meg lesz jelölve bejelentkezettként a user // id eltárolása a sessionbe
+    req.session.Jog = 'Tanár'
     
     activeSessions.add(req.sessionID)
     /*console.log("bejelentkezett user count: ")*/
@@ -325,7 +326,7 @@ app.post("/loginUser", async (req, res) => { //RD, PR
       return res.send(JSON.stringify({ error: 'invalid input' }));
     }
   }
-  let sql = `SELECT COUNT(id), id, UserToken, IntezmenyId
+  let sql = `SELECT COUNT(id), id, Jogosultsag, UserToken, IntezmenyId
              FROM Users 
              ${noMail ? `WHERE (${isEmail(user) ? "Email = ?" : "Nev = ?" } AND Jelszo = MD5(?)) 
              OR UserToken = ?` : `Where Email = ?`}`;
@@ -340,6 +341,7 @@ app.post("/loginUser", async (req, res) => { //RD, PR
     
     if(results[0]['COUNT(id)'] > 0){
       req.session.userId = results[0]['id'];
+      req.session.Jog = results[0]['Jogosultsag']
       req.session.intezmenyId = results[0]['IntezmenyId']
       activeSessions.add(req.sessionID)
       /*console.log("bejelentkezett user count: ")*/
@@ -452,11 +454,15 @@ app.post("/updatePassword" , (req, res) => { //PR, jelszó reset esetén jelszó
   naplozz(`update_password email=${email}`, 0)
 });
 
+
 app.post("/GetUserData", async (req, res) => { //PR, az összes felhasználó fontos adatai, 
   
-
-  if(req.session.userId == undefined) {req.session.userId = (await queryAsync('select id from Users where UserToken = ?', [req.body.UserToken]))[0].id;}
-  if(req.session.intezmenyId == undefined) {req.session.intezmenyId = (await queryAsync('select IntezmenyId from Users where UserToken = ?', [req.body.UserToken]))[0].IntezmenyId;}
+  if(req.session.Jog == undefined || req.session.userId == undefined || req.session.intezmenyId == undefined) {
+    let sessionValues = await queryAsync('select id, Jogosultsag, IntezmenyId from Users where UserToken = ?', [req.body.UserToken])[0];
+    req.session.Jog = sessionValues.Jogosultsag
+    req.session.userId = sessionValues.id
+    req.session.intezmenyId = sessionValues.IntezmenyId
+  }
 
   logger.log({
     level: 'debug',
@@ -491,6 +497,11 @@ app.post("/changeJog", (req, res)=> { //PR, jog változtatása
 
 app.post("/getUserCount", (req, res) =>{ //RD, a limit offset miatt a felhasználók száma
   
+  if(!['Admin', 'Főadmin'].includes(req.session.Jog)){
+    res.status(403).end();
+    return
+  }
+
   const intezmeny = req.session.intezmenyId
   const kereso = req.body.kereso
   var where = ""
@@ -653,6 +664,10 @@ app.post("/topHaromTanarData", (req, res) =>{ //RD, statok
 
 app.post("/SendUsers", (req, res) =>{ //RD //felhasználók kiszedése(frontenden megjelenítjük)
   
+  if(!['Admin', 'Főadmin'].includes(req.session.Jog)){
+    res.status(403).end();
+    return
+  }
   
   const limit = req.body.limit
   const offset = req.body.offset
@@ -894,8 +909,14 @@ app.post("/deleteUser", (req, res) => { //PR, BBB
 })
 
 app.post("/feladatTorol", (req, res) => { //BBB
-
   const id = req.body.id
+  let isArchived = Boolean(queryAsync('select Archivalva from Feladatok where id = ?', id)[0].Archivalva)
+  if(!isArchived){
+    res.status(405).end()
+    return
+  }
+
+
   conn.query("DELETE FROM Megosztott WHERE FeladatId=?", [id])
   conn.query("DELETE FROM Alfeladat WHERE FeladatId=?", [id])
   conn.query("DELETE FROM Feladatok WHERE id=?", [id])
@@ -1585,13 +1606,17 @@ app.post("/modositIntezmeny", (req, res) =>{//RD, intézmény módosítása
     })
 })
 
+
 app.post("/customSql", (req, res) => {//??? -RD
   const sql = req.body.sql;
+
+  //['Főadmin']
+  
   if ((!sql) || (sql === "")) {
     res.send(JSON.stringify({ error: "Üres lekérdezés" }));
     return;
   }
-
+  
   conn.query(sql, (err, results) => {
     if (err) {
       res.send(JSON.stringify({ error: err.message }));
