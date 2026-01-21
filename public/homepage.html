@@ -55,7 +55,7 @@
 /* ------------------------------------- - Document ready - ----------------------------------------*/
 
     $(document).ready(function(){
-        //try{
+        try{
             setThemeIndicators(getCookie("darkMode") == "1")
             setUserData();
             setEvents()
@@ -136,15 +136,11 @@
             
             setPageContent();
             
-       /*}
+       }
         catch (err){
-            //toastMsg("Megdöglött", err, "danger")
-            //setTimeout(() => {
-            hibaIndex = 2;
-            //window.location.href= 'hiba.html'
-            //}, 5000);
+            window.location.href= 'hiba.html?code=2'
         }
-            */
+            
         sizeCheck();
 
         window.addEventListener("resize", () => {
@@ -304,9 +300,8 @@
     function setPageContent() { //PR, RD, BBB
         document.getElementById("BigDih").replaceChildren()
         console.log("(setPageContent) oldal: "+ ActiveLocation)
-        if (!AvailablePages[ActiveLocation]) {
-            hibaIndex = 3
-            //window.location.href= 'hiba.html'
+        if (!AvailablePages[ActiveLocation]) { //shouldnt be possible to get this error
+            window.location.href= 'hiba.html?code=3&info='+encodeURIComponent(ActiveLocation)
             return;
         }
         document.getElementById("placeTitle").textContent = ActiveLocation

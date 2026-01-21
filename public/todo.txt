@@ -10,7 +10,9 @@ megosztás slimselect MEGVAN
 egy emberrel egy feladatot csak egyszer lehessen megosztani MEGVAN
 megosztottság indicator a cardon/modalon?
 
-feladat közzététel --> specifikus diknak
+feladat közzététel --> specifikus diáknak
+
+hibajelentés onload név & email
 
 maybe csillagozva page?
 

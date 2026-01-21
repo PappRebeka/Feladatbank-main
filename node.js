@@ -499,8 +499,7 @@ app.post("/changeJog", (req, res)=> { //PR, jog változtatása
 app.post("/getUserCount", (req, res) =>{ //RD, a limit offset miatt a felhasználók száma
   
   if(!['Admin', 'Főadmin'].includes(req.session.Jog)){
-    res.status(403).end();
-    return
+    return res.status(403).end();
   }
 
   const intezmeny = req.session.intezmenyId
@@ -644,11 +643,11 @@ app.post("/topHaromTanarData", (req, res) =>{ //RD, statok
   const intezmeny = req.session.intezmenyId 
   var sql = `SELECT Users.Nev, COUNT(Feladatok.id) AS FeladatDb
               FROM Feladatok RIGHT JOIN Users ON Users.id = Feladatok.Tanar
-              WHERE Users.IntezmenyId = ${intezmeny}
+              WHERE Users.IntezmenyId = ?
               GROUP BY Users.id, Users.Nev
               ORDER BY FeladatDb DESC
               LIMIT 3`
-  conn.query(sql, (err, results) => {
+  conn.query(sql, [intezmeny], (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -666,8 +665,7 @@ app.post("/topHaromTanarData", (req, res) =>{ //RD, statok
 app.post("/SendUsers", (req, res) =>{ //RD //felhasználók kiszedése(frontenden megjelenítjük)
   
   if(!['Admin', 'Főadmin'].includes(req.session.Jog)){
-    res.status(403).end();
-    return
+    return res.status(403).end();
   }
   
   const limit = req.body.limit
@@ -917,8 +915,7 @@ async function isArchived(id){
 app.post("/feladatTorol", async (req, res) => { //BBB
   const id = req.body.id
   if(!await isArchived(id)){
-    res.status(405).end()
-    return
+    return res.status(409).end()
   }
 
 
@@ -1131,8 +1128,7 @@ app.post("/saveClassroomFeladatKozzetett", (req, res) =>{ //RD adatbázisba a k�
 app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom feladat létrehozása adott kurzusba(összeállítása)
   feladatId = req.body.feladatid
   if(await isArchived(feladatId)){
-    res.status(405).end();
-    return
+    return res.status(409).end();
   }
 
   kurzusId = req.body.kurzusid
@@ -1263,8 +1259,7 @@ app.post("/feladatArchivalas", async(req, res) =>{ //PR
   var user = req.session.userId
   var id = req.body.id;
   if(!await doesUserOwnsThisTask(user, id)){
-    res.status(403).end();
-    return;
+    return res.status(403).end();
   }
   
   var state = req.body.state;
@@ -1324,8 +1319,7 @@ app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok köz�
   var dbszam = await MegosztottFeladatAlreadyExists(cimzett, feladatId, felado)
   console.log("db létező feladat: " + dbszam)
   if (dbszam > 0){
-    res.status(406).end()
-    return
+    return res.status(406).end()
   }
 
   let sql = `INSERT INTO Megosztott(FeladatId, FeladoId, VevoId)
@@ -1377,8 +1371,7 @@ app.post('/megosztasVisszavon', async (req, res) => {
   const vevo = req.body.vevo
   const user = req.session.userId;
   if(await isArchived(feladatId) || !await doesUserOwnsThisTask(user, feladatId)){
-    res.status(403).end();
-    return;
+    return res.status(403).end();
   }
 
   let sql = `DELETE FROM Megosztott where id 
@@ -1606,19 +1599,16 @@ app.post("/customSql", (req, res) => {//??? -RD
   const sql = req.body.sql;
 
   if(!['Főadmin'].includes(req.session.Jog)){
-    res.status(403).end();
-    return;
+    return res.status(403).end();
   }
   
   if ((!sql) || (sql === "")) {
-    res.send(JSON.stringify({ error: "Üres lekérdezés" }));
-    return;
+    return res.send(JSON.stringify({ error: "Üres lekérdezés" }));
   }
   
   conn.query(sql, (err, results) => {
     if (err) {
-      res.send(JSON.stringify({ error: err.message }));
-      return;
+      return res.send(JSON.stringify({ error: err.message }));
     }
 
     res.send(JSON.stringify({ error: "", results }));
@@ -1636,8 +1626,7 @@ app.post("/VanIntezmeny", (req, res) =>{//RD, Van-e a usernek Intézménye, mind
               WHERE Users.id = ${userId}`
   conn.query(sql, (err, results) => {
     if (err) {
-      res.status(500).send(JSON.stringify({ error: err.message }));
-      return;
+      return res.status(500).send(JSON.stringify({ error: err.message }));
     }
 
     res.send(JSON.stringify({ "results":results }));
@@ -1652,8 +1641,7 @@ app.post("/updateUserIntezmeny", (req, res) =>{//RD
   sql = `UPDATE Users SET IntezmenyId = ${intezmenyId} WHERE id = ${userId}`
   conn.query(sql, (err, results) => {
     if (err) {
-      res.status(500).send(JSON.stringify({ error: err.message }));
-      return;
+      return res.status(500).send(JSON.stringify({ error: err.message }));
     }
     res.end()
   });
@@ -1664,8 +1652,7 @@ app.post("/torolintezmeny", (req, res) =>{//RD, intézmény eltávolítása, az 
   var sql = `DELETE FROM Intezmenyek WHERE id = ${intezmId}`
   conn.query(sql, (err, results) => {
     if (err) {
-      res.status(500).send(JSON.stringify({ error: err.message }));
-      return;
+      return res.status(500).send(JSON.stringify({ error: err.message }));
     }
     res.end()
   });
@@ -1682,8 +1669,7 @@ app.post("/get-reports", (req, res) => { // BBB
     [javitott],
     (err, results) => {
       if(err) {
-        res.status(500).send(JSON.stringify({ error: "Nem sikerült a hibák listáját megszerezni." }));
-        return;
+        return res.status(500).send(JSON.stringify({ error: "Nem sikerült a hibák listáját megszerezni." }));
       } else {
         //console.log(`get-reports\n${results}`);
         res.send(JSON.stringify({ results: results }))
@@ -1707,9 +1693,7 @@ app.post("/send-report", (req, res) => { // BBB
     ],
     (err, results) => {
       if(err) {
-        res.status(500).send(JSON.stringify({ error: "Nem sikerült a hibajelentést elküldeni." }))
-        /*console.log("send-report", err)*/
-        return;
+        return res.status(500).send(JSON.stringify({ error: "Nem sikerült a hibajelentést elküldeni." }))
       } else {
         res.end();
       }
@@ -1839,8 +1823,7 @@ app.post("/backupTolt", async (req, res) =>{
 
 app.post("/MentBackup", async (req, res) =>{
   if(!['Főadmin'].includes(req.session.Jog)){
-    res.status(403).end();
-    return;
+    return res.status(403).end();
   }
   var cucc = await selectUpdate()
   /*console.log(cucc)*/
@@ -1850,8 +1833,7 @@ app.post("/MentBackup", async (req, res) =>{
 
 app.post("/RestoreBackup", (req, res) =>{
   if(!['Főadmin'].includes(req.session.Jog)){
-    res.status(403).end();
-    return;
+    return res.status(403).end();
   }
   const fajlNev = req.body.dumpNev
   var szamlalo = sessionCounter()
@@ -1895,8 +1877,7 @@ app.post("/getUserIntezmeny", (req, res)=>{
   conn.query(sql, (err, results) => {
     /*console.log(results)*/
     if (err) {
-      res.status(500).send(JSON.stringify({ error: err.message }));
-      return;
+      return res.status(500).send(JSON.stringify({ error: err.message }));
     }
 
     res.send(JSON.stringify({ "results":results }));
