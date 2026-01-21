@@ -186,6 +186,7 @@
 
         setLocationCookie(where, kikapcsId)
         setPageContent();
+        Lapozz('visza', 'összes')
         
         for (const item of document.querySelectorAll(".navOptionButton")) item.classList.remove("disabled") 
         document.getElementById(`${kikapcsId}`).classList.add("disabled");
@@ -645,7 +646,7 @@
         
         //egyéb
         document.querySelector('#UserDel .btn-warning').addEventListener('click', () => DeleteThisUser())
-        document.querySelector('#shareFeladat .modal-footer').firstChild.addEventListener('click', () => FeladatKozzetesz())
+        document.querySelector('#shareFeladat .modal-footer').children[0].addEventListener('click', () => FeladatKozzetesz())
         document.querySelector('#megosztFeladat .btn-warning').addEventListener('click', () => megosztFeladatTanarral())
         
 
@@ -1033,7 +1034,9 @@
 
                 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Közzététel</button>
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+                        <span>Közzététel</span>
+                    </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezárás</button>
                 </div>
               </div>

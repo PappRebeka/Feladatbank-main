@@ -10,6 +10,8 @@ megosztás slimselect MEGVAN
 egy emberrel egy feladatot csak egyszer lehessen megosztani MEGVAN
 megosztottság indicator a cardon/modalon?
 
+feladat közzététel --> specifikus diknak
+
 maybe csillagozva page?
 
 loading indicator közzétevésnél

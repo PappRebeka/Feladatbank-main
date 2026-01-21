@@ -79,12 +79,12 @@ function jogChange(id, from, to, nev){ //PR
     to.classList.add("btn-primary")
     to.classList.remove("btn-dark")
 
-    document.getElementById(`jogText_${id}`).innerHTML = to.innerText
+    document.getElementById(`jogText_${id}`).textContent = to.textContent
     
-    const result = ajax_post("/changeJog", 1, { id: id, mire: to.innerText })
+    const result = ajax_post("/changeJog", 1, { id: id, mire: to.textContent })
     
     if (result.success) {
-        toastMsg("Jogostultság frissítve", `A(z) ${nev} felhasználó mostantól ${to.innerText}`, 'info');
+        toastMsg("Jogostultság frissítve", `A(z) ${nev} felhasználó mostantól ${to.textContent}`, 'info');
     } else {
         toastMsg("Hiba", result.error || "Nem sikerült frissíteni a jogosultságot", "danger")
     }

@@ -67,11 +67,11 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
     p.classList.toggle('d-none', which != 'postBtn')
     v.classList.toggle('d-none', which != 'visszaBtn')
         
-    p.addEventListener('click', () => function(e){
+    p.addEventListener('click', (e) => {
         kozzeteszClick(adat.id); 
         e.stopPropagation();
     })
-    v.addEventListener('click', () => function(e){
+    v.addEventListener('click', (e) => {
         visszavonClick(adat.id, felhasznalo);
         e.stopPropagation();
     })

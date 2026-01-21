@@ -909,13 +909,14 @@ app.post("/deleteUser", (req, res) => { //PR, BBB
   })
 })
 
-function isArchived(id){
-  return Boolean(queryAsync('select Archivalva from Feladatok where id = ?', id)[0].Archivalva)
+async function isArchived(id){
+  var result = await queryAsync('select Archivalva from Feladatok where id = ?', [id])
+  return Boolean(result[0].Archivalva)
 }
 
-app.post("/feladatTorol", (req, res) => { //BBB
+app.post("/feladatTorol", async (req, res) => { //BBB
   const id = req.body.id
-  if(!isArchived(id)){
+  if(!await isArchived(id)){
     res.status(405).end()
     return
   }
@@ -1129,7 +1130,7 @@ app.post("/saveClassroomFeladatKozzetett", (req, res) =>{ //RD adatbázisba a k�
 
 app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom feladat létrehozása adott kurzusba(összeállítása)
   feladatId = req.body.feladatid
-  if(isArchived(feladatId)){
+  if(await isArchived(feladatId)){
     res.status(405).end();
     return
   }
@@ -1156,7 +1157,7 @@ app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom felada
     var feladatLeiras = results[0]["feladatLeiras"];
     var tema = results[0]["Tema"];
     var nehezseg = results[0]["Nehezseg"];
-    var maxPont = results[0]["maxPont"]
+    var maxPont = results[0]["maxPont"] ?? 0
     //var title = `${tema} - ${nev}`;
     var description =  `Téma: ${tema}
                         Feladat: ${nev}
@@ -1179,11 +1180,12 @@ app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom felada
         var id = await fajlFeltoltClassroom(results[i]["FajlId"])
         fajlIds.push(id);
       }
-      if(pont != null && leiras != null)
+      if(pont && leiras){
         if (!description.includes('Alfeladatok:')) description += "Alfeladatok:\n"
         description += `${i+1}) (${pont} pont) ${leiras}\n\n`
+      }
     }
-    
+
     var temp = await createClassroomTask(nev, description, maxPont, year, month, day, hours, minutes, kurzusId, fajlIds, tanulok)
     res.send(JSON.stringify({ "courseWorkId":temp } ))
     res.end();
@@ -1210,11 +1212,9 @@ async function createClassroomTask(title, description, maxPoints, year, month, d
       shareMode: "VIEW"
     }
   }));
-  tanulok = String(tanulok || "")
-  .split(",")
-  .map(s => s.trim())
-  .filter(s => s.length > 0);
-  var tobbTanulo = tanulok.length > 0 && tanulok.lenght != undefined
+  //tanulok = String(tanulok || "").split(",").map(s => s.trim()).filter(s => s.length > 0);
+  var selectedStudents = tanulok.length > 0 && tanulok.lenght != undefined
+  console.log(tanulok, selectedStudents)
   
   feladatData ={
     title,
@@ -1222,7 +1222,7 @@ async function createClassroomTask(title, description, maxPoints, year, month, d
     workType: "ASSIGNMENT",
     state: "PUBLISHED",
     maxPoints,
-     ...(tobbTanulo
+     ...(selectedStudents
         ? { assigneeMode: "INDIVIDUAL_STUDENTS", individualStudentsOptions: { studentIds: tanulok } }
         : { assigneeMode: "ALL_STUDENTS" }),
     ... (materials ? {materials} : { }),
@@ -1254,23 +1254,28 @@ async function createClassroomTask(title, description, maxPoints, year, month, d
   }
 }
 
-function doesUserOwnsThisTask(tanarid, feladatid){
-  return Boolean(queryAsync('select count(*) from Feladatok where Tanar = ? and id = ?', [tanarid, feladatid][0]))
+async function doesUserOwnsThisTask(tanarid, feladatid){
+  let result = await queryAsync('select count(*) as db from Feladatok where Tanar = ? and id = ?', [tanarid, feladatid])
+  return Boolean(result[0].db)
 }
 
-app.post("/feladatArchivalas", (req, res) =>{ //PR
+app.post("/feladatArchivalas", async(req, res) =>{ //PR
   var user = req.session.userId
   var id = req.body.id;
-  if(!doesUserOwnsThisTask(user, id)){
+  if(!await doesUserOwnsThisTask(user, id)){
     res.status(403).end();
     return;
   }
   
   var state = req.body.state;
   console.log(`archivalt feladat id${id}`)
-  console.log(`archivalt state${state}}`)
-  let sql = `UPDATE Feladatok SET Archivalva = ${state} WHERE id = `+id ;
-  conn.query(sql, (err, results) => {
+  console.log(`archivalt state${state}`, typeof state)
+   
+  if(state == 1) { await queryAsync('delete from Megosztott where FeladatId = ?', [id])}
+  let sql = `UPDATE Feladatok SET Archivalva = ? WHERE id = ?` ;
+  
+
+  conn.query(sql, [state, id], (err, results) => {
     if (err){
       logger.log({
         level: 'error',
@@ -1367,11 +1372,11 @@ app.post("/getTantargyForAuto", (req, res) =>{//RD, autocomplete/suggestion cucc
   });
 })
 
-app.post('/megosztasVisszavon', (req, res) => {
+app.post('/megosztasVisszavon', async (req, res) => {
   const feladatId = req.body.id
   const vevo = req.body.vevo
   const user = req.session.userId;
-  if(isArchived(feladatId) || !doesUserOwnsThisTask(user, feladatId)){
+  if(await isArchived(feladatId) || !await doesUserOwnsThisTask(user, feladatId)){
     res.status(403).end();
     return;
   }

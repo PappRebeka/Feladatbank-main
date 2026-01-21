@@ -41,6 +41,7 @@ async function mentFeladat(state) { //BBB, PR
     let alfeladatok = [];
     let s = slim_felAdd ? "-s" : "" //whether slim mode is on or off
     const ujFeladat = Boolean(state)
+    let hol = ujFeladat ? 'alfeladatBox' : 'alfeladatokContainer'
 
     const items = ujFeladat ? $("#alfeladatBox"+s).find(".alf_id").toArray()    //get the items depending on where the function was called from
                             : document.getElementById("alfeladatokContainer").querySelectorAll(".alfeladat");
