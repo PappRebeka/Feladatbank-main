@@ -1,6 +1,6 @@
 backend ellenőrzés feladat tulajdonságaira (pl arch, megosztott) és user jogosultságára1
 
-onload users tábla
+onload users tábla létezés ellenőrzés
 
 suti currentoldal
 
@@ -12,11 +12,9 @@ megosztottság indicator a cardon/modalon?
 
 feladat közzététel --> specifikus diáknak
 
-hibajelentés onload név & email
-
 maybe csillagozva page?
 
-loading indicator közzétevésnél
+loading indicator közzétevésnél - nem megvalósítható
 
 backup
 
@@ -25,6 +23,8 @@ google fiok -> mégse -> meghal
 hiba.html
 
 gombokhoz ikonok
+
+sql injection
 
 változó, funkció nevek egyértelműsítése
 

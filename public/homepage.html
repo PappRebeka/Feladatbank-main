@@ -355,13 +355,15 @@
                         $("#fullpageSize").html(html);
                     break;
                 case "Hibajelentés":
-                    if (CurrentUserData.Jogosultsag === "Főadmin") {
+                    if (CurrentUserData.Jogosultsag == "Főadmin") {
                        html = hibajelentesFoadminTemplate()
                        html.querySelector("#nemjavitott").addEventListener('click', () => reportToggle(0))
                        html.querySelector("#javitott").addEventListener('click', () => reportToggle(1))
                        runAfterDOM = loadReports;
                     } else {
                         html = hibajelentesDefaultTemplate();
+                        html.querySelector('#feedback-email').textContent = CurrentUserData.Email
+                        html.querySelector('#feedback-nev').textContent   = CurrentUserData.Nev
                         $bind(html, 'sendBtn').addEventListener('click', () => sendFeedback())
                         //runAfterDOM = feedbackStuff;
                         

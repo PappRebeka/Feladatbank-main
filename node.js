@@ -216,10 +216,10 @@ app.post("/registerData", async (req, res) =>{ //RD, PR
 
     // új user felvétele, adatok tárolása, a jelszó MD5-ös hashelése, FROM_UNIXTIME - másodpercről datetimera alakít, hozzá kell adni 2 órát(7200000 ms) mert a  token expiry date más időzónát számít augh
     let sql = `INSERT INTO Users(Nev, Email, Jelszo, Jogosultsag, AccessToken, RefreshToken, UserToken, AccessEletTartam, Hatterszin, IntezmenyId) 
-              VALUES(?, ?, MD5(?), 'Tanár', ?, ?, MD5(?), FROM_UNIXTIME((? + 7200000) / 1000), '${randomHatterszin()}', NULL)`; 
+              VALUES(?, ?, MD5(?), 'Tanár', ?, ?, MD5(?), FROM_UNIXTIME((? + 7200000) / 1000), ?, NULL)`; 
     
     
-    const insertSql = await queryAsync(sql, [username, email, passwd, req.session.access_token, req.session.refresh_token, req.session.userToken, req.session.expiry_date]) //insert végrehajtása
+    const insertSql = await queryAsync(sql, [username, email, passwd, req.session.access_token, req.session.refresh_token, req.session.userToken, req.session.expiry_date, randomHatterszin()]) //insert végrehajtása
     const ujId = insertSql.insertId //user idjének kiszedése
     
     req.session.userId = ujId //tulajdonképpen meg lesz jelölve bejelentkezettként a user // id eltárolása a sessionbe
@@ -482,8 +482,8 @@ app.post("/changeJog", (req, res)=> { //PR, jog változtatása
 
   const id = req.body.id
   const mire = req.body.mire
-  var sql = `UPDATE Users SET Jogosultsag = '${mire}' WHERE id = ${id}`
-  conn.query(sql, (err, results) => {
+  var sql = `UPDATE Users SET Jogosultsag = ? WHERE id = ?`
+  conn.query(sql, [mire.toString().trim(), id], (err, results) => {
     
     if(err){
       logger.log({
@@ -501,17 +501,23 @@ app.post("/getUserCount", (req, res) =>{ //RD, a limit offset miatt a felhaszná
   if(!['Admin', 'Főadmin'].includes(req.session.Jog)){
     return res.status(403).end();
   }
-
+  var injection = []
   const intezmeny = req.session.intezmenyId
   const kereso = req.body.kereso
-  var where = ""
-  if (kereso != "") where = ` AND LOWER(Users.Nev) COLLATE utf8mb4_bin LIKE '%${kereso}%'`
+  var and = ""
+  if (req.session.Jog != 'Főadmin'){
+    and =' AND IntezmenyId = ?'
+    injection.push(intezmeny)
+  }
+  if (kereso != "") {
+    and += ` AND LOWER(Users.Nev) COLLATE utf8mb4_bin LIKE '%${kereso}%'`
+  }
   
   var sql = `SELECT COUNT(Users.id) AS tanarDb
               FROM Users
-              WHERE NOT Jogosultsag = 'Mailsender' and not Jogosultsag = 'Főadmin' ${req.session.userId != '2' ? `AND IntezmenyId = ${intezmeny}` : ''}${where}`
+              WHERE NOT Jogosultsag = 'Mailsender' and not Jogosultsag = 'Főadmin' ${and}`
               
-  conn.query(sql, (err, results) => {
+  conn.query(sql, injection, (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -529,11 +535,11 @@ app.post("/megosztottFeladatokData", (req, res) =>{ //RD, statok
   const felhId = req.body.felhId
   var sql = `SELECT Users.Nev, COUNT(Users.nev) AS Darabszam
               FROM Users INNER JOIN Megosztott ON Megosztott.VevoId = Users.id
-              WHERE Megosztott.FeladoId = ${felhId}
+              WHERE Megosztott.FeladoId = ?
               GROUP BY Users.id, Users.Nev
               ORDER BY 2`
 
-  conn.query(sql, (err, results) => {
+  conn.query(sql, [felhId], (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -551,11 +557,11 @@ app.post("/kozzetettFeladatokData", (req, res) =>{ //RD, statok
   const felhId = req.body.felhId
   var sql = `SELECT kurzusNev, COUNT(Kozzetett.id) AS Darabszam
               FROM Users INNER JOIN Kozzetett ON Kozzetett.Tanar = Users.id
-              WHERE Users.id = ${felhId}
+              WHERE Users.id = ?
               GROUP BY Kozzetett.kurzusNev, Kozzetett.kurzusId
               ORDER BY 2`
 
-  conn.query(sql, (err, results) => {
+  conn.query(sql, [felhId], (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -581,8 +587,8 @@ app.post("/generalFeladatokData", (req, res) =>{ //RD, statok
                 LEFT JOIN Feladatok ON Feladatok.Tanar = Users.id
                 LEFT JOIN Kozzetett ON Kozzetett.Tanar = Users.id
                 LEFT JOIN Megosztott ON Megosztott.FeladoId = Users.id
-              WHERE Users.id = ${felhId}` 
-  conn.query(sql, (err, results) => {
+              WHERE Users.id = ?` 
+  conn.query(sql, [felhId], (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -600,9 +606,9 @@ app.post("/averageNehezsegData", (req, res) =>{ //RD, statok
   const felhId = req.body.felhId
   var sql = `SELECT kurzusNev, ROUND((SUM(Nehezseg)/COUNT(Nehezseg)), 2) AS atlagNehezseg
               FROM Feladatok INNER JOIN Kozzetett ON Kozzetett.FeladatId = Feladatok.id
-              WHERE Feladatok.Tanar = ${felhId}
+              WHERE Feladatok.Tanar = ?
               GROUP BY Kozzetett.kurzusNev, Kozzetett.kurzusId`
-  conn.query(sql, (err, results) => {
+  conn.query(sql, [felhId], (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -622,10 +628,10 @@ app.post("/evfolyamArchivaltData", (req, res) =>{ //RD, statok
                 SUM(CASE WHEN Archivalva = 1 THEN 1 ELSE 0 END) AS ArchDB,
                 SUM(CASE WHEN Archivalva = 0 THEN 1 ELSE 0 END) AS SimaDB
               FROM Feladatok
-              WHERE Tanar = ${felhId}
+              WHERE Tanar = ?
               GROUP BY Evfolyam
               ORDER BY Evfolyam`
-  conn.query(sql, (err, results) => {
+  conn.query(sql, [felhId], (err, results) => {
     if(err){
       logger.log({
         level: 'error',

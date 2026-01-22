@@ -36,10 +36,10 @@ function felhasznalokTolt(item){ //PR
     highlightKeresettText(ActiveFilters.kereso, text, udata[0].children[1])
     
 
-    udata[1].children[1].textContent += item.Email
+    udata[1].children[1].textContent = item.Email
 
     udata[2].id = `jogText_${item.id}`
-    udata[2].children[1].textContent += item.Jogosultsag
+    udata[2].children[1].textContent = item.Jogosultsag
 
     const buttons = $bind(div, 'buttons').querySelectorAll('button')
     buttons[0].id = `tanarGomb_${item.id}`
@@ -79,7 +79,7 @@ function jogChange(id, from, to, nev){ //PR
     to.classList.add("btn-primary")
     to.classList.remove("btn-dark")
 
-    document.getElementById(`jogText_${id}`).textContent = to.textContent
+    document.getElementById(`jogText_${id}`).children[1].textContent = to.textContent
     
     const result = ajax_post("/changeJog", 1, { id: id, mire: to.textContent })
     
