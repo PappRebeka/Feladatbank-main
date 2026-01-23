@@ -8,14 +8,12 @@ task_scripts/load.js ---------------
 */ 
 
 function kozzeteszClick(id){   //RD, PR
-    console.log("asd", ActiveLocation != "Feladataim" && ActiveLocation != "Velem megosztott")
+    /*console.log("asd", ActiveLocation != "Feladataim" && ActiveLocation != "Velem megosztott")
 
     if(ActiveLocation != "Feladataim" && ActiveLocation != "Velem megosztott"){
         toastMsg("Hiba", "Ezzel a feladattal nem lehet ezt a műveletet végrehajtani", "warning")
         return;
-    }
-
-    //$('#shareFeladat').modal('show');
+    }*/
 
     kozzetevesModalReset();
     
@@ -63,15 +61,16 @@ async function selectedCourse(){ //RD
     }
 }
 
-function FeladatKozzetesz(){ //RD
+async function FeladatKozzetesz(){ //RD
     const select = document.getElementById("kurzusSelect");
     const opt = select.options[select.selectedIndex];
     var kurzusId = opt.value.split("-")[0]
     var kurzusNev = opt.text
     var feladatId = opt.value.split("-")[1]
+    //var tanuloIdk = $('#tanulokSelect').val()
     
-    var dueDate =  DateAndTimePicker.value ? DateAndTimePicker.value.split(" ")[0] : ""
-    var dueTime =  DateAndTimePicker.value ? DateAndTimePicker.value.split(" ")[1] : ""
+    var dueDate =  DateAndTimePicker.value?.split(" ")[0] || ""
+    var dueTime =  DateAndTimePicker.value?.split(" ")[1] || ""
     
     var kurz = ajax_post("/postClassroomFeladat", 1, { kurzusid: kurzusId, feladatid: feladatId, dueDate: dueDate, dueTime: dueTime, tanulok: tanuloIdk })
     var kurzusFeladatId = kurz.courseWorkId

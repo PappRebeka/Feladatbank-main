@@ -217,13 +217,14 @@ app.post("/registerData", async (req, res) =>{ //RD, PR
 
     // új user felvétele, adatok tárolása, a jelszó MD5-ös hashelése, FROM_UNIXTIME - másodpercről datetimera alakít, hozzá kell adni 2 órát(7200000 ms) mert a  token expiry date más időzónát számít augh
     let sql = `INSERT INTO Users(Nev, Email, Jelszo, Jogosultsag, AccessToken, RefreshToken, UserToken, AccessEletTartam, Hatterszin, IntezmenyId) 
-              VALUES(?, ?, MD5(?), 'Tanár', ?, ?, MD5(?), FROM_UNIXTIME((? + 7200000) / 1000), '${randomHatterszin()}', NULL)`; 
+              VALUES(?, ?, MD5(?), 'Tanár', ?, ?, MD5(?), FROM_UNIXTIME((? + 7200000) / 1000), ?, NULL)`; 
     
     
-    const insertSql = await queryAsync(sql, [username, email, passwd, req.session.access_token, req.session.refresh_token, req.session.userToken, req.session.expiry_date]) //insert végrehajtása
+    const insertSql = await queryAsync(sql, [username, email, passwd, req.session.access_token, req.session.refresh_token, req.session.userToken, req.session.expiry_date, randomHatterszin()]) //insert végrehajtása
     const ujId = insertSql.insertId //user idjének kiszedése
     
     req.session.userId = ujId //tulajdonképpen meg lesz jelölve bejelentkezettként a user // id eltárolása a sessionbe
+    req.session.Jog = 'Tanár'
     
     activeSessions.add(req.sessionID)
     /*console.log("bejelentkezett user count: ")*/
@@ -326,7 +327,7 @@ app.post("/loginUser", async (req, res) => { //RD, PR
       return res.send(JSON.stringify({ error: 'invalid input' }));
     }
   }
-  let sql = `SELECT COUNT(id), id, UserToken, IntezmenyId
+  let sql = `SELECT COUNT(id), id, Jogosultsag, UserToken, IntezmenyId
              FROM Users 
              ${noMail ? `WHERE (${isEmail(user) ? "Email = ?" : "Nev = ?" } AND Jelszo = MD5(?)) 
              OR UserToken = ?` : `Where Email = ?`}`;
@@ -341,6 +342,7 @@ app.post("/loginUser", async (req, res) => { //RD, PR
     
     if(results[0]['COUNT(id)'] > 0){
       req.session.userId = results[0]['id'];
+      req.session.Jog = results[0]['Jogosultsag']
       req.session.intezmenyId = results[0]['IntezmenyId']
       activeSessions.add(req.sessionID)
       /*console.log("bejelentkezett user count: ")*/
@@ -453,11 +455,16 @@ app.post("/updatePassword" , (req, res) => { //PR, jelszó reset esetén jelszó
   naplozz(`update_password email=${email}`, 0)
 });
 
+
 app.post("/GetUserData", async (req, res) => { //PR, az összes felhasználó fontos adatai, 
   
-
-  if(req.session.userId == undefined) {req.session.userId = (await queryAsync('select id from Users where UserToken = ?', [req.body.UserToken]))[0].id;}
-  if(req.session.intezmenyId == undefined) {req.session.intezmenyId = (await queryAsync('select IntezmenyId from Users where UserToken = ?', [req.body.UserToken]))[0].IntezmenyId;}
+  if(req.session.Jog == undefined || req.session.userId == undefined || req.session.intezmenyId == undefined) {
+    let sessionValues = await queryAsync('select id, Jogosultsag, IntezmenyId from Users where UserToken = ?', [req.body.UserToken]);
+    console.log(sessionValues)
+    req.session.Jog = sessionValues[0].Jogosultsag
+    req.session.userId = sessionValues[0].id
+    req.session.intezmenyId = sessionValues[0].IntezmenyId
+  }
 
   logger.log({
     level: 'debug',
@@ -476,8 +483,8 @@ app.post("/changeJog", (req, res)=> { //PR, jog változtatása
 
   const id = req.body.id
   const mire = req.body.mire
-  var sql = `UPDATE Users SET Jogosultsag = '${mire}' WHERE id = ${id}`
-  conn.query(sql, (err, results) => {
+  var sql = `UPDATE Users SET Jogosultsag = ? WHERE id = ?`
+  conn.query(sql, [mire.toString().trim(), id], (err, results) => {
     
     if(err){
       logger.log({
@@ -492,16 +499,26 @@ app.post("/changeJog", (req, res)=> { //PR, jog változtatása
 
 app.post("/getUserCount", (req, res) =>{ //RD, a limit offset miatt a felhasználók száma
   
+  if(!['Admin', 'Főadmin'].includes(req.session.Jog)){
+    return res.status(403).end();
+  }
+  var injection = []
   const intezmeny = req.session.intezmenyId
   const kereso = req.body.kereso
-  var where = ""
-  if (kereso != "") where = ` AND LOWER(Users.Nev) COLLATE utf8mb4_bin LIKE '%${kereso}%'`
+  var and = ""
+  if (req.session.Jog != 'Főadmin'){
+    and =' AND IntezmenyId = ?'
+    injection.push(intezmeny)
+  }
+  if (kereso != "") {
+    and += ` AND LOWER(Users.Nev) COLLATE utf8mb4_bin LIKE '%${kereso}%'`
+  }
   
   var sql = `SELECT COUNT(Users.id) AS tanarDb
               FROM Users
-              WHERE NOT Jogosultsag = 'Mailsender' and not Jogosultsag = 'Főadmin' ${req.session.userId != '2' ? `AND IntezmenyId = ${intezmeny}` : ''}${where}`
+              WHERE NOT Jogosultsag = 'Mailsender' and not Jogosultsag = 'Főadmin' ${and}`
               
-  conn.query(sql, (err, results) => {
+  conn.query(sql, injection, (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -519,11 +536,11 @@ app.post("/megosztottFeladatokData", (req, res) =>{ //RD, statok
   const felhId = req.body.felhId
   var sql = `SELECT Users.Nev, COUNT(Users.nev) AS Darabszam
               FROM Users INNER JOIN Megosztott ON Megosztott.VevoId = Users.id
-              WHERE Megosztott.FeladoId = ${felhId}
+              WHERE Megosztott.FeladoId = ?
               GROUP BY Users.id, Users.Nev
               ORDER BY 2`
 
-  conn.query(sql, (err, results) => {
+  conn.query(sql, [felhId], (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -541,11 +558,11 @@ app.post("/kozzetettFeladatokData", (req, res) =>{ //RD, statok
   const felhId = req.body.felhId
   var sql = `SELECT kurzusNev, COUNT(Kozzetett.id) AS Darabszam
               FROM Users INNER JOIN Kozzetett ON Kozzetett.Tanar = Users.id
-              WHERE Users.id = ${felhId}
+              WHERE Users.id = ?
               GROUP BY Kozzetett.kurzusNev, Kozzetett.kurzusId
               ORDER BY 2`
 
-  conn.query(sql, (err, results) => {
+  conn.query(sql, [felhId], (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -571,8 +588,8 @@ app.post("/generalFeladatokData", (req, res) =>{ //RD, statok
                 LEFT JOIN Feladatok ON Feladatok.Tanar = Users.id
                 LEFT JOIN Kozzetett ON Kozzetett.Tanar = Users.id
                 LEFT JOIN Megosztott ON Megosztott.FeladoId = Users.id
-              WHERE Users.id = ${felhId}` 
-  conn.query(sql, (err, results) => {
+              WHERE Users.id = ?` 
+  conn.query(sql, [felhId], (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -590,9 +607,9 @@ app.post("/averageNehezsegData", (req, res) =>{ //RD, statok
   const felhId = req.body.felhId
   var sql = `SELECT kurzusNev, ROUND((SUM(Nehezseg)/COUNT(Nehezseg)), 2) AS atlagNehezseg
               FROM Feladatok INNER JOIN Kozzetett ON Kozzetett.FeladatId = Feladatok.id
-              WHERE Feladatok.Tanar = ${felhId}
+              WHERE Feladatok.Tanar = ?
               GROUP BY Kozzetett.kurzusNev, Kozzetett.kurzusId`
-  conn.query(sql, (err, results) => {
+  conn.query(sql, [felhId], (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -612,10 +629,10 @@ app.post("/evfolyamArchivaltData", (req, res) =>{ //RD, statok
                 SUM(CASE WHEN Archivalva = 1 THEN 1 ELSE 0 END) AS ArchDB,
                 SUM(CASE WHEN Archivalva = 0 THEN 1 ELSE 0 END) AS SimaDB
               FROM Feladatok
-              WHERE Tanar = ${felhId}
+              WHERE Tanar = ?
               GROUP BY Evfolyam
               ORDER BY Evfolyam`
-  conn.query(sql, (err, results) => {
+  conn.query(sql, [felhId], (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -633,11 +650,11 @@ app.post("/topHaromTanarData", (req, res) =>{ //RD, statok
   const intezmeny = req.session.intezmenyId 
   var sql = `SELECT Users.Nev, COUNT(Feladatok.id) AS FeladatDb
               FROM Feladatok RIGHT JOIN Users ON Users.id = Feladatok.Tanar
-              WHERE Users.IntezmenyId = ${intezmeny}
+              WHERE Users.IntezmenyId = ?
               GROUP BY Users.id, Users.Nev
               ORDER BY FeladatDb DESC
               LIMIT 3`
-  conn.query(sql, (err, results) => {
+  conn.query(sql, [intezmeny], (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -654,6 +671,9 @@ app.post("/topHaromTanarData", (req, res) =>{ //RD, statok
 
 app.post("/SendUsers", (req, res) =>{ //RD //felhasználók kiszedése(frontenden megjelenítjük)
   
+  if(!['Admin', 'Főadmin'].includes(req.session.Jog)){
+    return res.status(403).end();
+  }
   
   const limit = req.body.limit
   const offset = req.body.offset
@@ -894,9 +914,18 @@ app.post("/deleteUser", (req, res) => { //PR, BBB
   })
 })
 
-app.post("/feladatTorol", (req, res) => { //BBB
+async function isArchived(id){
+  var result = await queryAsync('select Archivalva from Feladatok where id = ?', [id])
+  return Boolean(result[0].Archivalva)
+}
 
+app.post("/feladatTorol", async (req, res) => { //BBB
   const id = req.body.id
+  if(!await isArchived(id)){
+    return res.status(409).end()
+  }
+
+
   conn.query("DELETE FROM Megosztott WHERE FeladatId=?", [id])
   conn.query("DELETE FROM Alfeladat WHERE FeladatId=?", [id])
   conn.query("DELETE FROM Feladatok WHERE id=?", [id])
@@ -1104,10 +1133,12 @@ app.post("/saveClassroomFeladatKozzetett", (req, res) =>{ //RD adatbázisba a k�
 })
 
 app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom feladat létrehozása adott kurzusba(összeállítása)
-  
+  feladatId = req.body.feladatid
+  if(await isArchived(feladatId)){
+    return res.status(409).end();
+  }
 
   kurzusId = req.body.kurzusid
-  feladatId = req.body.feladatid
   dueDate = req.body.dueDate
   dueTime = req.body.dueTime
   tanulok = req.body.tanulok
@@ -1129,7 +1160,7 @@ app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom felada
     var feladatLeiras = results[0]["feladatLeiras"];
     var tema = results[0]["Tema"];
     var nehezseg = results[0]["Nehezseg"];
-    var maxPont = results[0]["maxPont"]
+    var maxPont = results[0]["maxPont"] ?? 0
     //var title = `${tema} - ${nev}`;
     var description =  `Téma: ${tema}
                         Feladat: ${nev}
@@ -1152,11 +1183,12 @@ app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom felada
         var id = await fajlFeltoltClassroom(results[i]["FajlId"])
         fajlIds.push(id);
       }
-      if(pont != null && leiras != null)
+      if(pont && leiras){
         if (!description.includes('Alfeladatok:')) description += "Alfeladatok:\n"
         description += `${i+1}) (${pont} pont) ${leiras}\n\n`
+      }
     }
-    
+
     var temp = await createClassroomTask(nev, description, maxPont, year, month, day, hours, minutes, kurzusId, fajlIds, tanulok)
     res.send(JSON.stringify({ "courseWorkId":temp } ))
     res.end();
@@ -1183,11 +1215,9 @@ async function createClassroomTask(title, description, maxPoints, year, month, d
       shareMode: "VIEW"
     }
   }));
-  tanulok = String(tanulok || "")
-  .split(",")
-  .map(s => s.trim())
-  .filter(s => s.length > 0);
-  var tobbTanulo = tanulok.length > 0 && tanulok.lenght != undefined
+  //tanulok = String(tanulok || "").split(",").map(s => s.trim()).filter(s => s.length > 0);
+  var selectedStudents = tanulok.length > 0 && tanulok.lenght != undefined
+  console.log(tanulok, selectedStudents)
   
   feladatData ={
     title,
@@ -1195,7 +1225,7 @@ async function createClassroomTask(title, description, maxPoints, year, month, d
     workType: "ASSIGNMENT",
     state: "PUBLISHED",
     maxPoints,
-     ...(tobbTanulo
+     ...(selectedStudents
         ? { assigneeMode: "INDIVIDUAL_STUDENTS", individualStudentsOptions: { studentIds: tanulok } }
         : { assigneeMode: "ALL_STUDENTS" }),
     ... (materials ? {materials} : { }),
@@ -1227,41 +1257,27 @@ async function createClassroomTask(title, description, maxPoints, year, month, d
   }
 }
 
-app.post("/removeClassroomFeladat", async (req, res) =>{ //RD, eltávolítás(nem használjuk, túl sok lehetőség user error-ra)
+async function doesUserOwnsThisTask(tanarid, feladatid){
+  let result = await queryAsync('select count(*) as db from Feladatok where Tanar = ? and id = ?', [tanarid, feladatid])
+  return Boolean(result[0].db)
+}
 
-  const kurzusId = req.body.kurzusId
-  const kurzusFeladatId = req.body.kurzusFeladatId
-
-  await classroom.courses.courseWork.delete({
-    courseId: kurzusId,
-    id: kurzusFeladatId
-  });
-
-  let sql = `DELETE FROM Kozzetett WHERE kurzusFeladatId = ${kurzusFeladatId}`
-  conn.query(sql, (err, results) => {
-    if (err){
-      logger.log({
-        level: 'error',
-        message: `(/removeClassroomFeladat) error=${err.message}`
-      });
-      logger.log({
-        level: 'info',
-        message: logFormat("Task removed from classroom", "POST", req.ip),
-      })
-      throw err;
-    }
-    res.end()
-  })
-})
-
-app.post("/feladatArchivalas", (req, res) =>{ //PR
-
+app.post("/feladatArchivalas", async(req, res) =>{ //PR
+  var user = req.session.userId
   var id = req.body.id;
+  if(!await doesUserOwnsThisTask(user, id)){
+    return res.status(403).end();
+  }
+  
   var state = req.body.state;
   console.log(`archivalt feladat id${id}`)
-  console.log(`archivalt state${state}}`)
-  let sql = `UPDATE Feladatok SET Archivalva = ${state} WHERE id = `+id ;
-  conn.query(sql, (err, results) => {
+  console.log(`archivalt state${state}`, typeof state)
+   
+  if(state == 1) { await queryAsync('delete from Megosztott where FeladatId = ?', [id])}
+  let sql = `UPDATE Feladatok SET Archivalva = ? WHERE id = ?` ;
+  
+
+  conn.query(sql, [state, id], (err, results) => {
     if (err){
       logger.log({
         level: 'error',
@@ -1310,9 +1326,7 @@ app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok köz�
   var dbszam = await MegosztottFeladatAlreadyExists(cimzett, feladatId, felado)
   console.log("db létező feladat: " + dbszam)
   if (dbszam > 0){
-    res.status(404)
-    res.end()
-    return
+    return res.status(406).end()
   }
 
   let sql = `INSERT INTO Megosztott(FeladatId, FeladoId, VevoId)
@@ -1338,9 +1352,6 @@ app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok köz�
 
 app.post("/getTantargyForAuto", (req, res) =>{//RD, autocomplete/suggestion cucc
 
-  /*SELECT Tantargy FROM Megosztott INNER JOIN Feladatok ON Feladatok.id = Megosztott.FeladatId
-WHERE Megosztott.VevoId = 164
-GROUP BY Tantargy*/
   const userId = req.session.userId
   const megosztott = req.body.megosztott
   var tabla = megosztott ? `FROM Megosztott INNER JOIN Feladatok ON Feladatok.id = Megosztott.FeladatId
@@ -1362,9 +1373,13 @@ GROUP BY Tantargy*/
   });
 })
 
-app.post('/megosztasVisszavon', (req, res) => {
+app.post('/megosztasVisszavon', async (req, res) => {
   const feladatId = req.body.id
   const vevo = req.body.vevo
+  const user = req.session.userId;
+  if(await isArchived(feladatId) || !await doesUserOwnsThisTask(user, feladatId)){
+    return res.status(403).end();
+  }
 
   let sql = `DELETE FROM Megosztott where id 
             IN(select Megosztott.id FROM Megosztott INNER JOIN Users ON Megosztott.VevoId = Users.id
@@ -1586,17 +1601,21 @@ app.post("/modositIntezmeny", (req, res) =>{//RD, intézmény módosítása
     })
 })
 
+
 app.post("/customSql", (req, res) => {//??? -RD
   const sql = req.body.sql;
-  if ((!sql) || (sql === "")) {
-    res.send(JSON.stringify({ error: "Üres lekérdezés" }));
-    return;
-  }
 
+  if(!['Főadmin'].includes(req.session.Jog)){
+    return res.status(403).end();
+  }
+  
+  if ((!sql) || (sql === "")) {
+    return res.send(JSON.stringify({ error: "Üres lekérdezés" }));
+  }
+  
   conn.query(sql, (err, results) => {
     if (err) {
-      res.send(JSON.stringify({ error: err.message }));
-      return;
+      return res.send(JSON.stringify({ error: err.message }));
     }
 
     res.send(JSON.stringify({ error: "", results }));
@@ -1614,8 +1633,7 @@ app.post("/VanIntezmeny", (req, res) =>{//RD, Van-e a usernek Intézménye, mind
               WHERE Users.id = ${userId}`
   conn.query(sql, (err, results) => {
     if (err) {
-      res.status(500).send(JSON.stringify({ error: err.message }));
-      return;
+      return res.status(500).send(JSON.stringify({ error: err.message }));
     }
 
     res.send(JSON.stringify({ "results":results }));
@@ -1630,8 +1648,7 @@ app.post("/updateUserIntezmeny", (req, res) =>{//RD
   sql = `UPDATE Users SET IntezmenyId = ${intezmenyId} WHERE id = ${userId}`
   conn.query(sql, (err, results) => {
     if (err) {
-      res.status(500).send(JSON.stringify({ error: err.message }));
-      return;
+      return res.status(500).send(JSON.stringify({ error: err.message }));
     }
     res.end()
   });
@@ -1642,8 +1659,7 @@ app.post("/torolintezmeny", (req, res) =>{//RD, intézmény eltávolítása, az 
   var sql = `DELETE FROM Intezmenyek WHERE id = ${intezmId}`
   conn.query(sql, (err, results) => {
     if (err) {
-      res.status(500).send(JSON.stringify({ error: err.message }));
-      return;
+      return res.status(500).send(JSON.stringify({ error: err.message }));
     }
     res.end()
   });
@@ -1660,8 +1676,7 @@ app.post("/get-reports", (req, res) => { // BBB
     [javitott],
     (err, results) => {
       if(err) {
-        res.status(500).send(JSON.stringify({ error: "Nem sikerült a hibák listáját megszerezni." }));
-        return;
+        return res.status(500).send(JSON.stringify({ error: "Nem sikerült a hibák listáját megszerezni." }));
       } else {
         //console.log(`get-reports\n${results}`);
         res.send(JSON.stringify({ results: results }))
@@ -1685,9 +1700,7 @@ app.post("/send-report", (req, res) => { // BBB
     ],
     (err, results) => {
       if(err) {
-        res.status(500).send(JSON.stringify({ error: "Nem sikerült a hibajelentést elküldeni." }))
-        /*console.log("send-report", err)*/
-        return;
+        return res.status(500).send(JSON.stringify({ error: "Nem sikerült a hibajelentést elküldeni." }))
       } else {
         res.end();
       }
@@ -1844,6 +1857,9 @@ function sortFilesByCreation(fileData){
 }
 
 app.post("/MentBackup", async (req, res) =>{
+  if(!['Főadmin'].includes(req.session.Jog)){
+    return res.status(403).end();
+  }
   /*console.log("cote");
   var newSave = await backup()
   var cucc = await selectUpdate(newSave);
@@ -1915,8 +1931,7 @@ app.post("/getUserIntezmeny", (req, res)=>{
   conn.query(sql, (err, results) => {
     /*console.log(results)*/
     if (err) {
-      res.status(500).send(JSON.stringify({ error: err.message }));
-      return;
+      return res.status(500).send(JSON.stringify({ error: err.message }));
     }
 
     res.send(JSON.stringify({ "results":results }));

@@ -68,6 +68,7 @@ async function mentFeladat(state, hol) { //BBB, PR
     console.log("state")
     console.log(state)
     const ujFeladat = Boolean(state)
+    let hol = ujFeladat ? 'alfeladatBox' : 'alfeladatokContainer'
 
     const items = ujFeladat ? $("#alfeladatBox"+s).find(".alf_id").toArray()    //get the items depending on where the function was called from
                             : document.getElementById("alfeladatokContainer").querySelectorAll(".alfeladat");
@@ -276,9 +277,17 @@ function editThisFeladat(){ // PR
         '0': {id: 'tantargyEdit', value: feladatAdatai.Tantargy ?? ""},
         '1': {id: 'temaEdit',     value: feladatAdatai.Tema ?? ""},
         '2': {id: 'evfolyamEdit', value: feladatAdatai.Evfolyam ?? ""},
-        '5': {id: 'leirasEdit',   value: feladatAdatai.Leiras ?? ""}
+        //'5': {id: 'leirasEdit',   value: feladatAdatai.Leiras ?? ""}
     }
     addTextInputTo(spans, o)
+
+    const leiras = document.createElement('textarea')
+    leiras.style.resize = 'none'; leiras.type = 'text'
+    leiras.classList.add('form-control')
+    leiras.id = 'leirasEdit'
+    leiras.value = feladatAdatai.Leiras ?? ""
+    spans[5].replaceChildren(leiras)
+
     spans[2].firstChild.setAttribute('inputmode', 'numeric')
     spans[2].firstChild.addEventListener('input', () => numberCheck(spans[2].firstChild), maxEvfolyamValue)
 
@@ -289,8 +298,8 @@ function editThisFeladat(){ // PR
 
 
     document.getElementById("HozzaadGoesHere").innerHTML = 
-                                    `<div class="w-100"><hr class="w-75 mx-auto">
-                                        <button class="btn d-flex text-dark align-items-center btn-light">
+                                    `<div class="w-100">
+                                        <button class="btn d-flex text-dark align-items-center btn-light mx-auto">
                                             <i class="bi bi-plus-circle fs-5 me-2"></i>
                                             <span>Alfeladat Hozzáadása</span>
                                         </button>

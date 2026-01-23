@@ -1,7 +1,6 @@
 //   All shared frontend state lives here. Other scripts are expected to read/write these values
 
 var CurrentUserData = {}; 
-var hibaIndex = 0 // current error index for error reporting
 const max_fajl_meret = 30 * 1024 * 1024; // 30 MB
 const htmlElement = document.documentElement; 
 

@@ -55,7 +55,7 @@
 /* ------------------------------------- - Document ready - ----------------------------------------*/
 
     $(document).ready(function(){
-        //try{
+        try{
             setThemeIndicators(getCookie("darkMode") == "1")
             setUserData();
             setEvents()
@@ -136,15 +136,11 @@
             
             setPageContent();
             
-       /*}
+       }
         catch (err){
-            //toastMsg("Megdöglött", err, "danger")
-            //setTimeout(() => {
-            hibaIndex = 2;
-            //window.location.href= 'hiba.html'
-            //}, 5000);
+            window.location.href= 'hiba.html?code=2'
         }
-            */
+            
         sizeCheck();
 
         window.addEventListener("resize", () => {
@@ -186,6 +182,7 @@
 
         setLocationCookie(AvailablePages[where].pageId, kikapcsId)
         setPageContent();
+        Lapozz('visza', 'összes')
         
         for (const item of document.querySelectorAll(".navOptionButton")) item.classList.remove("disabled") 
         document.getElementById(`${kikapcsId}`).classList.add("disabled");
@@ -303,9 +300,8 @@
     function setPageContent() { //PR, RD, BBB
         document.getElementById("BigDih").replaceChildren()
         console.log("(setPageContent) oldal: "+ ActiveLocation)
-        if (!AvailablePages[ActiveLocation]) {
-            hibaIndex = 3
-            //window.location.href= 'hiba.html'
+        if (!AvailablePages[ActiveLocation]) { //shouldnt be possible to get this error
+            window.location.href= 'hiba.html?code=3&info='+encodeURIComponent(ActiveLocation)
             return;
         }
         document.getElementById("placeTitle").textContent = ActiveLocation
@@ -359,13 +355,15 @@
                         $("#fullpageSize").html(html);
                     break;
                 case "Hibajelentés":
-                    if (CurrentUserData.Jogosultsag === "Főadmin") {
+                    if (CurrentUserData.Jogosultsag == "Főadmin") {
                        html = hibajelentesFoadminTemplate()
                        html.querySelector("#nemjavitott").addEventListener('click', () => reportToggle(0))
                        html.querySelector("#javitott").addEventListener('click', () => reportToggle(1))
                        runAfterDOM = loadReports;
                     } else {
                         html = hibajelentesDefaultTemplate();
+                        html.querySelector('#feedback-email').textContent = CurrentUserData.Email
+                        html.querySelector('#feedback-nev').textContent   = CurrentUserData.Nev
                         $bind(html, 'sendBtn').addEventListener('click', () => sendFeedback())
                         //runAfterDOM = feedbackStuff;
                         
@@ -645,7 +643,7 @@
         
         //egyéb
         document.querySelector('#UserDel .btn-warning').addEventListener('click', () => DeleteThisUser())
-        document.querySelector('#shareFeladat .modal-footer').firstChild.addEventListener('click', () => FeladatKozzetesz())
+        document.querySelector('#shareFeladat .modal-footer').children[0].addEventListener('click', () => FeladatKozzetesz())
         document.querySelector('#megosztFeladat .btn-warning').addEventListener('click', () => megosztFeladatTanarral())
         
 
@@ -901,7 +899,7 @@
                                 </div>
                                 <div class="mt-2 mb-3 flex-grow-1 d-flex flex-column">
                                     <label class="form-label" for="leiras">Leírás</label>
-                                    <textarea id="leiras" class="form-control flex-grow-1" placeholder="Jellemezze a feladatot" style="resize: none;" type="text" required></textarea>
+                                    <textarea id="leiras" class="form-control flex-grow-1" placeholder="Jellemezze a feladatot" style="resize: none;" type="text"></textarea>
                                 </div>
                             </form>
 
@@ -1033,7 +1031,9 @@
 
                 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Közzététel</button>
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+                        <span>Közzététel</span>
+                    </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezárás</button>
                 </div>
               </div>

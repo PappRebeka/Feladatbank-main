@@ -6,6 +6,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <script src="scripts/globals.js"></script>
+    <script src="scripts/cookie.js"></script>
     <script src="scripts/helpers.js"></script>
 
     <link rel="stylesheet" href="main.css">
@@ -24,44 +25,33 @@
       <h1 id="title" class="text-center mb-4 text-warning">Hiba történt...</h1>
       <p id="msg" class="text-center mb-4 text-secondary"></p> <!-- Feedback -> miért történt hiba?-->
     </div>
-    <button class="btn btn-primary" onclick="vissza()">Vissza</button>
+    <button class="btn btn-primary">Vissza</button>
   </div>
 </body>
 
 
 <script>
-  const hibaMessages = ["",
-                        "Adatbázis hiba! Lépjen kapcsolatba a rendszergazdával.",
-                        "Nem sikerült bejelentkezni, hiányzó user token",
-                        "Ismeretlen oldal: ",
+  const hibaMessages = [
+    "Ismeretlen hiba.",
+    "Adatbázis hiba! Lépjen kapcsolatba a rendszergazdával.",
+    "Nem sikerült bejelentkezni, hiányzó user token.",
+    "Ismeretlen oldal: "
+  ];
 
-  ]
+  $(document).ready(function () {
+    document.querySelector('button').addEventListener('click', () => window.location.href = "index.html")
 
-  function vissza(){
-    window.location.href = "index.html"
-  }
+    const params = new URLSearchParams(window.location.search);
 
-  function getCookie(name) { //RD
-    const cookies = document.cookie.split("; ");
-    for (let c of cookies) {
-      const [key, value] = c.split("=");
-      if (key === name) return value;
-    }
-    return null;
-  }
+    let code = Number(params.get("code"));
+    let info = params.get("info");
 
+    let extra = "";
+    if (code == 3 && info) extra = String(info);
 
+    document.getElementById("msg").textContent = hibaMessages[code] + extra;
 
-  $(document).ready(function() {
-    DarkModeCheck()
-    var addtitionalInfo = ''
-    switch(hibaIndex){
-      case 3: addtitionalInfo = ActiveLocation
-        break;
-      default: addtitionalInfo = ''
-        break;
-    }
-    document.getElementById("msg").textContent = hibaMessages[hibaIndex] + addtitionalInfo
   });
 </script>
+
 </html>
