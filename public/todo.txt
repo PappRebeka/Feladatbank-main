@@ -1,8 +1,8 @@
 backend ellenőrzés feladat tulajdonságaira (pl arch, megosztott) és user jogosultságára1
 
-onload users tábla
+onload users tábla MEGVAN
 
-suti currentoldal
+suti currentoldal, talán limit offset is FOLYAMATBAN
 
 egyedi felhnév(MÓDOSÍTÁS)
 
@@ -14,7 +14,10 @@ maybe csillagozva page?
 
 loading indicator közzétevésnél
 
-backup
+file upload progress (könnyű bootstrapben + egy kicsi multer)
+
+backup MEGVAN
++ refaktorálva nagyjábol
 
 google fiok -> mégse -> meghal
 
@@ -26,7 +29,7 @@ változó, funkció nevek egyértelműsítése
 
 optimalizálás
 
-while (teszteles.errors.lenght > 0){
+while (teszteles.errors.length > 0){
     debug()
 }
 

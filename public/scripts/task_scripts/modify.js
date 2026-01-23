@@ -16,30 +16,57 @@ task_scripts/load.js ---------------
 async function fajlUpload(fajlInput) {//BBB
         
     const form = new FormData();
-    form.append('fajl', 
-        fajlInput.files[0]
-    )
+    const file = fajlInput.files[0];
+    form.append('fajl', file);
+
+    const progressBarModal = new bootstrap.Modal(document.getElementById("uploadProgressModal"));
+    progressBarModal.show();
+
+    let body = document.getElementById("uploadProgressBody");
+    body.innerHTML += `
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id="${file.name}-upload" style="width: 10%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+        <span></span>
+        </div>
+    </div>
+    `
 
     return new Promise((resolve, reject) => {
         $.ajax({
-        url: '/ment-fajl',
-        method: 'POST',
-        data: form,
-        processData: false,
-        contentType: false,
-        success: function(res) {
-            resolve(res.id ? res.id : null);
-        },
-        error: function(xhr) {
-            reject(xhr.responseText);
-        }
+            url: '/ment-fajl',
+            method: 'POST',
+            data: form,
+            processData: false,
+            contentType: false,
+            xhr: function() {
+                const xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(event) {
+                    if (event.lengthComputable) {
+                        const percentComplete = Math.round((event.loaded / event.total) * 100);
+                        $progress = $(`#${file.name}-upload`);
+
+                        $progress.attr("aria-valuenow", percentComplete);
+                        //$progress.find("span").html(`%${percentComplete}`)
+                        if(percentComplete == 100) { progressBarModal.hide(); }
+                    }
+                });
+                return xhr;
+            },
+            success: function(res) {
+                resolve(res.id ?? null);
+            },
+            error: function(xhr, status, error) {
+                reject(xhr.responseText || error || "Upload failed");
+            }
         });
     });
 }
 
-async function mentFeladat(state) { //BBB, PR 
+async function mentFeladat(state, hol) { //BBB, PR 
     let alfeladatok = [];
     let s = slim_felAdd ? "-s" : "" //whether slim mode is on or off
+    console.log("state")
+    console.log(state)
     const ujFeladat = Boolean(state)
 
     const items = ujFeladat ? $("#alfeladatBox"+s).find(".alf_id").toArray()    //get the items depending on where the function was called from

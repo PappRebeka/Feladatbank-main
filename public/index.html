@@ -319,9 +319,22 @@
       }
     }
 
+    function cookieModal() {
+      var modal = new bootstrap.Modal(document.getElementById("cookieModal"));
+
+      if(!localStorage.getItem('cookieAccepted')) {
+        modal.show();
+      }
+
+      document.getElementById('cookieAcceptBtn').addEventListener('click', function() {
+        localStorage.setItem('cookieAccepted', 'true')
+      });
+    }
+
     
     $(document).ready(function() {
-       DarkModeCheck();
+      cookieModal();
+      DarkModeCheck();
 
       const stay = getCookie("stayLoggedIn");
       if (stay == "1") {
@@ -457,6 +470,44 @@
                 </div>
             </div>
         </div>
+
+        <!--div class="w-100 h-100 position-absolute top-50 start-50 translate-middle modal fade">
+          <div class="container-fluid bg-light rounded-top z-1080 p-0 mx-auto fixed-bottom" id="cookieDiv">
+            <div class="m-0 p-4 border-bottom w-100 d-inline-flex justify-content-between">
+              <h6>Sütik elfogadása</h6>
+              <button type="button" class="btn btn-success">
+                <i class="bi bi-check-lg"></i>&nbsp;
+                Elfogadás
+              </button>
+            </div>
+            <div class="m-0 p-4">
+              Sütiket és hasonló módszereket használunk a felhasználók felismerésére és a preferenciáik megjegyzésére.
+
+              Az „Elfogadás” gombra koppintva hozzájárul ahhoz, hogy ezeket a módszereket használjuk, és így hozzáférhet a weboldalhoz, valamint használhatja azt.
+            </div>
+          </div>
+        </div-->
+        <div class="modal fade" id="cookieModal" aria-hidden="false" aria-labelledby="suti-label">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="suti-label">Sütik elfogadása</h5>
+              </div>
+              <div class="modal-body">
+                <p>Sütiket és hasonló módszereket használunk a felhasználók felismerésére és a preferenciáik megjegyzésére.</p>
+
+                <p>Az „Elfogadás” gombra koppintva hozzájárul ahhoz, hogy ezeket a módszereket használjuk, és így hozzáférhet a weboldalhoz, valamint használhatja azt.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" id="cookieAcceptBtn" class="btn btn-success" data-bs-dismiss="modal" aria-label="Elfogadás">
+                  <i class="bi bi-check-lg"></i>&nbsp;
+                  Elfogadás
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
     
 </body>
 </html>

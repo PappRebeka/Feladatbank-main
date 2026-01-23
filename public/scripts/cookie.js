@@ -14,6 +14,12 @@ function killCookie(name) { //PR
     document.cookie = `${name}=${(name.includes('current') ? 'null' : '0')}; expires=${date.toUTCString()}; path=/; SameSite=Lax`
 }                 // most cookies contain numbers, except the location handlers (currentPage, currentKikapcsId)
 
+function setThemeCookie(state){ //PR
+    var date = new Date();
+    date.setFullYear(date.getFullYear() + 10)
+    document.cookie = `darkMode=${state ? "1" : "0"}; expires=${date.toUTCString()}; path=/; SameSite=Lax;`
+}
+
 function getCookie(name) { //RD?
     const cookies = document.cookie.split("; ");
     for (let c of cookies) {
@@ -23,10 +29,12 @@ function getCookie(name) { //RD?
     return null;
 }
 
-function setThemeCookie(state){ //PR
-    var date = new Date();
-    date.setFullYear(date.getFullYear() + 10)
-    document.cookie = `darkMode=${state ? "1" : "0"}; expires=${date.toUTCString()}; path=/; SameSite=Lax`
+function setCookie(name, value, expiryDate) {
+    let cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)};`;
+    if (expiryDate) { cookie += ` expires=${expiryDate.toUTCString()}`; }
+    cookie += ` path=/; SameSite=Lax;`
+
+    document.cookie = cookie;
 }
 
 function themeSwitch(){ //PR

@@ -63,7 +63,7 @@
             switch (CurrentUserData.Jogosultsag) {
                 
                 case "Admin":
-                    ActiveLocation = 'Feladataim'
+                    
                     opt.innerHTML +=  `<p class="h3 mt-2">Tanár</p>
                                         <div class="px-3" data-bind='tanarPages'>
                                             
@@ -82,7 +82,7 @@
                     break;
 
                 case "Főadmin":
-                    ActiveLocation = 'Felhasználók'
+                    
                     Array.from(PageOptionsFor('Admin')).forEach(e => {
                         opt.appendChild(e)
                     });
@@ -93,7 +93,7 @@
                     break;
             
                 default:
-                    ActiveLocation = 'Feladataim'
+                    
                     Array.from(PageOptionsFor('Tanár')).forEach(e => {
                         opt.appendChild(e)
                     });
@@ -107,7 +107,7 @@
                     console.log("No saved location exists in cookies")
                     setLocationCookie('null', 'null');
                 }
-                else switchTo(getCookie("currentPage"), getCookie("currentKikapcsId"))
+                else switchTo(PageById[getCookie("currentPage")], getCookie("currentKikapcsId"))
             }
 
             catch{
@@ -157,7 +157,7 @@
     }
  
     function switchTo(where, kikapcsId){ //PR, RD
-        ActiveLocation = where
+        ActiveLocation = where;
         document.getElementById("placeTitle").textContent = where;
         
         document.getElementById("hozzaadas").classList.add("d-none")
@@ -184,7 +184,7 @@
             rendezesVissza()
         } catch{}
 
-        setLocationCookie(where, kikapcsId)
+        setLocationCookie(AvailablePages[where].pageId, kikapcsId)
         setPageContent();
         
         for (const item of document.querySelectorAll(".navOptionButton")) item.classList.remove("disabled") 
@@ -1129,6 +1129,19 @@
             <div class="text-muted position-absolute top-50 start-50 m-0 p-0 translate-middle w-75 p-4 d-flex justify-content-center align-items-center flex-column">
                 <h1 class="h-1"><i class="bi bi-sign-stop-fill"></i></h1>
                 <p>A készülék képernyője túl kicsi a weboldal megtekintéséhez.</p>
+            </div>
+        </div>
+
+        <div class="modal fade" id="uploadProgressModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Feltöltés folyamatban...</h5>
+                    </div>
+                    <div class="modal-body" id="uploadProgressBody">
+
+                    </div>
+                </div>
             </div>
         </div>
 </body>

@@ -16,6 +16,17 @@ const AvailablePages = {
   "Statisztikák":        { hideElements: true,  pageId: 'stat_page',  requredJogosultsag: ['Tanár']} 
 };
 
+const PageById = {
+  "fel_page": "Feladataim",
+  "arch_page": "Archívum",
+  "velem_page": "Velem megosztott",
+  "meg_page": "Általam megosztott",
+  "user_page": "Felhasználók",
+  "hiba_page": "Hibajelentés",
+  "db_page": "Adatbázis műveletek",
+  "stat_page": "Statisztikák",
+}
+
 var ActiveLocation = ''; // current active page, default set onload 
 var feladatAdatai = [] // active task data
 

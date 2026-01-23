@@ -124,6 +124,16 @@ function getCroomDrive() {
   return classroom, drive
 }
 
+const config = require("../config/config.js");
+
+// visszaad egy olyan sql lekerdezest amellyel meg lehet
+// nezni hogy a tabla letezik
+function tableExistsSql(tableName) {
+  return `SELECT * FROM information_schema.tables
+          WHERE table_schema = "${config.database.name}"
+          AND TABLE_NAME = "${table_name}"`
+}
+
 //const queryAsync = util.promisify(conn.query).bind(conn);  // RÉCZEG DŰVID
 
 module.exports = {

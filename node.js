@@ -6,6 +6,7 @@ const mysql = require("mysql");
 const mime = require('mime-types');
 const cron = require('node-cron');
 
+
 //const sharp = require('sharp'); // kép resizinghez kell
 const crypto = require('crypto');
 const fs = require('fs'); 
@@ -412,7 +413,7 @@ function getUtolsoId() { //BBB?
     feladat_utolso_id = results[0].maxId; 
   });
 }
-getUtolsoId()
+
 
 
 async function getUserDataFromSessionId (id){ //RD a user összes adata a sessionId segítségével
@@ -1726,57 +1727,41 @@ app.post("/update-report", (req, res) => { // BBB
   )
 })
 
-async function backup() {//BBB, PR, RD, sql backup készítése backups mappába(max 6db) 
-  const backups = path.join(__dirname, "backups");
-  const fajlNevek = await fajlNevLista(backups)
-  if(fajlNevek.length >= 5){
-    /*console.log(fajlNevek[0])*/
-    var toBeDeleted = fajlNevek[0]
-    const filePath = path.join(__dirname, "backups", toBeDeleted)
-    /*console.log(filePath)*/    
-    try{
-      await fs.access(filePath)
-      await fs.unlink(filePath)
-      /*console.log(`${toBeDeleted} obliterálva lett`)*/
-    }
-    catch(err){
-      /*console.log(`${toBeDeleted} törlése siketrtelen volt: ${err}`)*/
-    }
-  }
+async function backupCreate(backups) {//BBB, PR, RD, sql backup készítése backups mappába(max 6db) 
+  console.log("backup készítés fut")
   const dbUser = config.database.user;
   const dbPsw = config.database.password;
   const dbName = config.database.name;
 
-  let dir = fs.readdirSync(backups).sort((a, b) => {
-    return fs.statSync(path.join(backups, a)).mtimeMs - 
-           fs.statSync(path.join(backups, b)).mtimeMs;
-  });
-
-  while (dir.length > 5) {
-    const f = dir.shift(); 
-    fs.unlinkSync(path.join(backups, f));
-  }
+  var date = new Date();
+  date.setHours(date.getHours() + 1);
+  date = date.toISOString().replace(/[:]/g, '-');
   
-  var date = new Date().toISOString().replace(/[:]/g, '-');
   date = date.replace("T", "_")
   date = date.split(".")[0]
 
   const fn = `backup-${date}.sql`
   const backupCel = path.join(backups, fn);
 
-  const cmd = `"C:\\Program Files\\MariaDB 10.6\\bin\\mysqldump.exe" --single-transaction --skip-lock-tables -h ${config.database.host} -P ${config.database.port} -u ${dbUser} -p"${dbPsw}" ${dbName} > "${backupCel}"`
+  await makeDump(config.database.host, config.database.port, dbUser, dbPsw, dbName, backupCel)
+
+  return fn
+}
+async function makeDump(host, port, dbUser, dbPsw, dbName, backupCel){
+  const cmd = `"C:\\Program Files\\MariaDB 10.6\\bin\\mysqldump.exe" --single-transaction --skip-lock-tables -h ${host} -P ${port} -u ${dbUser} -p"${dbPsw}" ${dbName} > "${backupCel}"`
   exec(cmd, (error, stdout, stderr) =>{
     if(error){
       /*console.log("Valami szörnyű dolog történt")*/
       /*console.log(error)*/
-      return
+      //return
     }
-    /*console.log(stdout)*/
-    /*console.log("Minden jó")*/
+    else{
+      console.log("siker")
+    }
   })
 }
 
-function restore(fajlNev){/*BBB, RD, sql biztonsági mentés visszatöltése, CSAK AKKOR HA 1 session van életben, tehát akkor ha CSAK AZ ADMIN van bejelentkezve
+function restore(backupLocation, fileName){/*BBB, RD, sql biztonsági mentés visszatöltése, CSAK AKKOR HA 1 session van életben, tehát akkor ha CSAK AZ ADMIN van bejelentkezve
                             note: a session 1 óráig "él", ha egy user nem jelentkezik ki, hanem csak bezárja a böngésző ablakát akkor meg kell várni hogy a session véget érjen.
                             !!! Ez a funkció arra készült, hogy az adatbázist vissza lehessen állítani korrábi állapotába ha valamilyen módon adatok vesztek el,
                             használata akkor javasolt ha nagy mennyiségű adat veszett el.
@@ -1784,7 +1769,7 @@ function restore(fajlNev){/*BBB, RD, sql biztonsági mentés visszatöltése, CS
   const dbUser = config.database.user;
   const dbPsw = config.database.password;
   const dbName = config.database.name;
-  const backupHely = path.join(__dirname, "backups", fajlNev);
+  const backupHely = path.join(__dirname, backupLocation, fileName);
 
   const cmd = `"C:\\Program Files\\MariaDB 10.6\\bin\\mysql.exe" -h ${config.database.host} -P ${config.database.port} -u ${dbUser} -p${dbPsw} ${dbName} < ${backupHely}`
 
@@ -1804,28 +1789,94 @@ async function fajlNevLista(hely){
   return fajlok.filter(a => a.isFile()).map(a => a.name)
 } 
 
-async function selectUpdate(){
+async function selectUpdate(newFile){
   const backups = path.join(__dirname, "backups");
-  return await fajlNevLista(backups)
+  let fajlok = await fajlNevLista(backups);
+  fajlok.push(newFile)
+  return fajlok;
 }
 
 app.post("/backupTolt", async (req, res) =>{
-  res.send(JSON.stringify({"fajlok": await selectUpdate()}));
+  res.send(JSON.stringify({"fajlok": await selectUpdate(null)}));
   res.end()
 })
 
+async function getFileNameAndCreationDate(directory){
+  try {
+    const files = fs.readdirSync(directory);
+    console.log("fajlok: " + files)
+    const result = await Promise.all( //promisokat "csomagol" össze és küldi el egybe
+      files.map(async file => {
+        try {
+          const fullPath = path.join(directory, file);
+          const stats = await fspromise.stat(fullPath);
+          console.log("Fájl statok:")
+          console.log(fullPath, "\n", stats);
+          
+          return {
+            name: file,
+            fullPath: fullPath,
+            creationDate: stats.birthtimeMs || stats.ctimeMs
+          };
+        } catch (err) {
+          console.log(`Fájl statjainak olvasása sikertelen: ${err}`)
+          return null;
+        }
+      })
+    );
+
+    if(result) return result;
+    else {
+      throw Error("niggerundayo");
+    }
+  } catch (err) {
+    console.log(`Elérési út olvasása sikertelen: ${err}`);
+  }
+}
+
+// ilyen objektumokat szeret csak:
+// { fullPath: string, creationDate: number }
+function sortFilesByCreation(fileData){
+  const FILES_TO_KEEP = 5;
+  console.log(fileData)
+  return fileData.sort((a, b) => b.creationDate - a.creationDate)
+                 .slice(0, FILES_TO_KEEP);
+}
+
 app.post("/MentBackup", async (req, res) =>{
-  var cucc = await selectUpdate()
-  /*console.log(cucc)*/
-  res.send(JSON.stringify({"fajlok": cucc}))
-  res.end()
+  /*console.log("cote");
+  var newSave = await backup()
+  var cucc = await selectUpdate(newSave);
+  res.send(JSON.stringify({"fajlok":cucc}));
+  res.end()*/
+
+  backupPath = path.join(__dirname, 'backups');
+  let fileData = await getFileNameAndCreationDate(backupPath); //fájlnév, fájl path, creation(ms)
+  let sortedFiles = sortFilesByCreation(fileData)
+
+  const toBeDeleted = fileData.filter(f => !sortedFiles.map(s => s.fullPath)
+                              .includes(f.fullPath));
+
+  toBeDeleted.forEach(async (file) => {
+    await fspromise.unlink(file.fullPath);
+  })
+
+  const newBackup = await backupCreate(backupPath)
+  let result = sortedFiles.map((file) => file.name)
+  result.push(newBackup);
+
+  res.send(JSON.stringify({
+    "fajlok": result
+  }));
+  res.end();
 })
 
 app.post("/RestoreBackup", (req, res) =>{
+  //console.log("restorebackup fut")
   const fajlNev = req.body.dumpNev
   var szamlalo = sessionCounter()
   if(szamlalo <= 1){
-    restore(fajlNev)
+    restore("backups", fajlNev)
     res.send(JSON.stringify({"str":"Sikeres visszaállítás"}))
   }
   else{
@@ -1916,6 +1967,30 @@ const server = app.listen(config.server.port, () => {
     message: `Fut a szerver`,
   });
   
+  const tabla_lista = ["Alfeladat", "Fajl", "Feladatok", "Hibajelentes", "Intezmenyek", "Kozzetett", "Megosztott", "Naplo", "Users"];
+  let loadBase = false;
+  conn.query(
+    "SHOW TABLES",
+    (err, results) => {
+      //console.log(results);
+      const tablaNevek = results.map(row => Object.values(row)[0]);
+      //console.log(tablaNevek);
+      tabla_lista.forEach(tablaNev => {
+        if (!tablaNevek.includes(tablaNev)) {
+          loadBase = true;
+        }
+      })
+      console.log("fog futni a restore? " + loadBase)
+      //console.log("kuhkuhgskuhdgfsuhdgfsku")
+      if(loadBase) restore(
+        "utils",
+        "base.sql"
+      );
+    }
+  )
+
+  //getUtolsoId()
+
   /*console.log(server.address().address, server.address().port);*/
   //startWss(server);
 });
