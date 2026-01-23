@@ -1,9 +1,18 @@
 /* ------ CONTENT ------
 task_scripts/load.js ---------------
-    - fajlUpload               -BBB
-    - mentFeladat              -BBB, PR 
-    - resetFeladathozzaad      -PR
-    - AlfeladatHozzaad         -PR+
+    - uploadSubtaskFile     -BBB
+    - saveTask              -BBB, PR 
+    - isCompleteSubtask     -BBB
+    - getDeletedTasks       -BBB
+    - uploadTasks           -BBB
+    - validateTaskInputs    -BBB
+    - createTaskPayload     -BBB
+    - createSubtaskObjects  -BBB
+    - uploadFile            -BBB
+    - resetCreateNewTask    -PR
+    - createSubtask         -PR+
+    - buildFakeFileInput    -PR
+
     - AlfeladatEltavolit       -PR
     - updateFeladat            -PR
     - feladatArch              -PR
@@ -11,25 +20,78 @@ task_scripts/load.js ---------------
     - AlfFileChanged           -PR
     - CancelEditingThisFeladat -PR
     - TorolFeladat             -PR?
+    - bookmarkTaskClick        -RD
 */
 
-async function fajlUpload(fajlInput) {//BBB
+
+
+class ProgressBar { //BBB
+    constructor(fileName) {
+        this.progress = 0;
+        this.id = `${crypto.randomUUID()}-upload`;
+        this.fileName = fileName;
+
+        this.span = null;
+        this.bar = null;
+    }
+
+    start() {
+        const modalId = document.getElementById("uploadProgressModal");
+        let progressBarModal = bootstrap.Modal.getInstance(modalId);
+        if(progressBarModal == null) {
+            progressBarModal = new bootstrap.Modal(modalId);
+        }
+
+        progressBarModal.show();
+
+        $("#uploadProgressBody").append(`
+            <div id="${this.id}" class="mb-2 w-100">
+                <span class="me-2">${this.fileName} - ${this.progress}%</span>
+                <div class="progress">
+                    <div class="progress-bar 
+                                progress-bar-striped 
+                                progress-bar-animated" 
+                        role="progressbar" 
+                        style="width: 0%" 
+                        aria-valuenow="0" 
+                        aria-valuemin="0" 
+                        aria-valuemax="100">
+                    </div>
+                </div>
+                <hr class="w-75 mx-auto>
+            </div>
+        `)
+        
+        this.span = $(`#${this.id} span`)[0];
+        this.bar = $(`#${this.id} .progress-bar`)[0];
+    }
+
+    updateProgress(value) { // ez lesz meghívva az xhr callback-kel
+        this.span.textContent = `${this.fileName} - ${value}%`;
+        this.bar.setAttribute("aria-valuenow", value);
+        this.bar.style.width = `${value}%`;
+
+        this.progress = value;
+
+        if (value >= 100) {
+            this.span.textContent = `${this.fileName} - Feltöltve`;
+            
+            setTimeout(() => {
+                if ($("#uploadProgressBody").children().length === 0) {
+                    const progressBarModal = bootstrap.Modal.getInstance(document.getElementById("uploadProgressModal"));
+                    $("#uploadProgressBody").empty();
+                    progressBarModal.hide();
+                }
+            }, 500);
+        }
+    } 
+}
+
+async function uploadSubtaskFile(fajlInput) {//BBB
         
     const form = new FormData();
     const file = fajlInput.files[0];
     form.append('fajl', file);
-
-    const progressBarModal = new bootstrap.Modal(document.getElementById("uploadProgressModal"));
-    progressBarModal.show();
-
-    let body = document.getElementById("uploadProgressBody");
-    body.innerHTML += `
-    <div class="progress">
-        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id="${file.name}-upload" style="width: 10%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-        <span></span>
-        </div>
-    </div>
-    `
 
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -38,18 +100,20 @@ async function fajlUpload(fajlInput) {//BBB
             data: form,
             processData: false,
             contentType: false,
-            xhr: function() {
+            xhr: function() {  // feltöltési progress bar logika
                 const xhr = new window.XMLHttpRequest();
+                const progressBar = new ProgressBar(file.name);
+                progressBar.start();
+
                 xhr.upload.addEventListener("progress", function(event) {
                     if (event.lengthComputable) {
                         const percentComplete = Math.round((event.loaded / event.total) * 100);
-                        $progress = $(`#${file.name}-upload`);
-
-                        $progress.attr("aria-valuenow", percentComplete);
-                        //$progress.find("span").html(`%${percentComplete}`)
-                        if(percentComplete == 100) { progressBarModal.hide(); }
+                        progressBar.updateProgress(percentComplete);
+                    } else {
+                        progressBar.updateProgress(100); 
                     }
-                });
+                })
+
                 return xhr;
             },
             success: function(res) {
@@ -62,98 +126,175 @@ async function fajlUpload(fajlInput) {//BBB
     });
 }
 
-async function mentFeladat(state, hol) { //BBB, PR 
-    let alfeladatok = [];
-    let s = slim_felAdd ? "-s" : "" //whether slim mode is on or off
-    console.log("state")
-    console.log(state)
-    const ujFeladat = Boolean(state)
-    let hol = ujFeladat ? 'alfeladatBox' : 'alfeladatokContainer'
+async function saveTask(ujFeladat) {
+    console.log(ujFeladat)
+    const containerId = ujFeladat ? 'alfeladatBox' : 'alfeladatokContainer'; // új feladat vagy egy meglévő szerkesztése
+    const slimMode = slim_felAdd ? '-s' : ''; // slim mód
 
-    const items = ujFeladat ? $("#alfeladatBox"+s).find(".alf_id").toArray()    //get the items depending on where the function was called from
-                            : document.getElementById("alfeladatokContainer").querySelectorAll(".alfeladat");
+    let feladatData = {
+        Nev: getField("feladatNev" + slimMode, containerId),
+        Leiras: getField("leiras" + slimMode, containerId),
+        Evfolyam: getField("evfolyam" + slimMode, containerId),
+        Tantargy: getField("tantargy" + slimMode, containerId),
+        Tema: getField("tema" + slimMode, containerId),
+        Nehezseg: Math.min(getField("nehezseg" + slimMode, containerId) || 5, 10),
+    };
 
-    for (const item of items) {
-        const $item = $(item);
-        const fajlInput = $item.find(`.alfeladatFile`)[0]; 
-
-        const existingId = fajlInput?.dataset.fileId ?? null;
-        const hasNewFile = Boolean(fajlInput && fajlInput.files && fajlInput.files.length > 0);
-
-        let fajlId = null;
-        if (hasNewFile) {
-            fajlId = await fajlUpload(fajlInput);
-        } 
-        else if (existingId) {
-            fajlId = existingId;
-        }
-                    
-        alfeladatok.push({
-            "leiras": $item.find(`.alfeladatLeiras`)[0].value, 
-            "alfId": $item.find(".alfId")[0] ? $item.find(".alfId")[0].id.substring(15) : null,
-            "pontszam": $item.find(`.alfeladatPont`)[0].value, 
-            "fajlId": fajlId,
-            "isDelete": false
-        })
+    if (!validateTaskInputs(feladatData)) {
+        toastMsg("Feladat nem menthető!", "A összes mezőt ki kell tölteni.", "warning");
+        return;
     }
 
-    try{
-        for (const item of deleteIds) { // files to be deleted are stored in global
-            alfeladatok.push({"isDelete": true, "alfId": item}) //extract them
-        }
-        deleteIds = []; // and clear from global
+    let alfeladatok = await createSubtaskObjects(ujFeladat, slimMode, containerId);
+
+    let deletedFeladatok = getDeletedTasks();
+    if (deletedFeladatok.length > 0) {
+        alfeladatok = alfeladatok.concat(deletedFeladatok);
     }
-    catch(err){/* error can occure if nothing is flagged, so just ignore that */}
-    
 
-    alfeladatok = alfeladatok.filter(a => !(a["leiras"] == "" && a["fajlId"] == null && a["pontszam"] == "")); // clear the empty ones
+    alfeladatok = alfeladatok.filter(f => isCompleteSubtask(f));
 
-    var feladat = {
-        "Nev":      getField("feladatNev"+s, hol),
-        "Leiras":   getField("leiras"+s, hol),
-        "Evfolyam": getField("evfolyam"+s, hol),
-        "Tantargy": getField("tantargy"+s, hol),
-        "Tema":     getField("tema"+s, hol),
-        "Nehezseg": Math.min(getField("nehezseg"+s, hol), 10),
+    const payload = createTaskPayload(feladatData, alfeladatok, ujFeladat);
+
+    uploadTasks(payload, ujFeladat);
+}
+
+function isCompleteSubtask(alfeladat) { //BBB
+    return !((alfeladat.leiras === "" || alfeladat.leiras === null) &&
+            (alfeladat.pontszam === "" || alfeladat.pontszam === null));
+}
+
+function getDeletedTasks() { //BBB
+    try {
+        if (Array.isArray(deleteIds) && deleteIds.length > 0) {
+            return deleteIds.map(id => (
+                { 
+                    isDelete: true, 
+                    alfId: id 
+                }
+            ));
+        }
+    } catch (err) {
+        // hiba esetén üres tömb visszaadása
+        return [];
+    }
+
+    return [];
+}
+
+function uploadTasks(payload, ujFeladat) { //BBB
+    $.ajax({
+        url: '/ment-feladat',
+        method: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function (res) {
+            if (ujFeladat) {
+                loadPageData();
+                toastMsg("Feladat hozzáadva!", "A feladat hozzáadódott az adatbázishoz.", "success");
+            } else {
+                updateFeladat(payload, payload.alfeladatok.filter(a => !(a["isDelete"]))); 
+                toastMsg("Feladat frissítve!", "A feladat frissítése sikeres volt.", "info");
+            }
+        },
+        error: function (xhr) {
+            console.error('hiba feladat feltöltésekor:', xhr.responseText);
+            showErrorMsg('hiba feladat feltöltésekor');
+            toastMsg("Valami borzasztó dolog történt!", "Nem sikerült végrahajtani a műveletet.", "danger");
+        }
+    });
+    resetCreateNewTask();
+}
+
+function validateTaskInputs(feladatData) {//BBB
+    return Object.values(feladatData).every(value => value !== "");
+}
+
+function createTaskPayload(feladatData, alfeladatok, ujFeladat) {//BBB
+    console.log(ujFeladat)
+    return {
+        "Nev":      feladatData.Nev,
+        "Leiras":   feladatData.Leiras,
+        "Evfolyam": feladatData.Evfolyam,
+        "Tantargy": feladatData.Tantargy,
+        "Tema":     feladatData.Tema,
+        "Nehezseg": Math.min(feladatData.Nehezseg, 10),
         "kurzusNeve": null,
         "tanarId": CurrentUserData.id,
         "alfeladatok": alfeladatok,
         "alfDb": alfeladatok.length,
-        "isInsert": (ujFeladat ? 1 : 0),
+        "isInsert": ujFeladat ? 1 : 0,
         "id": ujFeladat ? feladatAdatai.id : null,
-    }
-
-    if (Object.values(feladat).some(a => a === "")) {
-        toastMsg("Feladat nem menthető!", "A összes mezőt ki kell tölteni.", "warning"); 
-        return;
-    }
-
-    console.log(feladat)
-    err = false
-
-    $.ajax({
-        url: '/ment-feladat', 
-        method: "POST",
-        contentType: 'application/json',
-        data: JSON.stringify(feladat),
-        success: function (res) {
-            if (ujFeladat) {loadPageData()
-                            toastMsg("Feladat hozzáadva!", "A feladat hozzáadódott az adatbázishoz.", "success")}
-            else {  updateFeladat(feladat, alfeladatok.filter(a => !(a["isDelete"]))); 
-                    toastMsg("Feladat frissítve!", "A feladat frissítése sikeres volt.", "info")}
-        },
-        error: function (xhr) {
-            console.error('hiba feladat feltöltésekor:', xhr.responseText);
-            showErrorMsg('hiba feladat feltöltésekor')
-            toastMsg("Valami borzasztó dolog történt!", "Nem sikerült végrahajtani a műveletet.", "danger")
-            err = true
-        }
-    }); 
-
-    resetFeladathozzaad();
+    };
 }
 
-function resetFeladathozzaad(){ //PR
+async function createSubtaskObjects(ujFeladat, slimMode, containerId) {//BBB
+    let alfeladatok = [];
+    let items;
+
+    if (ujFeladat) {
+        items = $(`#${containerId}${slimMode}`)
+            .find(".alf_id")
+            .toArray();
+    } else {
+        /*items = document.getElementById(containerId)
+            .querySelectorAll(".alfeladat");*/
+
+        items = Array.from(
+            document.getElementById(containerId)
+                .querySelectorAll(".alfeladat")
+        );
+    }
+    
+    const alfeladatPromises = items.map(
+        item => uploadFile(
+            $(item).find(".alfeladatFile")[0]
+        )
+    );
+
+    const fajlIds = await Promise.all(alfeladatPromises);
+
+    items.forEach((item, index) => {
+        const $item = $(item);
+
+        console.log("MEGBASZLAAAAAAAAAAAAAAAK")
+        console.log($item.find(".alfeladat").prevObject[0].id.substring(3))
+
+        const leiras = $item.find(".alfeladatLeiras")[0].value || null;
+        const pontszam = $item.find(".alfeladatPont")[0].value || null;
+        const alfId = $item.find(".alfeladat").prevObject[0].id.substring(3) || null;
+
+
+        alfeladat = {
+            leiras,
+            pontszam,
+            fajlId: fajlIds[index],
+            isDelete: false,
+            alfId: alfId || null,
+        }
+        console.log("ALFELADAT OBJECT")
+        console.log(alfeladat)
+        
+        alfeladatok.push(alfeladat);
+    });
+
+    return alfeladatok;
+}
+
+function uploadFile(fileInput) {//BBB
+    const existingId = fileInput?.dataset.fileId ?? null;
+    const hasNewFile = Boolean(fileInput && fileInput.files && fileInput.files.length > 0);
+
+    if (hasNewFile) {
+        return uploadSubtaskFile(fileInput);
+    } else if (existingId) {
+        return Promise.resolve(existingId);
+    } else {
+        return Promise.resolve(null);
+    }
+}
+
+function resetCreateNewTask(){ //PR
     var s = slim_felAdd ? "-s" : "";
     // set the input values back to empty
     document.getElementById("feladatNev"+s)  .value = "";
@@ -166,7 +307,7 @@ function resetFeladathozzaad(){ //PR
     document.getElementById("alfeladatBox"+s).innerHTML = "";
 }
 
-function AlfeladatHozzaad(hova){ //PR
+function createSubtask(hova){ //PR
     //creates a new subtask box
     const subtask = subtaskCardTemplate()
     subtask.id = `div${pId}`
@@ -175,7 +316,7 @@ function AlfeladatHozzaad(hova){ //PR
     button.addEventListener('click', () => AlfeladatEltavolit(subtask.id));
 
     const input = subtask.querySelector('.alfeladatPont')
-    input.addEventListener('input',() => numberCheck(input))
+    input.addEventListener('input',() => checkNumber(input))
 
     const fakeFile = buildFakeFileInput(pId) 
 
@@ -184,7 +325,7 @@ function AlfeladatHozzaad(hova){ //PR
     pId++;
 }
 
-function buildFakeFileInput(id, fileName, fileIdentifier){
+function buildFakeFileInput(id, fileName, fileIdentifier){ //PR
     const fakeFile = fakeFileTemplate()
 
     const label = fakeFile.children[0]
@@ -203,7 +344,7 @@ function buildFakeFileInput(id, fileName, fileIdentifier){
     label.setAttribute("for", `alfFile${id}`);
     input.addEventListener('change', () => {
         AlfFileChanged(input, `fakeFileText${id}`); 
-        FileSizeCheck(input, `fakeFileText${id}`)
+        checkFileSize(input, `fakeFileText${id}`)
     })
     return fakeFile
 }
@@ -289,7 +430,7 @@ function editThisFeladat(){ // PR
     spans[5].replaceChildren(leiras)
 
     spans[2].firstChild.setAttribute('inputmode', 'numeric')
-    spans[2].firstChild.addEventListener('input', () => numberCheck(spans[2].firstChild), maxEvfolyamValue)
+    spans[2].firstChild.addEventListener('input', () => checkNumber(spans[2].firstChild), maxEvfolyamValue)
 
 
     const {nehLabel, nehInput} = returnEditNehezsegSlider()
@@ -304,7 +445,7 @@ function editThisFeladat(){ // PR
                                             <span>Alfeladat Hozzáadása</span>
                                         </button>
                                     </div>`
-    document.querySelector("#HozzaadGoesHere button").addEventListener('click', () => AlfeladatHozzaad('alfeladatokContainer'))
+    document.querySelector("#HozzaadGoesHere button").addEventListener('click', () => createSubtask('alfeladatokContainer'))
 
     var db
     for (db = 0; db < editFeladat.querySelectorAll(".alfeladat").length; db++) {
@@ -337,7 +478,7 @@ function editThisFeladat(){ // PR
                         <button type="button" class="btn btn-warning">Mégse</button>`
 
     const felhasznalo = "";                
-    footer.children[0].addEventListener('click', () => { mentFeladat(false, db), resetFeladathozzaad()})
+    footer.children[0].addEventListener('click', () => { saveTask(false), resetCreateNewTask()})
     footer.children[1].addEventListener('click', () => CancelEditingThisFeladat(true, felhasznalo))
 }
 
@@ -380,7 +521,7 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR
     footer.replaceChildren()
     if(document.getElementById("hozzaadGoesHere")) document.getElementById("HozzaadGoesHere").innerHTML = "" 
 
-    if(ActiveLocation == "Feladataim") {
+    if(ActiveLocation == "Feladataim" || ActiveLocation == 'Csillagozva') {
         header.innerHTML += `<button class="btn"><i class="bi bi-pencil-square fs-5"></i></button>`
         footer.innerHTML = `<button type="button" class="btn btn-warning" data-bind="arch" data-bs-dismiss="modal">Archiválás</button>
                             <button type="button" class="btn btn-primary" data-bind="megoszt" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#megosztFeladat">Megosztás</button>`
@@ -388,7 +529,7 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR
 
         header.children[1].addEventListener("click", () => editThisFeladat());
         $bind(footer, 'arch').addEventListener("click", () => feladatArch(1));
-        $bind(footer, 'megoszt').addEventListener("click", () => autocompleteArrayTolt());
+        $bind(footer, 'megoszt').addEventListener("click", () => autocompleteShare_TeacherSelect());
     }
     
     if (ActiveLocation == "Archívum"){
@@ -407,11 +548,18 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR
 
     footer.appendChild(btn)
     
-    if(call_setModal) setModalContent(feladatAdatai, felhasznalo)   
+    if(call_setModal) setTaskModalContent(feladatAdatai, felhasznalo)   
 }
 
 function TorolFeladat(){//PR?
     document.getElementById(`thisDivHasAnIdOf${feladatAdatai.id}`).remove();// kill the div
     ajax_post("/feladatTorol", 1, { id: feladatAdatai.id })                     // update database
     talalatSzam.innerHTML = parseInt(talalatSzam.innerHTML)-1             // reduce count
+}
+
+function bookmarkTaskClick(feladatId, button){
+    button.classList.toggle('text-warning')
+    button.classList.toggle('bi-star-fill')
+    button.classList.toggle('bi-star')
+    ajax_post(`/updateBookmarkedState`, 1, {feladatId: feladatId})
 }

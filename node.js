@@ -37,7 +37,8 @@ const { naplozz } = require("./utils/naplozo");
 const conn = require("./config/db").connMegszerez();
 const { createOAuthClient, createClientUsingCredentials, SCOPES, baseUrl, clientId } = require("./config/google")
 const { sendMail } = require("./services/emailsend")
-const { loggerConfig, getLogger, terminal_wss_tokens, startWss } = require("./config/logging")
+const { loggerConfig, getLogger, terminal_wss_tokens, startWss } = require("./config/logging");
+const { log } = require("console");
 
 
 const pad = (s, n) => s.padEnd(n);
@@ -144,7 +145,7 @@ app.get("/reg", async (req, res) => { //PR, RD
     }
 
     const code = req.query.code;
-    if (!code) return res.status(400).send('Missing code');
+    if (!code) return res.redirect("index.html");
     req.session.code = code;
 
     const client = createOAuthClient(); //új kliens a sessionhoz -> nem dob be más user accountjába
@@ -511,7 +512,8 @@ app.post("/getUserCount", (req, res) =>{ //RD, a limit offset miatt a felhaszná
     injection.push(intezmeny)
   }
   if (kereso != "") {
-    and += ` AND LOWER(Users.Nev) COLLATE utf8mb4_bin LIKE '%${kereso}%'`
+    and += ` AND LOWER(Users.Nev) COLLATE utf8mb4_bin LIKE ?`
+    injection.push('%'+kereso+'%')
   }
   
   var sql = `SELECT COUNT(Users.id) AS tanarDb
@@ -681,14 +683,25 @@ app.post("/SendUsers", (req, res) =>{ //RD //felhasználók kiszedése(frontende
   const intezmeny = req.session.intezmenyId
   const kereso = req.body.kereso
   var limitoffset = ` LIMIT ${limit} OFFSET ${offset}`
+  var injection = [limit, offset]
   var where = ""
-  if (kereso != "") where = ` HAVING LOWER(Users.Nev) COLLATE utf8mb4_bin LIKE '%${kereso}%'`
+  if (kereso != ""){
+    injection.unshift(`%${kereso}%`)
+    where = ` HAVING LOWER(Users.Nev) COLLATE utf8mb4_bin LIKE ?`
+  } 
+  console.log(req.session.Jog)
+  if(req.session.Jog != "Főadmin"){
+    console.log("req.session.jog fut" )
+    injection.unshift(intezmeny)
+  } 
+    console.log("injection")
+    console.log(injection)
   var sql = `SELECT Users.id, Users.Nev, Users.Email, Users.Jogosultsag, Users.HatterSzin
-              FROM Users
-              WHERE NOT Jogosultsag = 'Mailsender' and not Jogosultsag = 'Főadmin' ${userId != '2' ? `AND IntezmenyId = ${intezmeny}` : ''} 
-              GROUP BY Users.id, Users.Nev ${where}${limitoffset}`
+    FROM Users
+    WHERE NOT Jogosultsag = 'Mailsender' and not Jogosultsag = 'Főadmin' ${userId != '2' ? `AND IntezmenyId = ?` : ''} 
+    GROUP BY Users.id, Users.Nev ${where}${limitoffset}`
               
-  conn.query(sql, (err, results) => {
+  conn.query(sql, injection, (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -756,28 +769,31 @@ app.post("/SendFeladatok", (req, res) =>{ //RD, BBB, PR
     injection.push(`%${keresoSz}%`)
   }
 
-
   if (!isPositiveInt(tanarId) && !isPositiveInt(oldal)) {
     return res.send(JSON.stringify({ error: 'invalid input' }));
   }
 
-  sql = "SELECT Feladatok.id as id, Feladatok.Nev, Feladatok.Leiras, Feladatok.Evfolyam, Feladatok.Tantargy, Feladatok.Tema, Feladatok.Nehezseg, (SELECT COUNT(Alfeladat.id) FROM Alfeladat WHERE FeladatId = Feladatok.id) AS alfDb"
-
-  if(oldal == 2 || oldal == 3){// Megosztott (velem vagy általam)
+  sql = "SELECT Feladatok.id as id, Feladatok.Nev, Feladatok.Leiras, Feladatok.Evfolyam, Feladatok.Tantargy, Feladatok.Tema, Feladatok.Nehezseg, (SELECT COUNT(Alfeladat.id) FROM Alfeladat WHERE FeladatId = Feladatok.id) AS alfDb, Feladatok.Csillagozva"
+  console.log(oldal)
+  if(oldal == 3 || oldal == 4){// Megosztott (velem vagy általam)
     sql += ` , Users.Nev AS Felhasznalo, Users.HatterSzin AS FelhasznaloColor
               FROM Megosztott 
               INNER JOIN Feladatok ON Feladatok.id = Megosztott.FeladatId
-              INNER JOIN Users ON Megosztott.${oldal == 2 ? 'FeladoId' : 'VevoId'} = Users.id
-              WHERE Megosztott.${oldal == 2 ? 'VevoId' : 'FeladoId'} = ?${where}${order}${limitSql}${offsetSql}`
+              INNER JOIN Users ON Megosztott.${oldal == 3 ? 'FeladoId' : 'VevoId'} = Users.id
+              WHERE Megosztott.${oldal == 3 ? 'VevoId' : 'FeladoId'} = ?${where}${order}${limitSql}${offsetSql}`
       injection.unshift(tanarId)
+  }
+  else if (oldal == 1){
+    sql += ` FROM Feladatok WHERE Csillagozva = 1 AND Tanar = ?${where}${order}${limitSql}${offsetSql}`
+    injection.unshift(tanarId)
   }
   else{ // Saját (archivált vagy nem archivált)
       sql += ` FROM Feladatok WHERE Archivalva = ? AND Tanar = ?${where}${order}${limitSql}${offsetSql}`
       injection.unshift(tanarId)
-      injection.unshift(oldal)
+      injection.unshift(oldal == 2 ? 1 : 0)
   }
 
-  /*console.log(sql, injection)*/
+  console.log(sql, injection)
   conn.query(sql, injection, (err, results) => {
   if(err){
     logger.log({
@@ -831,9 +847,9 @@ app.post("/SendAlFeladatok",  (req, res) => {//RD, BBB
     res.end(); return
   }
   
-  var sql = `SELECT * FROM Alfeladat WHERE FeladatId = ${feladatId}`
+  var sql = `SELECT * FROM Alfeladat WHERE FeladatId = ?`
 
-  conn.query(sql, async (err, results) => {
+  conn.query(sql, [feladatId], async (err, results) => {
     /*console.log(results)*/
     if(err || !results || results.length == 0){
       logger.log({
@@ -864,8 +880,8 @@ if (!isEmail(newEmail) || !isNonEmptyString(newNev)) {
     return res.send(JSON.stringify({ success: false, error: 'invalid input' }));
   }
 
-  let sql = `UPDATE Users SET Nev = ?, Email = ? WHERE UserToken = '${usertoken}'`
-  conn.query(sql, [newNev, newEmail], (err, results) => {
+  let sql = `UPDATE Users SET Nev = ?, Email = ? WHERE UserToken = ?`
+  conn.query(sql, [newNev, newEmail, usertoken], (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -959,15 +975,16 @@ app.post("/ment-fajl", upload.single('fajl'), async (req, res) => { // BBB
 
 app.post("/ment-feladat", (req, res) => { //BBB
     // full json alapú, azt mondta a tanár és a chatgpt is hogy így jobb
-    const adat = req.body
+    const adat = req.body;
+    console.log(adat)
     const isInsert = adat["isInsert"]
     let sql = "";
-    if(isInsert == 1){
-      sql += `INSERT INTO Feladatok(Nev, Leiras, Evfolyam, Tantargy, Tema, Nehezseg, Tanar, Archivalva)
-              VALUES(?, ?, ?, ?, ?, ?, ?, 0)`
+    if(isInsert == "1" || isInsert == 1 || isInsert == true){ // új feladat
+      sql = `INSERT INTO Feladatok(Nev, Leiras, Evfolyam, Tantargy, Tema, Nehezseg, Tanar, Archivalva, Csillagozva)
+              VALUES(?, ?, ?, ?, ?, ?, ?, 0, 0)`
     }
     else{
-      sql += `UPDATE Feladatok SET Nev = ?, Leiras = ?, Evfolyam = ?, Tantargy = ?, Tema = ?, Nehezseg = ?, Tanar = ?
+      sql = `UPDATE Feladatok SET Nev = ?, Leiras = ?, Evfolyam = ?, Tantargy = ?, Tema = ?, Nehezseg = ?, Tanar = ?
               WHERE id = ${adat["id"]}`
     }
     conn.query(sql, [adat["Nev"], adat["Leiras"], adat["Evfolyam"], adat["Tantargy"], adat["Tema"], adat["Nehezseg"], adat["tanarId"]], (err, results) => {
@@ -987,18 +1004,21 @@ app.post("/ment-feladat", (req, res) => { //BBB
     adat["alfeladatok"].forEach(alfeladat => {
       let fajlId = alfeladat["fajlId"]; 
 
-      let insert = !alfeladat["alfId"] // na nem kaptunk id-t akkor ez egy új alfeladat
-      let delte = alfeladat["isDelete"] == true
-      /*console.log(adat["id"])*/
-      /*console.log(feladat_utolso_id + 1)*/
+      console.log(alfeladat)
 
+      let insert = alfeladat["alfId"] == null // na nem kaptunk id-t akkor ez egy új alfeladat
+      let delte = alfeladat["isDelete"] == true
+      
+      console.log("insert fasz: " + insert)
+      console.log("type adat: " + typeof(adat["id"]))
+      console.log("type feladat utolso: " + typeof(feladat_utolso_id))
       let sql = "";
       if      (insert)           sql = `INSERT INTO Alfeladat (Leiras, FeladatId, FajlId, Pont) VALUES(?, ?, ?, ?)`
       else if (delte)            sql = `DELETE FROM Alfeladat WHERE id=${alfeladat["alfId"]}`
-      else                                    sql = `UPDATE Alfeladat SET Leiras = ?, FeladatId = ?, FajlId = ?, Pont = ?
-                                                      WHERE id = ${alfeladat["alfId"]}`
-          
-      conn.query(sql, !delte ? [alfeladat["leiras"],  (adat["id"] ? adat["id"] : (feladat_utolso_id + 1)),
+      else                       sql = `UPDATE Alfeladat SET Leiras = ?, FeladatId = ?, FajlId = ?, Pont = ?
+                                        WHERE id = ${alfeladat["alfId"]}`
+      console.log("sql: " + sql)
+      conn.query(sql, !delte ? [alfeladat["leiras"],  (insert ? (feladat_utolso_id + 1) : adat["id"]),
                       fajlId, alfeladat["pontszam"]] : [], (err, results) => { 
         if (err) { 
           logger.log({
@@ -1142,12 +1162,13 @@ app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom felada
   dueDate = req.body.dueDate
   dueTime = req.body.dueTime
   tanulok = req.body.tanulok
+  //console.log("tanulók: "+tanulok)
   let sql = `SELECT Feladatok.Nev, Feladatok.Leiras AS feladatLeiras, Feladatok.Tema, Feladatok.Nehezseg, 
-              (SELECT sum(Pont) FROM Alfeladat WHERE FeladatId = ${feladatId}) AS maxPont, 
+              (SELECT sum(Pont) FROM Alfeladat WHERE FeladatId = ?) AS maxPont, 
               Alfeladat.id, Alfeladat.Leiras, Alfeladat.Pont, Alfeladat.FajlId
             FROM Feladatok left JOIN Alfeladat ON Feladatok.id = Alfeladat.FeladatId 
-            WHERE Feladatok.id = ${feladatId}`; 
-  conn.query(sql, async (err, results) => {
+            WHERE Feladatok.id = ?`; 
+  conn.query(sql, [feladatId, feladatId], async (err, results) => {
     if (err){
       logger.log({
         level: 'error',
@@ -1216,8 +1237,8 @@ async function createClassroomTask(title, description, maxPoints, year, month, d
     }
   }));
   //tanulok = String(tanulok || "").split(",").map(s => s.trim()).filter(s => s.length > 0);
-  var selectedStudents = tanulok.length > 0 && tanulok.lenght != undefined
-  console.log(tanulok, selectedStudents)
+  var selectedStudents = (Boolean(tanulok.length))
+  //if(tanulok.length > 0)
   
   feladatData ={
     title,
@@ -1273,7 +1294,10 @@ app.post("/feladatArchivalas", async(req, res) =>{ //PR
   console.log(`archivalt feladat id${id}`)
   console.log(`archivalt state${state}`, typeof state)
    
-  if(state == 1) { await queryAsync('delete from Megosztott where FeladatId = ?', [id])}
+  if(state == 1) { 
+    await queryAsync('delete from Megosztott where FeladatId = ?', [id])
+    await queryAsync('UPDATE Feladatok SET Csillagozva = 0 WHERE id = ?', [id])
+  }
   let sql = `UPDATE Feladatok SET Archivalva = ? WHERE id = ?` ;
   
 
@@ -1294,8 +1318,8 @@ app.post("/autocompleteArrayTolt", (req, res) =>{ //RD, a suggestion alapú inpu
 
   const userId = req.session.userId
   const intezmeny = req.session.intezmenyId
-  let sql = `SELECT Nev, Email FROM Users WHERE (Jogosultsag = 'Tanár' OR Jogosultsag = 'Admin') AND NOT id = ${userId} AND IntezmenyId = ${intezmeny}`
-  conn.query(sql, (err, results) =>{
+  let sql = `SELECT Nev, Email FROM Users WHERE (Jogosultsag = 'Tanár' OR Jogosultsag = 'Admin') AND NOT id = ? AND IntezmenyId = ?`
+  conn.query(sql, [userId, intezmeny], (err, results) =>{
     if(err){
       logger.log({
         level: 'error',
@@ -1310,8 +1334,8 @@ app.post("/autocompleteArrayTolt", (req, res) =>{ //RD, a suggestion alapú inpu
 })
 
 async function MegosztottFeladatAlreadyExists(cimzett, feladatId, felado){
-  let sql = `SELECT COUNT(id) AS db FROM Megosztott WHERE FeladoID = ${felado} AND FeladatId = ${feladatId} AND (SELECT id FROM Users WHERE Email = '${cimzett}' OR Nev = '${cimzett}')`
-  var c = await queryAsync(sql)
+  let sql = `SELECT COUNT(id) AS db FROM Megosztott WHERE FeladoID = ? AND FeladatId = ? AND (SELECT id FROM Users WHERE Email = ? OR Nev = ?)`
+  var c = await queryAsync(sql, [felado, feladatId, cimzett, cimzett])
   console.log(c)
   console.log(c[0].db)
   return c[0].db
@@ -1350,29 +1374,6 @@ app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok köz�
   });
 })
 
-app.post("/getTantargyForAuto", (req, res) =>{//RD, autocomplete/suggestion cucc
-
-  const userId = req.session.userId
-  const megosztott = req.body.megosztott
-  var tabla = megosztott ? `FROM Megosztott INNER JOIN Feladatok ON Feladatok.id = Megosztott.FeladatId
-    WHERE Megosztott.VevoId = ${userId}` : `FROM Feladatok WHERE Tanar = ${userId}`
-  
-  let sql = `SELECT Tantargy ${tabla} GROUP BY Tantargy`
-  
-  conn.query(sql, (err, results) => {
-    if (err) { 
-      logger.log({
-        level: 'error',
-        message: `(/getTantargyForAuto) error=${err.message} userId=${userId}`
-      })
-      throw err;  
-    }
-   
-    res.send(JSON.stringify({ "results":results } ))
-    res.end()
-  });
-})
-
 app.post('/megosztasVisszavon', async (req, res) => {
   const feladatId = req.body.id
   const vevo = req.body.vevo
@@ -1396,11 +1397,11 @@ app.post("/getTanarForAuto", (req, res) =>{//RD, autocomplete/suggestion cucc
   
   let sql = `SELECT Users.id, Users.Nev
               FROM Megosztott 
-              INNER JOIN Users ON Megosztott.FeladoId = Users.id WHERE VevoId = ${vevo}
+              INNER JOIN Users ON Megosztott.FeladoId = Users.id WHERE VevoId = ?
               GROUP BY Users.id`
 
   /*console.log(sql)*/
-  conn.query(sql, (err, results) => {
+  conn.query(sql, [vevo], (err, results) => {
     if (err) { 
       logger.log({
         level: 'error',
@@ -1459,19 +1460,22 @@ app.post("/getFeladatNumber", (req, res) =>{//RD limit, offset miatt kell, a fel
     return res.send(JSON.stringify({ error: 'invalid input' }));
   }
 
-
+  console.log(oldal)
   try{
-
-    if(oldal == 2 || oldal == 3){ //  Megosztott
-        sql = `SELECT count(Megosztott.id) as db FROM Feladatok INNER JOIN Megosztott ON Megosztott.FeladatId = Feladatok.id WHERE ${oldal == 2 ? 'VevoId' : 'FeladoId'} = ? ${where}`
+    if(oldal == 3 || oldal == 4){ //  Megosztott
+        sql = `SELECT count(Megosztott.id) as db FROM Feladatok INNER JOIN Megosztott ON Megosztott.FeladatId = Feladatok.id WHERE ${oldal == 3 ? 'VevoId' : 'FeladoId'} = ? ${where}`
         injection.unshift(userId)
     }
-      else{ // Saját 
-        sql = `SELECT count(id) as db FROM Feladatok WHERE Archivalva = ? AND Tanar = ?${where}`
-        injection.unshift(userId)
-        injection.unshift(oldal)
+    else if (oldal == 1){
+      sql = `SELECT count(Feladatok.id) as db FROM Feladatok WHERE Csillagozva = 1 AND Tanar = ? ${where}`
+      injection.unshift(userId)
     }
- /*console.log(sql, injection)*/
+    else{ // Saját (archivált vagy nem archivált)
+      sql = `SELECT count(Feladatok.id) as db FROM Feladatok WHERE Archivalva = ? AND Tanar = ? ${where}`
+      injection.unshift(userId)
+      injection.unshift(oldal == 2 ? 1 : 0)
+    }
+ console.log(sql, injection)
     conn.query(sql, injection, (err, results) => {
       if (err) { 
         logger.log({
@@ -1486,7 +1490,8 @@ app.post("/getFeladatNumber", (req, res) =>{//RD limit, offset miatt kell, a fel
     })
   }
   catch(err){
-    /*console.log("tsundere kód "+err)*/
+    res.status(500).end();
+    return
   }
   
 })
@@ -1551,12 +1556,12 @@ app.get("/logs", async (req, res) => {
 app.post("/MentIntezmeny", (req, res) =>{//RD, Új intézmény hozzáadása utáni mentés
   const intezmeny = req.body.intezmeny
   var sql = `INSERT INTO Intezmenyek (IntezmenyNev)
-            SELECT '${intezmeny}'
+            SELECT ?
             WHERE NOT EXISTS (
                 SELECT 1 FROM Intezmenyek
-                WHERE IntezmenyNev = '${intezmeny}'
+                WHERE IntezmenyNev = ?
             )`
-  conn.query(sql, (err, results) => {
+  conn.query(sql, [intezmeny, intezmeny], (err, results) => {
     if (err) { 
       logger.log({
         level: 'error',
@@ -1569,8 +1574,7 @@ app.post("/MentIntezmeny", (req, res) =>{//RD, Új intézmény hozzáadása utá
 })
 
 app.post("/SendIntezmeny", (req, res) =>{//RD, intézmények küldése frontendre
-  var sql = `SELECT id, IntezmenyNev
-              FROM Intezmenyek`
+  var sql = `SELECT id, IntezmenyNev FROM Intezmenyek`
   conn.query(sql, (err, results) => {
     if(err){
       logger.log({
@@ -1588,9 +1592,9 @@ app.post("/modositIntezmeny", (req, res) =>{//RD, intézmény módosítása
   const kellId = req.body.id
   const intezmeny = req.body.intezmeny
   var sql = `UPDATE Intezmenyek
-              SET IntezmenyNev = '${intezmeny}'
-              WHERE id = ${kellId}`
-  conn.query(sql, (err, results) => {
+              SET IntezmenyNev = ?
+              WHERE id = ?`
+  conn.query(sql, [intezmeny, kellId], (err, results) => {
     if(err){
       logger.log({
         level: 'error',
@@ -1630,8 +1634,8 @@ app.post("/VanIntezmeny", (req, res) =>{//RD, Van-e a usernek Intézménye, mind
                 ELSE COUNT(Intezmenyek.id)
               END AS Db
               FROM Users LEFT JOIN Intezmenyek ON Users.IntezmenyId = Intezmenyek.id
-              WHERE Users.id = ${userId}`
-  conn.query(sql, (err, results) => {
+              WHERE Users.id = ?`
+  conn.query(sql, [userId], (err, results) => {
     if (err) {
       return res.status(500).send(JSON.stringify({ error: err.message }));
     }
@@ -1645,8 +1649,8 @@ app.post("/updateUserIntezmeny", (req, res) =>{//RD
   const userId = req.session.userId
   const intezmenyId = req.body.ujIntezmId
   req.session.intezmenyId = intezmenyId
-  sql = `UPDATE Users SET IntezmenyId = ${intezmenyId} WHERE id = ${userId}`
-  conn.query(sql, (err, results) => {
+  sql = `UPDATE Users SET IntezmenyId = ? WHERE id = ?`
+  conn.query(sql, [intezmenyId, userId], (err, results) => {
     if (err) {
       return res.status(500).send(JSON.stringify({ error: err.message }));
     }
@@ -1656,8 +1660,8 @@ app.post("/updateUserIntezmeny", (req, res) =>{//RD
 
 app.post("/torolintezmeny", (req, res) =>{//RD, intézmény eltávolítása, az érintett usereknek új intézményt kell választaniuk következő bejelentkezéskor
   const intezmId = req.body.id
-  var sql = `DELETE FROM Intezmenyek WHERE id = ${intezmId}`
-  conn.query(sql, (err, results) => {
+  var sql = `DELETE FROM Intezmenyek WHERE id = ?`
+  conn.query(sql, [intezmId], (err, results) => {
     if (err) {
       return res.status(500).send(JSON.stringify({ error: err.message }));
     }
@@ -1818,7 +1822,7 @@ async function getFileNameAndCreationDate(directory){
   try {
     const files = fs.readdirSync(directory);
     console.log("fajlok: " + files)
-    const result = await Promise.all( //promisokat "csomagol" össze és küldi el egybe
+    const result = await Promise.all(
       files.map(async file => {
         try {
           const fullPath = path.join(directory, file);
@@ -1840,7 +1844,7 @@ async function getFileNameAndCreationDate(directory){
 
     if(result) return result;
     else {
-      throw Error("niggerundayo");
+      throw Error("baj van");
     }
   } catch (err) {
     console.log(`Elérési út olvasása sikertelen: ${err}`);
@@ -1860,11 +1864,6 @@ app.post("/MentBackup", async (req, res) =>{
   if(!['Főadmin'].includes(req.session.Jog)){
     return res.status(403).end();
   }
-  /*console.log("cote");
-  var newSave = await backup()
-  var cucc = await selectUpdate(newSave);
-  res.send(JSON.stringify({"fajlok":cucc}));
-  res.end()*/
 
   backupPath = path.join(__dirname, 'backups');
   let fileData = await getFileNameAndCreationDate(backupPath); //fájlnév, fájl path, creation(ms)
@@ -1910,10 +1909,10 @@ app.post("/AthelyezUser", (req, res) =>{//RD, felhasználó áthelyezése(intéz
   const userId = req.body.userId
 
   var sql = `UPDATE Users 
-              SET IntezmenyId = ${hova}
-              WHERE Users.id = ${userId}`
+              SET IntezmenyId = ?
+              WHERE Users.id = ?`
   /*console.log(sql)*/
-  conn.query(sql, (err, results) => {
+  conn.query(sql, [hova, userId], (err, results) => {
     if (err) {
       return res.send(JSON.stringify({ success: false, error: err.message }));
     }
@@ -1927,8 +1926,8 @@ app.post("/getUserIntezmeny", (req, res)=>{
   var sql = `SELECT DISTINCT Intezmenyek.id, intezmenyNev, Users.id
               FROM Intezmenyek INNER JOIN Users ON Users.IntezmenyId = Intezmenyek.id
               GROUP BY Intezmenyek.id
-              HAVING not Users.id = ${userId}`
-  conn.query(sql, (err, results) => {
+              HAVING not Users.id = ?`
+  conn.query(sql, [userId], (err, results) => {
     /*console.log(results)*/
     if (err) {
       return res.status(500).send(JSON.stringify({ error: err.message }));
@@ -1938,36 +1937,6 @@ app.post("/getUserIntezmeny", (req, res)=>{
     res.end()
   });
 })
-
-/*app.post("/sendFeedback", (req, res) => {
-  logger.log({
-    level: 'info',
-    message: logFormat("/feedback", "POST", req.ip),
-  })
-
-  const feedbackReszlet = req.body.details || "Mi a lőcs?";
-  //const userName = req.body.user || "Something is not right";
-
-  logger.log({
-    level: 'debug',
-    message: `Feedback: ${feedbackReszlet}`
-  });
-
-  conn.query(
-    "INSERT INTO Hibajelentes (Felado, Ido, Message) VALUES (?, NOW(), ?)",
-    [req.session.id, feedbackReszlet],
-    (err, results) => {
-      if (err) {
-        logger.log({
-          level: 'error',
-          message: `(/feedback) error=${err.message} userId=${req.session.userId}`
-        });
-        throw err;
-      }
-      res.end();
-    }
-  )
-})*/
 
 app.post("/wss", (req, res) => {
   let wssToken = crypto.randomBytes(32).toString("hex");
@@ -2003,6 +1972,24 @@ const server = app.listen(config.server.port, () => {
       );
     }
   )
+
+  app.post("/updateBookmarkedState", (req, res) =>{
+    var feladatId = req.body.feladatId
+    let sql = `UPDATE Feladatok SET
+              Csillagozva =
+                CASE
+                    WHEN Feladatok.Csillagozva = 0 THEN 1
+                    ELSE 0
+                END	
+              WHERE Feladatok.id = ?`;
+
+    conn.query(sql, [feladatId], (err, results) => {
+      if (err) {
+        return res.send(JSON.stringify({ success: false, error: err.message }));
+      }
+      res.end()
+    })
+  })
 
   //getUtolsoId()
 

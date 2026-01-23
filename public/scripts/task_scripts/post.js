@@ -1,13 +1,13 @@
 /* ------ CONTENT ------
 task_scripts/load.js ---------------
-    - kozzeteszClick           -RD, PR
-    - kozzetevesModalReset     -PR
-    - selectedCourse           -RD
-    - FeladatKozzetesz         -RD
-    - getCourses               -RD
+    - kozzeteszButtonClick        -RD, PR
+    - resetKozzetevesModal        -PR
+    - loadAvailableCourses        -RD
+    - postTaskToClassroom         -RD
+    - getCoursesFromClassroomAPI  -RD
 */ 
 
-function kozzeteszClick(id){   //RD, PR
+function kozzeteszButtonClick(id){   //RD, PR
     /*console.log("asd", ActiveLocation != "Feladataim" && ActiveLocation != "Velem megosztott")
 
     if(ActiveLocation != "Feladataim" && ActiveLocation != "Velem megosztott"){
@@ -15,10 +15,10 @@ function kozzeteszClick(id){   //RD, PR
         return;
     }*/
 
-    kozzetevesModalReset();
+    resetKozzetevesModal();
     
     const select = document.createElement('select')
-    select.addEventListener('change', () => selectedCourse())
+    select.addEventListener('change', () => loadAvailableCourses())
     select.classList.add('slim-select', 'w-100', 'form-select-lg', 'mb-3')
     select.id = 'kurzusSelect'
 
@@ -32,21 +32,22 @@ function kozzeteszClick(id){   //RD, PR
         select.appendChild(option)
     } 
     document.getElementById("megosztasId").replaceChildren(select);
-    selectedCourse()
+    loadAvailableCourses()
 }
 
-function kozzetevesModalReset(){ //PR
+function resetKozzetevesModal(){ //PR
         // clears the date and students inputs
         flatPicker?.setDate(null)
         $("#tanulkoSelect").empty()
-    }
+}
 
-async function selectedCourse(){ //RD
+async function loadAvailableCourses(){ //RD
     var chosenOne = document.getElementById("kurzusSelect")?.value
     var kurzusId = chosenOne.split("-")[0]
     var tanulok = ajax_post("/getStudentList", 1, { kurzusId: kurzusId })
-    var tanulokLista = tanulok.diakok
-    
+    var tanulokLista = Array.from(tanulok?.diakok || []) || []
+    console.log("tanulok lista")
+    console.log(tanulokLista)    
     document.getElementById("tanulokSelect").replaceChildren()
     for (let index = 0; index < tanulokLista.length; index++) {
         tanuloObject.Idk.push(tanulokLista[index].userId)
@@ -61,7 +62,7 @@ async function selectedCourse(){ //RD
     }
 }
 
-async function FeladatKozzetesz(){ //RD
+async function postTaskToClassroom(){ //RD
     const select = document.getElementById("kurzusSelect");
     const opt = select.options[select.selectedIndex];
     var kurzusId = opt.value.split("-")[0]
@@ -84,7 +85,7 @@ async function FeladatKozzetesz(){ //RD
     }
 }
 
-function getCourses(){ //RD
+function getCoursesFromClassroomAPI(){ //RD
         var kurzus = ajax_post("/sendClassroomCourses", 1, {})
         if (kurzus) {
             kurzusok_nevek = kurzus.nevek

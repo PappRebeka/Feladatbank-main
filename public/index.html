@@ -19,7 +19,7 @@
     <script src="scripts/templates.js"></script>
 
     <link rel="icon" type="image/x-icon" href="img/fav.png">
-    <script>DarkModeCheck();</script>
+    <script>checkDarkMode();</script>
     <title>Feladatbank - Bejelentkezés</title>
 </head>
 <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
@@ -166,7 +166,7 @@
       form.querySelector('button').addEventListener('click', () => Boolean(existingUser) ? registerIntezmeny() : loginIntezmeny())
       form.querySelector('a').addEventListener('click', () => renderLogin())
 
-      IntezmenyArrayTolt();
+      autofillInstituteArray();
     }
 
     function renderPassReset() {
@@ -179,7 +179,7 @@
     }
 
     // ---------- Data fetch helpers ----------
-    function IntezmenyArrayTolt() {
+    function autofillInstituteArray() {
       const corporation = ajax_post("/SendIntezmeny", 1, {});
       const sel = document.getElementById("intezmenySelect");
 
@@ -300,8 +300,6 @@
       setTimeout(() => window.location.href = "/homepage.html", 1500);
     }
 
-    
-
     function emailCheck() {
       clearError();
       const mail = document.getElementById("email").value;
@@ -313,7 +311,7 @@
 
       if (ajax_post("/isRegistered", 0, { email: mail }) == "true") {
         ajax_post("/sendMailTo", 1, { email: mail });
-        toastMsg("Email elküldve", "Ha létezik fiók ezzel az emaillel, küldtünk helyreállító linket.", "success");
+        toastMsg("Email elküldve", "Ha létezik fiók ezzel az email címmel, küldtünk helyreállító linket.", "success");
       } else {
         showError("Nincs ilyen email című felhasználó!");
       }
@@ -331,10 +329,9 @@
       });
     }
 
-    
     $(document).ready(function() {
       cookieModal();
-      DarkModeCheck();
+      checkDarkMode();
 
       const stay = getCookie("stayLoggedIn");
       if (stay == "1") {
@@ -471,23 +468,7 @@
             </div>
         </div>
 
-        <!--div class="w-100 h-100 position-absolute top-50 start-50 translate-middle modal fade">
-          <div class="container-fluid bg-light rounded-top z-1080 p-0 mx-auto fixed-bottom" id="cookieDiv">
-            <div class="m-0 p-4 border-bottom w-100 d-inline-flex justify-content-between">
-              <h6>Sütik elfogadása</h6>
-              <button type="button" class="btn btn-success">
-                <i class="bi bi-check-lg"></i>&nbsp;
-                Elfogadás
-              </button>
-            </div>
-            <div class="m-0 p-4">
-              Sütiket és hasonló módszereket használunk a felhasználók felismerésére és a preferenciáik megjegyzésére.
-
-              Az „Elfogadás” gombra koppintva hozzájárul ahhoz, hogy ezeket a módszereket használjuk, és így hozzáférhet a weboldalhoz, valamint használhatja azt.
-            </div>
-          </div>
-        </div-->
-        <div class="modal fade" id="cookieModal" aria-hidden="false" aria-labelledby="suti-label">
+        <div class="modal fade bg-dark" id="cookieModal" aria-hidden="false" aria-labelledby="suti-label">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">

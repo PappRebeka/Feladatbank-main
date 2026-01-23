@@ -1,22 +1,27 @@
 /* ------ CONTENT ------
 task_scripts/load.js ---------------
-    - FeladatCardClick         -PR
-    - ClassroomGetCourses      -PR
-    - setModalContent          -PR, RD
-    - ikonFunction             -BBB
+    - feladatCardClick             -PR
+    - buildTaskCard                -PR
+    - setTaskModalContent          -PR, RD
+    - getCorrespondingFileIcon     -BBB
 */ 
 
 
-function FeladatCardClick(element){ //PR
+function feladatCardClick(element){ //PR
     const adat = JSON.parse(decodeURIComponent(element.adat));
     const felhasznalo = element.Felhasznalo;
 
-    setModalContent(adat, felhasznalo);
+    setTaskModalContent(adat, felhasznalo);
 }
 
 function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev){
     const container = taskCardTemplate();
     container.id = `thisDivHasAnIdOf${adat.id}`;
+
+    if(Boolean(adat?.Csillagozva)){
+        $bind(container, 'bookmarkTaskButton').classList.add('text-warning', 'bi-star-fill')
+        $bind(container, 'bookmarkTaskButton').classList.remove('bi-star')
+    }
     
     const card = $bind(container, 'card');
 
@@ -24,10 +29,10 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
     card.dataset.felhasznalo = felhasznalo ?? '';
     card.style.border = `4px solid ${borderColor(adat.Nehezseg)}`;
 
-    card.addEventListener('click', () => FeladatCardClick(card.dataset));
+    card.addEventListener('click', () => feladatCardClick(card.dataset));
 
     const nevText = adat.Nev
-    highlightKeresettText(ActiveFilters.kereso, nevText, $bind(container, 'nev'))
+    highlightSearchedText(ActiveFilters.kereso, nevText, $bind(container, 'nev'))
 
     $bind(container, 'tantargy').textContent = adat.Tantargy;
     $bind(container, 'tema')    .textContent = adat.Tema;
@@ -60,35 +65,42 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
     //Button 
     const which = ActiveLocation == "Archívum" ? '' : 
                   ActiveLocation == "Általam megosztott" ? 'visszaBtn' : 'postBtn'
+    //showElement(container, 'bookmarkTaskButton', Boolean(which));
+
 
     var p = $bind(container, 'postBtn')
     var v = $bind(container, 'visszaBtn')
+    var b = $bind(container, 'bookmarkTaskButton')
     
     p.classList.toggle('d-none', which != 'postBtn')
     v.classList.toggle('d-none', which != 'visszaBtn')
+    b.classList.toggle('d-none', !Boolean(which))
+
         
     p.addEventListener('click', (e) => {
-        kozzeteszClick(adat.id); 
+        kozzeteszButtonClick(adat.id); 
         e.stopPropagation();
     })
     v.addEventListener('click', (e) => {
-        visszavonClick(adat.id, felhasznalo);
+        removeSharedTask(adat.id, felhasznalo);
         e.stopPropagation();
     })
-
+    b.addEventListener('click', (e) => {
+        bookmarkTaskClick(adat.id, b);
+        e.stopPropagation();
+    })
     
 
     return container
 }
 
-function ClassroomGetCourses(adat, felhasznalo, felhasznaloColor, kurzusnev){//PR
+function buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev){//PR
     // this function has been reduced to dust
     const container = buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev)
     document.getElementById("BigDih").appendChild(container);
 }
 
-
-function setModalContent(adat, felhasznalo){ //PR, RD
+function setTaskModalContent(adat, felhasznalo){ //PR, RD
     feladatAdatai = adat
     var counter = 1;
     var alfeladatok = ajax_post("/SendAlFeladatok", 1, { feladatId: adat.id })
@@ -123,7 +135,7 @@ function setModalContent(adat, felhasznalo){ //PR, RD
             if (fajl){ 
                 fajlContainer.children[0].dataset.fileId = fajl["identifier"]
 
-                $bind(alfeladatDiv, 'fajlIkon').innerHTML = ikonFunction(fajl)
+                $bind(alfeladatDiv, 'fajlIkon').innerHTML = getCorrespondingFileIcon(fajl)
                 $bind(alfeladatDiv, "fajlNev").textContent = fajl["nev"];
                 $bind(alfeladatDiv, "fajlMeret").textContent = formatFileSize(fajl["meret"])
 
@@ -140,8 +152,7 @@ function setModalContent(adat, felhasznalo){ //PR, RD
     }
 }
 
-
-function ikonFunction(fajl) { // BBB
+function getCorrespondingFileIcon(fajl) { // BBB
     ext = fajl["nev"].split('.').pop().toLowerCase();
 
     const iconMap = {

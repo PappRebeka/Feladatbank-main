@@ -1,37 +1,13 @@
-backend ellenőrzés feladat tulajdonságaira (pl arch, megosztott) és user jogosultságára1
-
-onload users tábla MEGVAN
-
-suti currentoldal, talán limit offset is FOLYAMATBAN
+/public/scripts/task_scripts/modify.js
+refaktorálás kéne mert megdoglik
 
 egyedi felhnév(MÓDOSÍTÁS)
 
-megosztás slimselect MEGVAN
-egy emberrel egy feladatot csak egyszer lehessen megosztani MEGVAN
-megosztottság indicator a cardon/modalon?
-
-feladat közzététel --> specifikus diáknak
-
-maybe csillagozva page?
-
 loading indicator közzétevésnél
-
-file upload progress (könnyű bootstrapben + egy kicsi multer)
-
-backup MEGVAN
-+ refaktorálva nagyjábol
-
-google fiok -> mégse -> meghal
-
-hiba.html
 
 gombokhoz ikonok
 
-sql injection
-
 változó, funkció nevek egyértelműsítése
-
-optimalizálás
 
 while (teszteles.errors.length > 0){
     debug()

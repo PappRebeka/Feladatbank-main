@@ -42,7 +42,7 @@
     <script src="scripts/users.js"></script>
     <script src="scripts/intitution.js"></script>
 
-    <script>DarkModeCheck(); // called so the site doesnt flicker</script>
+    <script>checkDarkMode(); // called so the site doesnt flicker</script>
 
     <link rel="stylesheet" href="main.css"> 
     <link rel="stylesheet" href="themes.css"> 
@@ -63,7 +63,6 @@
             switch (CurrentUserData.Jogosultsag) {
                 
                 case "Admin":
-                    
                     opt.innerHTML +=  `<p class="h3 mt-2">Tanár</p>
                                         <div class="px-3" data-bind='tanarPages'>
                                             
@@ -73,20 +72,20 @@
                                             
                                         </div>`
 
-                    Array.from(PageOptionsFor('Tanár')).forEach(e => {
+                    Array.from(getPageOptionsFor('Tanár')).forEach(e => {
                         $bind(opt, 'tanarPages').appendChild(e)
                     }) 
-                    Array.from(PageOptionsFor('Admin')).forEach(e => {
+                    Array.from(getPageOptionsFor('Admin')).forEach(e => {
                         $bind(opt, 'adminPages').appendChild(e)
                     }) 
                     break;
 
                 case "Főadmin":
-                    
-                    Array.from(PageOptionsFor('Admin')).forEach(e => {
+                    ActiveLocation = 'Felhasználók'
+                    Array.from(getPageOptionsFor('Admin')).forEach(e => {
                         opt.appendChild(e)
                     });
-                    Array.from(PageOptionsFor('Főadmin')).forEach(e => {
+                    Array.from(getPageOptionsFor('Főadmin')).forEach(e => {
                         opt.appendChild(e)
                     });
                     
@@ -94,7 +93,7 @@
             
                 default:
                     
-                    Array.from(PageOptionsFor('Tanár')).forEach(e => {
+                    Array.from(getPageOptionsFor('Tanár')).forEach(e => {
                         opt.appendChild(e)
                     });
                     break;
@@ -115,14 +114,14 @@
                          CurrentUserData.Jogosultsag == "Főadmin" ? "user_page"    : "fel_page")
             }
             
-            getCourses();
+            getCoursesFromClassroomAPI();
 
             responsivity();
             window.addEventListener("resize", responsivity);
 
             document.getElementById("splash").remove();
             
-            flatpickerSet("DateAndTimePicker");
+            setFlatPicker("DateAndTimePicker");
 
             $('#slim-select-wrapper').on('click', function(e) {
                 e.stopPropagation(); // ne kérdezd // fuck you mean 'ne kérdezd' kys
@@ -130,28 +129,24 @@
              })
             
             //marker
-            CreateSlimSelect2('tanulokSelect', valtozottTanulokSelect)
-            CreateSlimSelect2('tantargySzuro', tantargyChanged)
-            CreateSlimSelect2('ujIntezmeny', AthelyezTeszt)
+            createSlimSelect('tanulokSelect', tanulokChanged)
+            createSlimSelect('tantargySzuro', tantargyChanged)
+            createSlimSelect('ujIntezmeny', AthelyezTeszt)
             
             setPageContent();
             
        }
         catch (err){
-            window.location.href= 'hiba.html?code=2'
+            //window.location.href= 'hiba.html?code=2'
         }
             
-        sizeCheck();
+        checkWindowSize();
 
         window.addEventListener("resize", () => {
-            sizeCheck();
+            checkWindowSize();
         })
     })
 
-    function megosztSelectTeszt(e){
-        //console.log(e)
-    }
- 
     function switchTo(where, kikapcsId){ //PR, RD
         ActiveLocation = where;
         document.getElementById("placeTitle").textContent = where;
@@ -166,29 +161,27 @@
                 break;
             case 'Velem megosztott':
                 document.getElementById('filter-recieved').classList.remove("d-none")
-                CreateSlimSelect2('tanarSzuro', tanarChanged)
+                createSlimSelect('tanarSzuro', tanarChanged)
                 break;
             case 'Általam közzétett':
                 document.getElementById('filter-shared').classList.remove("d-none")
-                CreateSlimSelect2('kurzusSzuro', kurzusChanged)
+                createSlimSelect('kurzusSzuro', kurzusChanged)
                 break;
         }
 
         try{
-            keresoVissza()
-            szuroVissza()
+            resetSearchFilter()
+            resetFilters()
             rendezesVissza()
         } catch{}
 
         setLocationCookie(AvailablePages[where].pageId, kikapcsId)
-        setPageContent();
-        Lapozz('visza', 'összes')
+        //setPageContent();
+        changeNavigationLocation('vissza', 'összes')
         
         for (const item of document.querySelectorAll(".navOptionButton")) item.classList.remove("disabled") 
         document.getElementById(`${kikapcsId}`).classList.add("disabled");
     }
-
-
 
     function updateReport(action, id, javitott) { //BBB
         let res = ajax_post("/update-report", 1, { action: action, id: id });
@@ -301,7 +294,7 @@
         document.getElementById("BigDih").replaceChildren()
         console.log("(setPageContent) oldal: "+ ActiveLocation)
         if (!AvailablePages[ActiveLocation]) { //shouldnt be possible to get this error
-            window.location.href= 'hiba.html?code=3&info='+encodeURIComponent(ActiveLocation)
+            //window.location.href= 'hiba.html?code=3&info='+encodeURIComponent(ActiveLocation)
             return;
         }
         document.getElementById("placeTitle").textContent = ActiveLocation
@@ -331,14 +324,14 @@
                         let id = ['I_Hozzaad', 'I_Modosit', 'I_Torol'][i]
                         let btn = html.querySelector(`#${id}`)
                         
-                        btn.addEventListener('click', () => {IntezmenyRadioToggle(btn); setIntezmenyOption(i)})
+                        btn.addEventListener('click', () => {toggleInstitutionRadio(btn); setInstitutionOption(i)})
                     }
 
 
                     let runBtn = $bind(html, 'sqlBtn')
                     runBtn.addEventListener('click', () => runSql())
                     let mentBtn = $bind(html, 'backupMentBtn')
-                    mentBtn.addEventListener('click', () => backupMent())
+                    mentBtn.addEventListener('click', () => saveBackup())
 
                     runAfterDOM = sqlStuff;
                     document.querySelector("#fullpageSize").replaceChildren(html)
@@ -372,7 +365,7 @@
                     break;
             }
             
-            if(ActiveLocation == "Adatbázis műveletek")backupTolt();
+            if(ActiveLocation == "Adatbázis műveletek")getBackupOptions();
             if(ActiveLocation == "Statisztikák")StatisztikaOnLoad();
             // runAfterDOM egy funkciót tartalmaz ami a html beillesztése után fut le
             if (runAfterDOM != null) { runAfterDOM(); } // quick hack de jól működik
@@ -412,20 +405,20 @@
                     tema: ActiveFilters.order.field,
                     desc: ActiveFilters.order.desc,
 
-                    limit: limit,
-                    offset: offset
+                    limit: localStorage.getItem("limit"),
+                    offset: localStorage.getItem("offset")
                 }
         const par    = new URLSearchParams(temp).toString();
-        var results      = userpage ? ajax_post("/SendUsers", 1, { limit: limit, offset: offset, kereso: ActiveFilters.kereso }).results : 
+        var results      = userpage ? ajax_post("/SendUsers", 1, { limit: localStorage.getItem("limit"), offset: localStorage.getItem("offset"), kereso: ActiveFilters.kereso }).results : 
                                       ajax_post("/SendFeladatok", 1, temp).results    
             resultsCount = userpage ? ajax_post("/getUserCount", 1, { kereso: ActiveFilters.kereso }).db : 
                                       ajax_post("/getFeladatNumber", 1, temp).db       
                                    
-        LimitOffset();
+        changeLimitOffset();
         talalatSzam.textContent = resultsCount
-        maxPageNumber = Math.max(1, Math.ceil(resultsCount / limit))
+        maxPageNumber = Math.max(1, Math.ceil(resultsCount / localStorage.getItem("limit")))
 
-        updateGombok()
+        updateNavigationButtons()
         document.getElementById("oldal").textContent = activePageNumber
         document.getElementById("maxPageNumber").textContent = maxPageNumber
         var tantargyak = [];
@@ -435,29 +428,24 @@
         if(results){ if(results.length!= undefined) {
             for (const adat of results) {
                 tantargyak.push(adat.Tantargy)
-                let felhasznalo = (oldal == "2" || oldal == '3' ? adat.Felhasznalo: "")
-                let felhasznaloColor = (oldal == "2" || oldal == '3' ? adat.FelhasznaloColor: "")
-                let kurzusnev = (oldal == "4" ? adat.Kurzus: "")
-                let kurzusId = (oldal == "4" ? adat.kurzusId: "")
-                let kurzusFeladatId = (oldal == "4" ? adat.kurzusFeladatId: "")
+                let felhasznalo      = (oldal == "3" || oldal == '4' ? adat.Felhasznalo: "")
+                let felhasznaloColor = (oldal == "3" || oldal == '4' ? adat.FelhasznaloColor: "")
+                let kurzusnev        = (oldal == "5" ? adat.Kurzus: "")
+                let kurzusId         = (oldal == "5" ? adat.kurzusId: "")
+                let kurzusFeladatId  = (oldal == "5" ? adat.kurzusFeladatId: "")
                 
-                userpage ? felhasznalokTolt(adat) :
-                           ClassroomGetCourses(adat, felhasznalo, felhasznaloColor, kurzusnev, kurzusId, kurzusFeladatId)
+                userpage ? loadUsers(adat) :
+                           buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev, kurzusId, kurzusFeladatId)
             }
         }}
-        updateTantargySzuro(tantargyak.filter((value, index, array) => array.indexOf(value) === index));
+        autofillSubjectFilter(tantargyak.filter((value, index, array) => array.indexOf(value) == index));
     }
-
-    function munkaTorol(kurzusId, kurzusFeladatId){ //RD
-        ajax_post("/removeClassroomFeladat", 1, { kurzusId: kurzusId, kurzusFeladatId: kurzusFeladatId })
-        setPageContent()
-    }
-    
+  
     function responsivity() { // PR
         if(AvailablePages[ActiveLocation]?.hideElements) return;
-        offset = 0
+        localStorage.setItem("offset", 0)
         activePageNumber = 1
-        var valtozott = LimitOffset();
+        var valtozott = changeLimitOffset();
         if(valtozott){  // if the limit changed, only then call the function
             //loadPageData()
             setPageContent(); 
@@ -474,13 +462,13 @@
                 kicsiMeretu = true
                 document.querySelector(".searchbarInNav").classList.add("d-none"); 
                 document.querySelector("#searchbar_mobile").classList.remove("d-none");
-                kereso(null) // reset the search
+                setSearchFilter(null) // reset the search
             } 
             else if (width >= 576 && kicsiMeretu){  // larger than bootstrap sm and still in small size
                 kicsiMeretu = false
                 document.querySelector(".searchbarInNav").classList.remove("d-none");
                 document.querySelector("#searchbar_mobile").classList.add("d-none");
-                kereso(null)
+                setSearchFilter(null)
             }
         }
     } 
@@ -488,7 +476,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         var offcanvas = document.getElementById('userOptions');
         offcanvas.addEventListener('hidden.bs.offcanvas', function () {
-            AlapVisszaalit();
+            resetUserOptions();
         });        
     });
 
@@ -581,11 +569,6 @@
             document.getElementById("feedback-form").reset();
         }
     }
-
-
-    /* ------ ----------------------- ------    Téma   ------ ----------------------- ------ */
-    
-    
     
     function logout(){ //PR
         killCookie('stayLoggedIn'); killCookie('userToken'); killCookie('currentPage'); killCookie('currentKikapcsId');
@@ -596,60 +579,60 @@
     function setEvents(){
         //kereső
         document.getElementById('keresoButton').addEventListener('click', () => 
-            kereso(document.getElementById('searchbar_nav').value))
+            setSearchFilter(document.getElementById('searchbar_nav').value))
         document.getElementById('keresoButtonOffcanvas').addEventListener('click', () => 
-            kereso(document.getElementById('searchbar_offcanvas').value))
+            setSearchFilter(document.getElementById('searchbar_offcanvas').value))
         
         //fiók lehetőségek
         const optionsDiv = document.getElementById('options').children
-        optionsDiv[0].addEventListener('click', () => fiokBealitasok())
+        optionsDiv[0].addEventListener('click', () => allowUserDataEdit())
         optionsDiv[1].addEventListener('click', () => themeSwitch())
         optionsDiv[2].addEventListener('click', () => {window.location.href = `/segitseg/sugo.html?role=${CurrentUserData.Jogosultsag == 'Tanár' ? 'tanár' : 'admin'}`})
         optionsDiv[3].addEventListener('click', () => logout())
 
         //szűrő
-        document.getElementById('filterBtn').addEventListener('click', () => autocompleteFilters())
+        //document.getElementById('filterBtn').addEventListener('click', () => autocompleteFilters())
 
-        var radios = document.querySelectorAll('#nehezsegekSzuresReszen input')
-        for (let i = 0; i < 3; i++) radios[i].addEventListener('click', () => NehezsegRadioToggle(radios[i]))
+        var nehradios = document.querySelectorAll('#nehezsegekSzuresReszen input')
+        for (let i = 0; i < 3; i++) nehradios[i].addEventListener('click', () => toggleDifficultyRadio(nehradios[i]))
             
-        document.getElementById('evfolyamSzuro').addEventListener('input', () => numberCheck(document.getElementById('evfolyamSzuro'), maxEvfolyamValue))
-        document.getElementById('sortValues').addEventListener('change', () => getRendezes())
+        document.getElementById('evfolyamSzuro').addEventListener('input', () => checkNumber(document.getElementById('evfolyamSzuro'), maxEvfolyamValue))
+        document.getElementById('sortValues').addEventListener('change', () => getSortField())
         document.getElementById('sortAsc').addEventListener('click', () => setSortDirection(0))
         document.getElementById('sortDesc').addEventListener('click', () => setSortDirection(1))
 
         var buttons = $bind(document.getElementById('szuro'), 'buttons').children
-        buttons[0].addEventListener('click', () => {szuroVissza(); szuroClick()})
-        buttons[1].addEventListener('click', () => szuroClick())
+        buttons[0].addEventListener('click', () => {resetFilters(); setPageContent(); applyFilters()})
+        buttons[1].addEventListener('click', () => applyFilters())
 
         //lapozás
         var buttons = document.querySelectorAll('#bottom button')
-        buttons[0].addEventListener('click', () => Lapozz('vissza', 'elso'))
-        buttons[1].addEventListener('click', () => Lapozz('vissza', '1'))
-        buttons[2].addEventListener('click', () => Lapozz('tovabb', '1'))
-        buttons[3].addEventListener('click', () => Lapozz('tovabb', 'utolso'))
+        buttons[0].addEventListener('click', () => changeNavigationLocation('vissza', 'elso'))
+        buttons[1].addEventListener('click', () => changeNavigationLocation('vissza', '1'))
+        buttons[2].addEventListener('click', () => changeNavigationLocation('tovabb', '1'))
+        buttons[3].addEventListener('click', () => changeNavigationLocation('tovabb', 'utolso'))
 
         //új feladat
-        document.getElementById('evfolyam').addEventListener('input', () => numberCheck(document.getElementById('evfolyam'), maxEvfolyamValue))
+        document.getElementById('evfolyam').addEventListener('input', () => checkNumber(document.getElementById('evfolyam'), maxEvfolyamValue))
         document.getElementById('nehezseg').addEventListener('input', () => {
                 document.getElementById('Difficulty').textContent = 'Nehézség - ' + document.getElementById('nehezseg').value
         })
-        $bind(document.getElementById('newFeladat'), 'hozzaadButton').addEventListener('click', () => AlfeladatHozzaad('alfeladatBox'))
-        document.querySelector('#newFeladat .modal-footer').children[0].addEventListener('click', () => mentFeladat(true))
+        $bind(document.getElementById('newFeladat'), 'hozzaadButton').addEventListener('click', () => createSubtask('alfeladatBox'))
+        document.querySelector('#newFeladat .modal-footer').children[0].addEventListener('click', () => saveTask(true))
 
         //tanár adatai
         var radios = document.querySelectorAll('#chips input')
         for (let i = 0; i < 3; i++) radios[i].addEventListener('click', () => statToggle(radios[i], i + 1))
         
         //egyéb
-        document.querySelector('#UserDel .btn-warning').addEventListener('click', () => DeleteThisUser())
-        document.querySelector('#shareFeladat .modal-footer').children[0].addEventListener('click', () => FeladatKozzetesz())
-        document.querySelector('#megosztFeladat .btn-warning').addEventListener('click', () => megosztFeladatTanarral())
+        document.querySelector('#UserDel .btn-warning').addEventListener('click', () => deleteThisUser())
+        document.querySelector('#shareFeladat .modal-footer').children[0].addEventListener('click', () => postTaskToClassroom())
+        document.querySelector('#megosztFeladat .btn-warning').addEventListener('click', () => shareTaskWithTeacher())
         
 
         
         document.getElementById('ujIntezmeny').addEventListener('click', () => AthelyezHova())
-        document.querySelector('#intezmenyValt .btn-info').addEventListener('click', () => AthelyezUser())
+        document.querySelector('#intezmenyValt .btn-info').addEventListener('click', () => moveUserInstitution())
         
         //backup betöltése
         document.querySelector('#BiztosBackup .btn-warning').addEventListener('click', () => restoreBackup())

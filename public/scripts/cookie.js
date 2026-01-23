@@ -39,7 +39,10 @@ function setCookie(name, value, expiryDate) {
 
 function themeSwitch(){ //PR
     const state = document.getElementById("themeIndicator").classList.contains("bi-sun-fill") // if its light we're setting to dark
-    setThemeCookie(state)
+    var date = new Date();
+    date.setFullYear(date.getFullYear() + 10)
+    setCookie('darkMode', state ? '1' : '0', date)
+    //setThemeCookie(state)
     DarkModeCheck()
 }
 
@@ -47,6 +50,9 @@ function themeSwitch(){ //PR
 function setLocationCookie(where, kikapcsId){ //PR
     var date = new Date();
     date.setFullYear(date.getFullYear() + 10)
-    document.cookie = `currentPage=${where}; expires=${date.toUTCString()}`
-    document.cookie = `currentKikapcsId=${kikapcsId}; expires=${date.toUTCString()}`
+
+    setCookie('currentPage', where, date)
+    setCookie('currentKikapcsId', kikapcsId, date)
+    //document.cookie = `currentPage=${where}; expires=${date.toUTCString()}`
+    //document.cookie = `currentKikapcsId=${kikapcsId}; expires=${date.toUTCString()}`
 }

@@ -6,6 +6,7 @@ const htmlElement = document.documentElement;
 
 const AvailablePages = {
   "Feladataim":          { hideElements: false, pageId: 'fel_page',   requredJogosultsag: ['Tanár']},
+  "Csillagozva":         { hideElements: false, pageId: 'star_page',  requredJogosultsag: ['Tanár']},
   "Archívum":            { hideElements: false, pageId: 'arch_page',  requredJogosultsag: ['Tanár']},
   "Velem megosztott":    { hideElements: false, pageId: 'velem_page', requredJogosultsag: ['Tanár']},
   "Általam megosztott":  { hideElements: false, pageId: 'meg_page',   requredJogosultsag: ['Tanár']}, // + maybe csillagozva
@@ -17,6 +18,7 @@ const AvailablePages = {
 
 const PageById = {
   "fel_page": "Feladataim",
+  "star_page": "Csillagozva",
   "arch_page": "Archívum",
   "velem_page": "Velem megosztott",
   "meg_page": "Általam megosztott",
@@ -26,7 +28,7 @@ const PageById = {
   "stat_page": "Statisztikák",
 }
 
-var ActiveLocation = ''; // current active page, default set onload 
+var ActiveLocation = 'Feladataim'; // current active page, default set onload 
 var feladatAdatai = [] // active task data
 
 // user's course data

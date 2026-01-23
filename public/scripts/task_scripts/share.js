@@ -1,13 +1,14 @@
 /* ------ CONTENT ------
 task_scripts/load.js ---------------
-    - autocompleteArrayTolt    -RD
-    - megosztFeladatTanarral   -RD
+    - autocompleteShare_TeacherSelect   -RD
+    - shareTaskWithTeacher              -RD
+    - removeSharedTask                  -PR
 */ 
 
-function autocompleteArrayTolt(){ //RD
-    const user_email = ajax_post("/autocompleteArrayTolt", 1, {})
+function autocompleteShare_TeacherSelect(){ //RD
+    const user_email = ajax_post("/autocompleteShare_TeacherSelect", 1, {})
     var tolteniValo = []; 
-    var html = ""
+    document.getElementById("vevoInputText").replaceChildren()
     for (const alma of user_email.results) {
         var nev = alma.Nev
         var email = alma.Email
@@ -21,10 +22,10 @@ function autocompleteArrayTolt(){ //RD
         document.getElementById("vevoInputText").appendChild(opt2)
     }
     console.log(document.getElementById("vevoInputText"))
-    CreateSlimSelect2('vevoInputText', megosztSelectTeszt)
-  }
+    createSlimSelect('vevoInputText', megosztSelectTeszt)
+}
 
-  function megosztFeladatTanarral(){ //RD
+function shareTaskWithTeacher(){ //RD
     const cimzett = document.getElementById("vevoInputText").value
     const feladatId = feladatAdatai.id
 
@@ -35,14 +36,14 @@ function autocompleteArrayTolt(){ //RD
     } else {
       toastMsg("Hiba történt", result.error || "Nem sikerült megosztani a feladatot", "danger")
     }
-  }
+}
 
-  function visszavonClick(id, vevo){
-    const result = ajax_post('megosztasVisszavon', 1, {id, vevo})
-    
-    if (result.success) {
-      toastMsg("Megosztás visszavonva", "", 'success')
-    } else {
-      toastMsg("Hiba", result.error || "Nem sikerült visszavonni a megosztást", "danger")
-    }
+function removeSharedTask(id, vevo){ //PR
+  const result = ajax_post('megosztasVisszavon', 1, {id, vevo})
+  
+  if (result.success) {
+    toastMsg("Megosztás visszavonva", "", 'success')
+  } else {
+    toastMsg("Hiba", result.error || "Nem sikerült visszavonni a megosztást", "danger")
+  }
 }

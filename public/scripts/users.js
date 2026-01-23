@@ -1,19 +1,19 @@
 /* ------ CONTENT ------
 users.js -------------
-    - FelhasznaloClick    -RD?
-    - felhasznalokTolt    -PR
-    - athelyezOnLoad      -RD
-    - jogChange           -PR
-    - AthelyezUser        -RD
+    - userCardClick         -RD
+    - loadUsers             -PR
+    - moveUserClick         -RD
+    - updateUserAuth        -PR
+    - moveUserInstitution   -RD
 */
 
 
-function FelhasznaloClick(id){ //RD?
-    felhasznaloSetModal(0, id);
+function userCardClick(id){ //RD
+    setUserModal(0, id);
     selectionReset()
 }
 
-function felhasznalokTolt(item){ //PR    
+function loadUsers(item){ //PR    
     const div = felhasznaloCardTemplate()
 
     if (item.id == CurrentUserData.id) {
@@ -22,7 +22,7 @@ function felhasznalokTolt(item){ //PR
     else{
         div.setAttribute('data-bs-toggle', 'modal')
         div.setAttribute('data-bs-target', '#tanarAdatai')
-        div.addEventListener('click', () => FelhasznaloClick(item.id))
+        div.addEventListener('click', () => userCardClick(item.id))
     }
 
     div.querySelector('#hatter').style.backgroundColor = `${item.HatterSzin}`
@@ -48,8 +48,8 @@ function felhasznalokTolt(item){ //PR
     buttons[0].classList.add(`btn-${item.Jogosultsag == "Tanár" ? "primary" : "dark"}`)
     buttons[1].classList.add(`btn-${item.Jogosultsag != "Tanár" ? "primary" : "dark" }`)
 
-    buttons[0].addEventListener('click', () => {jogChange(item.id, buttons[1], buttons[0], item.Nev)})
-    buttons[1].addEventListener('click', () => {jogChange(item.id, buttons[0], buttons[1], item.Nev)})
+    buttons[0].addEventListener('click', () => {updateUserAuth(item.id, buttons[1], buttons[0], item.Nev)})
+    buttons[1].addEventListener('click', () => {updateUserAuth(item.id, buttons[0], buttons[1], item.Nev)})
 
     document.getElementById("BigDih").appendChild(div)
 
@@ -64,15 +64,15 @@ function felhasznalokTolt(item){ //PR
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezárás</button>`
 
     footer.children[0].addEventListener('click', () => DeleteSelectedUser())
-    footer.children[1].addEventListener('click', () => athelyezOnLoad())
+    footer.children[1].addEventListener('click', () => moveUserClick())
 }
 
-function athelyezOnLoad(){ //RD
+function moveUserClick(){ //RD
     var intezmenyek = ajax_post("/getUserIntezmeny", 1, { uid: userId_ToChangeInstitute })
     IntezmenyAthelyezTolt(intezmenyek.results)
 }
 
-function jogChange(id, from, to, nev){ //PR
+function updateUserAuth(id, from, to, nev){ //PR
     from.classList.remove("btn-primary")
     from.classList.add("btn-dark")
 
@@ -90,10 +90,10 @@ function jogChange(id, from, to, nev){ //PR
     }
 }
 
-function AthelyezUser(){ //RD
+function moveUserInstitution(){ //RD
     var hova = document.getElementById("ujIntezmeny").value
     
-    const result = ajax_post("/AthelyezUser", 1, { hova: hova, userId: userId_ToChangeInstitute })
+    const result = ajax_post("/moveUserInstitution", 1, { hova: hova, userId: userId_ToChangeInstitute })
     
     if (result.success) {
         toastMsg("Sikeres művelet", "A felhasználó sikeresen áthelyezve", "success")

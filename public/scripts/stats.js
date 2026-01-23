@@ -1,6 +1,6 @@
 /* ------ CONTENT ------
 stats.js ---------------
-  - felhasznaloSetModal  -PR, RD    
+  - setUserModal         -PR, RD    
   - statToggle           -PR
   - selectionReset       -RD?
   - DefaultStat          -RD
@@ -12,11 +12,11 @@ stats.js ---------------
   - constructArchDataset -RD
   - top3Data             -RD, PR
   - createChart          -RD, PR
-  - createCard           -RD, PR
+  - createStatisticCard  -RD, PR
   - StatisztikaOnLoad    -RD
 */ 
 
-function felhasznaloSetModal(statLap, id){ //PR, RD
+function setUserModal(statLap, id){ //PR, RD
     if(id != undefined) StatUserId = id
     userId_ToChangeInstitute = id
     const tanarAdatai = document.querySelector("#modalTanarContent")
@@ -76,7 +76,6 @@ function felhasznaloSetModal(statLap, id){ //PR, RD
     }
 }
 
-
 function statToggle(chosenOne, page){ //PR
     if(StatPageCounter == page) return; //if the user clicks the same button again, dont do anything
 
@@ -94,7 +93,7 @@ function statToggle(chosenOne, page){ //PR
     document.getElementById(id).classList.remove(`btn-light`)
     chosenOne.checked = true    //turn on the clicked button 
     StatPageCounter = page     //set the global page counter
-    felhasznaloSetModal(page) //set the modal content based on the clicked button
+    setUserModal(page) //set the modal content based on the clicked button
 }
 
 function selectionReset(){//RD?
@@ -290,7 +289,7 @@ function createChart(hova, errorHova, tipus, cimkek, dataset, subtitleText, x, y
     return ujChart
 }
 
-function createCard(){ //RD, PR
+function createStatisticCard(){ //RD, PR
     var statAdat
     var tipus = ""
     var title = ""
@@ -363,6 +362,6 @@ function StatisztikaOnLoad(){ //RD
     StatUserId = CurrentUserData.id;
     generatedChartNumber = 0
     for (let i = 0; i < 6; i++) {
-        createCard();
+        createStatisticCard();
     }
 }

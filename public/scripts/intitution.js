@@ -1,19 +1,29 @@
-//marker
-function hozzaadIntezmeny(){ //RD
+/* ------ CONTENT ------
+institution.js ---------
+    - addInstitution             -RD
+    - editInstitution            -RD  
+    - deleteInstitution          -RD
+    - toggleInstitutionRadio     -PR
+    - setInstitutionOption       -RD, PR
+    - autofillInstitutions       -RD
+    - autofillOtherInstitutions  -RD
+*/
+
+function addInstitution(){ //RD
     var intezmValue = document.getElementById("intezmenyMezo").value
     ajax_post("/MentIntezmeny", 1, { intezmeny: intezmValue })
 }
 
-function modositIntezmeny(){ //RD
+function editInstitution(){ //RD
     var intezmValue = document.getElementById("JavitMezo").value
-    ajax_post("/modositIntezmeny", 1, { id: intezmenyId, intezmeny: intezmValue })
+    ajax_post("/editInstitution", 1, { id: intezmenyId, intezmeny: intezmValue })
 }
 
-function torolIntezmeny(){ //RD
-    ajax_post("/torolIntezmeny", 1, { id: intezmenyId })
+function deleteInstitution(){ //RD
+    ajax_post("/deleteInstitution", 1, { id: intezmenyId })
 }
 
-function IntezmenyRadioToggle(chosenOne){ //PR
+function toggleInstitutionRadio(chosenOne){ //PR
     let id = chosenOne.id+"_Option"
 
     for (const element of document.querySelector("#IntezmenyOptions").querySelectorAll('label.btn')) {
@@ -29,17 +39,16 @@ function IntezmenyRadioToggle(chosenOne){ //PR
     chosenOne.checked = true
 }
 
-function setIntezmenyOption(index){ //?
+function setInstitutionOption(index){ //RD, PR
     let html = intezmenyOptionTemplate(index)
     var type = ["", "javit", "torol"][index] || ""
 
     document.getElementById("currentDatabaseOption").replaceChildren(html)
-    IntezmenyArrayTolt(type)
-    CreateSlimSelect2('torolIntezmeny', IntezmenyChanged)
+    autofillInstitutions(type)
+    createSlimSelect('deleteInstitution', IntezmenyChanged)
 }
 
-//marker
-function IntezmenyArrayTolt(mit, lista){//RD
+function autofillInstitutions(mit, lista){//RD
     var corp = ajax_post("/SendIntezmeny", 1, {})
     var html = []
     for (const lob of corp.results) {
@@ -53,15 +62,15 @@ function IntezmenyArrayTolt(mit, lista){//RD
     }  
     if(mit == "javit"){
         document.getElementById("javitIntezmeny").replaceChildren(...html)// passes each element as separate arguments
-        CreateSlimSelect2('javitIntezmeny', IntezmenyChanged)
+        createSlimSelect('javitIntezmeny', IntezmenyChanged)
     }        
     if(mit == "torol"){
-        document.getElementById("torolIntezmeny").replaceChildren(...html);// html[0], html[1], html[2], ...
-        CreateSlimSelect2('torolIntezmeny', IntezmenyChanged)
+        document.getElementById("deleteInstitution").replaceChildren(...html);// html[0], html[1], html[2], ...
+        createSlimSelect('deleteInstitution', IntezmenyChanged)
     }
 }
 
-function IntezmenyAthelyezTolt(lista){
+function autofillOtherInstitutions(lista){//RD
     document.getElementById("ujIntezmeny").innerHTML = "";
     var html = []
     for (const asdf of lista) {
@@ -72,8 +81,4 @@ function IntezmenyAthelyezTolt(lista){
         html.push(opt)
     }  
     document.getElementById("ujIntezmeny").replaceChildren(...html);
-}
-
-function AthelyezTeszt(e){
-    console.log(e)
 }

@@ -1,4 +1,10 @@
-function backupTolt(adatok = ajax_post("/backupTolt", 1, {})){ //RD
+/* ------ CONTENT ------
+backup.js --------------
+    - getBackupOptions      -RD
+    - saveBackup            -RD
+    - restoreBackup         -RD
+*/
+function getBackupOptions(adatok = ajax_post("/getBackupOptions", 1, {})){ //RD
     document.getElementById("backupSelect").replaceChildren()
     for (const file of adatok.fajlok) {
         let opt = document.createElement('option')
@@ -8,9 +14,9 @@ function backupTolt(adatok = ajax_post("/backupTolt", 1, {})){ //RD
         document.getElementById("backupSelect").appendChild(opt)
     }
 }
-function backupMent(){ //RD
+function saveBackup(){ //RD
     var adatok = ajax_post("/MentBackup", 1, {})
-    backupTolt(adatok);
+    getBackupOptions(adatok);
 }
 
 function restoreBackup(){ //RD

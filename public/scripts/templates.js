@@ -4,12 +4,16 @@ function taskCardTemplate(){//PR
     div.innerHTML = `<div class="card h-100" data-bind="card" data-bs-toggle="modal" data-bs-target="#editFeladat">
                         <div class="card-body d-flex flex-column">
 
-                            <h5 class="card-title text-overflow-hidden" data-bind="nev"></h5>
-
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title text-overflow-hidden" data-bind="nev"></h5>
+                                <i class="d-none bi bi-star fs-5" data-bs-toggle="modal" data-bind="bookmarkTaskButton"></i>
+                            </div>
+                            
                             <div class="d-none d-flex align-items-center mb-2 p-1 card-text" data-bind="felhasznaloRow">
-                            <h6 class="mb-0 d-flex align-items-center">Tanár:</h6>
-                            <div class="btn mx-1 rounded-circle border-0 d-inline-flex align-items-center justify-content-center"
-                                style="width:24px;height:24px;" data-bind="felhasznaloCircle"></div>
+                                <h6 class="mb-0 d-flex align-items-center">Tanár:</h6>
+                                <div class="btn mx-1 rounded-circle border-0 d-inline-flex align-items-center justify-content-center"
+                                    style="width:24px;height:24px;" data-bind="felhasznaloCircle">
+                                </div>
                                 <span class="text-truncate" data-bind="felhasznaloName"></span>
                             </div>
 
@@ -28,7 +32,7 @@ function taskCardTemplate(){//PR
                                 közzétevés
                             </button>
                             <button class="d-none btn btn-sm btn-light btn-outline-secondary text-dark"
-                                    data-bind="visszaBtn" data-bs-toggle="modal" data-bs-target="#shareFeladat">
+                                    data-bind="visszaBtn" data-bs-toggle="modal">
                                 visszavonás
                             </button>
                         </div>
@@ -348,7 +352,7 @@ function intezmenyOptionTemplate(index){
             var div1 = intezmenyDiv1('intezmenyMezo', 'Intézmény neve:')
             var div2 = intezmenyDiv2('Intézmény hozzáadása')
 
-            $bind(div2, 'intClick').addEventListener('click', () => hozzaadIntezmeny())
+            $bind(div2, 'intClick').addEventListener('click', () => addInstitution())
 
             div.querySelector('.row').appendChild(div1)
             div.querySelector('.row').appendChild(div2)
@@ -365,7 +369,7 @@ function intezmenyOptionTemplate(index){
             
 
             var div2 = intezmenyDiv2('Intézmény módosítása', true)
-            $bind(div2, 'intClick').addEventListener('click', () => modositIntezmeny())
+            $bind(div2, 'intClick').addEventListener('click', () => editInstitution())
 
             let newDiv = document.createElement('div')
             newDiv.classList.add('row', 'justify-content-end')
@@ -375,10 +379,10 @@ function intezmenyOptionTemplate(index){
             break;
 
         case 2: 
-            var div1 = intezmenyDiv1('torolIntezmeny', 'Törölni való intézmény neve:')
+            var div1 = intezmenyDiv1('deleteInstitution', 'Törölni való intézmény neve:')
             var div2 = intezmenyDiv2('Intézmény törlése')
 
-            $bind(div2, 'intClick').addEventListener('click', () => hozzaadIntezmeny())
+            $bind(div2, 'intClick').addEventListener('click', () => addInstitution())
 
             div.querySelector('.row').appendChild(div1)
             div.querySelector('.row').appendChild(div2)

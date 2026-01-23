@@ -1,13 +1,14 @@
 /* ------ CONTENT ------
 account.js -------------
-    - setUserData          -PR 
-    - AlapVisszaalit       -PR 
-    - fiokBealitasok       -PR
-    - changeField          -PR
-    - setField             -PR, BBB
-    - saveUserData         -PR
-    - DeleteThisUser       -PR
-    - PageOptionsFor       -PR
+    - setUserData           -PR 
+    - resetUserOptions      -PR 
+    - buildButtonWithIcon   -PR
+    - allowUserDataEdit     -PR
+    - changeFieldToInput    -PR
+    - setFieldToText        -PR, BBB
+    - saveUserData          -PR
+    - deleteThisUser        -PR
+    - getPageOptionsFor     -PR
 */
 
 function setUserData(){//PR
@@ -29,9 +30,7 @@ function setUserData(){//PR
     CurrentUserData = {id, Nev, Email, Jogosultsag}
 }
 
-
-
-function AlapVisszaalit(){//PR
+function resetUserOptions(){//PR
 
     document.getElementById("details").innerHTML = `<div id="jogosultsag" class="big"></div>
                                                     <div id="usernev" class="fw-semibold"></div>
@@ -46,7 +45,7 @@ function AlapVisszaalit(){//PR
     document.getElementById("editUserOptions")?.remove()
 }
   
-function buildButtonWithIcon(iconType, otherClasses){
+function buildButtonWithIcon(iconType, otherClasses){//PR
     const button = document.createElement('button')
     button.type = 'button'
     button.classList.add('btn')
@@ -59,19 +58,19 @@ function buildButtonWithIcon(iconType, otherClasses){
     return button
 }
 
-function fiokBealitasok(){ //PR
+function allowUserDataEdit(){ //PR
     // let the users data to be edited on buttonclick
     
     const cancelButton = buildButtonWithIcon('bi-x-lg', ['fs-5'])
-    cancelButton.addEventListener('click', () => AlapVisszaalit())
+    cancelButton.addEventListener('click', () => resetUserOptions())
     cancelButton.classList.add('ms-3')
     document.getElementById("visszagomb").replaceChildren(cancelButton);
 
     const editNameButton = buildButtonWithIcon('bi-pencil-square', ['fs-5'])
-    editNameButton.addEventListener('click', () => changeField('usernev'))
+    editNameButton.addEventListener('click', () => changeFieldToInput('usernev'))
 
     const editEmailButton = buildButtonWithIcon('bi-pencil-square')
-    editEmailButton.addEventListener('click', () => changeField('emailcim'))
+    editEmailButton.addEventListener('click', () => changeFieldToInput('emailcim'))
 
     document.getElementById("details").innerHTML = //the stuff that can be edited -- name email
         `<div id="usernev" class="fw-semibold h3">
@@ -104,20 +103,20 @@ function fiokBealitasok(){ //PR
     document.getElementById('userOptions').appendChild(options)
 }
 
-function changeField(which){//PR
+function changeFieldToInput(which){//PR
     // change the name or email field to input field
     const input = document.createElement('input')
     input.type = 'text'
     input.id = 'mezo'
     input.classList.add('form-control')
-    input.addEventListener('blur', () => setField(which))
+    input.addEventListener('blur', () => setFieldToText(which))
     input.value = which == "usernev" ? CurrentUserData.Nev : CurrentUserData.Email
     
     document.getElementById(which).replaceChildren(input);
     document.getElementById('mezo').focus() // force focus
 }
 
-function setField(what){//PR, BBB
+function setFieldToText(what){//PR, BBB
     // set the now changed name or email field back to normal text
     const target = document.getElementById(what) 
     const button = buildButtonWithIcon('bi-pencil-square', ['fs-5'])
@@ -125,7 +124,7 @@ function setField(what){//PR, BBB
     const mezo = document.getElementById("mezo").value;
     if (what == "usernev") { //if its just a name change its simple
         CurrentUserData.Nev = mezo // update global data
-        button.addEventListener('click', () => changeField('usernev'))
+        button.addEventListener('click', () => changeFieldToInput('usernev'))
 
         target.textContent = mezo
 
@@ -138,14 +137,14 @@ function setField(what){//PR, BBB
         var van = ajax_post("/isRegistered", 0, { email: mezo }) //check if email is taken
         if(emailPattern.test(mezo.value) && van == 'false') {   //if email format is ok and its not taken
             CurrentUserData.Email = mezo;        // update global data and set the input back to text
-            button.addEventListener('click', () => changeField('emailcim'))
+            button.addEventListener('click', () => changeFieldToInput('emailcim'))
 
             target.textContent = mezo
             
         } else {    //if we have issues choose your pick
             if (van) toastMsg("Az email használatban van", "Nem sikerült az emailcím megváltoztatása, mivel ez az emailcím már használatban van", "warning"); 
             else showErrorMsg("Nem megfelő formátum", "A megadott emailcím formátuma helytelen", "warning")  
-            button.addEventListener('click', () => changeField('emailcim'))
+            button.addEventListener('click', () => changeFieldToInput('emailcim'))
             target.textContent = CurrentUserData.Email //and set back to old email
         }              
     }
@@ -175,10 +174,10 @@ function saveUserData(){//PR
     }
 
     toastMsg("Sikeres művelet", "A felhasználói adatok frissítve lettek", "success");
-    AlapVisszaalit();// set the UI back to normal
+    resetUserOptions();// set the UI back to normal
 }
 
-function DeleteThisUser(){//PR
+function deleteThisUser(){//PR
     if(CurrentUserData.Jogosultsag == "Főadmin"){  // prevent deleting main admin
         toastMsg("Tiltott művelet!", "Az főadmin nem törölhető", "danger")
         setTimeout(() => {      // is this really necessary?
@@ -201,8 +200,7 @@ function DeleteThisUser(){//PR
     }
 }
 
-
-function PageOptionsFor(jog){ //PR
+function getPageOptionsFor(jog){ //PR
     var minors = [];
     
     for (const key in AvailablePages) {

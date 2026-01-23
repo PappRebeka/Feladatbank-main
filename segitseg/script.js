@@ -189,7 +189,7 @@ function sugoKeres(){
     if(originalText.toLowerCase().includes(searchValue)){
       item.style.display = ''
 
-      highlightKeresettText(searchValue, originalText, button)
+      highlightSearchedText(searchValue, originalText, button)
     } 
     else {
       item.style.display = 'none'

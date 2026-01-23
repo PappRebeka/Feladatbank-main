@@ -3,21 +3,29 @@
 helpers.js -------------
   - ajax_get 
   - ajax_post
-  - mezoCheck         -BBB
-  - sizeCheck         -BBB
-  - isBackgroundDark  -PR
-  - LogSession        -PR
-  - borderColor       -PR, BBB
-  - getField          -PR
-  - showErrorMsg      -BBB
-  - toastMsg          -PR
-  - hslSzinGeneral    -RD
-  - tulKozel          -RD
-  - rnd               -PR
-  - randomHatterszin  -PR
-  - numberCheck     -PR
-  - formatFileSize    -BBB
-  - FileSizeCheck     -BBB, PR
+  - checkDarkMode           -PR
+  - setThemeIndicators      -PR
+  - validateField           -BBB
+  - checkWindowSize         -BBB
+  - isBackgroundDark        -PR
+  - LogSession              -PR
+  - borderColor             -PR, BBB
+  - getField                -PR
+  - showErrorMsg            -BBB
+  - toastMsg                -PR
+  - hslSzinGeneral          -RD
+  - tulKozel                -RD
+  - rnd                     -PR
+  - randomHatterszin        -PR
+  - checkNumber             -PR
+  - formatFileSize          -BBB
+  - checkFileSize           -BBB, PR
+  - $bind                   -PR
+  - showElement             -PR
+  - setBgColor              -PR
+  - preventParentClick      -PR
+  - highlightSearchedText   -PR
+  - escapeRegex             -PR
 */
 
 function ajax_get( urlsor, hova, tipus, aszinkron ) { //KA // html oldalak beszúrására használjuk
@@ -58,15 +66,18 @@ function ajax_post( urlsor, tipus, data ) { //KA // json restapi-hoz használjuk
     return s;
 };
 
-function DarkModeCheck(){
+function checkDarkMode(){//PR
     var isDark = getCookie("darkMode") == "1" || false;
 
-    setThemeCookie(isDark);
+    var date = new Date();
+    date.setFullYear(date.getFullYear() + 10)
+    setCookie('darkMode', isDark ? '1' : '0', date)
+
     htmlElement.classList.toggle('darkMode', isDark);
     setThemeIndicators(isDark)
 }
 
-function setThemeIndicators(isDark){
+function setThemeIndicators(isDark){//PR
   try{
         document.getElementById("themeIndicator").classList.toggle("bi-sun-fill", !isDark); 
         document.getElementById("themeIndicator").classList.toggle("bi-moon-fill", isDark);
@@ -74,7 +85,8 @@ function setThemeIndicators(isDark){
     catch{}
 }
 
-function mezoCheck() { // BBB
+function validateField() { // BBB
+    console.log("validateField")
     jo = true
     reasonok = []
 
@@ -96,7 +108,7 @@ function mezoCheck() { // BBB
     return [jo, reasonok];
 }
 
-function sizeCheck() {//BBB
+function checkWindowSize() {//BBB
     let vw = window.innerWidth;
     let vh = window.innerHeight;
 
@@ -184,7 +196,7 @@ function randomHatterszin(){ //PR
     return `rgb(${rnd(0, 255)} ${rnd(0, 255)} ${rnd(0, 255)})`;
 }
 
-function numberCheck(input, max){  //PR
+function checkNumber(input, max){  //PR
     input.value = input.value.replace(/\D/g,'')         //regex meaning all non-digit characters  (d -> digit, D -> !digit)
     if(Number(max) && parseInt(input.value) > max) input.value = max     //max
     else if(parseInt(input.value) < 1)             input.value = '' //clear       
@@ -211,7 +223,7 @@ function formatFileSize(bytes) { // BBB
     return (negative ? '-' : '') + str + ' ' + units[i];
 }
 
-function FileSizeCheck(fileInput, fakeFileName = null){//BBB, PR
+function checkFileSize(fileInput, fakeFileName = null){//BBB, PR
     const file = fileInput.files[0];
 
     if (file && file.size > max_fajl_meret) { // dont let the user upload too large files
@@ -248,7 +260,7 @@ function preventParentClick(btn){
     })
 }
 
-function highlightKeresettText(keres, text, textHely){
+function highlightSearchedText(keres, text, textHely){
     if(keres) {
         const regex = new RegExp(`(${escapeRegex(keres)})`, 'gi')
 

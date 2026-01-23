@@ -1,9 +1,8 @@
 /* ------ CONTENT ------
 externals.js ---------------
-  - the same stuff x4
-  - valtozottTanulokSelect  -RD?   
-  - CreateSlimSelect2       -PR, RD
-  - flatpickerSet           -PR
+  - the same stuff x5   
+  - createSlimSelect       -PR, RD
+  - setFlatPicker          -PR
 */ 
 
 
@@ -11,7 +10,7 @@ function tantargyChanged(e){
     TempFilters.tantargy = e[0].value
 }
 
-function tanarChanged(e){ //PR
+function tanarChanged(e){
     TempFilters.tanar = e[0].value.substring(3)
 }
 
@@ -23,47 +22,46 @@ function IntezmenyChanged(e){
     intezmenyId = e[0].value
 }
 
-function valtozottTanulokSelect(e){//RD?
+function tanulokChanged(e){
     tanuloIdk = []
     for (const item of e) {
         tanuloIdk.push(item.value)
     }
 }
 
-function CreateSlimSelect2(hovaId, functionNev){ //PR, RD
-    console.log(hovaId)
-        document.getElementById(hovaId).selectedIndex = -1
-        var ss = new SlimSelect({
-                select: document.getElementById(hovaId),
-                cssClasses: {
-                    option: "option"
+function createSlimSelect(hovaId, functionNev){ //PR, RD
+    document.getElementById(hovaId).selectedIndex = -1
+    var ss = new SlimSelect({
+            select: document.getElementById(hovaId),
+            cssClasses: {
+                option: "option"
+            },
+            settings: {
+                closeOnSelect: false,
+                allowDeselect: true,
+                focusSearch: true,
+                searchPlaceholder: 'Keresés…',
+                //contentPosition: 'fixed',
+                currentLocation: document.getElementById("local")
+            },
+            events: {
+                afterChange: (e) => {
+                    functionNev(e)
                 },
-                settings: {
-                    closeOnSelect: false,
-                    allowDeselect: true,
-                    focusSearch: true,
-                    searchPlaceholder: 'Keresés…',
-                    //contentPosition: 'fixed',
-                    currentLocation: document.getElementById("local")
-                },
-                events: {
-                    afterChange: (e) => {
-                        functionNev(e)
-                    },
-                    searchFilter: (option, search) => {
-                        if(search.length < 2)
-                            return option.text.toLowerCase().substring(0, search.length) == search
-                        else{
-                            return option.text.toLowerCase().includes(search.toLowerCase())
-                        }
+                searchFilter: (option, search) => {
+                    if(search.length < 2)
+                        return option.text.toLowerCase().substring(0, search.length) == search
+                    else{
+                        return option.text.toLowerCase().includes(search.toLowerCase())
                     }
                 }
-            })
-        ss.setSelected(null);
-        ss.selectedIndex = -1
+            }
+        })
+    ss.setSelected(null);
+    ss.selectedIndex = -1
 }
 
-function flatpickerSet(id){ //PR
+function setFlatPicker(id){ //PR
     flatPicker = $(`#${id}`).flatpickr({
         minDate: "today",
         altInput: true,

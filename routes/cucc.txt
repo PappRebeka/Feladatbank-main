@@ -23,8 +23,7 @@
 | POST /removeClassroomFeladat        | DELETE /classroom/tasks/:id   | Remove classroom task    | kész
 | POST /feladatArchivalas             | PUT /tasks/:id/archive        | Archive                  | kész
 | POST /autocompleteArrayTolt         | GET /autocomplete/subjects    | Autocomplete subjects    | kész
-| POST /FeladatMegosztasaTanarral     | POST /tasks/:id/share/teacher | Share with teacher       | kész
-| POST /getTantargyForAuto            | GET /autocomplete/subjects    | Duplicate of above       | kész
+| POST /FeladatMegosztasaTanarral     | POST /tasks/:id/share/teacher | Share with teacher       | kész         | GET /autocomplete/subjects    | Duplicate of above       | kész
 | POST /getFeladatNumber              | GET /tasks/count              | Count tasks              | kész
 
 auth.js
