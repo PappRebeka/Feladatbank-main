@@ -12,16 +12,18 @@ task_scripts/load.js ---------------
     - resetCreateNewTask    -PR
     - createSubtask         -PR+
     - buildFakeFileInput    -PR
+    - subtaskDelete            -PR
 
-    - AlfeladatEltavolit       -PR
-    - updateFeladat            -PR
-    - feladatArch              -PR
+    - updateTask            -PR
+    - archiveTask              -PR
     - editThisFeladat          -PR
     - AlfFileChanged           -PR
     - CancelEditingThisFeladat -PR
     - TorolFeladat             -PR?
     - bookmarkTaskClick        -RD
 */
+
+// BENETT: Merge uploadFile and uploadSubtaskFile
 
 
 
@@ -75,14 +77,22 @@ class ProgressBar { //BBB
 
         if (value >= 100) {
             this.span.textContent = `${this.fileName} - Feltöltve`;
+            $(`#${this.id}`).remove();
             
-            setTimeout(() => {
-                if ($("#uploadProgressBody").children().length === 0) {
-                    const progressBarModal = bootstrap.Modal.getInstance(document.getElementById("uploadProgressModal"));
+            
+            if ($("#uploadProgressBody").children().length === 0) {
+                $("#uploadProgressBody").html(`
+                    <h6 class="display6">Minden fájl feltöltve!</h6>
+                `)
+
+                const progressBarModal = bootstrap.Modal.getInstance(document.getElementById("uploadProgressModal"));
+
+                setTimeout(() => {
                     $("#uploadProgressBody").empty();
                     progressBarModal.hide();
-                }
-            }, 500);
+                }, 500);
+            }
+            
         }
     } 
 }
@@ -107,12 +117,19 @@ async function uploadSubtaskFile(fajlInput) {//BBB
 
                 xhr.upload.addEventListener("progress", function(event) {
                     if (event.lengthComputable) {
-                        const percentComplete = Math.round((event.loaded / event.total) * 100);
+                        const percentComplete = Math.min(
+                            100,
+                            Math.round((event.loaded / event.total) * 100)
+                        );
                         progressBar.updateProgress(percentComplete);
                     } else {
                         progressBar.updateProgress(100); 
                     }
                 })
+
+                xhr.addEventListener("load", () => {
+                    progressBar.updateProgress(100);
+                });
 
                 return xhr;
             },
@@ -193,7 +210,7 @@ function uploadTasks(payload, ujFeladat) { //BBB
                 loadPageData();
                 toastMsg("Feladat hozzáadva!", "A feladat hozzáadódott az adatbázishoz.", "success");
             } else {
-                updateFeladat(payload, payload.alfeladatok.filter(a => !(a["isDelete"]))); 
+                updateTask(payload, payload.alfeladatok.filter(a => !(a["isDelete"]))); 
                 toastMsg("Feladat frissítve!", "A feladat frissítése sikeres volt.", "info");
             }
         },
@@ -307,13 +324,13 @@ function resetCreateNewTask(){ //PR
     document.getElementById("alfeladatBox"+s).innerHTML = "";
 }
 
-function createSubtask(hova){ //PR
+function createSubtask(where){ //PR
     //creates a new subtask box
     const subtask = subtaskCardTemplate()
     subtask.id = `div${pId}`
 
     const button = $bind(subtask, 'removeButton')
-    button.addEventListener('click', () => AlfeladatEltavolit(subtask.id));
+    button.addEventListener('click', () => subtaskDelete(subtask.id));
 
     const input = subtask.querySelector('.alfeladatPont')
     input.addEventListener('input',() => checkNumber(input))
@@ -321,7 +338,7 @@ function createSubtask(hova){ //PR
     const fakeFile = buildFakeFileInput(pId) 
 
     subtask.children[0].appendChild(fakeFile)
-    document.getElementById(hova).appendChild(subtask);
+    document.getElementById(where).appendChild(subtask);
     pId++;
 }
 
@@ -349,27 +366,36 @@ function buildFakeFileInput(id, fileName, fileIdentifier){ //PR
     return fakeFile
 }
 
-function AlfeladatEltavolit(id){//PR
+function subtaskDelete(id){//PR
     console.log(id)
     console.log(document.getElementById(`${id}`))
     document.getElementById(`${id}`).remove(); 
 }
 
-function updateFeladat(feladat, alfeladatok){//PR
+function updateTask(task, subtasks){//PR
     // update the task with the new data
-    feladatAdatai = {id: feladat.id, Nev: feladat.Nev, Leiras: feladat.Leiras, Tantargy: feladat.Tantargy, Tema: feladat.Tema, Evfolyam: feladat.Evfolyam, Nehezseg: feladat.Nehezseg, alfDb: feladat.alfDb}
-    const container = buildTaskCardPrimaryData(feladat, null, null, null)
-    document.getElementById("thisDivHasAnIdOf"+feladat.id).replaceChildren(container.querySelector('div'))         
+    feladatAdatai = {
+        id: feladat.id, 
+        Nev: feladat.Nev, 
+        Leiras: feladat.Leiras, 
+        Tantargy: feladat.Tantargy, 
+        Tema: feladat.Tema, 
+        Evfolyam: feladat.Evfolyam, 
+        Nehezseg: feladat.Nehezseg, 
+        alfDb: feladat.alfDb
+    }
+    const container = buildTaskCardPrimaryData(task, null, null, null)
+    document.getElementById(`task-${task.id}`).replaceChildren(container.querySelector('div'))         
     
     CancelEditingThisFeladat(true, ''); // and stop the editing process
 }
 
-function feladatArch(state){  //PR
+function archiveTask(state){  //PR
     console.log(`feladat state: ${state}`)
     talalatSzam.innerHTML = parseInt(talalatSzam.innerHTML)-1 
     
     ajax_post("/feladatArchivalas", 1, { id: feladatAdatai.id, state: state })
-    document.getElementById(`thisDivHasAnIdOf${feladatAdatai.id}`).remove(); 
+    document.getElementById(`task-${feladatAdatai.id}`).remove(); 
 }
 
 function addTextInputTo(place, object){
@@ -455,7 +481,7 @@ function editThisFeladat(){ // PR
         let fileName = alfeladatPlaceholderek[2].querySelector(".uploadedFileName")?.textContent || "Nincs fájl kiválsztva"
         let fileIdentifier = $bind(thisOne, 'alfeladatFajl')?.children[0]?.dataset.fileId || null
          
-        var alfId = thisOne.querySelector("div").id.substring(15);
+        var alfId = thisOne.querySelector("div").id.substring(4);
         thisOne.querySelector(".deleteButtonGoesHere").appendChild(buildDeleteButton(alfId))
         
         
@@ -492,7 +518,7 @@ function buildDeleteButton(id){
     button.appendChild(i)
 
     button.addEventListener('click', () => {
-            deleteIds.push(id); AlfeladatEltavolit(`ThisIsAlfeladat${id}`)})
+            deleteIds.push(id); subtaskDelete(`ThisIsAlfeladat${id}`)})
     
     return button
 }
@@ -528,7 +554,7 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR
     
 
         header.children[1].addEventListener("click", () => editThisFeladat());
-        $bind(footer, 'arch').addEventListener("click", () => feladatArch(1));
+        $bind(footer, 'arch').addEventListener("click", () => archiveTask(1));
         $bind(footer, 'megoszt').addEventListener("click", () => autocompleteShare_TeacherSelect());
     }
     
@@ -537,7 +563,7 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR
                              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Visszaálít</button>`
         
         footer.children[0].addEventListener("click", () => TorolFeladat());
-        footer.children[1].addEventListener("click", () => feladatArch(0));
+        footer.children[1].addEventListener("click", () => archiveTask(0));
     }
     
     const btn = document.createElement('button')
@@ -552,9 +578,9 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR
 }
 
 function TorolFeladat(){//PR?
-    document.getElementById(`thisDivHasAnIdOf${feladatAdatai.id}`).remove();// kill the div
-    ajax_post("/feladatTorol", 1, { id: feladatAdatai.id })                     // update database
-    talalatSzam.innerHTML = parseInt(talalatSzam.innerHTML)-1             // reduce count
+    document.getElementById(`task-${feladatAdatai.id}`).remove();           // remove the div
+    ajax_post("/feladatTorol", 1, { id: feladatAdatai.id })                 // update database
+    talalatSzam.innerHTML = parseInt(talalatSzam.innerHTML) - 1;            // reduce count
 }
 
 function bookmarkTaskClick(feladatId, button){

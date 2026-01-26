@@ -159,8 +159,10 @@ function saveUserData(){//PR
     const result = ajax_post("/updateUserdata", 1, { userToken: getCookie("userToken"), newNev: newNev, newEmail: newEmail });
 
     if (result.error === 'username_exists') {
-        showErrorMsg("Felhasználónév foglalt", "Ezt a felhasználónevet már használja valaki! Kérjük válasszon másikat");
+        showErrorMsg("Felhasználónév foglalt", "Ezt a felhasználónevet már használja valaki! Kérjük válasszon másikat!");
         return;
+    } else if (result.error === 'invalid_input') {
+        showErrorMsg("Helytelen adatok", "Helytelen adatokat találtunk az Email vagy a Felhasználónév mezőkben!")
     }
 
     if (result.error) {

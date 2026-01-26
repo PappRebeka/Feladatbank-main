@@ -87,7 +87,8 @@ function taskModal_AlfeladatTemplate(){//PR
                                 </div>
                             </div>
                         </span>
-                    </div>`;
+                    </div>
+                   `; //<hr class="w-100">
     return div
 }
 

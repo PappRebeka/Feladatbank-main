@@ -119,7 +119,7 @@
       const buttons = form.querySelectorAll('button')
       buttons[0].addEventListener('click', () => jelszoVisibility(buttons[0], '#password'))
       buttons[1].addEventListener('click', () => jelszoVisibility(buttons[1], '#passwordAgain'))
-      buttons[2].addEventListener('click', () => register())
+      buttons[2].addEventListener('click', () => registerNext())
 
       form.querySelector('#rememberMe').addEventListener('change', () => emlekezz())
       form.querySelector('a').addEventListener('click', () => formReset())

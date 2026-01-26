@@ -33,7 +33,7 @@ function loadUsers(item){ //PR
     udata[0].id = `UserName_${item.id}`
 
     let text = item.Nev
-    highlightKeresettText(ActiveFilters.kereso, text, udata[0].children[1])
+    highlightSearchedText(ActiveFilters.kereso, text, udata[0].children[1])
     
 
     udata[1].children[1].textContent = item.Email

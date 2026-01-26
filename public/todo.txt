@@ -1,11 +1,13 @@
-/public/scripts/task_scripts/modify.js
-refaktorálás kéne mert megdoglik
-
-egyedi felhnév(MÓDOSÍTÁS)
-
-loading indicator közzétevésnél
+loading indicator közzétevésnél (nagyon kérdéses tbh)
 
 gombokhoz ikonok
+
+fiók törlése után meghal
+
+feladat navének törése ha túl hosszú
+ne engedjünk röhelyesen hosszú szöveg bevitelét
+
+rendezés néha szar - why????
 
 változó, funkció nevek egyértelműsítése
 

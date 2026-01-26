@@ -1,12 +1,12 @@
 /* ------ CONTENT ------
-task_scripts/load.js ---------------
+task_scripts/share.js ---------------
     - autocompleteShare_TeacherSelect   -RD
     - shareTaskWithTeacher              -RD
     - removeSharedTask                  -PR
 */ 
 
 function autocompleteShare_TeacherSelect(){ //RD
-    const user_email = ajax_post("/autocompleteShare_TeacherSelect", 1, {})
+    const user_email = ajax_post("/autocompleteArrayTolt", 1, {})
     var tolteniValo = []; 
     document.getElementById("vevoInputText").replaceChildren()
     for (const alma of user_email.results) {
@@ -22,7 +22,7 @@ function autocompleteShare_TeacherSelect(){ //RD
         document.getElementById("vevoInputText").appendChild(opt2)
     }
     console.log(document.getElementById("vevoInputText"))
-    createSlimSelect('vevoInputText', megosztSelectTeszt)
+    //createSlimSelect('vevoInputText', megosztSelectTeszt)
 }
 
 function shareTaskWithTeacher(){ //RD

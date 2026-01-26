@@ -16,7 +16,7 @@ function feladatCardClick(element){ //PR
 
 function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev){
     const container = taskCardTemplate();
-    container.id = `thisDivHasAnIdOf${adat.id}`;
+    container.id = `task-${adat.id}`;
 
     if(Boolean(adat?.Csillagozva)){
         $bind(container, 'bookmarkTaskButton').classList.add('text-warning', 'bi-star-fill')
@@ -140,9 +140,9 @@ function setTaskModalContent(adat, felhasznalo){ //PR, RD
                 $bind(alfeladatDiv, "fajlMeret").textContent = formatFileSize(fajl["meret"])
 
                 const link = String(fajl["link"] ?? "");
-                const aElement = $bind(alfeladatDiv, "fajlLetoltes").firstChild;
+                const aElement = $bind(alfeladatDiv, "fajlLetoltes").querySelector("a");
 
-                if (link.startsWith("/letolt-fajl/")) aElement.href = link;
+                if (link.startsWith("/letolt-fajl/") && aElement) aElement.setAttribute("href", link);
                 else aElement.removeAttribute("href");
 
             }

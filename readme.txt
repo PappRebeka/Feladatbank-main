@@ -5,7 +5,42 @@ A web applikáció indítása nulláról:
         `cd Feladatbank-main`
     3. A függőségek letöltése:
         `npm ci`
-    4. A web applikáció futtatása:
+    4. A megfelelő adatok kitöltése:
+        1. a Google Oauth applikáció szerkesztése (FONTOS!!!) 
+            Mivel a web applikáció költöztetve van, és emiatt megváltozik
+            maga az applikáció url-je, ezt az Oauth Cloud Console-ban is
+            frissíteni kell a redirect URI-t, hogy helyesen működjön az
+            Oauth2 bejelentkezés. A redirect URI-t úgy kell megadni, hogy
+            az ezt a sémát alkossa: 
+                `http://base_url_ide/reg`
+                PL. `http://localhost:9071/reg`
+            Pár megjegyzés:
+                - Az alap URL után lehet rakni portot, szükség esetén.
+                - MINDIG rakja a /reg végpontot az URL után.
+                - Az Cloud Console adatok frissítése után valószínűsíthető,
+                  hogy egy pár percig tart az, hogy az adatok rendesen, 
+                  rendszer-szinten frissűljenek.
+
+        2. server-config.json használata (FONTOS!!!)
+            "server": 
+                "port" => a szerver használni való port-ja
+                "base_url" => a szerver alap url-je (google oauth miatt)
+                "session_secret" => a session-höz használni kívánt kód
+
+            "database": 
+                "host" => a MySql szerver címe
+                "port" => a MySql szerver portja
+                "user" => a MySql-hez használni való felhasználónév
+                "password" => a MySql felhasználónévhez kapcsolódó jelszó
+                "name" => a MySql adatbázis neve
+                "connectionLimit" => csatlahoztatható sql driver-ek száma (10)
+                "waitForConnections" => true, nehogy timeout-oljon a driver
+
+            "google":
+                "client_id": a google oauth applikáció kliens id-je
+                "client_secret": a google oauth applikáció titok kódja
+            
+    5. A web applikáció futtatása:
         `npm start-nohup`
-    5. A web applikáció megállítása:
+    6. A web applikáció megállítása:
         `npm stop-nohup`

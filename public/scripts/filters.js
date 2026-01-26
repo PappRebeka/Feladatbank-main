@@ -13,7 +13,8 @@ filters.js -------------
 */
 
 function setSearchFilter(ker){//PR
-    ActiveFilters.setSearchFilter = ker ? ker.toLowerCase() : "" // save the search filter globally
+    console.log('??')
+    ActiveFilters.kereso = ker ? ker.toLowerCase() : "" // save the search filter globally
     loadPageData()          // reload the data with the new filter
 }
 
@@ -27,8 +28,8 @@ function applyFilters() { //RD
     ActiveFilters.nehezseg = TempFilters.nehezseg 
     ActiveFilters.evfolyam = document.getElementById("evfolyamSzuro").value
     ActiveFilters.tantargy = TempFilters.tantargy
-    ActiveFilters.tanar = TempFilters.tanar 
-    ActiveFilters.kurzus = TempFilters.kurzus
+    ActiveFilters.tanar    = TempFilters.tanar 
+    ActiveFilters.kurzus   = TempFilters.kurzus
     loadPageData()
 }
 
