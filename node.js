@@ -340,10 +340,11 @@ app.post("/loginUser", async (req, res) => { //RD, PR
     if(results[0]['COUNT(id)'] > 0){
       // lets hope this works
       try {
-        const pingResults = await queryAsync("SELECT UtolsoPing FROM Users WHERE id = ?", [results[0].id]);
+        const pingResults = await queryAsync("SELECT UtolsoPing FROM Users WHERE id = ?", [results[0]['id']]);
         const lastPing = pingResults?.[0]?.UtolsoPing;
         if (lastPing) {
           const now = Date.now();
+          console.log(now - lastPing);
           if ((now - lastPing) < (1 * 60 * 1000)) {
             return res.status(403).end();
           }
@@ -2082,6 +2083,15 @@ const server = app.listen(config.server.port, () => {
     console.log(feladatok[0].db)
     return feladatok[0].db > 0
   }
+
+  app.post("/GetTantargyak", (req, res) =>{
+    const UserId = req.session.userId
+    var sql = "SELECT Tantargy FROM Feladatok GROUP BY Tantargy HAVING Tanar = ?"
+    conn.query(sql, [UserId], (err, results) => {
+      res.send(JSON.stringify({ "results":results }));
+      res.end()
+    })
+  })
 
   app.post("/updateBookmarkedState", async (req, res) =>{ //RD
     const feladatId = req.body.feladatId

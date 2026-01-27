@@ -21,7 +21,7 @@ function setSearchFilter(ker){//PR
 function resetSearchFilter(){ //PR
     document.getElementById("searchbar_nav").value = ""
     document.getElementById("searchbar_offcanvas").value = ""
-    ActiveFilters.setSearchFilter = ""
+    ActiveFilters.kereso = ""
 }
 
 function applyFilters() { //RD

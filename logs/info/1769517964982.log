@@ -1,0 +1,2 @@
+2026-01-27T12:46:05.009Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T12:46:05.170Z [feladatbank] [31merror[39m: /sendClassroomCourses error=Cannot read properties of undefined (reading 'AccessToken') userid=undefined

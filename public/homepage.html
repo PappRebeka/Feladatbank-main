@@ -134,13 +134,12 @@
             createSlimSelect('tanulokSelect', tanulokChanged)
             createSlimSelect('tantargySzuro', tantargyChanged)
             createSlimSelect('ujIntezmeny', AthelyezTeszt)
-            
             setPageContent();
             
        }
         catch (err){
             console.log(err)
-            window.location.href= 'hiba.html?code=2'
+            //window.location.href= 'hiba.html?code=2'
         }
             
         checkWindowSize();
@@ -405,9 +404,12 @@
     }
 
     function loadPageData(){ //PR, RD
+        var tanta = ajax_post("/GetTantargyak", 1, {})
+        console.log("tantargyak")
+        console.log(tantargyak)
         let userpage = ActiveLocation == "Felhasználók"
         let oldal = Object.keys(AvailablePages).indexOf(ActiveLocation).toString()
-        
+        console.log("loadPageData: "+ ActiveFilters.tantargy)
         let temp = {tanarId: CurrentUserData.id,
                     oldal: oldal,
 
@@ -437,7 +439,7 @@
         updateNavigationButtons()
         document.getElementById("oldal").textContent = activePageNumber
         document.getElementById("maxPageNumber").textContent = maxPageNumber
-        var tantargyak = [];
+        var tantargyak = tantargyak? tantargyak : []
 
         document.getElementById("BigDih").replaceChildren()
         if (talalatSzam.innerText == "0") toastMsg("Nem találtunk feladatokat!", "A megadott paraméterek alapján nem találtunk önhöz tartozó feladatokat.", "warning")
@@ -826,10 +828,10 @@
                                         </select>
 
                                         <div class="btn-group sort-dir" role="group">
-                                            <button type="button" class="btn btn-outline-secondary sortDirectionButton active" id="sortAsc">
+                                            <button type="button" class="btn btn-outline-secondary sortDirectionButton" id="sortAsc">
                                                 <i class="bi bi-arrow-up"></i>
                                             </button>
-                                            <button type="button" class="btn btn-outline-secondary sortDirectionButton" id="sortDesc">
+                                            <button type="button" class="btn btn-outline-secondary sortDirectionButton active" id="sortDesc">
                                                 <i class="bi bi-arrow-down"></i>
                                             </button>
                                         </div>
