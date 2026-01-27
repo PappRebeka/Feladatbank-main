@@ -1,0 +1,3 @@
+2026-01-23T11:03:20.906Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T11:03:21.174Z [feladatbank] [31merror[39m: /sendClassroomCourses error=Cannot read properties of undefined (reading 'AccessToken') userid=undefined
+2026-01-23T11:03:25.213Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..

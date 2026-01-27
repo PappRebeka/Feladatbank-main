@@ -1,0 +1,7 @@
+2026-01-20T12:54:15.216Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-20T12:54:23.698Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-20T12:54:27.651Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-20T12:54:27.996Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T12:54:28.132Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-20T12:54:28.441Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-20T12:54:30.663Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1

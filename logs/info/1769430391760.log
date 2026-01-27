@@ -1,0 +1,4 @@
+2026-01-26T12:26:31.791Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-26T12:26:40.386Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=423
+2026-01-26T12:27:33.995Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=433
+2026-01-26T12:27:37.192Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=433

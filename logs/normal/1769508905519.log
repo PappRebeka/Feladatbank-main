@@ -1,0 +1,15 @@
+2026-01-27T10:15:05.549Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T10:15:07.923Z [feladatbank] [32minfo[39m: User  login attempted..
+2026-01-27T10:15:08.503Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T10:15:09.686Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-27T10:15:17.526Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-27T10:15:18.021Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T10:15:19.119Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-27T10:15:19.147Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-27T10:15:19.527Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-27T10:15:31.485Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-27T10:15:31.960Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T10:15:34.158Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)
+2026-01-27T10:15:42.621Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-27T10:15:42.809Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T10:15:43.898Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)

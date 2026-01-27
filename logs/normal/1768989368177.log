@@ -1,0 +1,16 @@
+2026-01-21T09:56:08.206Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-21T09:56:10.660Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-21T09:56:11.830Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-21T09:56:17.850Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-21T09:56:18.708Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-21T09:56:42.115Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-21T09:56:42.913Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-21T09:57:13.324Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-21T09:57:14.113Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-21T09:57:29.199Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-21T09:57:30.005Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-21T09:57:41.201Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-21T09:57:41.690Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-21T09:57:42.465Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-21T09:59:51.620Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-21T09:59:52.453Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)

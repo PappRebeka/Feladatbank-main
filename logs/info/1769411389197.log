@@ -1,0 +1,8 @@
+2026-01-26T07:09:49.226Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-26T07:09:57.835Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-26T07:10:11.467Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::1             
+2026-01-26T07:11:47.816Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::1             
+2026-01-26T07:12:01.542Z [feladatbank] [32minfo[39m: User Rebeka Papp succesfully registered! method=POST             ip=::1             
+2026-01-26T07:12:07.889Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_BAD_FIELD_ERROR: Unknown column 'Feladatok.Csillagozva' in 'SELECT' clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-26T07:12:07.918Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_BAD_FIELD_ERROR: Unknown column 'Feladatok.Csillagozva' in 'SELECT' clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-26T07:12:44.995Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'Csillagozva' in 'INSERT INTO'

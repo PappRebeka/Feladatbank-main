@@ -1,0 +1,55 @@
+2026-01-27T09:41:41.950Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T09:41:44.301Z [feladatbank] [31merror[39m: {
+  "code": "ER_EMPTY_QUERY",
+  "errno": 1065,
+  "sqlMessage": "Query was empty",
+  "sqlState": "42000",
+  "index": 0
+}
+2026-01-27T09:41:52.387Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-27T09:41:52.599Z [feladatbank] [31merror[39m: {
+  "code": "ER_EMPTY_QUERY",
+  "errno": 1065,
+  "sqlMessage": "Query was empty",
+  "sqlState": "42000",
+  "index": 0
+}
+2026-01-27T09:44:44.772Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-27T09:44:45.522Z [feladatbank] [31merror[39m: {
+  "code": "ER_EMPTY_QUERY",
+  "errno": 1065,
+  "sqlMessage": "Query was empty",
+  "sqlState": "42000",
+  "index": 0
+}
+2026-01-27T09:44:58.078Z [feladatbank] [31merror[39m: {
+  "code": "ER_EMPTY_QUERY",
+  "errno": 1065,
+  "sqlMessage": "Query was empty",
+  "sqlState": "42000",
+  "index": 0
+}
+2026-01-27T09:45:03.561Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-27T09:45:03.991Z [feladatbank] [31merror[39m: {
+  "code": "ER_EMPTY_QUERY",
+  "errno": 1065,
+  "sqlMessage": "Query was empty",
+  "sqlState": "42000",
+  "index": 0
+}
+2026-01-27T09:45:07.487Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-27T09:45:07.683Z [feladatbank] [31merror[39m: {
+  "code": "ER_EMPTY_QUERY",
+  "errno": 1065,
+  "sqlMessage": "Query was empty",
+  "sqlState": "42000",
+  "index": 0
+}
+2026-01-27T09:47:28.199Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-27T09:47:28.472Z [feladatbank] [31merror[39m: {
+  "code": "ER_EMPTY_QUERY",
+  "errno": 1065,
+  "sqlMessage": "Query was empty",
+  "sqlState": "42000",
+  "index": 0
+}

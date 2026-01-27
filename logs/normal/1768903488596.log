@@ -1,0 +1,5 @@
+2026-01-20T10:04:48.626Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-20T10:04:52.661Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T10:04:52.685Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T10:04:54.018Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T10:04:59.815Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=290 felado=164 cimzett=Rebeka Papp

@@ -1,0 +1,2 @@
+2026-01-27T10:37:19.592Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T10:37:20.407Z [feladatbank] [31merror[39m: (/FeladatMegosztasaTanarral) error=ER_BAD_NULL_ERROR: Column 'FeladoId' cannot be null feladatId=432 felado=undefined cimzett=

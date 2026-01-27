@@ -1,0 +1,7 @@
+2026-01-27T10:36:51.756Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T10:36:53.199Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T10:36:54.613Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-27T10:36:55.790Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=429
+2026-01-27T10:37:00.269Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=429 felado=202 cimzett=Dávid Réczeg
+2026-01-27T10:37:02.663Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-27T10:37:08.361Z [feladatbank] [31merror[39m: (/FeladatMegosztasaTanarral) error=ER_SUBQUERY_NO_1_ROW: Subquery returns more than 1 row feladatId=434 felado=202 cimzett=

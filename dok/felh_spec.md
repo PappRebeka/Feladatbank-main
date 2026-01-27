@@ -20,10 +20,9 @@
 2. Központi feladatkezelés **több tanár között**
 3. Teljes feladatok tanár közti **megosztása, publikálása**
 4. **Számtalan** fájltípusok feltöltése és megosztása
-5. Közzétett feladatok visszavonása **egyetlen gombnyomásra**
-6. Egy **letisztult** és **pofonegyszerű** felhasználói felület
-7. Felhasználói statisztikák **teljeskörű elérése** diagrammokban
-8. **Különböző** jogosultságok adminoknak és tanároknak
+5. Egy **letisztult** és **pofonegyszerű** felhasználói felület
+6. Felhasználói statisztikák **teljeskörű elérése** diagrammokban
+7. **Különböző** jogosultságok adminoknak és tanároknak
 
 ## Fő funkciók
 1. **Feladatok**

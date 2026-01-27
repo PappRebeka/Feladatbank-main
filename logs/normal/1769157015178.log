@@ -1,0 +1,14 @@
+2026-01-23T08:30:15.204Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T08:30:19.586Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-23T08:30:19.911Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T08:30:19.935Z [feladatbank] [31merror[39m: /SendUsers error=ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'null OFFSET 0' at line 4
+2026-01-23T08:30:19.937Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-23T08:30:22.176Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-23T08:30:22.255Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-23T08:30:51.840Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-23T08:31:02.581Z [feladatbank] [32minfo[39m: User Badó Benett Brendon login attempted..
+2026-01-23T08:31:08.339Z [feladatbank] [32minfo[39m: User Badó Benett Brendon login attempted..
+2026-01-23T08:31:20.325Z [feladatbank] [32minfo[39m: User Badó Benett Brendon login attempted..
+2026-01-23T08:31:29.366Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-23T08:31:51.996Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-23T08:32:06.298Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1

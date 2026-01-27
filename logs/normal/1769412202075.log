@@ -1,0 +1,35 @@
+2026-01-26T07:23:22.113Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-26T07:24:22.909Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::1             
+2026-01-26T07:24:28.513Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-26T07:24:28.717Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-26T07:24:29.942Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-26T07:24:49.383Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-26T07:24:49.563Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-26T07:24:50.657Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-26T07:32:09.945Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:13.936Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:14.313Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:14.505Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:14.688Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:14.977Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:15.185Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:15.393Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:15.600Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:15.815Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:16.014Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:16.199Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:16.407Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:16.615Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:16.831Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:17.039Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:17.224Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:17.424Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:32:18.267Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T07:32:28.566Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T07:33:57.875Z [feladatbank] [32minfo[39m: User Dávid Réczeg succesfully registered! method=POST             ip=::ffff:127.0.0.1
+2026-01-26T07:34:02.946Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-26T07:34:02.970Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'null OFFSET 0' at line 1 clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-26T07:34:05.264Z [feladatbank] [34mdebug[39m: Courses extracted (userid=203)
+2026-01-26T07:34:34.071Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-26T07:34:34.551Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-26T07:34:35.725Z [feladatbank] [34mdebug[39m: Courses extracted (userid=203)

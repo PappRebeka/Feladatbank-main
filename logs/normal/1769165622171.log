@@ -1,0 +1,16 @@
+2026-01-23T10:53:42.200Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T10:53:43.749Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-23T10:53:46.803Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-23T10:53:47.924Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T10:53:47.929Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T10:53:51.059Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T10:53:51.064Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T10:54:12.126Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-23T10:54:13.501Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-23T10:54:14.817Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T10:55:03.951Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-23T10:55:05.060Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-23T10:55:08.035Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T10:55:08.040Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T10:55:10.368Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T10:55:10.372Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null

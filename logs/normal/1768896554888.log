@@ -1,0 +1,88 @@
+2026-01-20T08:09:14.922Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-20T08:09:18.154Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:09:18.178Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:09:19.426Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:12:43.129Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-20T08:12:43.135Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-20T08:13:32.846Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:13:32.915Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:13:34.168Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:13:36.491Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=400
+2026-01-20T08:13:49.207Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:13:49.235Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:13:50.331Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:13:52.104Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=400
+2026-01-20T08:18:16.375Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T08:18:16.408Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:18:18.015Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T08:18:19.017Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=399
+2026-01-20T08:18:24.303Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-20T08:18:24.539Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:18:25.680Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:18:26.082Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=399
+2026-01-20T08:19:22.934Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383
+2026-01-20T08:19:30.575Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383
+2026-01-20T08:19:53.184Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383
+2026-01-20T08:21:23.902Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-20T08:21:59.490Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=402
+2026-01-20T08:22:04.438Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-20T08:22:04.443Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-20T08:24:20.711Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:24:21.813Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:24:23.364Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=402
+2026-01-20T08:24:26.178Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=398
+2026-01-20T08:24:40.513Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=403
+2026-01-20T08:25:22.811Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:25:23.981Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:25:39.260Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=403
+2026-01-20T08:27:32.800Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:27:33.882Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:31:07.953Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T08:31:08.088Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:31:10.562Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T08:31:10.670Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=384
+2026-01-20T08:33:41.326Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T08:33:41.400Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:33:42.578Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T08:33:55.564Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:33:56.856Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:33:58.338Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T08:33:58.361Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:33:59.181Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T08:34:13.808Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383
+2026-01-20T08:34:33.208Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383
+2026-01-20T08:36:28.536Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T08:36:28.555Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:36:30.846Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T08:36:52.012Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383
+2026-01-20T08:37:24.830Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T08:37:24.853Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:37:27.126Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T08:37:39.729Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383
+2026-01-20T08:38:08.816Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:38:11.406Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:38:18.045Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383
+2026-01-20T08:38:58.743Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T08:38:58.770Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:39:00.135Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T08:39:04.022Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383
+2026-01-20T08:39:08.877Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:39:10.010Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:39:21.574Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383
+2026-01-20T08:39:27.135Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:39:28.284Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:39:32.358Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383
+2026-01-20T08:39:33.652Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383
+2026-01-20T08:41:09.136Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:41:10.285Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:41:41.374Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:41:42.493Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:45:22.186Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T08:45:22.285Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:45:24.714Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T08:47:23.730Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T08:47:23.794Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:47:26.259Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T08:47:32.401Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:47:33.476Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:47:38.289Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383

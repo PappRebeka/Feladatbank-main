@@ -1,0 +1,5 @@
+2026-01-26T12:11:15.223Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-26T12:11:16.745Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=421
+2026-01-26T12:11:17.357Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=433
+2026-01-26T12:11:19.294Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=433
+2026-01-26T12:11:23.977Z [feladatbank] [31merror[39m: createClassroomTask error=Cannot read properties of undefined (reading 'courses') courseId=780813094806

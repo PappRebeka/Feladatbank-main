@@ -1,0 +1,22 @@
+2026-01-27T10:39:38.931Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T10:39:40.089Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T10:39:40.656Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T10:39:41.553Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-27T10:39:41.777Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-27T10:39:42.512Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=437
+2026-01-27T10:39:47.143Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=437 felado=210 cimzett=Benett Brendasdfon Bad
+2026-01-27T10:39:51.024Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=421
+2026-01-27T10:39:54.834Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=421 felado=202 cimzett=reczegd@gmail.com
+2026-01-27T10:39:56.699Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=404
+2026-01-27T10:40:01.303Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=404 felado=202 cimzett=
+2026-01-27T10:40:09.952Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=430
+2026-01-27T10:40:15.429Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=430 felado=210 cimzett=
+2026-01-27T10:41:56.254Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=430
+2026-01-27T10:41:59.142Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=430
+2026-01-27T10:42:05.492Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=430
+2026-01-27T10:42:15.621Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T10:42:16.762Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-27T10:42:22.223Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T10:42:23.567Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-27T10:42:27.680Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=430
+2026-01-27T10:42:32.020Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=430 felado=210 cimzett=bado.benett.brendon@gmail.com

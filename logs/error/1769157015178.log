@@ -1,0 +1,1 @@
+2026-01-23T08:30:19.935Z [feladatbank] [31merror[39m: /SendUsers error=ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'null OFFSET 0' at line 4

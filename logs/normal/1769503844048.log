@@ -1,0 +1,17 @@
+2026-01-27T08:50:44.076Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T08:50:52.077Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-27T08:50:52.338Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T08:50:54.775Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)
+2026-01-27T09:04:19.249Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-27T09:04:19.999Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T09:04:22.209Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-27T09:04:31.381Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T09:04:32.732Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-27T09:07:16.600Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T09:07:18.167Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-27T09:07:41.487Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T09:07:42.993Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-27T09:08:21.086Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T09:08:22.222Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-27T09:08:54.040Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T09:08:55.185Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)

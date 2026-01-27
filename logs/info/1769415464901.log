@@ -1,0 +1,40 @@
+2026-01-26T08:17:44.928Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-26T08:17:49.367Z [feladatbank] [32minfo[39m: User Dávid Réczeg succesfully registered! method=POST             ip=::ffff:127.0.0.1
+2026-01-26T08:20:24.643Z [feladatbank] [31merror[39m: /sendClassroomCourses error=No refresh token is set. userid=205
+2026-01-26T08:20:54.575Z [feladatbank] [32minfo[39m: User (id=205) and their tasks were successfully deleted method=POST             ip=::ffff:127.0.0.1
+2026-01-26T08:20:59.646Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T08:21:18.529Z [feladatbank] [32minfo[39m: User Dávid Réczeg succesfully registered! method=POST             ip=::ffff:127.0.0.1
+2026-01-26T08:22:13.841Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T08:22:42.616Z [feladatbank] [32minfo[39m: User  login attempted..
+2026-01-26T08:24:07.987Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-26T08:27:16.948Z [feladatbank] [32minfo[39m: Sending mail to reczegd@gmail.com
+2026-01-26T08:28:21.348Z [feladatbank] [32minfo[39m: Password reset requested       method=POST             ip=::ffff:127.0.0.1
+2026-01-26T08:28:38.529Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-26T08:29:13.068Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-26T08:29:14.303Z [feladatbank] [31merror[39m: /sendClassroomCourses error=Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project. userid=202
+2026-01-26T08:29:16.217Z [feladatbank] [32minfo[39m: User  login attempted..
+2026-01-26T08:29:16.547Z [feladatbank] [31merror[39m: /sendClassroomCourses error=Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project. userid=202
+2026-01-26T08:29:34.664Z [feladatbank] [31merror[39m: /sendClassroomCourses error=Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project. userid=202
+2026-01-26T08:29:43.404Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-26T08:29:45.911Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-26T08:29:50.838Z [feladatbank] [32minfo[39m: User  login attempted..
+2026-01-26T08:30:21.877Z [feladatbank] [31merror[39m: /sendClassroomCourses error=Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project. userid=202
+2026-01-26T08:30:39.718Z [feladatbank] [31merror[39m: /sendClassroomCourses error=Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project. userid=202
+2026-01-26T08:30:44.969Z [feladatbank] [32minfo[39m: User  login attempted..
+2026-01-26T08:30:45.817Z [feladatbank] [31merror[39m: /sendClassroomCourses error=Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project. userid=202
+2026-01-26T08:33:34.650Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T08:37:39.622Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T08:38:22.149Z [feladatbank] [32minfo[39m: User  login attempted..
+2026-01-26T08:38:57.150Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-26T08:38:58.681Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-26T08:39:17.369Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-26T08:39:32.578Z [feladatbank] [32minfo[39m: User (id=206) and their tasks were successfully deleted method=POST             ip=::ffff:127.0.0.1
+2026-01-26T08:39:57.271Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T08:40:12.933Z [feladatbank] [32minfo[39m: User Dávid Réczeg succesfully registered! method=POST             ip=::ffff:127.0.0.1
+2026-01-26T08:40:22.614Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-26T08:40:31.587Z [feladatbank] [32minfo[39m: User (id=207) and their tasks were successfully deleted method=POST             ip=::ffff:127.0.0.1
+2026-01-26T08:40:38.542Z [feladatbank] [32minfo[39m: User (id=207) and their tasks were successfully deleted method=POST             ip=::ffff:127.0.0.1
+2026-01-26T08:40:55.903Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T08:41:18.223Z [feladatbank] [32minfo[39m: User Dávid Réczeg succesfully registered! method=POST             ip=::ffff:127.0.0.1
+2026-01-26T08:41:44.918Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-26T08:41:53.344Z [feladatbank] [32minfo[39m: User (id=208) and their tasks were successfully deleted method=POST             ip=::ffff:127.0.0.1

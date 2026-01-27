@@ -1,0 +1,57 @@
+2026-01-20T07:26:52.375Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-20T07:33:58.525Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-20T07:33:58.965Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T07:33:58.989Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T07:34:01.565Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T07:47:47.687Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-20T07:47:48.487Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T07:47:48.652Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T07:47:51.264Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T07:48:18.267Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T07:48:18.340Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T07:48:19.528Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T07:49:48.565Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T07:49:48.640Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T07:49:49.811Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T07:49:58.613Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T07:49:58.636Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T07:49:59.787Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T07:51:19.047Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T07:51:19.105Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T07:51:20.456Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T07:51:27.233Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T07:51:27.261Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T07:51:28.737Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T07:52:49.028Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T07:52:49.059Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T07:52:50.159Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T07:53:39.953Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T07:53:39.972Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T07:53:42.220Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T07:53:58.108Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T07:53:58.194Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T07:53:59.464Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T07:55:32.425Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T07:55:32.446Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T07:55:33.593Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T07:55:47.194Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=398
+2026-01-20T07:55:49.143Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T07:55:49.164Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T07:55:50.347Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T07:56:11.626Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=399
+2026-01-20T07:56:12.162Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=400
+2026-01-20T08:02:48.053Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-20T08:03:30.225Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=399
+2026-01-20T08:03:41.581Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T08:03:41.656Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:03:44.181Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T08:03:48.743Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=399
+2026-01-20T08:04:04.146Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=399
+2026-01-20T08:04:06.848Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=399
+2026-01-20T08:04:21.185Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T08:04:21.306Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:04:22.442Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-20T08:05:22.026Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-20T08:05:22.055Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T08:05:23.175Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-20T08:05:26.796Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=400

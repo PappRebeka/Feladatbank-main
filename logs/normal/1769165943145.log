@@ -1,0 +1,4 @@
+2026-01-23T10:59:03.174Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T10:59:04.815Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-23T10:59:57.734Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-23T10:59:58.500Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1

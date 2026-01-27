@@ -1,0 +1,8 @@
+2026-01-23T12:20:45.354Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T12:20:46.809Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T12:20:50.501Z [feladatbank] [34mdebug[39m: Courses extracted (userid=167)
+2026-01-23T12:21:18.203Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=307
+2026-01-23T12:21:25.938Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=431
+2026-01-23T12:21:40.107Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=431
+2026-01-23T12:23:03.572Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T12:23:06.189Z [feladatbank] [34mdebug[39m: Courses extracted (userid=167)

@@ -1,0 +1,7 @@
+2026-01-27T09:35:07.491Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T09:35:07.547Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-27T09:35:07.648Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-27T09:35:08.174Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T09:35:09.594Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-27T09:35:22.564Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T09:35:23.853Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)

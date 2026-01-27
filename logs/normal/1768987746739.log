@@ -1,0 +1,6 @@
+2026-01-21T09:29:06.766Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-21T09:29:12.398Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-21T09:29:14.791Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-21T09:29:34.277Z [feladatbank] [31merror[39m: /SendUsers error=ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'WHERE'
+2026-01-21T09:29:34.279Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-21T09:29:34.300Z [feladatbank] [31merror[39m: /getUserCount error=ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'WHERE'

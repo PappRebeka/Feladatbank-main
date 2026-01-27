@@ -1,0 +1,12 @@
+2026-01-27T07:32:16.701Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T07:32:24.257Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-27T07:32:25.154Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T07:32:28.662Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-27T07:32:37.887Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=406
+2026-01-27T07:32:54.597Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=406
+2026-01-27T07:33:11.272Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=406
+2026-01-27T07:33:21.900Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T07:33:23.060Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-27T07:33:24.484Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=406
+2026-01-27T07:33:57.943Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T07:33:59.029Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)

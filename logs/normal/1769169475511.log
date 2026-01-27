@@ -1,0 +1,6 @@
+2026-01-23T11:57:55.537Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T11:57:58.557Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T11:58:00.470Z [feladatbank] [34mdebug[39m: Courses extracted (userid=167)
+2026-01-23T11:58:36.176Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T11:58:37.670Z [feladatbank] [34mdebug[39m: Courses extracted (userid=167)
+2026-01-23T11:58:52.068Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'SET'

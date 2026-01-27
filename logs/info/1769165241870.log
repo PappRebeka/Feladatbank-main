@@ -1,0 +1,3 @@
+2026-01-23T10:47:21.901Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T10:48:59.698Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=269
+2026-01-23T10:49:21.206Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'VALUES'

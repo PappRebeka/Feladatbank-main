@@ -1,0 +1,5 @@
+2026-01-27T07:47:02.227Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T07:47:06.928Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-27T07:47:07.005Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-27T07:47:11.190Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-27T07:47:22.022Z [feladatbank] [31merror[39m: createClassroomTask error=materials: Drive materials must have an ID. courseId=829569107329

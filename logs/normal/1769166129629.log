@@ -1,0 +1,3 @@
+2026-01-23T11:02:09.659Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T11:02:21.612Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-23T11:02:21.849Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1

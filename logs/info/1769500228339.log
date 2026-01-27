@@ -1,0 +1,4 @@
+2026-01-27T07:50:28.371Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T07:50:36.894Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=406
+2026-01-27T07:50:48.559Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=406
+2026-01-27T07:52:11.444Z [feladatbank] [31merror[39m: createClassroomTask error=Requested entity was not found. courseId=780813094806

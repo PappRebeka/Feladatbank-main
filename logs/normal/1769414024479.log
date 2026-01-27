@@ -1,0 +1,4 @@
+2026-01-26T07:53:44.507Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-26T07:54:20.173Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-26T07:54:20.463Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-26T07:54:21.774Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)

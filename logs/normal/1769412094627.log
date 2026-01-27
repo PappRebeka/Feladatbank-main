@@ -1,0 +1,7 @@
+2026-01-26T07:21:34.655Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-26T07:21:39.880Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::1             
+2026-01-26T07:21:55.265Z [feladatbank] [32minfo[39m: User Rebeka Papp succesfully registered! method=POST             ip=::1             
+2026-01-26T07:21:57.949Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-26T07:21:59.090Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-26T07:22:28.758Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-26T07:22:29.814Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)

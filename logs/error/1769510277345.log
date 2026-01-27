@@ -1,0 +1,13 @@
+2026-01-27T10:38:16.081Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=404
+2026-01-27T10:38:22.929Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=421
+2026-01-27T10:38:27.985Z [feladatbank] [31merror[39m: (/FeladatMegosztasaTanarral) error=ER_SUBQUERY_NO_1_ROW: Subquery returns more than 1 row feladatId=421 felado=202 cimzett=
+2026-01-27T10:38:33.463Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=424
+2026-01-27T10:38:36.138Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=430
+2026-01-27T10:38:39.166Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=437
+2026-01-27T10:38:43.458Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=424
+2026-01-27T10:38:50.014Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=430
+2026-01-27T10:38:54.480Z [feladatbank] [31merror[39m: (/FeladatMegosztasaTanarral) error=ER_SUBQUERY_NO_1_ROW: Subquery returns more than 1 row feladatId=430 felado=210 cimzett=
+2026-01-27T10:38:55.527Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=437
+2026-01-27T10:39:00.466Z [feladatbank] [31merror[39m: (/FeladatMegosztasaTanarral) error=ER_SUBQUERY_NO_1_ROW: Subquery returns more than 1 row feladatId=437 felado=210 cimzett=
+2026-01-27T10:39:04.695Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=437
+2026-01-27T10:39:08.572Z [feladatbank] [31merror[39m: (/FeladatMegosztasaTanarral) error=ER_SUBQUERY_NO_1_ROW: Subquery returns more than 1 row feladatId=437 felado=210 cimzett=

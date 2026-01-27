@@ -1,0 +1,3 @@
+2026-01-23T11:13:45.689Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T11:14:36.580Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-23T11:14:55.220Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'VALUES'

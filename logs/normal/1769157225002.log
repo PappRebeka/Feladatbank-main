@@ -1,0 +1,15 @@
+2026-01-23T08:33:45.031Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T08:34:03.164Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-23T08:34:04.192Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-23T08:34:04.492Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T08:34:06.588Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-23T08:34:06.607Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-23T08:34:06.701Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-23T08:34:36.914Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-23T08:34:37.159Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T08:34:38.318Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-23T08:35:04.874Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-23T08:35:05.138Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T08:35:05.167Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'null OFFSET 0' at line 1 clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-23T08:35:06.615Z [feladatbank] [34mdebug[39m: Courses extracted (userid=167)
+2026-01-23T08:35:44.447Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'VALUES'

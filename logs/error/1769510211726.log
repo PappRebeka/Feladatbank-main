@@ -1,0 +1,2 @@
+2026-01-27T10:36:55.790Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=429
+2026-01-27T10:37:08.361Z [feladatbank] [31merror[39m: (/FeladatMegosztasaTanarral) error=ER_SUBQUERY_NO_1_ROW: Subquery returns more than 1 row feladatId=434 felado=202 cimzett=

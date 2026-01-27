@@ -1,0 +1,12 @@
+2026-01-20T10:05:38.383Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T10:07:44.220Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383
+2026-01-20T10:07:53.037Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=383
+2026-01-20T10:08:56.169Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T10:09:00.728Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=284
+2026-01-20T10:09:42.508Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T10:09:44.793Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=284
+2026-01-20T10:09:54.345Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=269
+2026-01-20T10:11:14.330Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T10:12:03.975Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T10:12:09.601Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=269
+2026-01-20T10:13:03.196Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com

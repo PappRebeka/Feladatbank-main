@@ -1,0 +1,2 @@
+2026-01-23T12:30:19.018Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T12:30:37.701Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'VALUES'

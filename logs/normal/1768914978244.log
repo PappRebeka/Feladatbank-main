@@ -1,0 +1,6 @@
+2026-01-20T13:16:18.270Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-20T13:23:11.711Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T13:23:13.783Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-20T13:23:23.461Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-20T13:23:24.029Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T13:23:25.346Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)

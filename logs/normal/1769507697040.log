@@ -1,0 +1,19 @@
+2026-01-27T09:54:57.067Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T09:54:59.677Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T09:55:01.120Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)
+2026-01-27T09:55:13.207Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-27T09:55:13.532Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T09:55:14.703Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)
+2026-01-27T09:55:15.640Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-27T09:55:15.914Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T09:55:16.427Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-27T09:55:16.461Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-27T09:55:16.550Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-27T09:55:57.029Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-27T09:55:57.689Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T09:55:58.833Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-27T09:56:22.143Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T09:56:23.301Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)
+2026-01-27T09:57:57.900Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-27T09:57:58.560Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T09:57:59.707Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)

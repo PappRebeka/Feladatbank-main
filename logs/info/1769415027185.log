@@ -1,0 +1,6 @@
+2026-01-26T08:10:27.212Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-26T08:12:33.614Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::1             
+2026-01-26T08:13:01.379Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T08:16:24.156Z [feladatbank] [32minfo[39m: User  login attempted..
+2026-01-26T08:16:35.533Z [feladatbank] [32minfo[39m: User (id=203) and their tasks were successfully deleted method=POST             ip=::ffff:127.0.0.1
+2026-01-26T08:16:39.009Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1

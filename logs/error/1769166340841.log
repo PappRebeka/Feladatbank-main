@@ -1,0 +1,4 @@
+2026-01-23T11:05:41.148Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=390
+2026-01-23T11:05:54.317Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=408
+2026-01-23T11:06:26.866Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=408
+2026-01-23T11:10:26.303Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'VALUES'

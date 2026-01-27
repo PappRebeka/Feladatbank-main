@@ -12,8 +12,20 @@ account.js -------------
 */
 
 function setUserData(){//PR
-    if (!CurrentUserData.id)
-        CurrentUserData = ajax_post("/GetUserData", 1, { UserToken: getCookie("userToken") }).dataset
+
+    if (!CurrentUserData.id) { // agyrák
+        let response = ajax_post("/GetUserData", 1, { UserToken: getCookie("userToken") })
+        /*if (response.statusCode == 403) {
+            window.location.href = "hiba.html?code=0";
+            // user is already logged in on another device
+            return;
+        } else {*/
+            CurrentUserData = response.dataset;
+        //}
+    }
+
+    sessionStorage.setItem("loggedIn", true);
+        
     
     let rgb = `${CurrentUserData.HatterSzin}`;
     document.querySelectorAll(".letter").forEach(a => {a.textContent = CurrentUserData.Nev[0].toUpperCase();

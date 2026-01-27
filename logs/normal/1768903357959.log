@@ -1,0 +1,4 @@
+2026-01-20T10:02:37.989Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-20T10:02:39.949Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-20T10:02:40.028Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-20T10:02:41.340Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)

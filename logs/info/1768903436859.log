@@ -1,0 +1,2 @@
+2026-01-20T10:03:56.888Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-20T10:04:00.630Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_SP_UNDECLARED_VAR: Undeclared variable: undefined clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com

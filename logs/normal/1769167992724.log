@@ -1,0 +1,8 @@
+2026-01-23T11:33:12.754Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T11:33:18.104Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T11:33:20.467Z [feladatbank] [34mdebug[39m: Courses extracted (userid=167)
+2026-01-23T11:33:21.061Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-23T11:33:21.325Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T11:33:21.923Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-23T11:33:28.998Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-23T11:33:37.507Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'VALUES'

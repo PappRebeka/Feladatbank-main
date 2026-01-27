@@ -1,0 +1,4 @@
+2026-01-26T07:49:29.067Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-26T07:49:29.101Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T07:49:36.448Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T07:49:52.253Z [feladatbank] [32minfo[39m: User Benett Brendon Badó succesfully registered! method=POST             ip=::ffff:127.0.0.1

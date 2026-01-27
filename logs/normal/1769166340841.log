@@ -1,0 +1,15 @@
+2026-01-23T11:05:40.868Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T11:05:41.148Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=390
+2026-01-23T11:05:41.200Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T11:05:41.206Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T11:05:41.211Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T11:05:41.216Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T11:05:41.223Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T11:05:54.317Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=408
+2026-01-23T11:05:57.039Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T11:05:58.600Z [feladatbank] [34mdebug[39m: Courses extracted (userid=167)
+2026-01-23T11:06:26.866Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=408
+2026-01-23T11:07:12.321Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::1             
+2026-01-23T11:09:42.288Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T11:09:43.633Z [feladatbank] [34mdebug[39m: Courses extracted (userid=167)
+2026-01-23T11:10:26.303Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'VALUES'

@@ -55,6 +55,8 @@
 /* ------------------------------------- - Document ready - ----------------------------------------*/
 
     $(document).ready(function(){
+        
+
         try{
             setThemeIndicators(getCookie("darkMode") == "1")
             setUserData();
@@ -138,7 +140,7 @@
        }
         catch (err){
             console.log(err)
-            //window.location.href= 'hiba.html?code=2'
+            window.location.href= 'hiba.html?code=2'
         }
             
         checkWindowSize();
@@ -146,7 +148,17 @@
         window.addEventListener("resize", () => {
             checkWindowSize();
         })
-    })
+
+        const heartbeat = () => { {
+            $.ajax({
+                url: `/heartbeat`,
+                type: "post",
+            })
+        }};
+
+        heartbeat();
+        setInterval(() => heartbeat(), 30000);
+    });
 
     function AthelyezTeszt(){}
 
@@ -411,7 +423,7 @@
                     limit: localStorage.getItem("limit"),
                     offset: localStorage.getItem("offset")
                 }
-        const par    = new URLSearchParams(temp).toString();
+        const par = new URLSearchParams(temp).toString();
         console.log(temp)
         var results      = userpage ? ajax_post("/SendUsers", 1, { limit: localStorage.getItem("limit"), offset: localStorage.getItem("offset"), kereso: ActiveFilters.kereso }).results : 
                                       ajax_post("/SendFeladatok", 1, temp).results    
@@ -606,7 +618,11 @@
         document.getElementById('sortDesc').addEventListener('click', () => setSortDirection(1))
 
         var buttons = $bind(document.getElementById('szuro'), 'buttons').children
-        buttons[0].addEventListener('click', () => {resetFilters(); setPageContent(); applyFilters()})
+        buttons[0].addEventListener('click', () => {
+            resetFilters();
+            setPageContent(); 
+            applyFilters()
+        });
         buttons[1].addEventListener('click', () => applyFilters())
 
         //lapozás

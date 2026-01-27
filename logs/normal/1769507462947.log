@@ -1,0 +1,6 @@
+2026-01-27T09:51:02.974Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T09:51:06.917Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T09:51:07.455Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-27T09:51:07.718Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T09:51:08.220Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-27T09:51:09.635Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)

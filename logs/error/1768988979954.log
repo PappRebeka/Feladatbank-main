@@ -1,0 +1,8 @@
+2026-01-21T09:49:59.147Z [feladatbank] [31merror[39m: /SendUsers error=ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'WHERE'
+2026-01-21T09:49:59.165Z [feladatbank] [31merror[39m: /getUserCount error=ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'WHERE'
+2026-01-21T09:49:59.272Z [feladatbank] [31merror[39m: /SendUsers error=ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'WHERE'
+2026-01-21T09:49:59.291Z [feladatbank] [31merror[39m: /getUserCount error=ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'WHERE'
+2026-01-21T09:50:00.506Z [feladatbank] [31merror[39m: /SendUsers error=ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'WHERE'
+2026-01-21T09:50:00.521Z [feladatbank] [31merror[39m: /getUserCount error=ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'WHERE'
+2026-01-21T09:50:00.672Z [feladatbank] [31merror[39m: /SendUsers error=ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'WHERE'
+2026-01-21T09:50:00.687Z [feladatbank] [31merror[39m: /getUserCount error=ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'WHERE'

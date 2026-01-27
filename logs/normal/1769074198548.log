@@ -1,0 +1,29 @@
+2026-01-22T09:29:58.575Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-22T09:30:19.426Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-22T09:30:21.726Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-22T09:41:12.770Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-22T09:41:14.903Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-22T09:41:19.551Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-22T09:41:19.795Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-22T09:41:20.072Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-22T09:41:21.447Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-22T09:41:21.699Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-22T09:41:22.473Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-22T09:41:43.100Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-22T09:41:44.250Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-22T09:54:06.552Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-22T09:54:09.023Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-22T09:55:13.820Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-22T09:55:14.952Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-22T09:55:59.121Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-22T09:56:00.128Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-22T09:58:58.333Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-22T09:58:59.729Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-22T10:00:41.196Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-22T10:00:42.514Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-22T10:02:11.656Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-22T10:02:13.198Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-22T10:02:38.661Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-22T10:02:39.734Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-22T10:06:57.475Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-22T10:06:59.826Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)

@@ -61,7 +61,7 @@ function turnDifficultyRadiosOff(){ //PR
 }
 
 function resetFilters(){ //PR
-    turnDifficultyRadiosOff() // turn off all the difficulty buttons
+    turnDifficultyRadiosOff()
 
     // reset the evfolyam and tantargy inputs
     document.getElementById("evfolyamSzuro").value = ""
@@ -74,7 +74,7 @@ function resetFilters(){ //PR
         nehezseg: "",
         tanar: "",
         kurzus: "",
-        setSearchFilter: "",
+        kereso: "",
         sort: { field: "", desc: 0 }
     });
 

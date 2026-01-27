@@ -1,0 +1,4 @@
+2026-01-26T07:15:37.548Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-26T07:15:38.816Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T07:15:51.727Z [feladatbank] [32minfo[39m: User Rebeka Papp succesfully registered! method=POST             ip=::1             
+2026-01-26T07:16:40.458Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=404

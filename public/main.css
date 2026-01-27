@@ -73,11 +73,14 @@ mark {
   inset: 0;
   z-index: 9900;
   background: linear-gradient(135deg, #8d93ac, #cfd5db);
-  font-variant: small-caps;
   text-shadow: 3px 3px #82868b80;
-  font-size: 48px;
   letter-spacing: 2px;
 }
+
+#splash #title{
+  font-variant: small-caps;
+}
+
 
 #szuroDoboz {
   position: fixed;

@@ -2,7 +2,10 @@ dupla bejelentkezést ne engedjünk / fiók törlése után kijeletkeztetjük az
 
 rendezés néha szar, idk why
 
-velem és általam megosztott for some reason csillagozott
+velem megosztott for some reason csillagozott -- lehet hogy ott ne is engedjünk csillagozást? idk tho
+    ha a feladó csillagozta a feldatot amit megosztott, akkor az csillagozva jelenik meg, de a 'csillagozva' ablakhoz nem adódik hozzá. 
+    Also, a vevő módosítani tudja a feladó feladatának a csillagozozzságát
+    csillagozásra kéne másik tábla talán.
 
 változó, funkció nevek egyértelműsítése
 

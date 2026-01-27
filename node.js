@@ -1,23 +1,20 @@
 // #region Dependencies
-const express = require("express");
+const express    = require("express");
 const { google } = require("googleapis");
-const mysql = require("mysql");
-//const drive = google.drive({version: 'v3'});
-const mime = require('mime-types');
-const cron = require('node-cron');
+const mysql      = require("mysql");
+const mime       = require('mime-types');
+const cron       = require('node-cron');
 
 
-//const sharp = require('sharp'); // kép resizinghez kell
-const crypto = require('crypto');
-const fs = require('fs'); 
-const fspromise = require('fs').promises; 
-const path = require("path");
-const { exec } = require("child_process");
-// const mysqldump = require("mysqldump") // nincs használva
-const util = require("util");
+const crypto     = require('crypto');
+const fs         = require('fs'); 
+const fspromise  = require('fs').promises; 
+const path       = require("path");
+const { exec }   = require("child_process");
+const util       = require("util");
 const ansiToHtml = require('ansi-to-html');
 
-const multer  = require('multer')
+const multer = require('multer')
 const upload = multer({ dest: 'uploads/' })
 
 const app = express();
@@ -26,7 +23,6 @@ app.use(express.json());
 app.use(express.static("public"));
 app.use('/segitseg', express.static(path.join(__dirname, 'segitseg')));
 var md5 = require('js-md5');
-let drive = null;
 
 const config = require("./config/config.js");
 //require('dotenv').config();
@@ -318,6 +314,8 @@ app.post("/loginUser", async (req, res) => { //RD, PR
   var user_token = req.body.userToken    // ha tobb mint 0 akkor bejelentkeztetjük
   var mail = req.body.mail
 
+  
+
   const noMail = !Boolean(mail)
   
   
@@ -340,6 +338,23 @@ app.post("/loginUser", async (req, res) => { //RD, PR
     }
     
     if(results[0]['COUNT(id)'] > 0){
+      // lets hope this works
+      try {
+        const pingResults = await queryAsync("SELECT UtolsoPing FROM Users WHERE id = ?", [results[0].id]);
+        const lastPing = pingResults?.[0]?.UtolsoPing;
+        if (lastPing) {
+          const now = Date.now();
+          if ((now - lastPing) < (1 * 60 * 1000)) {
+            return res.status(403).end();
+          }
+        } else {
+          console.log("nincs last ping")
+        }
+      } catch (e) {
+        logger.log({ level: 'error', message: `ping check failed: ${e.message}` });
+        // fall through (or decide to fail)
+      }
+
       req.session.userId = results[0]['id'];
       req.session.Jog = results[0]['Jogosultsag']
       req.session.intezmenyId = results[0]['IntezmenyId']
@@ -450,18 +465,23 @@ app.post("/updatePassword" , (req, res) => { //PR, jelszó reset esetén jelszó
 
 app.post("/GetUserData", async (req, res) => { //PR, az összes felhasználó fontos adatai, 
   //(issue!) néha nem kap
+  
   try{
+
     if(req.session.Jog == undefined || req.session.userId == undefined || req.session.intezmenyId == undefined) {
       let sessionValues = await queryAsync('select id, Jogosultsag, IntezmenyId from Users where UserToken = ?', [req.body.UserToken]);
       req.session.Jog = sessionValues[0].Jogosultsag
       req.session.userId = sessionValues[0].id
       req.session.intezmenyId = sessionValues[0].IntezmenyId
     }
+
+    
+    
   }
   catch(err){
     logger.log({
       level:'error',
-      message: err
+      message: 'GetUserData '+err
     })
     res.send(500).end()
     return;
@@ -729,20 +749,19 @@ app.post("/SendFeladatok", (req, res) =>{ //RD, BBB, PR
   const tanarSz    = req.body.tanar    ?? ''
   const keresoSz   = req.body.kereso   ?? ''
 
-  const rendezesTema = req.body.tema  ?? ''
-  const rendezesFajta = req.body.desc ?? ''
+  const rendezesTema  = req.body.tema  ?? ''
+  const rendezesFajta = req.body.desc
 
   const limit = req.body.limit
   const offset = req.body.offset
   
-
   var where = ""
   var order = ""
   var injection = []
   var limitSql = ` LIMIT ${limit}`
   var offsetSql = ` OFFSET ${offset}`
 
-  if (rendezesTema != "" && rendezesFajta != ""){
+  if (rendezesTema != ""){
     order += ` ORDER BY ${rendezesTema == 'id' ? 'Feladatok.id' : rendezesTema} ${rendezesFajta == 0 ? "" : "DESC"}`
   }
   if (evfolyamSz != ""){
@@ -769,11 +788,13 @@ app.post("/SendFeladatok", (req, res) =>{ //RD, BBB, PR
   if (!isPositiveInt(tanarId) && !isPositiveInt(oldal)) {
     return res.send(JSON.stringify({ error: 'invalid input' }));
   }
-
-  sql = "SELECT Feladatok.id as id, Feladatok.Nev, Feladatok.Leiras, Feladatok.Evfolyam, Feladatok.Tantargy, Feladatok.Tema, Feladatok.Nehezseg, (SELECT COUNT(Alfeladat.id) FROM Alfeladat WHERE FeladatId = Feladatok.id) AS alfDb, Feladatok.Csillagozva"
+  console.log("Rendezéses cuccok:")
+  console.log(`Téma: ${rendezesTema}\nFajta: ${rendezesFajta}`)
+  console.log("order: " + order)
+  sql = "SELECT Feladatok.id as id, Feladatok.Nev, Feladatok.Leiras, Feladatok.Evfolyam, Feladatok.Tantargy, Feladatok.Tema, Feladatok.Nehezseg, (SELECT COUNT(Alfeladat.id) FROM Alfeladat WHERE FeladatId = Feladatok.id) AS alfDb"
   
   if(oldal == 3 || oldal == 4){// Megosztott (velem vagy általam)
-    sql += ` , Users.Nev AS Felhasznalo, Users.HatterSzin AS FelhasznaloColor
+    sql += `, ${oldal == 3 ? 'Megosztott.Csillagozva' : 'Feladatok.Csillagozva'} , Users.Nev AS Felhasznalo, Users.HatterSzin AS FelhasznaloColor
               FROM Megosztott 
               INNER JOIN Feladatok ON Feladatok.id = Megosztott.FeladatId
               INNER JOIN Users ON Megosztott.${oldal == 3 ? 'FeladoId' : 'VevoId'} = Users.id
@@ -781,11 +802,16 @@ app.post("/SendFeladatok", (req, res) =>{ //RD, BBB, PR
       injection.unshift(tanarId)
   }
   else if (oldal == 1){
-    sql += ` FROM Feladatok WHERE Csillagozva = 1 AND Tanar = ?${where}${order}${limitSql}${offsetSql}`
-    injection.unshift(tanarId)
+    sql += `, 1 as Csillagozva 
+            FROM Feladatok 
+            LEFT JOIN Megosztott ON Megosztott.FeladatId = Feladatok.id
+            WHERE ((Tanar = ? AND Feladatok.Csillagozva = 1) OR (VevoId = ? AND Megosztott.Csillagozva = 1))${where}
+            GROUP BY Feladatok.id
+            ${order}${limitSql}${offsetSql}`
+    injection.unshift(tanarId, tanarId)
   }
   else{ // Saját (archivált vagy nem archivált)
-      sql += ` FROM Feladatok WHERE Archivalva = ? AND Tanar = ?${where}${order}${limitSql}${offsetSql}`
+      sql += `, Feladatok.Csillagozva FROM Feladatok WHERE Archivalva = ? AND Tanar = ?${where}${order}${limitSql}${offsetSql}`
       injection.unshift(tanarId)
       injection.unshift(oldal == 2 ? 1 : 0)
   }
@@ -1006,7 +1032,7 @@ app.post("/feladatTorol", async (req, res) => { //BBB
 })
 
 /*app.post("/get-last-id", (req, res) => {// BBB
-  res.send({ "id": utolsoId }).end()
+  res.send({ "id": feladatId }).end()
 })*/
 
 app.post("/ment-fajl", upload.single('fajl'), async (req, res) => { // BBB 
@@ -1033,11 +1059,11 @@ app.post("/ment-feladat", async (req, res) => { //BBB
     // full json alapú, azt mondta a tanár és a chatgpt is hogy így jobb
     const adat = req.body;
     const isInsert = adat["isInsert"]
-    var utolsoId
+    var feladatId
     let sql = "";
     var felInjection = [adat["Nev"], adat["Leiras"], adat["Evfolyam"], adat["Tantargy"], adat["Tema"], adat["Nehezseg"], adat["tanarId"]]
     
-    if(isInsert == "1" || isInsert == 1 || isInsert == true){ // új feladat
+    if(Boolean(isInsert)){ // új feladat
       sql = `INSERT INTO Feladatok(Nev, Leiras, Evfolyam, Tantargy, Tema, Nehezseg, Tanar, Archivalva, Csillagozva)
               VALUES(?, ?, ?, ?, ?, ?, ?, 0, 0)`
     }
@@ -1048,8 +1074,9 @@ app.post("/ment-feladat", async (req, res) => { //BBB
     }
 
     var feladat = await queryAsync(sql, felInjection)
-    utolsoId = feladat.insertId
-
+    feladatId = Boolean(feladat.insertId) ? feladat.insertId : adat["id"]
+    console.log('feladatId')
+    console.log(feladatId)
     
     adat["alfeladatok"].forEach(async (alfeladat) => {
       let fajlId = alfeladat["fajlId"]; 
@@ -1061,7 +1088,7 @@ app.post("/ment-feladat", async (req, res) => { //BBB
       let sql = "";
       if (insert){
         sql = `INSERT INTO Alfeladat (Leiras, FeladatId, FajlId, Pont) VALUES(?, ?, ?, ?)`
-        injection.push(alfeladat['leiras'], utolsoId, fajlId, alfeladat["pontszam"])
+        injection.push(alfeladat['leiras'], feladatId, fajlId, alfeladat["pontszam"])
       }     
 
       else if (delte){
@@ -1072,9 +1099,11 @@ app.post("/ment-feladat", async (req, res) => { //BBB
       else {
         sql = `UPDATE Alfeladat SET Leiras = ?, FeladatId = ?, FajlId = ?, Pont = ?
                 WHERE id = ${alfeladat["alfId"]}`
-        injection.push(alfeladat['leiras'], adat["id"], fajlId, alfeladat["pontszam"], alfeladat["alfId"])
+        injection.push(alfeladat['leiras'], feladatId, fajlId, alfeladat["pontszam"], alfeladat["alfId"])
       }
 
+      console.log('injection')
+      console.log(injection)
       await queryAsync(sql, injection)
       /*conn.query(sql, injection, (err, results) => { 
         if (err) { 
@@ -1087,7 +1116,7 @@ app.post("/ment-feladat", async (req, res) => { //BBB
         }
       });*/
     });
-    res.send({ "id": utolsoId }).status(200).end()
+    res.send({ "id": feladatId }).status(200).end()
 });
 
 
@@ -1184,19 +1213,9 @@ async function fajlFeltoltClassroom (fajlId) {//BBB?
     resource: fileMetadata,
     media: media,
     fields: 'id'
-  },
-  { // sigma axios https://axios-http.com/docs/req_config
-    onUploadProgress: function (progressEvent) {
-      if(progressEvent.lengthComputable) {
-        const percentComplete = Math.round((event.loaded / event.total) * 100);
-        console.log(`uploadProgress: ${percentComplete}%`);
-      }
-    }
-  }).then(() => {
-    console.log("uploaded")
   });
 
-  return res.data.id;
+  return res?.data.id;
 }
 
 app.post("/saveClassroomFeladatKozzetett", (req, res) =>{ //RD adatbázisba a közzétett feladatok tárolása(csak naplózásra szolgál)
@@ -1268,17 +1287,17 @@ app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom felada
       var pont = results[i]["Pont"];
       let classroomPromises = [];
       if (results[i]["FajlId"]){ // BENETT: Promise.all() => ProgressBar
-        classroomPromises.push(fajlFeltoltClassroom(results[i]["FajlId"]));
+        let uploadedFileId = await fajlFeltoltClassroom(results[i]["FajlId"]);
+        fajlIds.push(uploadedFileId);
       }
-
-      fajlIds = await Promise.all(classroomPromises);
 
       if(pont && leiras){
         if (!description.includes('Alfeladatok:')) description += "Alfeladatok:\n"
         description += `${i+1}) (${pont} pont) ${leiras}\n\n`
       }
     }
-
+    console.log("fájlok")
+    console.log(fajlIds)
     var temp = await createClassroomTask(nev, description, maxPont, year, month, day, hours, minutes, kurzusId, fajlIds, tanulok)
     res.send(JSON.stringify({ "courseWorkId":temp } ))
     res.end();
@@ -1296,7 +1315,16 @@ async function biztosFileShare(fileId) {
 }
 
 async function createClassroomTask(title, description, maxPoints, year, month, day, hours, minutes, courseid, fajlIds, tanulok){ //RD, classroom feladat létrehozása adott kurzusba(feltöltése)
- 
+  //console.log("fájlok")
+  //console.log(fajlIds)
+
+  /*
+    shareMode:
+        "UNKNOWN_SHARE_MODE"  => No sharing mode specified. This should never be returned.
+        "VIEW"                => Students can view the shared file.
+        "EDIT"                => Students can edit the shared file.
+        "STUDENT_COPY"        => Students have a personal copy of the shared file.
+  */
   const materials = fajlIds.map(fajlId => ({
     driveFile: {
       driveFile: {
@@ -1305,6 +1333,8 @@ async function createClassroomTask(title, description, maxPoints, year, month, d
       shareMode: "VIEW"
     }
   }));
+
+  console.log(`"materials" Object: ${JSON.stringify(materials, null, 2)}`);
   //tanulok = String(tanulok || "").split(",").map(s => s.trim()).filter(s => s.length > 0);
   var selectedStudents = (Boolean(tanulok?.length))
   //if(tanulok.length > 0)
@@ -1401,7 +1431,7 @@ app.post("/autocompleteArrayTolt", (req, res) =>{ //RD, a suggestion alapú inpu
 })
 
 async function MegosztottFeladatAlreadyExists(cimzett, feladatId, felado){
-  let sql = `SELECT COUNT(id) AS db FROM Megosztott WHERE FeladoID = ? AND FeladatId = ? AND VevoId = (SELECT id FROM Users WHERE Email = ? OR Nev = ?)`
+  let sql = `SELECT COUNT(id) AS db FROM Megosztott WHERE FeladoID = ? AND FeladatId = ? AND VevoId = (SELECT id FROM Users WHERE Email = ? OR Nev = ? limit 1)`
   var c = await queryAsync(sql, [felado, feladatId, cimzett, cimzett])
   return c[0].db
 
@@ -1417,8 +1447,8 @@ app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok köz�
     return res.status(406).end()
   }
 
-  let sql = `INSERT INTO Megosztott(FeladatId, FeladoId, VevoId)
-            VALUES(?, ?, (SELECT id FROM Users WHERE Email = ? OR Nev = ?))`
+  let sql = `INSERT INTO Megosztott(FeladatId, FeladoId, VevoId, Csillagozva)
+            VALUES(?, ?, (SELECT id FROM Users WHERE Email = ? OR Nev = ? limit 1), 0)`
 
   conn.query(sql, [feladatId, felado, cimzett, cimzett], (err, results) => {
     if (err) { 
@@ -1529,8 +1559,11 @@ app.post("/getFeladatNumber", (req, res) =>{//RD limit, offset miatt kell, a fel
         injection.unshift(userId)
     }
     else if (oldal == 1){
-      sql = `SELECT count(Feladatok.id) as db FROM Feladatok WHERE Csillagozva = 1 AND Tanar = ? ${where}`
-      injection.unshift(userId)
+      sql = `SELECT count(distinct Feladatok.id) as db
+            FROM Feladatok 
+            LEFT JOIN Megosztott ON Megosztott.FeladatId = Feladatok.id
+            WHERE ((Tanar = ? AND Feladatok.Csillagozva = 1) OR (VevoId = ? AND Megosztott.Csillagozva = 1))${where}`
+      injection.unshift(userId, userId)
     }
     else{ // Saját (archivált vagy nem archivált)
       sql = `SELECT count(Feladatok.id) as db FROM Feladatok WHERE Archivalva = ? AND Tanar = ? ${where}`
@@ -1986,6 +2019,28 @@ app.post("/wss", (req, res) => {
   res.send({ "wss": wssToken });
 })
 
+// explanation: client sends a "heartbeat" every let's say 30 seconds
+// so that the server knows when the client discoonnects
+app.post("/heartbeat", (req, res) => { 
+  let userId = req.session.userId;
+  let now = Date.now();
+
+  if (!isPositiveInt(userId)) {
+    // could be an admin without a userId
+    // no problem, just ignore
+    return res.end();
+  }
+
+  // problem: mysql server has timezone - 1 hour than our timezone
+  queryAsync(
+    "UPDATE Users SET UtolsoPing = ? WHERE id = ?",
+    [now, userId]
+  ).then(() => {
+    //console.log(`User ${userId} last online at ${new Date(now).toISOString()}`);
+    res.end();
+  })
+})
+
 const server = app.listen(config.server.port, () => {
   logger.log({
     level: 'info',
@@ -2012,17 +2067,54 @@ const server = app.listen(config.server.port, () => {
     }
   )
 
-  app.post("/updateBookmarkedState", (req, res) =>{
-    var feladatId = req.body.feladatId
-    let sql = `UPDATE Feladatok SET
+  function ExistsUser(){ //RD, ha egy user 2 lapon jelentkezik be
+    const userId = req.session.userId
+    let sql = "SELECT COUNT(id) AS db FROM Users WHERE Users.id = ?"
+    var users = queryAsync(sql, [userId])
+    return users.db > 0
+  }
+
+  async function IsFeladatSharedWithThisUser(feladatId, UserId){
+    console.log(feladatId )
+    console.log(UserId)
+    sql = "SELECT COUNT(id) AS db FROM Megosztott WHERE FeladatId = ? AND VevoId = ?"
+    var feladatok = await queryAsync(sql, [feladatId, UserId])
+    console.log(feladatok[0].db)
+    return feladatok[0].db > 0
+  }
+
+  app.post("/updateBookmarkedState", async (req, res) =>{ //RD
+    const feladatId = req.body.feladatId
+    const vevoId = req.session.userId
+    const feladoNev = req.body.felado
+    const oldal   = req.body.oldal ? parseInt(req.body.oldal) : 0 
+    var tablaToUpdate = ""
+    var whereParameters = ""
+    var injection = []
+    console.log(await IsFeladatSharedWithThisUser(feladatId, vevoId))
+    
+    const sharedFeladat = await IsFeladatSharedWithThisUser(feladatId, vevoId)
+    if(sharedFeladat){
+      tablaToUpdate = "Megosztott"
+      whereParameters = `FeladatId = ? AND VevoId = ?`
+      injection.push(feladatId, vevoId)
+    }
+    else{
+      tablaToUpdate = "Feladatok"
+      whereParameters = "Feladatok.id = ?"
+      injection.push(feladatId)
+    }
+
+    let sql = `UPDATE ${tablaToUpdate} SET
               Csillagozva =
                 CASE
-                    WHEN Feladatok.Csillagozva = 0 THEN 1
+                    WHEN Csillagozva = 0 THEN 1
                     ELSE 0
                 END	
-              WHERE Feladatok.id = ?`;
-
-    conn.query(sql, [feladatId], (err, results) => {
+              WHERE ${whereParameters}`;
+    
+    console.log(sql, injection)
+    conn.query(sql, injection, (err, results) => {
       if (err) {
         return res.send(JSON.stringify({ success: false, error: err.message }));
       }

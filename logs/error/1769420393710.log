@@ -1,0 +1,8 @@
+2026-01-26T09:41:10.569Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=423
+2026-01-26T09:43:46.273Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=423
+2026-01-26T09:44:46.679Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=423
+2026-01-26T09:44:49.835Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=425
+2026-01-26T09:45:12.033Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=423
+2026-01-26T09:46:22.961Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=426
+2026-01-26T09:46:35.191Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=426
+2026-01-26T09:46:43.616Z [feladatbank] [31merror[39m: createClassroomTask error=title: Title is too long courseId=829569107329

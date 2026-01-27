@@ -1,0 +1,5 @@
+2026-01-27T09:12:58.265Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T09:13:01.813Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T09:13:03.235Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-27T09:14:20.810Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-27T09:14:21.905Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)

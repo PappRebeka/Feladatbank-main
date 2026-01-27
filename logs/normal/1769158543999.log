@@ -1,0 +1,4 @@
+2026-01-23T08:55:44.029Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T08:55:47.099Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T08:55:48.282Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-23T08:55:55.638Z [feladatbank] [34mdebug[39m: createClassroomTask: feladat közzétéve courseId=810412347922 courseWorkId=840946152280

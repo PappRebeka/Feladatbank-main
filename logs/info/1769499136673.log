@@ -1,0 +1,6 @@
+2026-01-27T07:32:16.701Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T07:32:24.257Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-27T07:32:37.887Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=406
+2026-01-27T07:32:54.597Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=406
+2026-01-27T07:33:11.272Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=406
+2026-01-27T07:33:24.484Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=406

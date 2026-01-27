@@ -1,0 +1,1 @@
+2026-01-23T12:05:33.632Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'WHERE'

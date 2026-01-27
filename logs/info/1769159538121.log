@@ -1,0 +1,9 @@
+2026-01-23T09:12:18.151Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T09:15:18.255Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=390
+2026-01-23T09:17:02.421Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=265
+2026-01-23T09:17:03.256Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=265
+2026-01-23T09:17:05.396Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=265
+2026-01-23T09:17:06.963Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=265
+2026-01-23T09:18:39.421Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=390
+2026-01-23T09:22:33.253Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=265
+2026-01-23T09:29:43.858Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=265

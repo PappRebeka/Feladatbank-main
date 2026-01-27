@@ -1,0 +1,2 @@
+2026-01-27T07:41:24.867Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T07:41:47.420Z [feladatbank] [31merror[39m: createClassroomTask error=materials: Drive materials must have an ID. courseId=829569107329

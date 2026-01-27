@@ -1,0 +1,5 @@
+2026-01-23T11:25:47.859Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T11:25:48.783Z [feladatbank] [31merror[39m: /SendUsers error=ER_EMPTY_QUERY: Query was empty
+2026-01-23T11:25:48.786Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-23T11:25:50.251Z [feladatbank] [31merror[39m: /SendUsers error=ER_EMPTY_QUERY: Query was empty
+2026-01-23T11:25:50.252Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             

@@ -1,0 +1,4 @@
+2026-01-27T07:29:55.383Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T07:30:03.321Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T07:30:04.693Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-27T07:30:09.302Z [feladatbank] [31merror[39m: createClassroomTask error=materials: Drive materials must have an ID. courseId=829569107329

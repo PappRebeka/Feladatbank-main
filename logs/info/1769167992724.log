@@ -1,0 +1,4 @@
+2026-01-23T11:33:12.754Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T11:33:21.061Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-23T11:33:28.998Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-23T11:33:37.507Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'VALUES'

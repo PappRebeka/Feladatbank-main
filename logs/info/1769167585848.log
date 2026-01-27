@@ -1,0 +1,4 @@
+2026-01-23T11:26:25.878Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T11:26:28.382Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-23T11:26:31.000Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-23T11:27:11.665Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'VALUES'

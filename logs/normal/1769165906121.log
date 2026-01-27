@@ -1,0 +1,6 @@
+2026-01-23T10:58:26.147Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T10:58:30.580Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-23T10:58:31.886Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-23T10:58:34.585Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T10:58:34.592Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-23T10:58:50.696Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'VALUES'

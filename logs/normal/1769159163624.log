@@ -1,0 +1,8 @@
+2026-01-23T09:06:03.651Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T09:06:06.812Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T09:06:09.160Z [feladatbank] [34mdebug[39m: Courses extracted (userid=164)
+2026-01-23T09:06:16.638Z [feladatbank] [34mdebug[39m: createClassroomTask: feladat közzétéve courseId=810412347922 courseWorkId=840947807859
+2026-01-23T09:08:08.765Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-23T09:08:09.984Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)
+2026-01-23T09:10:38.768Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-23T09:10:39.912Z [feladatbank] [34mdebug[39m: Courses extracted (userid=89)

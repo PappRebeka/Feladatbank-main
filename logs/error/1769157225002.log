@@ -1,0 +1,2 @@
+2026-01-23T08:35:05.167Z [feladatbank] [31merror[39m: /SendFeladatok error=ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'null OFFSET 0' at line 1 clientId=592681031902-0prnralr3p1udmkhodepqtohe8qjvpdl.apps.googleusercontent.com
+2026-01-23T08:35:44.447Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'VALUES'

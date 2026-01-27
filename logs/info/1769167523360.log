@@ -1,0 +1,4 @@
+2026-01-23T11:25:23.388Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T11:25:31.629Z [feladatbank] [31merror[39m: /SendUsers error=ER_EMPTY_QUERY: Query was empty
+2026-01-23T11:25:31.631Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-23T11:25:38.860Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'VALUES'

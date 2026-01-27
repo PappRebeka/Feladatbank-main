@@ -1,0 +1,12 @@
+2026-01-26T08:44:26.090Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-26T08:44:32.418Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T08:44:32.518Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T08:44:32.672Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T08:44:32.799Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T08:44:32.951Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-26T08:45:01.140Z [feladatbank] [32minfo[39m: User Dávid Réczeg succesfully registered! method=POST             ip=::ffff:127.0.0.1
+2026-01-26T08:45:30.513Z [feladatbank] [32minfo[39m: Sending mail to reczegd@gmail.com
+2026-01-26T08:45:54.472Z [feladatbank] [32minfo[39m: Password reset requested       method=POST             ip=::ffff:127.0.0.1
+2026-01-26T08:46:03.695Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-26T08:46:24.874Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-26T08:46:36.528Z [feladatbank] [32minfo[39m: User  login attempted..

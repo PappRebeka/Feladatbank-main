@@ -1,0 +1,34 @@
+2026-01-26T09:49:36.186Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-26T09:50:04.256Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=426
+2026-01-26T09:50:13.819Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-26T09:50:18.195Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-26T09:53:10.638Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=427
+2026-01-26T09:53:33.606Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=425
+2026-01-26T09:54:10.139Z [feladatbank] [32minfo[39m: User  login attempted..
+2026-01-26T09:54:18.979Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=428
+2026-01-26T09:55:03.163Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=429
+2026-01-26T10:05:55.523Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=423
+2026-01-26T10:06:06.714Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=427
+2026-01-26T10:08:01.929Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=429
+2026-01-26T10:08:17.264Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=404
+2026-01-26T10:08:20.609Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=410
+2026-01-26T10:08:21.992Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=409
+2026-01-26T10:10:42.981Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-26T10:10:44.321Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-26T10:10:54.602Z [feladatbank] [31merror[39m: /sendClassroomCourses error=Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project. userid=210
+2026-01-26T10:11:52.495Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-26T10:12:40.931Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-26T10:12:53.336Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-26T10:13:09.089Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-26T10:13:56.916Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=410
+2026-01-26T10:15:35.131Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=409
+2026-01-26T10:15:52.976Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=404
+2026-01-26T10:15:58.917Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=423
+2026-01-26T10:50:35.771Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=418
+2026-01-26T10:50:37.570Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=419
+2026-01-26T10:50:38.915Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=420
+2026-01-26T10:50:40.428Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=422
+2026-01-26T10:50:41.890Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=424
+2026-01-26T10:50:43.081Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=425
+2026-01-26T10:50:44.953Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=427
+2026-01-26T10:50:46.250Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=428

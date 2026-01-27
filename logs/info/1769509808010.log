@@ -1,0 +1,4 @@
+2026-01-27T10:30:08.037Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T10:30:12.431Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-27T10:31:34.741Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=430
+2026-01-27T10:31:39.182Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=437

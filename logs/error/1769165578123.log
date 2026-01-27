@@ -1,0 +1,1 @@
+2026-01-23T10:53:19.284Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'VALUES'

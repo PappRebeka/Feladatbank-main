@@ -1,0 +1,2 @@
+2026-01-23T11:25:31.629Z [feladatbank] [31merror[39m: /SendUsers error=ER_EMPTY_QUERY: Query was empty
+2026-01-23T11:25:38.860Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'VALUES'

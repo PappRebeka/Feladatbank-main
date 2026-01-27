@@ -1,0 +1,2 @@
+2026-01-21T09:29:34.277Z [feladatbank] [31merror[39m: /SendUsers error=ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'WHERE'
+2026-01-21T09:29:34.300Z [feladatbank] [31merror[39m: /getUserCount error=ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'WHERE'

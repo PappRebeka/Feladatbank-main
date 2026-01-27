@@ -9,6 +9,8 @@ task_scripts/load.js ---------------
 
 function feladatCardClick(element){ //PR
     const adat = JSON.parse(decodeURIComponent(element.adat));
+    console.log('adat')
+    console.log(adat)
     const felhasznalo = element.Felhasznalo;
 
     setTaskModalContent(adat, felhasznalo);
@@ -74,7 +76,7 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
     
     p.classList.toggle('d-none', which != 'postBtn')
     v.classList.toggle('d-none', which != 'visszaBtn')
-    b.classList.toggle('d-none', !Boolean(which))
+    b.classList.toggle('d-none', (ActiveLocation == "Archívum" || ActiveLocation == 'Általam megosztott') )
 
         
     p.addEventListener('click', (e) => {
@@ -86,7 +88,7 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
         e.stopPropagation();
     })
     b.addEventListener('click', (e) => {
-        bookmarkTaskClick(adat.id, b);
+        bookmarkTaskClick(adat.id, b, card.dataset);
         e.stopPropagation();
     })
     

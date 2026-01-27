@@ -1,0 +1,5 @@
+2026-01-23T12:36:31.674Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-23T12:36:34.260Z [feladatbank] [32minfo[39m: User Benett Brendon Badó login attempted..
+2026-01-23T12:36:35.300Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-23T12:36:36.828Z [feladatbank] [34mdebug[39m: Courses extracted (userid=167)
+2026-01-23T12:36:49.313Z [feladatbank] [31merror[39m: (/ment-feladat) error=ER_BAD_FIELD_ERROR: Unknown column 'NaN' in 'SET'

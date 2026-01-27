@@ -1,0 +1,7 @@
+2026-01-27T08:04:56.766Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-27T08:05:03.024Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-27T08:05:03.376Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T08:05:04.737Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)
+2026-01-27T08:05:11.729Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T08:05:12.309Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-27T08:05:13.276Z [feladatbank] [31merror[39m: createClassroomTask error=@AttachmentNotVisible The item referenced by an attachment was not found or not visible to the user. courseId=780813094806

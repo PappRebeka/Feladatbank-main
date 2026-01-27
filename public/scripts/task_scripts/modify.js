@@ -1,26 +1,26 @@
 /* ------ CONTENT ------
 task_scripts/load.js ---------------
-    - uploadSubtaskFile     -BBB
-    - saveTask              -BBB, PR 
-    - isCompleteSubtask     -BBB
-    - getDeletedTasks       -BBB
-    - uploadTasks           -BBB
-    - validateTaskInputs    -BBB
-    - createTaskPayload     -BBB
-    - createSubtaskObjects  -BBB
-    - uploadFile            -BBB
-    - resetCreateNewTask    -PR
-    - createSubtask         -PR+
-    - buildFakeFileInput    -PR
-    - subtaskDelete            -PR
+    - uploadSubtaskFile         -BBB
+    - saveTask                  -BBB, PR 
+    - isCompleteSubtask         -BBB
+    - getDeletedTasks           -BBB
+    - uploadTasks               -BBB
+    - validateTaskInputs        -BBB
+    - createTaskPayload         -BBB
+    - createSubtaskObjects      -BBB
+    - uploadFile                -BBB
+    - resetCreateNewTask        -PR
+    - createSubtask             -PR+
+    - buildFakeFileInput        -PR
+    - subtaskDelete             -PR
 
-    - updateTask            -PR
-    - archiveTask              -PR
-    - editThisFeladat          -PR
-    - AlfFileChanged           -PR
-    - CancelEditingThisFeladat -PR
-    - TorolFeladat             -PR?
-    - bookmarkTaskClick        -RD
+    - updateTask                -PR
+    - archiveTask               -PR
+    - editThisFeladat           -PR
+    - AlfFileChanged            -PR
+    - CancelEditingThisFeladat  -PR
+    - TorolFeladat              -PR?
+    - bookmarkTaskClick         -RD
 */
 
 // BENETT: Merge uploadFile and uploadSubtaskFile
@@ -178,7 +178,7 @@ async function saveTask(ujFeladat) {
 
 function isCompleteSubtask(alfeladat) { //BBB
     return !((alfeladat.leiras === "" || alfeladat.leiras === null) &&
-            (alfeladat.pontszam === "" || alfeladat.pontszam === null));
+           (alfeladat.pontszam === "" || alfeladat.pontszam === null));
 }
 
 function getDeletedTasks() { //BBB
@@ -385,9 +385,6 @@ function updateTask(task, subtasks){//PR
         alfDb: task.alfDb
     }
     const container = buildTaskCardPrimaryData(task, null, null, null)
-    console.log(`task-${task.id}`)
-    console.log(document.getElementById(`task-${task.id}`))
-    console.log(document.getElementById(`task-${task.id}`))
     document.getElementById(`task-${task.id}`).replaceChildren(container.querySelector('div'))         
     
     CancelEditingThisFeladat(true, ''); // and stop the editing process
@@ -604,9 +601,11 @@ function TorolFeladat(){//PR?
     talalatSzam.innerHTML = parseInt(talalatSzam.innerHTML) - 1;            // reduce count
 }
 
-function bookmarkTaskClick(feladatId, button){
+function bookmarkTaskClick(feladatId, button, dataset){
+    //console.log(dataset)
     button.classList.toggle('text-warning')
     button.classList.toggle('bi-star-fill')
     button.classList.toggle('bi-star')
-    ajax_post(`/updateBookmarkedState`, 1, {feladatId: feladatId})
+    let oldal = Object.keys(AvailablePages).indexOf(ActiveLocation).toString()
+    ajax_post(`/updateBookmarkedState`, 1, {feladatId: feladatId, oldal: oldal, felado: dataset.felhasznalo})
 }
