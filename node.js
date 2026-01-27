@@ -1355,7 +1355,7 @@ async function doesUserOwnsThisTask(tanarid, feladatid){
 app.post("/feladatArchivalas", async(req, res) =>{ //PR
   var user = req.session.userId
   var id = req.body.id;
-  if(!await doesUserOwnsThisTask(user, id)){
+  if(await !doesUserOwnsThisTask(user, id)){
     return res.status(403).end();
   }
   
@@ -1401,7 +1401,7 @@ app.post("/autocompleteArrayTolt", (req, res) =>{ //RD, a suggestion alapú inpu
 })
 
 async function MegosztottFeladatAlreadyExists(cimzett, feladatId, felado){
-  let sql = `SELECT COUNT(id) AS db FROM Megosztott WHERE FeladoID = ? AND FeladatId = ? AND (SELECT id FROM Users WHERE Email = ? OR Nev = ?)`
+  let sql = `SELECT COUNT(id) AS db FROM Megosztott WHERE FeladoID = ? AND FeladatId = ? AND VevoId = (SELECT id FROM Users WHERE Email = ? OR Nev = ?)`
   var c = await queryAsync(sql, [felado, feladatId, cimzett, cimzett])
   return c[0].db
 

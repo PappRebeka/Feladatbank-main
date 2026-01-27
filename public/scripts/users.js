@@ -59,9 +59,18 @@ function loadUsers(item){ //PR
     }
 
     const footer = document.querySelector("#tanarAdatai .modal-footer")
-    footer.innerHTML = `<button type="button" class="btn btn-danger data-bs-dismiss="modal">Törlés</button>
-                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#intezmenyValt">Áthelyezés</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezárás</button>`
+    footer.innerHTML = `<button type="button" class="btn btn-danger data-bs-dismiss="modal">
+                            <i class="bi bi-trash-fill"></i>&nbsp;
+                            Törlés
+                        </button>
+                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#intezmenyValt">
+                            <i class="bi bi-arrow-left-right"></i>&nbsp;
+                            Áthelyezés
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x"></i>&nbsp;
+                            Bezárás
+                        </button>`
 
     footer.children[0].addEventListener('click', () => DeleteSelectedUser())
     footer.children[1].addEventListener('click', () => moveUserClick())

@@ -1,13 +1,8 @@
-loading indicator közzétevésnél (nagyon kérdéses tbh)
+dupla bejelentkezést ne engedjünk / fiók törlése után kijeletkeztetjük az összes platformról
 
-gombokhoz ikonok
+rendezés néha szar, idk why
 
-fiók törlése után meghal
-
-feladat navének törése ha túl hosszú
-ne engedjünk röhelyesen hosszú szöveg bevitelét
-
-rendezés néha szar - why????
+velem és általam megosztott for some reason csillagozott
 
 változó, funkció nevek egyértelműsítése
 

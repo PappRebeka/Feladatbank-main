@@ -98,12 +98,13 @@ function subtaskCardTemplate(){//PR
     div.innerHTML = `<div class="card-body">
                         <div class="d-flex mt-0 deleteButtonGoesHere align-items-center justify-content-between fw-semibold">
                             <h6 class="mt-auto mb-3">Alfeladat</h6>
-                            <button class="btn text-danger" data-bind="removeButton"><i class="bi bi-x-circle fs-4"></i></button>
+                            <button class="btn text-danger" data-bind="removeButton">
+                                <i class="bi bi-x-circle fs-4"></i></button>
                         </div>
                         <p class="mb-1"><strong>Pont:</strong>
-                        <input class="form-control alfeladatPont" type="text" inputmode="numeric" placeholder="Pontszám"></p>
+                        <input class="form-control alfeladatPont" type="text" maxlength="100" inputmode="numeric" placeholder="Pontszám"></p>
                         <p class="mb-1"><strong>Leírás:</strong>
-                        <input class="form-control alfeladatLeiras" type="text" placeholder="Leírás"></p>                
+                        <input class="form-control alfeladatLeiras" type="text" maxlength="10000" placeholder="Leírás"></p>                
                     </div>`;
     return div
 }
@@ -252,10 +253,16 @@ function hibajelentesFoadminTemplate(){
                     <div class="d-md-flex justify-content-evenly">
 
                         <div class="p-2 w-100">
-                            <button type="button" id="nemjavitott" class="btn btn-outline-warning active overflow-hidden text-nowrap w-100" data-bs-toggle="button" autocomplete="off">Nem javított</button>
+                            <button type="button" id="nemjavitott" class="btn btn-outline-warning active overflow-hidden text-nowrap w-100" data-bs-toggle="button" autocomplete="off">
+                                <i class="bi bi-x"></i>&nbsp;
+                                Nem javított
+                            </button>
                         </div>
                         <div class="p-2 w-100">
-                            <button type="button" id="javitott" class="btn btn-outline-secondary overflow-hidden text-nowrap w-100" data-bs-toggle="button" autocomplete="off">Javított</button>
+                            <button type="button" id="javitott" class="btn btn-outline-secondary overflow-hidden text-nowrap w-100" data-bs-toggle="button" autocomplete="off">
+                                <i class="bi bi-check-lg"></i>&nbsp;
+                                Javított
+                            </button>
                         </div>
                     </div>
                     <div class="m-0 my-2 p-0 row row-cols-1 row-cols-lg-2 row-cols-xxl-3" id="reportContainer"></div>`
@@ -268,7 +275,7 @@ function hibajelentesDefaultTemplate(){
     div.style += "backdrop-filter: blur(5px); height: 70vh; overflow: hidden;"
     div.innerHTML = `<div class="row flex-grow-1 h-100">
                         <div class="col-md-4 d-flex flex-column">
-                            <h3><i class="bi bi-info-circle-fill"></i>&nbsp;Admin adatai</h3>
+                            <h3><i class="bi bi-info-circle-fill"></i>&nbsp;Felhasználó adatai</h3>
                             <hr>
                             <div class="row">
                                 <div class="col-md-auto">
@@ -290,14 +297,17 @@ function hibajelentesDefaultTemplate(){
                                 <div class="mb-3 d-flex flex-column flex-grow-1">
                                     <label for="hiba-reszletek" class="form-label">Hibajelenség részletei:</label>
                                     <textarea class="form-control flex-grow-1" id="hiba-reszletek"
-                                        style="resize: none;"></textarea>
+                                        maxlength="10000" style="resize: none;"></textarea>
                                     <div class="invalid-feedback">Kérem töltse ki a szövegdobozt.</div>
                                 </div>
 
                                 
                             </form>
                             <div class="mb-3">
-                                <button data-bind="sendBtn" onclick="sendFeedback()" class="btn btn-primary">Küldés</button>
+                                <button data-bind="sendBtn" onclick="sendFeedback()" class="btn btn-primary">
+                                    <i class="bi bi-send-fill"></i>&nbsp;
+                                    Küldés
+                                </button>
                             </div>
                             
                         </div>
@@ -473,7 +483,7 @@ function loginFormTemplate(){
                     </div>
                     
                     <div class="mb-3"> 
-                        <input type="text" placeholder="Felhasználónév / email" class="form-control border-0" id="user" required> 
+                        <input type="text" placeholder="Felhasználónév / email" maxlength="320" class="form-control border-0" id="user" required> 
                     </div> 
                     <div class="mb-3 col-12 position-relative"> 
                         <button type="button" id="passwordButton" class="btn text-secondary position-absolute top-50 translate-middle-y end-0 me-2 p-0"><i class="bi bi-eye"></i></button>
@@ -491,7 +501,7 @@ function loginFormTemplate(){
 
 function registerFormTemplate(){
     const content = `<h3 class="text-center mb-4" >Regisztráció</h3>
-                    <input type="text" placeholder="Felhasználónév" class="form-control mb-2" id="username" required>     
+                    <input type="text" placeholder="Felhasználónév" maxlength="320" class="form-control mb-2" id="username" required>     
                 
                     <div class="mb-2 position-relative">  
                         <input type="password" placeholder="Jelszó" class="form-control" id="password" required>  

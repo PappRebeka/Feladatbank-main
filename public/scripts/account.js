@@ -38,6 +38,10 @@ function resetUserOptions(){//PR
     document.getElementById("jogosultsag").textContent = CurrentUserData.Jogosultsag;
     document.getElementById("usernev").textContent     = CurrentUserData.Nev;
     document.getElementById("emailcim").textContent    = CurrentUserData.Email;
+    
+    document.getElementById("letter").textContent = CurrentUserData.Nev[0].toUpperCase();  
+    document.getElementById("Letter").textContent = CurrentUserData.Nev[0].toUpperCase();
+
 
     document.getElementById("visszagomb").innerHTML = userOptionsDefaultButton();
 
@@ -93,8 +97,14 @@ function allowUserDataEdit(){ //PR
     options.className = "offcanvas-body"; options.id = 'editUserOptions'
     options.innerHTML = // change pw via sending email, save changes, delete account
         `<button class="btn btn-light w-100 my-2">Jelszó módosítás</button>
-         <button class="btn btn-success w-100 my-2">Mentés</button>
-         <button data-bs-toggle="modal" data-bs-target="#UserDel" class="btn btn-secondary w-100 my-2">Fiók törlése</button>`;
+         <button class="btn btn-success w-100 my-2">
+            <i class="bi bi-check-lg"></i>&nbsp;
+            Mentés
+         </button>
+         <button data-bs-toggle="modal" data-bs-target="#UserDel" class="btn btn-secondary w-100 my-2">
+            <i class="bi bi-trash-fill"></i>&nbsp;
+            Fiók törlése
+         </button>`;
 
     options.children[1].addEventListener('click', () => saveUserData())
     options.children[0].addEventListener('click', () =>{window.location.href=`/passreset.html?email=${CurrentUserData.Email}`;
@@ -116,67 +126,77 @@ function changeFieldToInput(which){//PR
     document.getElementById('mezo').focus() // force focus
 }
 
-function setFieldToText(what){//PR, BBB
+function setFieldToText(which){//PR
     // set the now changed name or email field back to normal text
-    const target = document.getElementById(what) 
+    const target = document.getElementById(which) 
     const button = buildButtonWithIcon('bi-pencil-square', ['fs-5'])
 
     const mezo = document.getElementById("mezo").value;
-    if (what == "usernev") { //if its just a name change its simple
-        CurrentUserData.Nev = mezo // update global data
+    if (which == "usernev") { //if its just a name change its simple
+        //CurrentUserData.Nev = mezo // update global data
         button.addEventListener('click', () => changeFieldToInput('usernev'))
 
         target.textContent = mezo
 
-        document.getElementById("letter").textContent = mezo[0].toUpperCase();              //set the input back to text
-        document.getElementById("Letter").textContent = mezo[0].toUpperCase();             //and update the user icons 
+        document.getElementById("letter").textContent = mezo[0].toUpperCase();    //set the input back to text
+        document.getElementById("Letter").textContent = mezo[0].toUpperCase();   //and update the user icons 
     } else {
-        // input ellenőzés
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ //regex by BBB
+        button.addEventListener('click', () => changeFieldToInput('emailcim'))
 
-        var van = ajax_post("/isRegistered", 0, { email: mezo }) //check if email is taken
-        if(emailPattern.test(mezo.value) && van == 'false') {   //if email format is ok and its not taken
-            CurrentUserData.Email = mezo;        // update global data and set the input back to text
-            button.addEventListener('click', () => changeFieldToInput('emailcim'))
-
-            target.textContent = mezo
-            
-        } else {    //if we have issues choose your pick
-            if (van) toastMsg("Az email használatban van", "Nem sikerült az emailcím megváltoztatása, mivel ez az emailcím már használatban van", "warning"); 
-            else showErrorMsg("Nem megfelő formátum", "A megadott emailcím formátuma helytelen", "warning")  
-            button.addEventListener('click', () => changeFieldToInput('emailcim'))
-            target.textContent = CurrentUserData.Email //and set back to old email
-        }              
+        target.textContent = mezo
+                       
     }
     target.appendChild(button)
 }
 
-function saveUserData(){//PR
+function saveUserData(){//PR, BBB
     // update the user data in the database
-    let newNev = document.getElementById("usernev").innerText;
-    let newEmail = document.getElementById("emailcim").innerText;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ //simple email pattern by BBB
 
+    const newNev   =  document.getElementById("usernev").innerText;
+    const newEmail = document.getElementById("emailcim").innerText;
+    
+    const valtozottEmail = newEmail != CurrentUserData.Email 
+    const valtozottNev   = newNev   != CurrentUserData.Nev 
+
+    if(!valtozottEmail && !valtozottNev){
+        resetUserOptions()
+        return;
+    } 
+
+    if(valtozottEmail){
+        const isRegistered = ajax_post("/isRegistered", 0, { email: newEmail })
+        const isValidEmail = emailPattern.test(newEmail)
+
+        if (isRegistered || !isValidEmail){
+            if(isRegistered) toastMsg("Az email használatban van", "Nem sikerült az emailcím megváltoztatása, mivel ez az emailcím már használatban van", "warning");
+            else             toastMsg("Nem megfelő formátum", "A megadott emailcím formátuma helytelen", "warning");
+            
+            return;
+        }
+    }
+    
     const result = ajax_post("/updateUserdata", 1, { userToken: getCookie("userToken"), newNev: newNev, newEmail: newEmail });
+
+    if(result.success){
+        CurrentUserData.Email = newEmail
+        CurrentUserData.Nev = newNev
+
+        toastMsg("Sikeres művelet", "A felhasználói adatok frissítve lettek", "success");
+        resetUserOptions();// set the UI back to normal
+        return
+    }
 
     if (result.error === 'username_exists') {
         showErrorMsg("Felhasználónév foglalt", "Ezt a felhasználónevet már használja valaki! Kérjük válasszon másikat!");
         return;
-    } else if (result.error === 'invalid_input') {
-        showErrorMsg("Helytelen adatok", "Helytelen adatokat találtunk az Email vagy a Felhasználónév mezőkben!")
-    }
-
-    if (result.error) {
-        showErrorMsg("Hiba", "Az adatok frissítése során hiba történt");
+    } else if (result.error || !result.success) {
+        toastMsg("Hiba", "Az adatok frissítése során hiba történt: "+result.error, "danger");
         return;
     }
 
-    if (!result.success) {
-        toastMsg("Hiba", result.error || "Az adatok frissítése sikertelen volt", "danger");
-        return;
-    }
-
-    toastMsg("Sikeres művelet", "A felhasználói adatok frissítve lettek", "success");
-    resetUserOptions();// set the UI back to normal
+    resetUserOptions()
+        
 }
 
 function deleteThisUser(){//PR

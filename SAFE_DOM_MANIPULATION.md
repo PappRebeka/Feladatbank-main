@@ -55,7 +55,10 @@ function taskCardTemplate() {
             <div class="card-body">
                 <h5 class="card-title" data-bind="nev"></h5>
                 <p class="card-text" data-bind="description"></p>
-                <button data-bind="editBtn">Szerkesztés</button>
+                <button data-bind="editBtn">
+                edit: <i class="bi bi-pencil-square"></i>&nbsp;
+                Szerkesztés
+                </button>
             </div>
         </div>`;
     return div;

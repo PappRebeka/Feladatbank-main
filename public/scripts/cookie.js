@@ -43,7 +43,7 @@ function themeSwitch(){ //PR
     date.setFullYear(date.getFullYear() + 10)
     setCookie('darkMode', state ? '1' : '0', date)
     //setThemeCookie(state)
-    DarkModeCheck()
+    checkDarkMode()
 }
 
 

@@ -200,6 +200,8 @@ function getDeletedTasks() { //BBB
 }
 
 function uploadTasks(payload, ujFeladat) { //BBB
+    console.log('payload')
+    console.log(payload)
     $.ajax({
         url: '/ment-feladat',
         method: "POST",
@@ -241,7 +243,7 @@ function createTaskPayload(feladatData, alfeladatok, ujFeladat) {//BBB
         "alfeladatok": alfeladatok,
         "alfDb": alfeladatok.length,
         "isInsert": ujFeladat ? 1 : 0,
-        "id": ujFeladat ? feladatAdatai.id : null,
+        "id": feladatAdatai.id || null
     };
 }
 
@@ -273,8 +275,6 @@ async function createSubtaskObjects(ujFeladat, slimMode, containerId) {//BBB
 
     items.forEach((item, index) => {
         const $item = $(item);
-
-        console.log("MEGBASZLAAAAAAAAAAAAAAAK")
         console.log($item.find(".alfeladat").prevObject[0].id.substring(3))
 
         const leiras = $item.find(".alfeladatLeiras")[0].value || null;
@@ -375,16 +375,19 @@ function subtaskDelete(id){//PR
 function updateTask(task, subtasks){//PR
     // update the task with the new data
     feladatAdatai = {
-        id: feladat.id, 
-        Nev: feladat.Nev, 
-        Leiras: feladat.Leiras, 
-        Tantargy: feladat.Tantargy, 
-        Tema: feladat.Tema, 
-        Evfolyam: feladat.Evfolyam, 
-        Nehezseg: feladat.Nehezseg, 
-        alfDb: feladat.alfDb
+        id: task.id, 
+        Nev: task.Nev, 
+        Leiras: task.Leiras, 
+        Tantargy: task.Tantargy, 
+        Tema: task.Tema, 
+        Evfolyam: task.Evfolyam, 
+        Nehezseg: task.Nehezseg, 
+        alfDb: task.alfDb
     }
     const container = buildTaskCardPrimaryData(task, null, null, null)
+    console.log(`task-${task.id}`)
+    console.log(document.getElementById(`task-${task.id}`))
+    console.log(document.getElementById(`task-${task.id}`))
     document.getElementById(`task-${task.id}`).replaceChildren(container.querySelector('div'))         
     
     CancelEditingThisFeladat(true, ''); // and stop the editing process
@@ -481,7 +484,7 @@ function editThisFeladat(){ // PR
         let fileName = alfeladatPlaceholderek[2].querySelector(".uploadedFileName")?.textContent || "Nincs fájl kiválsztva"
         let fileIdentifier = $bind(thisOne, 'alfeladatFajl')?.children[0]?.dataset.fileId || null
          
-        var alfId = thisOne.querySelector("div").id.substring(4);
+        var alfId = thisOne.querySelector("div").id.substring(15);
         thisOne.querySelector(".deleteButtonGoesHere").appendChild(buildDeleteButton(alfId))
         
         
@@ -500,8 +503,14 @@ function editThisFeladat(){ // PR
         spans[2].replaceChildren(buildFakeFileInput(db, fileName, fileIdentifier)) // replace the file input with a fake, because you cant set its value  
     }
     const footer = editFeladat.querySelector(".modal-footer")
-    footer.innerHTML = `<button type="button" class="btn btn-primary">Mentés</button>
-                        <button type="button" class="btn btn-warning">Mégse</button>`
+    footer.innerHTML = `<button type="button" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i>&nbsp;
+                            Mentés
+                        </button>
+                        <button type="button" class="btn btn-warning">
+                            <i class="bi bi-x"></i>&nbsp;
+                            Mégse
+                        </button>`
 
     const felhasznalo = "";                
     footer.children[0].addEventListener('click', () => { saveTask(false), resetCreateNewTask()})
@@ -549,8 +558,14 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR
 
     if(ActiveLocation == "Feladataim" || ActiveLocation == 'Csillagozva') {
         header.innerHTML += `<button class="btn"><i class="bi bi-pencil-square fs-5"></i></button>`
-        footer.innerHTML = `<button type="button" class="btn btn-warning" data-bind="arch" data-bs-dismiss="modal">Archiválás</button>
-                            <button type="button" class="btn btn-primary" data-bind="megoszt" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#megosztFeladat">Megosztás</button>`
+        footer.innerHTML = `<button type="button" class="btn btn-warning" data-bind="arch" data-bs-dismiss="modal">
+                                <i class="bi bi-archive-fill"></i>&nbsp;
+                                Archiválás
+                            </button>
+                            <button type="button" class="btn btn-primary" data-bind="megoszt" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#megosztFeladat">
+                                <i class="bi bi-share-fill"></i>&nbsp;
+                                Megosztás
+                            </button>`
     
 
         header.children[1].addEventListener("click", () => editThisFeladat());
@@ -559,8 +574,14 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR
     }
     
     if (ActiveLocation == "Archívum"){
-        footer.innerHTML += `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Töröl</button>
-                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Visszaálít</button>`
+        footer.innerHTML += `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                                <i class="bi bi-x"></i>&nbsp;
+                                Töröl
+                             </button>
+                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                                 <i class="bi bi-x"></i>&nbsp;                        
+                                 Visszaálít
+                             </button>`
         
         footer.children[0].addEventListener("click", () => TorolFeladat());
         footer.children[1].addEventListener("click", () => archiveTask(0));

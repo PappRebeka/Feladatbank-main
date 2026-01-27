@@ -22,8 +22,9 @@ function autocompleteShare_TeacherSelect(){ //RD
         document.getElementById("vevoInputText").appendChild(opt2)
     }
     console.log(document.getElementById("vevoInputText"))
-    //createSlimSelect('vevoInputText', megosztSelectTeszt)
+    createSlimSelect('vevoInputText', megosztSelectTeszt)
 }
+function megosztSelectTeszt(){}
 
 function shareTaskWithTeacher(){ //RD
     const cimzett = document.getElementById("vevoInputText").value

@@ -131,7 +131,7 @@
             //marker
             createSlimSelect('tanulokSelect', tanulokChanged)
             createSlimSelect('tantargySzuro', tantargyChanged)
-            //createSlimSelect('ujIntezmeny', AthelyezTeszt)
+            createSlimSelect('ujIntezmeny', AthelyezTeszt)
             
             setPageContent();
             
@@ -147,6 +147,8 @@
             checkWindowSize();
         })
     })
+
+    function AthelyezTeszt(){}
 
     function switchTo(where, kikapcsId){ //PR, RD
         ActiveLocation = where;
@@ -661,7 +663,7 @@
            
                 <!-- ## searchbar része ## -->
             <div class="col-sm-6 col-4 search-wrapper d-flex mx-auto searchbarInNav">
-                <input type="text"  class="form-control" id="searchbar_nav" placeholder="Keresés..." />
+                <input type="text" class="form-control" maxlength="100" id="searchbar_nav" placeholder="Keresés..." />
                 <button id="keresoButton" class="btn btn-light mx-1"><i class="bi bi-search"></i></button>
             </div>
 
@@ -681,7 +683,7 @@
             </div>
             <div id="menuOptions" class="offcanvas-body d-flex flex-column">
                 <div class="col-12 search-wrapper d-flex mx-auto searchbarInOffcanvas my-2 d-none" id="searchbar_mobile">
-                    <input type="text" class="form-control" id="searchbar_offcanvas" placeholder="Keresés..." />
+                    <input type="text" class="form-control" maxlength="100" id="searchbar_offcanvas" placeholder="Keresés..." />
                     <button id="keresoButtonOffcanvas" class="btn btn-light mx-1" data-bs-dismiss="offcanvas"><i class="bi bi-search"></i></button>
                 </div>
                 
@@ -770,7 +772,7 @@
 
                                 <div class="form mt-2">
                                     <label class="form-label">Évfolyam</label>
-                                    <input class="form-control" type="text" inputmode="numeric" id="evfolyamSzuro" min="1" max="13" >
+                                    <input class="form-control" type="text" maxlength="16" inputmode="numeric" id="evfolyamSzuro" min="1" max="13" >
                                 </div>
 
                                 <div class="form mt-2">
@@ -820,8 +822,14 @@
 
 
                                 <div class="text-end mt-3" data-bind="buttons">
-                                    <button class="btn btn-sm btn-secondary">Visszaálítás</button>
-                                    <button class="btn btn-sm btn-primary">Alkalmaz</button>
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="bi bi-x"></i>&nbsp;
+                                        Visszaálítás
+                                    </button>
+                                    <button class="btn btn-sm btn-primary">
+                                        <i class="bi bi-check-lg"></i>&nbsp;
+                                        Alkalmaz
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -864,19 +872,19 @@
                             <form class="col-12 col-lg-6 d-flex flex-column h-100">
                                 <div class="mb-2">
                                     <label class="form-label" for="feladatNev">Feladat Neve</label>
-                                    <input class="form-control" type="text" id="feladatNev" placeholder="Adja meg a feladat nevét" required>
+                                    <input class="form-control" type="text" maxlength="100" id="feladatNev" placeholder="Adja meg a feladat nevét" required>
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label" for="tantargy">Tantárgy</label>
-                                    <input class="form-control" type="text" id="tantargy" placeholder="Pl.: Matematika" required>
+                                    <input class="form-control" type="text" maxlength="100" id="tantargy" placeholder="Pl.: Matematika" required>
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label" for="tema">Téma</label>
-                                    <input class="form-control" type="text" id="tema" placeholder="Pl.: Algebra" required>
+                                    <input class="form-control" type="text" maxlength="100" id="tema" placeholder="Pl.: Algebra" required>
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label" for="evfolyam">Évfolyam</label>
-                                    <input class="form-control" type="text" inputmode="numeric" id="evfolyam" placeholder="Pl.: 10" required>
+                                    <input class="form-control" type="text" maxlength="16" inputmode="numeric" id="evfolyam" placeholder="Pl.: 10" required>
                                 </div>
                                 <div class="mb-2">
                                     <label id="Difficulty" class="form-label">Nehézség - 5</label>
@@ -884,7 +892,7 @@
                                 </div>
                                 <div class="mt-2 mb-3 flex-grow-1 d-flex flex-column">
                                     <label class="form-label" for="leiras">Leírás</label>
-                                    <textarea id="leiras" class="form-control flex-grow-1" placeholder="Jellemezze a feladatot" style="resize: none;" type="text"></textarea>
+                                    <textarea id="leiras" class="form-control flex-grow-1" maxlength="10000" placeholder="Jellemezze a feladatot" style="resize: none;" type="text"></textarea>
                                 </div>
                             </form>
 
@@ -909,8 +917,14 @@
                     </div>
                 </div>
                 <div class="modal-footer footer-normal">
-                    <button class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-save"></i> Hozzáadás</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezár</button>
+                    <button class="btn btn-primary" data-bs-dismiss="modal">
+                        <i class="bi bi-save"></i>&nbsp;
+                        Hozzáadás
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x"></i>&nbsp;
+                        Bezár
+                    </button>
                 </div>
               </div>
             </div>
@@ -984,8 +998,14 @@
                 </div>
                 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning">Igen</button>
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nem</button>
+                    <button type="button" class="btn btn-warning">
+                        <i class="bi bi-check-lg"></i>&nbsp;
+                        Igen
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x"></i>&nbsp;
+                        Nem
+                    </button>
                 </div>
               </div>
             </div>
@@ -1017,9 +1037,13 @@
                 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
-                        <span>Közzététel</span>
+                        <i class="bi bi-check-lg"></i>&nbsp;
+                        Közzététel
                     </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezárás</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x"></i>&nbsp;
+                        Bezárás
+                    </button>
                 </div>
               </div>
             </div>
@@ -1043,8 +1067,14 @@
                     </div>
                     
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Megosztás</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+                            <i class="bi bi-check-lg"></i>&nbsp;
+                            Megosztás
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x"></i>&nbsp;
+                            Mégse
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1065,8 +1095,14 @@
                     </div>
                     
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-info"      data-bs-dismiss="modal">Áthelyezés</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezárás</button>
+                        <button type="button" class="btn btn-info" data-bs-dismiss="modal">
+                            <i class="bi bi-check-lg"></i>&nbsp;
+                            Áthelyezés
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x"></i>&nbsp;
+                            Bezárás
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1086,8 +1122,14 @@
                     </div>
 
                     <div class="gap-2 mb-3 mx-3 d-flex justify-content-end">
-                        <button type="button" class="btn btn-warning w-25"   data-bs-dismiss="modal">Betöltés</button>
-                        <button type="button" class="btn btn-secondary w-25" data-bs-dismiss="modal">Mégse</button>
+                        <button type="button" class="btn btn-warning w-25"   data-bs-dismiss="modal">
+                            <i class="bi bi-check-lg"></i>&nbsp;
+                            Betöltés
+                        </button>
+                        <button type="button" class="btn btn-secondary w-25" data-bs-dismiss="modal">
+                            <i class="bi bi-x"></i>&nbsp;
+                            Mégse
+                        </button>
                     </div>
                     
                 </div>
