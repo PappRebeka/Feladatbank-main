@@ -1,3 +1,5 @@
 2026-01-27T13:05:09.406Z [feladatbank] [32minfo[39m: Fut a szerver
 2026-01-27T13:05:09.615Z [feladatbank] [31merror[39m: /sendClassroomCourses error=Cannot read properties of undefined (reading 'AccessToken') userid=undefined
 2026-01-27T13:05:12.731Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T13:05:35.880Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-27T13:05:38.277Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
