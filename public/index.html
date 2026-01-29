@@ -228,7 +228,18 @@
         }
       }
 
-      const result = ajax_post("/loginUser", 1, { user: user, passwd: passwd, userToken: "", mail: loginWithGoogle ? mail : "" });
+
+      const result = ajax_post("/loginUser", 1, { 
+        user: user, 
+        passwd: passwd, 
+        userToken: "", 
+        mail: loginWithGoogle ? mail : "" 
+      });
+
+      if(result.error == "ALREADY_LOGGED_IN") {
+        showError("Már egy másik eszközön be van jelentkezve!");
+        return;
+      }
 
       if (result.db == 1) {
         const intezmenyCount = ajax_post("/VanIntezmeny", 1, {});
@@ -337,7 +348,19 @@
 
       const stay = getCookie("stayLoggedIn");
       if (stay == "1") {
-        const van = ajax_post("/loginUser", 1, { user: "", passwd: "", userToken: getCookie("userToken") || "" });
+        var van = null
+        
+        van = ajax_post("/loginUser", 1, { 
+          user: "", 
+          passwd: "", 
+          userToken: getCookie("userToken") || "" 
+        });
+
+        if(van.error == "ALREADY_LOGGED_IN") {
+          showError("Már egy másik eszközön be van jelentkezve!");
+          return;
+        }
+        
         if (van?.db == 1) {
           window.location.href = "/homepage.html";
           return;

@@ -1,0 +1,16 @@
+2026-01-28T10:18:09.887Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-28T10:18:26.678Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T10:18:29.129Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T10:18:30.844Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=467
+2026-01-28T10:18:38.166Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T10:18:39.821Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)
+2026-01-28T10:19:00.122Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T10:19:00.887Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T10:19:02.800Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)
+2026-01-28T10:53:36.348Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T10:53:39.800Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T10:53:56.865Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T10:53:58.006Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T10:55:00.121Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T10:55:00.837Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T10:59:29.743Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1

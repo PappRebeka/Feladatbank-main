@@ -1,0 +1,25 @@
+2026-01-28T09:39:41.192Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-28T09:39:45.289Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:39:47.423Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:39:48.125Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:39:48.428Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:39:48.623Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:39:48.795Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:39:48.972Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:39:49.161Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:39:49.329Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:39:49.482Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:39:49.676Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:39:49.847Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:39:50.013Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:39:50.188Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:39:50.330Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:40:47.442Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:40:47.796Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:40:49.114Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)
+2026-01-28T09:40:59.432Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T09:41:01.197Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T09:41:51.928Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T09:41:53.894Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T09:41:56.719Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-28T09:42:14.506Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null

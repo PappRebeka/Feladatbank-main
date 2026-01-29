@@ -345,8 +345,10 @@ app.post("/loginUser", async (req, res) => { //RD, PR
         if (lastPing) {
           const now = Date.now();
           console.log(now - lastPing);
-          if ((now - lastPing) < (1 * 60 * 1000)) {
-            return res.status(403).end();
+          if ((now - lastPing) < (5 * 1000)) {
+            return res.send({ 
+              error: "ALREADY_LOGGED_IN",
+            }).end();
           }
         } else {
           console.log("nincs last ping")
@@ -789,9 +791,7 @@ app.post("/SendFeladatok", (req, res) =>{ //RD, BBB, PR
   if (!isPositiveInt(tanarId) && !isPositiveInt(oldal)) {
     return res.send(JSON.stringify({ error: 'invalid input' }));
   }
-  console.log("Rendezéses cuccok:")
-  console.log(`Téma: ${rendezesTema}\nFajta: ${rendezesFajta}`)
-  console.log("order: " + order)
+  
   sql = "SELECT Feladatok.id as id, Feladatok.Nev, Feladatok.Leiras, Feladatok.Evfolyam, Feladatok.Tantargy, Feladatok.Tema, Feladatok.Nehezseg, (SELECT COUNT(Alfeladat.id) FROM Alfeladat WHERE FeladatId = Feladatok.id) AS alfDb"
   
   if(oldal == 3 || oldal == 4){// Megosztott (velem vagy általam)
@@ -1249,6 +1249,7 @@ app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom felada
   dueDate = req.body.dueDate
   dueTime = req.body.dueTime
   tanulok = req.body.tanulok
+  shareMode = req.body.shareMode
   let sql = `SELECT Feladatok.Nev, Feladatok.Leiras AS feladatLeiras, Feladatok.Tema, Feladatok.Nehezseg, 
               (SELECT sum(Pont) FROM Alfeladat WHERE FeladatId = ?) AS maxPont, 
               Alfeladat.id, Alfeladat.Leiras, Alfeladat.Pont, Alfeladat.FajlId
@@ -1287,7 +1288,7 @@ app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom felada
       var leiras = results[i]["Leiras"];
       var pont = results[i]["Pont"];
       let classroomPromises = [];
-      if (results[i]["FajlId"]){ // BENETT: Promise.all() => ProgressBar
+      if (results[i]["FajlId"]){ 
         let uploadedFileId = await fajlFeltoltClassroom(results[i]["FajlId"]);
         fajlIds.push(uploadedFileId);
       }
@@ -1299,7 +1300,7 @@ app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom felada
     }
     console.log("fájlok")
     console.log(fajlIds)
-    var temp = await createClassroomTask(nev, description, maxPont, year, month, day, hours, minutes, kurzusId, fajlIds, tanulok)
+    var temp = await createClassroomTask(nev, description, maxPont, year, month, day, hours, minutes, kurzusId, fajlIds, tanulok, shareMode)
     res.send(JSON.stringify({ "courseWorkId":temp } ))
     res.end();
   });
@@ -1315,7 +1316,7 @@ async function biztosFileShare(fileId) {
   });
 }
 
-async function createClassroomTask(title, description, maxPoints, year, month, day, hours, minutes, courseid, fajlIds, tanulok){ //RD, classroom feladat létrehozása adott kurzusba(feltöltése)
+async function createClassroomTask(title, description, maxPoints, year, month, day, hours, minutes, courseid, fajlIds, tanulok, shareMode){ //RD, classroom feladat létrehozása adott kurzusba(feltöltése)
   //console.log("fájlok")
   //console.log(fajlIds)
 
@@ -1331,7 +1332,7 @@ async function createClassroomTask(title, description, maxPoints, year, month, d
       driveFile: {
         id: fajlId
       },
-      shareMode: "VIEW"
+      shareMode: shareMode
     }
   }));
 
@@ -1431,9 +1432,9 @@ app.post("/autocompleteArrayTolt", (req, res) =>{ //RD, a suggestion alapú inpu
   })
 })
 
-async function MegosztottFeladatAlreadyExists(cimzett, feladatId, felado){
-  let sql = `SELECT COUNT(id) AS db FROM Megosztott WHERE FeladoID = ? AND FeladatId = ? AND VevoId = (SELECT id FROM Users WHERE Email = ? OR Nev = ? limit 1)`
-  var c = await queryAsync(sql, [felado, feladatId, cimzett, cimzett])
+async function MegosztottFeladatAlreadyExists(injection){
+  let sql = `SELECT COUNT(id) AS db FROM Megosztott WHERE FeladatId = ? AND FeladoID = ? AND VevoId = (SELECT id FROM Users WHERE Email = ? OR Nev = ? limit 1)`
+  var c = await queryAsync(sql, injection)
   return c[0].db
 
 }
@@ -1443,7 +1444,8 @@ app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok köz�
   const cimzett = req.body.cimzett
   const feladatId = req.body.feladatId
   const felado = req.session.userId
-  var dbszam = await MegosztottFeladatAlreadyExists(cimzett, feladatId, felado)
+  var injection = [feladatId, felado, cimzett, cimzett]
+  var dbszam = await MegosztottFeladatAlreadyExists(injection)
   if (dbszam > 0){
     return res.status(406).end()
   }
@@ -1451,7 +1453,8 @@ app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok köz�
   let sql = `INSERT INTO Megosztott(FeladatId, FeladoId, VevoId, Csillagozva)
             VALUES(?, ?, (SELECT id FROM Users WHERE Email = ? OR Nev = ? limit 1), 0)`
 
-  conn.query(sql, [feladatId, felado, cimzett, cimzett], (err, results) => {
+            console.log(sql, injection)
+  conn.query(sql, injection, (err, results) => {
     if (err) { 
       logger.log({
         level: 'error',
@@ -2086,7 +2089,35 @@ const server = app.listen(config.server.port, () => {
 
   app.post("/GetTantargyak", (req, res) =>{
     const UserId = req.session.userId
-    var sql = "SELECT Tantargy FROM Feladatok GROUP BY Tantargy HAVING Tanar = ?"
+    const oldal = req.body.oldal
+    var selectTable = ""
+    var whereParameters = ""
+    switch(parseInt(oldal)){
+      case 1: //Csillagozva, injection: userid
+      console.log("nemtom")
+        selectTable = "Feladatok"
+        whereParameters = "Tanar = ? AND Csillagozva = 1"
+      break;
+      case 2: //Archivalva, injection: userid
+        selectTable = "Feladatok"
+        whereParameters = "Tanar = ? AND Archivalva = 1"
+      break;
+      case 3: //Velem megosztva, injection: userid
+        selectTable = "Feladatok INNER JOIN Megosztott on Feladatok.id = Megosztott.FeladatId"
+        whereParameters = "VevoId = ?"
+      break;
+      case 4: //Általam megosztott, injection: userid
+        selectTable = "Feladatok INNER JOIN Megosztott on Feladatok.id = Megosztott.FeladatId"
+        whereParameters = "FeladoId = ?"
+      break;
+      default: //Feladataim, injection: userid
+        selectTable = "Feladatok"
+        whereParameters = "Tanar = ?"
+      break;
+    }
+    
+    var sql = `SELECT Tantargy FROM ${selectTable} WHERE ${whereParameters} GROUP BY Tantargy`
+    
     conn.query(sql, [UserId], (err, results) => {
       res.send(JSON.stringify({ "results":results }));
       res.end()

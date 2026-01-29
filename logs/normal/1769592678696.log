@@ -1,0 +1,24 @@
+2026-01-28T09:31:18.725Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-28T09:31:21.576Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:31:24.204Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T09:33:32.375Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-28T09:33:40.136Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T09:33:41.309Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T09:33:42.630Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-28T09:33:45.159Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:33:45.800Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T09:33:51.411Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=467
+2026-01-28T09:34:24.886Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T09:34:25.512Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T09:34:37.619Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-28T09:34:43.209Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null
+2026-01-28T09:34:48.494Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=466
+2026-01-28T09:36:07.816Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=468
+2026-01-28T09:36:54.510Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T09:36:56.694Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T09:36:57.280Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:36:58.779Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:36:58.970Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:36:59.149Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:36:59.325Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:36:59.552Z [feladatbank] [34mdebug[39m: (/fajlInfo) nincs ilyen fájl id: null

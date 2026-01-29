@@ -1,0 +1,20 @@
+2026-01-28T09:19:24.839Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-28T09:19:26.260Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T09:19:26.400Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:19:27.697Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T09:19:27.744Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T09:20:02.126Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:20:03.377Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T09:20:24.537Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:20:25.695Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T09:20:53.994Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:20:56.586Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T09:21:20.951Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:21:22.078Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T09:21:45.653Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:21:46.974Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T09:24:38.548Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:24:39.710Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)
+2026-01-28T09:25:18.332Z [feladatbank] [34mdebug[39m: createClassroomTask: feladat közzétéve courseId=780813094806 courseWorkId=841697687634
+2026-01-28T09:25:44.507Z [feladatbank] [34mdebug[39m: createClassroomTask: feladat közzétéve courseId=780813094806 courseWorkId=841697524835
+2026-01-28T09:28:08.657Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=433

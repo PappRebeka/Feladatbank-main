@@ -63,17 +63,22 @@ async function loadAvailableCourses(){ //RD
 }
 
 async function postTaskToClassroom(){ //RD
+    const feladatModal = document.getElementById("shareFeladat")
+
     const select = document.getElementById("kurzusSelect");
+    const modeSelect = feladatModal.querySelector("#modeSelect")
+
     const opt = select.options[select.selectedIndex];
     var kurzusId = opt.value.split("-")[0]
     var kurzusNev = opt.text
     var feladatId = opt.value.split("-")[1]
+    var shareMode = modeSelect.value;
     //var tanuloIdk = $('#tanulokSelect').val()
     
     var dueDate =  DateAndTimePicker.value?.split(" ")[0] || ""
     var dueTime =  DateAndTimePicker.value?.split(" ")[1] || ""
     
-    var kurz = ajax_post("/postClassroomFeladat", 1, { kurzusid: kurzusId, feladatid: feladatId, dueDate: dueDate, dueTime: dueTime, tanulok: tanuloIdk })
+    var kurz = ajax_post("/postClassroomFeladat", 1, { kurzusid: kurzusId, feladatid: feladatId, dueDate: dueDate, dueTime: dueTime, tanulok: tanuloIdk, shareMode: shareMode })
     var kurzusFeladatId = kurz.courseWorkId
 
     const result = ajax_post("/saveClassroomFeladatKozzetett", 1, { feladatid: feladatId, kurzusNev: kurzusNev, kurzusId: kurzusId, kurzusFeladatId: kurzusFeladatId })

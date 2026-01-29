@@ -25,11 +25,14 @@ function resetSearchFilter(){ //PR
 }
 
 function applyFilters() { //RD
-    ActiveFilters.nehezseg = TempFilters.nehezseg 
-    ActiveFilters.evfolyam = document.getElementById("evfolyamSzuro").value
-    ActiveFilters.tantargy = TempFilters.tantargy
-    ActiveFilters.tanar    = TempFilters.tanar 
-    ActiveFilters.kurzus   = TempFilters.kurzus
+    ActiveFilters.nehezseg   = TempFilters.nehezseg 
+    ActiveFilters.evfolyam   = document.getElementById("evfolyamSzuro").value
+    ActiveFilters.tantargy   = TempFilters.tantargy
+    ActiveFilters.tanar      = TempFilters.tanar 
+    ActiveFilters.kurzus     = TempFilters.kurzus
+    
+    ActiveFilters.order.field = TempFilters.order.field
+    ActiveFilters.order.desc  = TempFilters.order.desc
     loadPageData()
 }
 
@@ -66,6 +69,12 @@ function resetFilters(){ //PR
     // reset the evfolyam and tantargy inputs
     document.getElementById("evfolyamSzuro").value = ""
     document.getElementById("tantargySzuro").value = ""
+    document.getElementById("sortValues").selectedIndex = 0
+
+
+    const buttons = document.querySelectorAll(".sortDirectionButton")
+    buttons[0].classList.remove('active')
+    buttons[1].classList.add('active')
 
     // reset all the global filter variables
     Object.assign(TempFilters, {
@@ -75,29 +84,29 @@ function resetFilters(){ //PR
         tanar: "",
         kurzus: "",
         kereso: "",
-        sort: { field: "", desc: 0 }
+        order: { field: "id", desc: 1 }
     });
 
-    //setPageContent() // reload. this can run on location change 
-    // so we call the big boy funtion to handle the change of location
 }
 
 function setSortDirection(dir){ //PR
-  ActiveFilters.order.desc = dir; // 0 asc, 1 desc  https://www.reddit.com/r/ProgrammerHumor/comments/1i3r1zd/fakestatement/
+  TempFilters.order.desc = dir; // 0 asc, 1 desc  https://www.reddit.com/r/ProgrammerHumor/comments/1i3r1zd/fakestatement/
   document.getElementById("sortAsc").classList.toggle("active", dir == 0);
   document.getElementById("sortDesc").classList.toggle("active", dir == 1);
   getSortField();
 }
 
 function getSortField(){ //PR
-  ActiveFilters.order.field = document.getElementById("sortValues").value; // Nev/Nehezseg/Evfolyam/id  (maybe add sender/corse)
+  TempFilters.order.field = document.getElementById("sortValues").value; // Nev/Nehezseg/Evfolyam/id  (maybe add sender/corse)
 }
 
-function autofillSubjectFilter(tantargyak){ //PR
+function autofillSubjectFilter(tantargyak, selectedTantargy){ //PR, RD, selectedTantargy: a szűrő alkalmazása előtti kiválasztott tantárgy, azért van hogy a tantárgy selected maradjon
     document.getElementById('tantargySzuro').innerHTML = `<option value="" class="d-none" hidden></option>`
-    for (const t of tantargyak) {
+    for (const id in tantargyak) {
+        var t = tantargyak[id].Tantargy
         let opt = document.createElement('option')
         opt.value = t; opt.textContent = t
+        opt.selected = selectedTantargy == t 
         document.getElementById('tantargySzuro').appendChild(opt)
     }
 }
@@ -108,6 +117,6 @@ function autofillTeacherFilter(){ //PR
     for (const item of options.results){
         let opt = document.createElement('option')
         opt.value = `id_${item.id}`; opt.textContent = item.Nev
-        document.getElementById("tanarSzuro").innerHTML += `<option value="id_${item.id}">${item.Nev}</option>`
+        document.getElementById("tanarSzuro").appendChild(opt) 
     }
 }

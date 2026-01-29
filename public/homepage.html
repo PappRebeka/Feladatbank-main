@@ -134,6 +134,8 @@
             createSlimSelect('tanulokSelect', tanulokChanged)
             createSlimSelect('tantargySzuro', tantargyChanged)
             createSlimSelect('ujIntezmeny', AthelyezTeszt)
+            createSlimSelect('modeSelect', AthelyezTeszt)
+            createSlimSelect('vevoInputText', megosztSelectTeszt)
             setPageContent();
             
        }
@@ -156,7 +158,7 @@
         }};
 
         heartbeat();
-        setInterval(() => heartbeat(), 30000);
+        setInterval(() => heartbeat(), 2000);
     });
 
     function AthelyezTeszt(){}
@@ -404,12 +406,11 @@
     }
 
     function loadPageData(){ //PR, RD
-        var tanta = ajax_post("/GetTantargyak", 1, {})
-        console.log("tantargyak")
-        console.log(tantargyak)
-        let userpage = ActiveLocation == "Felhasználók"
         let oldal = Object.keys(AvailablePages).indexOf(ActiveLocation).toString()
-        console.log("loadPageData: "+ ActiveFilters.tantargy)
+        
+        var SubjectList = ajax_post("/GetTantargyak", 1, {oldal: oldal})
+        let userpage = ActiveLocation == "Felhasználók"
+        var selectedTantargy = ActiveFilters.tantargy
         let temp = {tanarId: CurrentUserData.id,
                     oldal: oldal,
 
@@ -426,7 +427,6 @@
                     offset: localStorage.getItem("offset")
                 }
         const par = new URLSearchParams(temp).toString();
-        console.log(temp)
         var results      = userpage ? ajax_post("/SendUsers", 1, { limit: localStorage.getItem("limit"), offset: localStorage.getItem("offset"), kereso: ActiveFilters.kereso }).results : 
                                       ajax_post("/SendFeladatok", 1, temp).results    
             resultsCount = userpage ? ajax_post("/getUserCount", 1, { kereso: ActiveFilters.kereso }).db : 
@@ -439,13 +439,11 @@
         updateNavigationButtons()
         document.getElementById("oldal").textContent = activePageNumber
         document.getElementById("maxPageNumber").textContent = maxPageNumber
-        var tantargyak = tantargyak? tantargyak : []
 
         document.getElementById("BigDih").replaceChildren()
         if (talalatSzam.innerText == "0") toastMsg("Nem találtunk feladatokat!", "A megadott paraméterek alapján nem találtunk önhöz tartozó feladatokat.", "warning")
         if(results){ if(results.length!= undefined) {
             for (const adat of results) {
-                tantargyak.push(adat.Tantargy)
                 let felhasznalo      = (oldal == "3" || oldal == '4' ? adat.Felhasznalo: "")
                 let felhasznaloColor = (oldal == "3" || oldal == '4' ? adat.FelhasznaloColor: "")
                 let kurzusnev        = (oldal == "5" ? adat.Kurzus: "")
@@ -456,7 +454,8 @@
                            buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev, kurzusId, kurzusFeladatId)
             }
         }}
-        autofillSubjectFilter(tantargyak.filter((value, index, array) => array.indexOf(value) == index));
+        autofillSubjectFilter(SubjectList.results, selectedTantargy);
+        autofillTeacherFilter()
     }
   
     function responsivity() { // PR
@@ -1049,6 +1048,14 @@
                         <label class="form-label fw-semibold">Tanulók</label>
                         <select id="tanulokSelect" class="slim-select" multiple> </select>
                     </div>
+
+                    <div class="form mt-2">
+                        <label class="form-label fw-semibold">Fájlok megosztási módja</label><br>
+                        <select id="modeSelect" class="slim-select" placeholder="">
+                            <option value="VIEW" selected>Csak megtekintés</option>
+                            <option value="EDIT">Megtekintés és szerkesztés</option>
+                        </select>
+                    </div>
                     
                 </div>
 
@@ -1068,7 +1075,7 @@
         </div>
 
          <!----------------------------------------------------- - Feladat megosztása - -------------------------------------------------------->
-         <div class="modal fade" id="megosztFeladat" tabindex="-1">
+         <div class="modal fade" id="megosztFeladat" tabindex="-1" data-bs-focus="false">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">

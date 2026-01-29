@@ -42,7 +42,9 @@ function createSlimSelect(hovaId, functionNev){ //PR, RD
                 focusSearch: true,
                 searchPlaceholder: 'Keresés…',
                 //contentPosition: 'fixed',
-                currentLocation: document.getElementById("local")
+                currentLocation: document.querySelector("#local"),
+                contentLocation: document.querySelector(hovaId == "tantargySzuro" ? "#szuro .dropdown-menu" :
+                                                        hovaId == "tanarSzuro"    ? "#szuro .dropdown-menu" : "body")
             },
             events: {
                 afterChange: (e) => {

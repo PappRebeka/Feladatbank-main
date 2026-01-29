@@ -1,0 +1,18 @@
+2026-01-28T11:26:34.845Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-28T11:26:42.900Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=468
+2026-01-28T11:28:19.608Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=468
+2026-01-28T11:29:43.908Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=467
+2026-01-28T11:38:10.518Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=423
+2026-01-28T11:38:16.388Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=429
+2026-01-28T11:38:23.268Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=421
+2026-01-28T11:39:33.341Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=423
+2026-01-28T11:39:39.653Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=429
+2026-01-28T11:42:17.553Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=467
+2026-01-28T11:42:21.982Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=465
+2026-01-28T11:42:27.819Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=437
+2026-01-28T11:42:30.711Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=429
+2026-01-28T11:42:35.276Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=430
+2026-01-28T11:43:12.479Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-28T11:43:18.349Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-28T11:44:56.804Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=421
+2026-01-28T11:44:59.198Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=421

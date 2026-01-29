@@ -1,0 +1,6 @@
+2026-01-28T11:59:28.366Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-28T11:59:32.497Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T11:59:35.330Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T12:04:28.672Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T12:04:30.119Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T12:04:31.525Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)

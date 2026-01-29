@@ -1,0 +1,4 @@
+2026-01-28T10:18:09.887Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-28T10:18:30.844Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=467
+2026-01-28T10:19:00.122Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T10:59:29.743Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1

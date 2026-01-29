@@ -1,0 +1,9 @@
+2026-01-28T10:13:36.615Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-28T10:13:51.864Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T10:14:45.362Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=468
+2026-01-28T10:14:52.418Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=468
+2026-01-28T10:14:58.297Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=467
+2026-01-28T10:15:02.232Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=465
+2026-01-28T10:15:08.373Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=464
+2026-01-28T10:15:12.425Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=437
+2026-01-28T10:15:17.991Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=430

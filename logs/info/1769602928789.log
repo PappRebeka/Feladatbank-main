@@ -1,0 +1,41 @@
+2026-01-28T12:22:08.822Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-28T12:27:32.621Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=471
+2026-01-28T12:27:45.722Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=471
+2026-01-28T12:27:49.854Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=471
+2026-01-28T12:35:22.613Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=429
+2026-01-28T12:36:59.817Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T12:37:06.776Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=471
+2026-01-28T12:37:15.440Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=472
+2026-01-28T12:37:23.636Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=510
+2026-01-28T12:37:29.042Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=509
+2026-01-28T12:37:37.761Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=511
+2026-01-28T12:37:49.042Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=504
+2026-01-28T12:37:54.242Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=505
+2026-01-28T12:38:18.625Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=502
+2026-01-28T12:38:24.769Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=501
+2026-01-28T12:39:22.183Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=468
+2026-01-28T12:39:25.867Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=430
+2026-01-28T12:39:32.307Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=430
+2026-01-28T12:39:38.014Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=441
+2026-01-28T12:39:44.236Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=442
+2026-01-28T12:41:19.071Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=424
+2026-01-28T12:41:25.604Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=467
+2026-01-28T12:41:33.058Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=468
+2026-01-28T12:45:03.616Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-28T12:45:04.196Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-28T12:46:13.548Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-28T12:46:22.092Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-28T12:46:36.948Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-28T12:48:42.841Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-28T12:48:52.286Z [feladatbank] [32minfo[39m: User  login attempted..
+2026-01-28T12:48:59.985Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-28T12:50:11.719Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-28T12:50:12.931Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-28T12:50:12.987Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-28T12:55:37.669Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-28T12:55:37.781Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-28T12:55:42.764Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-28T12:55:46.859Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-28T12:57:44.783Z [feladatbank] [32minfo[39m: Google Auth progress started   method=GET              ip=::ffff:127.0.0.1
+2026-01-28T12:57:54.289Z [feladatbank] [32minfo[39m: User  login attempted..
+2026-01-28T13:10:41.056Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=438

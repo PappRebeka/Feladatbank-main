@@ -8,7 +8,12 @@ task_scripts/share.js ---------------
 function autocompleteShare_TeacherSelect(){ //RD
     const user_email = ajax_post("/autocompleteArrayTolt", 1, {})
     var tolteniValo = []; 
-    document.getElementById("vevoInputText").replaceChildren()
+    const input = document.getElementById("vevoInputText")
+    input.replaceChildren()
+
+    const emptyOpt = document.createElement("option")
+    emptyOpt.setAttribute("data-placeholder", "true")
+    input.appendChild(emptyOpt)
     for (const alma of user_email.results) {
         var nev = alma.Nev
         var email = alma.Email
@@ -18,17 +23,20 @@ function autocompleteShare_TeacherSelect(){ //RD
         var opt2 = document.createElement("option")
         opt1.textContent = nev
         opt2.textContent = email
-        document.getElementById("vevoInputText").appendChild(opt1)
-        document.getElementById("vevoInputText").appendChild(opt2)
+        input.appendChild(opt1)
+        input.appendChild(opt2)
     }
-    console.log(document.getElementById("vevoInputText"))
-    createSlimSelect('vevoInputText', megosztSelectTeszt)
 }
 function megosztSelectTeszt(){}
 
 function shareTaskWithTeacher(){ //RD
     const cimzett = document.getElementById("vevoInputText").value
     const feladatId = feladatAdatai.id
+    console.log("megoszt element:"+document.getElementById("vevoInputText"))
+    console.log("megoszt cimzett: "+document.getElementById("vevoInputText").value)
+    console.log("megoszt index: "+document.getElementById("vevoInputText").selectedIndex)
+    console.log(document.getElementById("vevoInputText")[document.getElementById("vevoInputText").selectedIndex])
+    console.log("megoszt indexed value: "+document.getElementById("vevoInputText")[document.getElementById("vevoInputText").selectedIndex].value)
 
     const result = ajax_post("/FeladatMegosztasaTanarral", 1, { cimzett: cimzett, feladatId: feladatId })
     

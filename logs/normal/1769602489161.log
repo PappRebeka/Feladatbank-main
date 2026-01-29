@@ -1,0 +1,6 @@
+2026-01-28T12:14:49.190Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-28T12:14:52.687Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T12:14:54.212Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T12:15:34.220Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T12:15:35.588Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T12:16:19.705Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=429

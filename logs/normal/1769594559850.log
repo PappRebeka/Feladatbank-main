@@ -1,0 +1,39 @@
+2026-01-28T10:02:39.883Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-28T10:02:45.017Z [feladatbank] [32minfo[39m: User Dávid Réczeg login attempted..
+2026-01-28T10:03:12.260Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T10:03:15.245Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T10:04:10.159Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T10:04:11.279Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T10:04:17.285Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=429
+2026-01-28T10:04:27.144Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=404
+2026-01-28T10:04:45.260Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-28T10:04:45.895Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T10:04:46.585Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=432 felado=202 cimzett=
+2026-01-28T10:04:47.068Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T10:05:51.298Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T10:05:52.612Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T10:05:55.445Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T10:05:56.136Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T10:05:56.683Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T10:05:57.406Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T10:06:00.457Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=467
+2026-01-28T10:06:04.097Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=467 felado=210 cimzett=Rebeka Papp
+2026-01-28T10:06:11.115Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=467
+2026-01-28T10:06:20.989Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=466
+2026-01-28T10:06:24.733Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=466 felado=210 cimzett=
+2026-01-28T10:07:49.364Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T10:07:50.701Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T10:07:52.223Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=466
+2026-01-28T10:07:53.979Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=462
+2026-01-28T10:07:58.931Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=462 felado=210 cimzett=Rebeka Papp
+2026-01-28T10:08:03.856Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=461
+2026-01-28T10:08:08.862Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=461 felado=210 cimzett=
+2026-01-28T10:10:10.288Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T10:10:12.811Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T10:10:17.829Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=460
+2026-01-28T10:10:21.909Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=460 felado=210 cimzett=Rebeka Papp
+2026-01-28T10:10:29.695Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=451
+2026-01-28T10:10:33.775Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=451 felado=210 cimzett=
+2026-01-28T10:10:49.388Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=442
+2026-01-28T10:10:53.636Z [feladatbank] [34mdebug[39m: (/FeladatMegosztasaTanarral) Feladat megosztva feladatId=442 felado=210 cimzett=
+2026-01-28T10:11:12.251Z [feladatbank] [31merror[39m: (/SendAlFeladatok) error=no results feladatId=451

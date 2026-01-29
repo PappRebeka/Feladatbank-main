@@ -1,0 +1,23 @@
+2026-01-28T09:42:27.712Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-28T09:42:39.846Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T09:42:42.188Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T09:43:37.617Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T09:43:38.801Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T09:44:11.491Z [feladatbank] [32minfo[39m: User Benett Brendasdfon Bad login attempted..
+2026-01-28T09:44:11.979Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:44:13.185Z [feladatbank] [34mdebug[39m: Courses extracted (userid=204)
+2026-01-28T09:44:19.551Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-28T09:44:19.844Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:44:20.662Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-28T09:44:20.743Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:44:20.848Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:44:34.751Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T09:44:35.929Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T09:45:17.201Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T09:45:18.555Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T09:45:34.860Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T09:45:36.070Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)
+2026-01-28T09:45:48.466Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-28T09:45:49.548Z [feladatbank] [34mdebug[39m: Courses extracted (userid=210)
+2026-01-28T09:46:01.091Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::1             
+2026-01-28T09:46:02.197Z [feladatbank] [34mdebug[39m: Courses extracted (userid=202)

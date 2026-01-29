@@ -1,4 +1,4 @@
-dupla bejelentkezést ne engedjünk / fiók törlése után kijeletkeztetjük az összes platformról
+fiók törlése után kijeletkeztetjük az összes platformról
 
 rendezés néha szar, idk why
 
