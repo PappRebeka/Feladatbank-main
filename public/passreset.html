@@ -72,10 +72,11 @@
             return;
         }
         ajax_post(`/updatePassword`, 1, { email: email, password: password.value });
-        box.innerHTML = `<h1 id="title" class="text-center mb-4 text-secondary">Sikeres jelszó frissítés! Átirányítás a bejelentkezési oldalra...</h1>`;
+        ajax_post("/sendMailTo", 1, { email: email, type: 'confirm' });
+
+        box.children[0].innerHTML = `<h1 id="title" class="text-center mb-4 text-secondary">Sikeres jelszó frissítés!</h1><h4 class="text-center mb-4 text-secondary">Átirányítás a bejelentkezési oldalra...</h4>`;
         setTimeout(function() {window.location.href = "/index.html"}, 2000);
-        
-}
+    }
 
 </script>
 <body class="hazy">

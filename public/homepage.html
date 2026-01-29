@@ -135,6 +135,10 @@
             createSlimSelect('tantargySzuro', tantargyChanged)
             createSlimSelect('ujIntezmeny', AthelyezTeszt)
             createSlimSelect('modeSelect', AthelyezTeszt)
+            
+            createSlimSelect('javitIntezmeny', AthelyezTeszt)
+            createSlimSelect('deleteInstitution', AthelyezTeszt)
+            
             createSlimSelect('vevoInputText', megosztSelectTeszt)
             setPageContent();
             
@@ -646,7 +650,7 @@
         for (let i = 0; i < 3; i++) radios[i].addEventListener('click', () => statToggle(radios[i], i + 1))
         
         //egyéb
-        document.querySelector('#UserDel .btn-warning').addEventListener('click', () => deleteThisUser())
+        document.querySelector('#UserDel .btn-warning').addEventListener('click', () => deleteThisUser(CurrentUserData.id))
         document.querySelector('#shareFeladat .modal-footer').children[0].addEventListener('click', () => postTaskToClassroom())
         document.querySelector('#megosztFeladat .btn-warning').addEventListener('click', () => shareTaskWithTeacher())
         

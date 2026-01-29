@@ -1,0 +1,43 @@
+2026-01-29T09:07:18.900Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-29T09:07:19.388Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:07:20.597Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:07:23.279Z [feladatbank] [32minfo[39m: User (id=211) and their tasks were successfully deleted method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:07:23.533Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:08:44.654Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:08:45.556Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:08:46.234Z [feladatbank] [32minfo[39m: Password reset requested       method=POST             ip=::1             
+2026-01-29T09:08:46.246Z [feladatbank] [32minfo[39m: Sending mail to papp.r.606@gmail.com
+2026-01-29T09:08:48.251Z [feladatbank] [32minfo[39m: User (id=211) and their tasks were successfully deleted method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:08:48.332Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:09:22.521Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:09:23.328Z [feladatbank] [32minfo[39m: Password reset requested       method=POST             ip=::1             
+2026-01-29T09:09:23.337Z [feladatbank] [32minfo[39m: Sending mail to papp.r.606@gmail.com
+2026-01-29T09:09:43.450Z [feladatbank] [32minfo[39m: User reczegd@gmail.com login attempted..
+2026-01-29T09:09:55.160Z [feladatbank] [32minfo[39m: Password reset requested       method=POST             ip=::1             
+2026-01-29T09:09:55.169Z [feladatbank] [32minfo[39m: Sending mail to papp.r.606@gmail.com
+2026-01-29T09:10:08.053Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-29T09:10:09.639Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:10:09.849Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:10:12.065Z [feladatbank] [32minfo[39m: Password reset requested       method=POST             ip=::1             
+2026-01-29T09:10:12.085Z [feladatbank] [32minfo[39m: Sending mail to papp.r.606@gmail.com
+2026-01-29T09:13:54.941Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:14:22.954Z [feladatbank] [32minfo[39m: User Rebeka Papp login attempted..
+2026-01-29T09:15:03.648Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:15:07.138Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:15:07.334Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:16:15.519Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:17:16.628Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:17:17.895Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:17:57.125Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-29T09:17:58.230Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-29T09:17:58.320Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-29T09:19:32.338Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-29T09:20:52.229Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::1             
+2026-01-29T09:21:06.564Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-29T09:21:42.766Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:22:04.860Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:22:40.816Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:24:29.550Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:24:56.109Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:27:50.967Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:28:58.536Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1

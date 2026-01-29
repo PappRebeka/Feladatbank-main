@@ -211,26 +211,26 @@ function saveUserData(){//PR, BBB
         
 }
 
-function deleteThisUser(){//PR
-    if(CurrentUserData.Jogosultsag == "Főadmin"){  // prevent deleting main admin
-        toastMsg("Tiltott művelet!", "Az főadmin nem törölhető", "danger")
-        setTimeout(() => {      // is this really necessary?
-            window.location.href = "homepage.html"
-        }, 2000);
+function deleteThisUser(id){//PR
+    if(id == CurrentUserData.id && CurrentUserData.Jogosultsag == "Főadmin"){  // prevent deleting main admin
+        toastMsg("Tiltott művelet!", "A főadmin nem törölhető", "danger")
     }
     else{   // proceed with deletion
-        const result = ajax_post("/deleteUser", 1, { id: CurrentUserData.id });
+        const result = ajax_post("/deleteUser", 1, { id: id });
         
         if (result.success) {
-            toastMsg("Sikeres művelet!", "A felhasználó törölve lett, nemsokára átirányítjuk a bejelentkezési oldalra", "success")
+            toastMsg("Sikeres művelet!", "A felhasználó törölve lett", "success")
         } else {
             toastMsg("Hiba", result.error || "Nem sikerült törölni a felhasználót", "danger")
             return;
         }
         
-        setTimeout(() => { // redirect to login page
-            window.location.href = "index.html"
-        }, 2000);
+        if(id == CurrentUserData.id){
+            setTimeout(() => { // redirect id the user deleted themselves
+                window.location.href = "index.html"
+            }, 2000);
+        }
+        
     }
 }
 

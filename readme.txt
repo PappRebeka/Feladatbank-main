@@ -1,4 +1,20 @@
 A web applikáció indítása nulláról:
+    0. Korrekt verziók használata (Linux útmutató):
+        Javasoljuk a következő csomagok korrekt verziójának használatát:
+            0. `nvm` (Node Version Manager):
+                A Node csomagok verziójának letöltéséhez az `nvm` csomagot javasoljuk.
+                Kérem hogy kövesse a letöltési és telepítése utasításokat az `nvm`
+                Github repository-ján: https://github.com/nvm-sh/nvm
+            1. Node:
+                `nvm install 20` - Node 20 LTS verziójának letöltése
+                `nvm use 20` - Ennek a verziójának használata
+            2. MariaDB:
+                A MariaDB helyes verziójának letöltése érdekében látogasson el erre a weboldalra:
+                    - https://mariadb.org/download/
+                1. Válassza ki a helyes operációs rendszert és utasításkészlet-architektúra verziót.
+                2. Hogy a 10.11.13-as verziót letöltse, kapcsolja be a "Display older releases" kapcsolót.
+                3. Válassza ki a korrekt verziót és nyomjon rá a "Download" gombra.
+                
     1. A github repo klónozása helyileg: 
         `git clone https://github.com/PappRebeka/Feladatbank-main.git`
     2. A klónozott mappa megnyitása:

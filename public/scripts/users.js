@@ -59,7 +59,7 @@ function loadUsers(item){ //PR
     }
 
     const footer = document.querySelector("#tanarAdatai .modal-footer")
-    footer.innerHTML = `<button type="button" class="btn btn-danger data-bs-dismiss="modal">
+    footer.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
                             <i class="bi bi-trash-fill"></i>&nbsp;
                             Törlés
                         </button>
@@ -72,13 +72,15 @@ function loadUsers(item){ //PR
                             Bezárás
                         </button>`
 
-    footer.children[0].addEventListener('click', () => DeleteSelectedUser())
+    footer.children[0].addEventListener('click', () => {deleteThisUser(item.id); loadPageData()})
     footer.children[1].addEventListener('click', () => moveUserClick())
 }
 
 function moveUserClick(){ //RD
+    console.log(userId_ToChangeInstitute)
     var intezmenyek = ajax_post("/getUserIntezmeny", 1, { uid: userId_ToChangeInstitute })
-    IntezmenyAthelyezTolt(intezmenyek.results)
+    console.log(intezmenyek)
+    autofillOtherInstitutions(intezmenyek.results)
 }
 
 function updateUserAuth(id, from, to, nev){ //PR
@@ -101,8 +103,8 @@ function updateUserAuth(id, from, to, nev){ //PR
 
 function moveUserInstitution(){ //RD
     var hova = document.getElementById("ujIntezmeny").value
-    
-    const result = ajax_post("/moveUserInstitution", 1, { hova: hova, userId: userId_ToChangeInstitute })
+    console.log("hova: "+hova)
+    const result = ajax_post("/AthelyezUser", 1, { hova: hova, userId: userId_ToChangeInstitute })
     
     if (result.success) {
         toastMsg("Sikeres művelet", "A felhasználó sikeresen áthelyezve", "success")

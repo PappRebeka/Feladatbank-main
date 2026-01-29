@@ -20,7 +20,7 @@ function editInstitution(){ //RD
 }
 
 function deleteInstitution(){ //RD
-    ajax_post("/deleteInstitution", 1, { id: intezmenyId })
+    ajax_post("/torolIntezmeny", 1, { id: intezmenyId })
 }
 
 function toggleInstitutionRadio(chosenOne){ //PR
@@ -45,7 +45,7 @@ function setInstitutionOption(index){ //RD, PR
 
     document.getElementById("currentDatabaseOption").replaceChildren(html)
     autofillInstitutions(type)
-    createSlimSelect('deleteInstitution', IntezmenyChanged)
+    
 }
 
 function autofillInstitutions(mit, lista){//RD
@@ -59,18 +59,19 @@ function autofillInstitutions(mit, lista){//RD
         opt.textContent = lob.IntezmenyNev
 
         html.push(opt)
-    }  
+    }
     if(mit == "javit"){
         document.getElementById("javitIntezmeny").replaceChildren(...html)// passes each element as separate arguments
         createSlimSelect('javitIntezmeny', IntezmenyChanged)
     }        
-    if(mit == "torol"){
+    if(mit == "torol"){ 
         document.getElementById("deleteInstitution").replaceChildren(...html);// html[0], html[1], html[2], ...
         createSlimSelect('deleteInstitution', IntezmenyChanged)
     }
 }
 
 function autofillOtherInstitutions(lista){//RD
+    console.log(lista)
     document.getElementById("ujIntezmeny").innerHTML = "";
     var html = []
     for (const asdf of lista) {

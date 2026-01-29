@@ -21,7 +21,7 @@ const app = express();
 const convert = new ansiToHtml();
 app.use(express.json());
 app.use(express.static("public"));
-app.use('/segitseg', express.static(path.join(__dirname, 'segitseg')));
+app.use('/help', express.static(path.join(__dirname, 'help')));
 var md5 = require('js-md5');
 
 const config = require("./config/config.js");
@@ -147,10 +147,10 @@ app.get("/reg", async (req, res) => { //PR, RD
     const client = createOAuthClient(); //új kliens a sessionhoz -> nem dob be más user accountjába
     const {tokens: uj_tokenek} = await client.getToken(req.query.code) // uj_tokenek tartalmazza: access_token, refresh_token, expiry_date
 
-    const lejaratms = uj_tokenek.expiry_date || Date.now() + (3600 * 1000) //vagy a lejárati idő a tokenekből ha nincs akkor most + 2 óra(időzóna difference)
+    const expiryDateMs = uj_tokenek.expiry_date || Date.now() + (3600 * 1000) //vagy a lejárati idő a tokenekből ha nincs akkor most + 2 óra(időzóna difference)
     req.session.access_token = uj_tokenek.access_token;
     req.session.refresh_token = uj_tokenek.refresh_token;
-    req.session.expiry_date = lejaratms;
+    req.session.expiry_date = expiryDateMs;
 
     //felhasználó adataiak kiszedése az új tokenek segítségével
     client.setCredentials(uj_tokenek)
@@ -378,6 +378,7 @@ app.post("/sendMailTo", (req, res) => { //PR  //email
   
 
   var email = req.body.email;
+  var type = req.body.type || 'request'
    if (!isEmail(email)) {
     return res.send(JSON.stringify({ error: 'invalid input' }));
   }
@@ -386,7 +387,7 @@ app.post("/sendMailTo", (req, res) => { //PR  //email
     level: 'info',
     message: "Sending mail to "+email,
   })
-    sendMail(email);
+    sendMail(email, type);
     res.end();
 })
 //#endregion
@@ -1895,6 +1896,7 @@ async function selectUpdate(newFile){
   const backups = path.join(__dirname, "backups");
   let fajlok = await fajlNevLista(backups);
   fajlok.push(newFile)
+  fajlok.unshift();
   return fajlok;
 }
 
@@ -1960,6 +1962,7 @@ app.post("/MentBackup", async (req, res) =>{
   const newBackup = await backupCreate(backupPath)
   let result = sortedFiles.map((file) => file.name)
   result.push(newBackup);
+  result.unshift();
 
   res.send(JSON.stringify({
     "fajlok": result
@@ -2002,15 +2005,14 @@ app.post("/AthelyezUser", (req, res) =>{//RD, felhasználó áthelyezése(intéz
 
 app.post("/getUserIntezmeny", (req, res)=>{
   var userId = req.body.uid
-  var sql = `SELECT DISTINCT Intezmenyek.id, intezmenyNev, Users.id
-              FROM Intezmenyek INNER JOIN Users ON Users.IntezmenyId = Intezmenyek.id
-              GROUP BY Intezmenyek.id
-              HAVING not Users.id = ?`
+  var sql = `SELECT Intezmenyek.id, intezmenyNev
+              FROM Intezmenyek LEFT JOIN Users ON Users.IntezmenyId = Intezmenyek.id
+              WHERE not Intezmenyek.id = (SELECT IntezmenyId FROM Users WHERE Users.id = ?)
+              GROUP BY Intezmenyek.id`
   conn.query(sql, [userId], (err, results) => {
     if (err) {
       return res.status(500).send(JSON.stringify({ error: err.message }));
     }
-
     res.send(JSON.stringify({ "results":results }));
     res.end()
   });

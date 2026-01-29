@@ -4,7 +4,7 @@ const Docs = {
   admin: "type/admin.json",
 };
 
-const Base = "/segitseg/";
+const Base = "/help/";
 var tocState = true
 
 $(document).ready(async function() {

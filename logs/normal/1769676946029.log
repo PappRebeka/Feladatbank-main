@@ -1,0 +1,50 @@
+2026-01-29T08:55:46.058Z [feladatbank] [32minfo[39m: Fut a szerver
+2026-01-29T08:55:53.467Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-29T08:55:53.551Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T08:55:54.542Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-29T08:55:54.636Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T08:58:00.510Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-29T08:58:00.585Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T08:58:01.456Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-29T08:58:01.545Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T08:58:17.934Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-29T08:58:18.280Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T08:58:19.198Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-29T08:58:19.750Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T08:59:36.727Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-29T08:59:36.773Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T08:59:37.782Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-29T08:59:37.887Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:03:33.531Z [feladatbank] [32minfo[39m: Sending mail to papp.r.606@gmail.com
+2026-01-29T09:03:50.760Z [feladatbank] [32minfo[39m: Password reset requested       method=POST             ip=::1             
+2026-01-29T09:04:09.851Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:04:09.952Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:04:10.816Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-29T09:04:10.925Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:04:15.726Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:04:15.826Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:04:16.721Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-29T09:04:16.851Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:04:22.003Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:04:22.040Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:04:22.907Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-29T09:04:23.003Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:05:12.653Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:05:12.750Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:05:14.668Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-29T09:05:14.786Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:05:17.754Z [feladatbank] [32minfo[39m: User (id=211) and their tasks were successfully deleted method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:05:37.172Z [feladatbank] [32minfo[39m: User admin login attempted..
+2026-01-29T09:05:37.409Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:05:37.489Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:05:38.348Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-29T09:05:38.377Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:06:01.434Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:06:01.472Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:06:02.443Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-29T09:06:02.528Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:06:04.480Z [feladatbank] [32minfo[39m: User (id=211) and their tasks were successfully deleted method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:06:21.768Z [feladatbank] [34mdebug[39m: User has logged in             method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:06:21.840Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1
+2026-01-29T09:06:22.739Z [feladatbank] [34mdebug[39m: No usable courses found (userid=2)
+2026-01-29T09:06:22.846Z [feladatbank] [32minfo[39m: All user data extracterd for display method=POST             ip=::ffff:127.0.0.1

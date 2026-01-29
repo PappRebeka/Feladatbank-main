@@ -30,7 +30,7 @@ function tanulokChanged(e){
 }
 
 function createSlimSelect(hovaId, functionNev){ //PR, RD
-    document.getElementById(hovaId).selectedIndex = -1
+    document.getElementById(hovaId)?.selectedIndex = -1
     var ss = new SlimSelect({
             select: document.getElementById(hovaId),
             cssClasses: {

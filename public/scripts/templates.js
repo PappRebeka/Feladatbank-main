@@ -315,7 +315,7 @@ function hibajelentesDefaultTemplate(){
     return div
 }
 
-function intezmenyDiv1(id, text){
+function intezmenyDiv1(id, text, type){
     const div1 = document.createElement('div')
     div1.classList.add('col-md-6', 'p-3')
 
@@ -324,8 +324,9 @@ function intezmenyDiv1(id, text){
     lab.textContent = text
     lab.classList.add('form-label', 'text-muted')
 
-    const inp = document.createElement('input')
-    inp.type = 'text'; inp.id = id
+    const inp = document.createElement(type)
+    if(type == 'input') inp.type = 'text'
+    inp.id = id
     inp.setAttribute('hint', id)
     inp.classList.add('rounded')
 
@@ -360,7 +361,7 @@ function intezmenyOptionTemplate(index){
                     </div>`
     switch(index){
         case 0: 
-            var div1 = intezmenyDiv1('intezmenyMezo', 'Intézmény neve:')
+            var div1 = intezmenyDiv1('intezmenyMezo', 'Intézmény neve:', 'input')
             var div2 = intezmenyDiv2('Intézmény hozzáadása')
 
             $bind(div2, 'intClick').addEventListener('click', () => addInstitution())
@@ -372,10 +373,10 @@ function intezmenyOptionTemplate(index){
             break;
 
         case 1: 
-            var div1 = intezmenyDiv1('javitIntezmeny', 'Javítani való intézmény:')
+            var div1 = intezmenyDiv1('javitIntezmeny', 'Javítani való intézmény:', 'select')
             div.querySelector('.row').appendChild(div1)
 
-            div1 = intezmenyDiv1('JavitMezo', 'Új intézmény név:')
+            div1 = intezmenyDiv1('JavitMezo', 'Új intézmény név:', 'input')
             div.querySelector('.row').appendChild(div1)
             
 
@@ -390,7 +391,7 @@ function intezmenyOptionTemplate(index){
             break;
 
         case 2: 
-            var div1 = intezmenyDiv1('deleteInstitution', 'Törölni való intézmény neve:')
+            var div1 = intezmenyDiv1('deleteInstitution', 'Törölni való intézmény neve:', 'select')
             var div2 = intezmenyDiv2('Intézmény törlése')
 
             $bind(div2, 'intClick').addEventListener('click', () => addInstitution())

@@ -4,7 +4,7 @@ backup.js --------------
     - saveBackup            -RD
     - restoreBackup         -RD
 */
-function getBackupOptions(adatok = ajax_post("/getBackupOptions", 1, {})){ //RD
+function getBackupOptions(adatok = ajax_post("/backupTolt", 1, {})){ //RD
     document.getElementById("backupSelect").replaceChildren()
     for (const file of adatok.fajlok) {
         let opt = document.createElement('option')

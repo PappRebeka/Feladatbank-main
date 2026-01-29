@@ -321,7 +321,7 @@
       }
 
       if (ajax_post("/isRegistered", 0, { email: mail }) == "true") {
-        ajax_post("/sendMailTo", 1, { email: mail });
+        ajax_post("/sendMailTo", 1, { email: mail, type: 'request' });
         toastMsg("Email elküldve", "Ha létezik fiók ezzel az email címmel, küldtünk helyreállító linket.", "success");
       } else {
         showError("Nincs ilyen email című felhasználó!");
