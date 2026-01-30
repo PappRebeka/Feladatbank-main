@@ -1086,8 +1086,9 @@ app.post("/ment-feladat", async (req, res) => { //BBB
       console.log(alfeladat["alfId"])
       console.log(Boolean(alfeladat["alfId"]))
       console.log(isNumber(alfeladat["alfId"]))
+	  console.log(!alfeladat["alfIf"])
 
-      let insert = !Boolean(alfeladat["alfId"]) // na nem kaptunk id-t akkor ez egy új alfeladat
+      let insert = !alfeladat["alfId"] // ha nem kaptunk id-t akkor ez egy új alfeladat
       let delte = alfeladat["isDelete"] == true
       let injection = []
             
