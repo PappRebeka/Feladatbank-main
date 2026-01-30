@@ -110,7 +110,7 @@ module.exports = function (oauth2Client, logger, google) {
                     (SELECT sum(Pont) FROM Alfeladat WHERE FeladatId = ${feladatId}) AS maxPont, 
                     Alfeladat.id, Alfeladat.Leiras, Alfeladat.Pont, Alfeladat.FajlId
                   FROM Feladatok left JOIN Alfeladat ON Feladatok.id = Alfeladat.FeladatId 
-                  WHERE Feladatok.id = ${feladatId}`; // AHGYUGIUFASZ
+                  WHERE Feladatok.id = ${feladatId}`; 
         conn.query(sql, async (err, results) => {
             if (err){
                 logger.log({
@@ -136,7 +136,7 @@ module.exports = function (oauth2Client, logger, google) {
             var year =    dueDate == '' ? null : dueDate.split("-")[0];
             var month =   dueDate == '' ? null : dueDate.split("-")[1];
             var day =     dueDate == '' ? null : dueDate.split("-")[2];
-            var hours =   dueTime == '' ? null : parseInt(dueTime.split(":")[0]) - 1; //időzóna bullshit
+            var hours =   dueTime == '' ? null : parseInt(dueTime.split(":")[0]) - 1; //időzóna
             var minutes = dueTime == '' ? null : dueTime.split(":")[1];
             var maxPont = results[0]["maxPont"]
 
@@ -153,8 +153,10 @@ module.exports = function (oauth2Client, logger, google) {
                     description += `${i+1}. alfeladat - ${pont} pont\n${leiras}\n\n`
             }
       
-            var lofasz = await createClassroomTask(title, description, maxPont, year, month, day, hours, minutes, kurzusId, fajlIds)
-            res.send(JSON.stringify({ "courseWorkId":lofasz } ))
+            var courseWorkId = await createClassroomTask(title, description, maxPont, year, month, day, hours, minutes, kurzusId, fajlIds)
+            res.send(JSON.stringify({ 
+                "courseWorkId": courseWorkId
+            }));
             res.end();
         });
     }),

@@ -14,6 +14,8 @@ A web applikáció indítása nulláról:
                 1. Válassza ki a helyes operációs rendszert és utasításkészlet-architektúra verziót.
                 2. Hogy a 10.11.13-as verziót letöltse, kapcsolja be a "Display older releases" kapcsolót.
                 3. Válassza ki a korrekt verziót és nyomjon rá a "Download" gombra.
+            3. `mysqldump` (adatbázis biztonsági mentés):
+                
                 
     1. A github repo klónozása helyileg: 
         `git clone https://github.com/PappRebeka/Feladatbank-main.git`

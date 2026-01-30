@@ -180,13 +180,13 @@
 
     // ---------- Data fetch helpers ----------
     function autofillInstituteArray() {
-      const corporation = ajax_post("/SendIntezmeny", 1, {});
+      const institute = ajax_post("/SendIntezmeny", 1, {});
       const sel = document.getElementById("intezmenySelect");
 
       sel.replaceChildren();
-      if (!corporation.results) return;
+      if (!institute.results) return;
 
-      for (const item of corporation.results) {
+      for (const item of institute.results) {
         const opt = document.createElement("option");
         opt.value = item.id;
         opt.textContent = item.IntezmenyNev;

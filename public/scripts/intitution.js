@@ -4,7 +4,7 @@ institution.js ---------
     - editInstitution            -RD  
     - deleteInstitution          -RD
     - toggleInstitutionRadio     -PR
-    - setInstitutionOption       -RD, PR
+    - toggleInstitutionOption       -RD, PR
     - autofillInstitutions       -RD
     - autofillOtherInstitutions  -RD
 */
@@ -15,8 +15,8 @@ function addInstitution(){ //RD
 }
 
 function editInstitution(){ //RD
-    var intezmValue = document.getElementById("JavitMezo").value
-    ajax_post("/editInstitution", 1, { id: intezmenyId, intezmeny: intezmValue })
+    var intezmValue = document.getElementById("ujIntezmeny").value
+    ajax_post("/modositIntezmeny", 1, { id: intezmenyId, intezmeny: intezmValue })
 }
 
 function deleteInstitution(){ //RD
@@ -39,24 +39,25 @@ function toggleInstitutionRadio(chosenOne){ //PR
     chosenOne.checked = true
 }
 
-function setInstitutionOption(index){ //RD, PR
-    let html = intezmenyOptionTemplate(index)
+function toggleInstitutionOption(index){ //RD, PR
+    //let html = intezmenyOptionTemplate(index)
     var type = ["", "javit", "torol"][index] || ""
 
-    document.getElementById("currentDatabaseOption").replaceChildren(html)
+    document.querySelectorAll('#IntezmenyOptions .bg-login')[index].classList.toggle('d-none')
+    //document.getElementById("currentDatabaseOption").replaceChildren(html)
     autofillInstitutions(type)
     
 }
 
 function autofillInstitutions(mit, lista){//RD
-    var corp = ajax_post("/SendIntezmeny", 1, {})
+    var inst = ajax_post("/SendIntezmeny", 1, {})
     var html = []
-    for (const lob of corp.results) {
-        intezmenyek.push(lob.IntezmenyNev)
+    for (const item of inst.results) {
+        intezmenyek.push(item.IntezmenyNev)
 
         let opt = document.createElement('option')
-        opt.value = lob.id
-        opt.textContent = lob.IntezmenyNev
+        opt.value = item.id
+        opt.textContent = item.IntezmenyNev
 
         html.push(opt)
     }
@@ -65,8 +66,8 @@ function autofillInstitutions(mit, lista){//RD
         createSlimSelect('javitIntezmeny', IntezmenyChanged)
     }        
     if(mit == "torol"){ 
-        document.getElementById("deleteInstitution").replaceChildren(...html);// html[0], html[1], html[2], ...
-        createSlimSelect('deleteInstitution', IntezmenyChanged)
+        document.getElementById("torolIntezmeny").replaceChildren(...html);// html[0], html[1], html[2], ...
+        createSlimSelect('torolIntezmeny', IntezmenyChanged)
     }
 }
 

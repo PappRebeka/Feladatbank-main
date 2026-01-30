@@ -51,6 +51,7 @@ function logFormat(msg, method, ip) {
 loggerConfig('debug', false);
 var logger = getLogger();
 
+var mariadb_dump_exists = false;
 
 
 // ha jól értem akkor ez callback helyett vagy elfogadja vagy elutasítja a connectiont, promise based lesz, a bind pedig megakadályozza a leválasztást?
@@ -216,9 +217,9 @@ app.post("/registerData", async (req, res) =>{ //RD, PR
     
     
     const insertSql = await queryAsync(sql, [username, email, passwd, req.session.access_token, req.session.refresh_token, req.session.userToken, req.session.expiry_date, randomHatterszin()]) //insert végrehajtása
-    const ujId = insertSql.insertId //user idjének kiszedése
+    const letrejottId = insertSql.insertId //user idjének kiszedése
     
-    req.session.userId = ujId //tulajdonképpen meg lesz jelölve bejelentkezettként a user // id eltárolása a sessionbe
+    req.session.userId = letrejottId //tulajdonképpen meg lesz jelölve bejelentkezettként a user // id eltárolása a sessionbe
     req.session.Jog = 'Tanár'
     
     activeSessions.add(req.sessionID)
@@ -1196,28 +1197,28 @@ app.post("/sendClassroomCourses", async (req, res) =>{ //RD, kiszedett kurzusok 
 
 async function fajlFeltoltClassroom (fajlId) {//BBB?
 
-  let ext, asd;
-  let dbres = await queryAsync("SELECT BackendNev, AlapNev FROM Fajl WHERE id = ?", [fajlId]);
+  let fileExtension, filePath;
+  let dbResults = await queryAsync("SELECT BackendNev, AlapNev FROM Fajl WHERE id = ?", [fajlId]);
   
   const fileMetadata = {
-    name: dbres[0]["AlapNev"],
+    name: results[0]["AlapNev"],
   };
 
-  ext = path.extname(dbres[0]["AlapNev"]);
-  asd = path.join(__dirname, "uploads", dbres[0]["BackendNev"]);
+  fileExtension = path.extname(dbResults[0]["AlapNev"]);
+  filePath = path.join(__dirname, "uploads", dbResults[0]["BackendNev"]);
   
   const media = {
-    mimeType: mime.lookup(ext) || 'application/octet-stream',
-    body: fs.createReadStream(asd),
+    mimeType: mime.lookup(fileExtension) || 'application/octet-stream',
+    body: fs.createReadStream(filePath),
   }
 
-  const res = await drive.files.create({
+  const driveResults = await drive.files.create({
     resource: fileMetadata,
     media: media,
     fields: 'id'
   });
 
-  return res?.data.id;
+  return driveResults?.data.id;
 }
 
 app.post("/saveClassroomFeladatKozzetett", (req, res) =>{ //RD adatbázisba a közzétett feladatok tárolása(csak naplózásra szolgál)
@@ -1299,8 +1300,6 @@ app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom felada
         description += `${i+1}) (${pont} pont) ${leiras}\n\n`
       }
     }
-    console.log("fájlok")
-    console.log(fajlIds)
     var temp = await createClassroomTask(nev, description, maxPont, year, month, day, hours, minutes, kurzusId, fajlIds, tanulok, shareMode)
     res.send(JSON.stringify({ "courseWorkId":temp } ))
     res.end();
@@ -1705,7 +1704,7 @@ app.post("/modositIntezmeny", (req, res) =>{//RD, intézmény módosítása
 })
 
 
-app.post("/customSql", (req, res) => {//??? -RD
+app.post("/customSql", (req, res) => {//??? BBB
   const sql = req.body.sql;
 
   if(!['Főadmin'].includes(req.session.Jog)){
@@ -1855,12 +1854,20 @@ async function backupCreate(backups) {//BBB, PR, RD, sql backup készítése bac
   const fn = `backup-${date}.sql`
   const backupCel = path.join(backups, fn);
 
-  await makeDump(config.database.host, config.database.port, dbUser, dbPsw, dbName, backupCel)
+  if (mariadb_dump_exists) {
+    await makeDump(
+      config.database.host, 
+      config.database.port, 
+      dbUser, 
+      dbPsw, 
+      dbName, 
+      backupCel)
+  }
 
-  return fn
+  return mariadb_dump_exists ? fn : "no_mariadb_dump"
 }
 async function makeDump(host, port, dbUser, dbPsw, dbName, backupCel){
-  const cmd = `"C:\\Program Files\\MariaDB 10.6\\bin\\mysqldump.exe" --single-transaction --skip-lock-tables -h ${host} -P ${port} -u ${dbUser} -p"${dbPsw}" ${dbName} > "${backupCel}"`
+  const cmd = `mariadb-dump --single-transaction --skip-lock-tables -h ${host} -P ${port} -u ${dbUser} -p"${dbPsw}" ${dbName} > "${backupCel}"`
   exec(cmd, (error, stdout, stderr) =>{
     if(error){
       return
@@ -1878,7 +1885,9 @@ function restore(backupLocation, fileName){/*BBB, RD, sql biztonsági mentés vi
   const dbName = config.database.name;
   const backupHely = path.join(__dirname, backupLocation, fileName);
 
-  const cmd = `"C:\\Program Files\\MariaDB 10.6\\bin\\mysql.exe" -h ${config.database.host} -P ${config.database.port} -u ${dbUser} -p${dbPsw} ${dbName} < ${backupHely}`
+  
+
+  const cmd = `mysql -h ${config.database.host} -P ${config.database.port} -u ${dbUser} -p${dbPsw} ${dbName} < ${backupHely}`
 
   exec(cmd, (error, stdout, stderr) =>{
     if(error){
@@ -1895,9 +1904,8 @@ async function fajlNevLista(hely){
 async function selectUpdate(newFile){
   const backups = path.join(__dirname, "backups");
   let fajlok = await fajlNevLista(backups);
-  fajlok.push(newFile)
-  fajlok.unshift();
-  return fajlok;
+  if(Boolean(newFile)) fajlok.push(newFile)
+  return Array.from(fajlok).splice(1);
 }
 
 app.post("/backupTolt", async (req, res) =>{
@@ -1960,6 +1968,13 @@ app.post("/MentBackup", async (req, res) =>{
   })
 
   const newBackup = await backupCreate(backupPath)
+  if (newBackup === "no_mariadb_dump") {
+    res.send(JSON.stringify({
+      "error": "Nincsen letöltve a helyes csomag a biztonsági mentés elvégzéséhez"
+    })).end();
+    return;
+  }
+
   let result = sortedFiles.map((file) => file.name)
   result.push(newBackup);
   result.unshift();
@@ -1972,13 +1987,13 @@ app.post("/MentBackup", async (req, res) =>{
 
 app.post("/RestoreBackup", (req, res) =>{
   const fajlNev = req.body.dumpNev
-  var szamlalo = sessionCounter()
-  if(szamlalo <= 1){
+  var sessionSzamlalo = sessionCounter()
+  if(sessionSzamlalo <= 1){
     restore("backups", fajlNev)
     res.send(JSON.stringify({"str":"Sikeres visszaállítás"}))
   }
   else{
-    res.send(JSON.stringify({"str":`Jelenleg vannak bejelentkezett felhasználók (${szamlalo} db), kérjük próbálja újra később`}))
+    res.send(JSON.stringify({"str":`Jelenleg vannak bejelentkezett felhasználók (${sessionSzamlalo} db), kérjük próbálja újra később`}))
   }
   res.end()
 })
@@ -2018,7 +2033,7 @@ app.post("/getUserIntezmeny", (req, res)=>{
   });
 })
 
-app.post("/wss", (req, res) => {
+app.post("/wss", (req, res) => { // Ez mi?(RD)
   let wssToken = crypto.randomBytes(32).toString("hex");
   terminal_wss_tokens.push(wssToken)
 
@@ -2052,6 +2067,16 @@ const server = app.listen(config.server.port, () => {
     level: 'info',
     message: `Fut a szerver`,
   });
+
+  exec (`mariadb-dump --version`, (error, stdout, stderr) => {
+    if (error) {
+      mariadb_dump_exists = false;
+      console.log("mariadb-dump package nincs installálva");
+    } else {
+      mariadb_dump_exists = true;
+      console.log("mariadb-dump package installálva van");
+    }
+  })
   
   const tabla_lista = ["Alfeladat", "Fajl", "Feladatok", "Hibajelentes", "Intezmenyek", "Kozzetett", "Megosztott", "Naplo", "Users"];
   let loadBase = false;
@@ -2159,7 +2184,10 @@ const server = app.listen(config.server.port, () => {
     console.log(sql, injection)
     conn.query(sql, injection, (err, results) => {
       if (err) {
-        return res.send(JSON.stringify({ success: false, error: err.message }));
+        return res.send(JSON.stringify({ 
+          success: false, 
+          error: err.message 
+        }));
       }
       res.end()
     })

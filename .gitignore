@@ -10,11 +10,11 @@ uploads/
 !uploads/.gitkeep    
 
 # Ne legyen semmilyen log fájl commitelve
-# logs/
-# !logs/.gitkeep
-# !logs/info/.gitkeep
-# !logs/error/.gitkeep
-# !logs/normal/.gitkeep
+logs/
+!logs/.gitkeep
+!logs/info/.gitkeep
+!logs/error/.gitkeep
+!logs/normal/.gitkeep
 
 backups/
 !backups/.gitkeep

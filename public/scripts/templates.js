@@ -164,20 +164,49 @@ function databasePageTemplate(){//BBB, PR
                         <div class="container-md mx-auto">
                             <div class="row" id="IntezmenyOptions">
                                 <div class="col-12 col-md-4 mb-2">
-                                    <label class="btn w-100 btn-light border border-secondary py-2 text-nowrap overflow-hidden" id="I_Hozzaad_Option" for="I_Hozzaad"><i class="bi bi-plus-lg"></i>&nbsp;Intézmény hozzáadása</label>
+                                    <label class="btn w-100 btn-light border border-secondary py-2 text-nowrap overflow-hidden" id="I_Hozzaad_Option" for="I_Hozzaad">
+                                        <i class="bi bi-plus-lg"></i>&nbsp;Intézmény hozzáadása
+                                    </label>
                                     <input class="btn-check" name="IntRadio" type="checkbox" id="I_Hozzaad">
+                                    <div class='w-100 mt-3 bg-login rounded border border-dark-subtle text-center p-2 d-none'>
+                                        <h3>Intézmény hozzáadása</h3>
+                                        <hr class='w-75 mx-auto'>
+                                        <div class='w-100 justify-content-center'>
+                                            <input type="text" id="intezmenyMezo" hint="intezmenyMezo" placeholder='Új intézmény neve' class="rounded mb-2">
+                                            <button data-bind="intAddClick" class="btn p-2 btn-warning"><i class="bi bi-plus"></i>Hozzáadás</button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-12 col-md-4 mb-2">
-                                    <label class="btn w-100 btn-light border border-secondary py-2 text-nowrap overflow-hidden" id="I_Modosit_Option" for="I_Modosit"><i class="bi bi-pencil"></i>&nbsp;Intézmény módosítása</label>
+                                    <label class="btn w-100 btn-light border border-secondary py-2 text-nowrap overflow-hidden" id="I_Modosit_Option" for="I_Modosit">
+                                        <i class="bi bi-pencil"></i>&nbsp;Intézmény módosítása
+                                    </label>
                                     <input class="btn-check" name="IntRadio" type="checkbox" id="I_Modosit">
+                                    <div class='w-100 mt-3 bg-login rounded border border-dark-subtle text-center p-2 d-none'>
+                                        <h3>Intézmény módosítása</h3>
+                                        <hr class='w-75 mx-auto'>
+                                        <div class='w-100 justify-content-center'>
+                                            <select id="javitIntezmeny" class="rounded"></select>
+                                            <input type="text" id="ujIntezmeny" hint="ujIntezmeny" placeholder='Az intézmény új neve' class="rounded mb-2">
+                                            <button data-bind="intEditClick" class="btn p-2 btn-warning"><i class="bi bi-pencil"></i>Módosítás</button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-12 col-md-4 mb-2">
-                                    <label class="btn w-100 btn-light border border-secondary py-2 text-nowrap overflow-hidden" id="I_Torol_Option" for="I_Torol"><i class="bi bi-eraser"></i>&nbsp;Intézmény törlése</label>
+                                    <label class="btn w-100 btn-light border border-secondary py-2 text-nowrap overflow-hidden" id="I_Torol_Option" for="I_Torol">
+                                        <i class="bi bi-eraser"></i>&nbsp;Intézmény törlése
+                                    </label>
                                     <input class="btn-check" name="IntRadio" type="checkbox" id="I_Torol">
+                                    <div class='w-100 mt-3 bg-login rounded border border-dark-subtle text-center p-2 d-none'>
+                                        <h3>Intézmény törlése</h3>
+                                        <hr class='w-75 mx-auto'>
+                                        <div class='w-100 justify-content-center'>
+                                            <select id="torolIntezmeny" class="rounded"></select>
+                                            <button data-bind="intDeleteClick" class="btn p-2 btn-warning"><i class="bi bi-trash3-fill"></i>Törlés</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        
-                            <div id="currentDatabaseOption" class="w-100 justify-content-center"></div>
                         </div>
                     </div>
                 
@@ -240,6 +269,10 @@ function databasePageTemplate(){//BBB, PR
                             </div>
                         </div>
                     </div>`
+
+    $bind(div, 'intAddClick').addEventListener('click', () => addInstitution())
+    $bind(div, 'intEditClick').addEventListener('click', () => editInstitution())
+    $bind(div, 'intDeleteClick').addEventListener('click', () => deleteInstitution())
     return div
 
 }
@@ -312,96 +345,6 @@ function hibajelentesDefaultTemplate(){
                             
                         </div>
                     </div>`
-    return div
-}
-
-function intezmenyDiv1(id, text, type){
-    const div1 = document.createElement('div')
-    div1.classList.add('col-md-6', 'p-3')
-
-    const lab = document.createElement('label')
-    lab.setAttribute('for', id)
-    lab.textContent = text
-    lab.classList.add('form-label', 'text-muted')
-
-    const inp = document.createElement(type)
-    if(type == 'input') inp.type = 'text'
-    inp.id = id
-    inp.setAttribute('hint', id)
-    inp.classList.add('rounded')
-
-    div1.appendChild(lab)
-    div1.appendChild(document.createElement('br'))
-    div1.appendChild(inp)
-    return div1
-} 
-
-function intezmenyDiv2(text, mt){
-    const div2 = document.createElement('div')
-    div2.classList.add('col-md-6', 'p-3', 'align-bottom')
-
-    const innerDiv = document.createElement('div')
-    innerDiv.setAttribute('data-bind', 'intClick')
-    innerDiv.classList.add('btn', 'p-3', 'btn-warning')
-    if (mt) innerDiv.classList.add('mt-3')
-    innerDiv.textContent = text
-
-    div2.appendChild(innerDiv)
-    return div2
-}
-
-function intezmenyOptionTemplate(index){
-    const div = document.createElement('div')
-    div.classList.add('w-100', 'mx-auto', 'text-center', 'rounded', 'my-4', 'p-3')
-
-    div.innerHTML = `<h1 class="display-6">Intézmény </h1>
-                    <hr class="w-75 mx-auto">
-                    <div class="row">
-                        
-                    </div>`
-    switch(index){
-        case 0: 
-            var div1 = intezmenyDiv1('intezmenyMezo', 'Intézmény neve:', 'input')
-            var div2 = intezmenyDiv2('Intézmény hozzáadása')
-
-            $bind(div2, 'intClick').addEventListener('click', () => addInstitution())
-
-            div.querySelector('.row').appendChild(div1)
-            div.querySelector('.row').appendChild(div2)
-
-            
-            break;
-
-        case 1: 
-            var div1 = intezmenyDiv1('javitIntezmeny', 'Javítani való intézmény:', 'select')
-            div.querySelector('.row').appendChild(div1)
-
-            div1 = intezmenyDiv1('JavitMezo', 'Új intézmény név:', 'input')
-            div.querySelector('.row').appendChild(div1)
-            
-
-            var div2 = intezmenyDiv2('Intézmény módosítása', true)
-            $bind(div2, 'intClick').addEventListener('click', () => editInstitution())
-
-            let newDiv = document.createElement('div')
-            newDiv.classList.add('row', 'justify-content-end')
-            newDiv.appendChild(div2)
-            
-            div.appendChild(div2)
-            break;
-
-        case 2: 
-            var div1 = intezmenyDiv1('deleteInstitution', 'Törölni való intézmény neve:', 'select')
-            var div2 = intezmenyDiv2('Intézmény törlése')
-
-            $bind(div2, 'intClick').addEventListener('click', () => addInstitution())
-
-            div.querySelector('.row').appendChild(div1)
-            div.querySelector('.row').appendChild(div2)
-            break;
-    }
-                        
-    div.firstChild.textContent += ['hozzáadása', 'módosítása', 'törlése'][index]
     return div
 }
 

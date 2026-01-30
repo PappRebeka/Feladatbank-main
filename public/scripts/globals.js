@@ -78,4 +78,3 @@ var intezmenyId
 var kurzusId   
 
 var editor = null; //sql input
-

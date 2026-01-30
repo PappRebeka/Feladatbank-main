@@ -16,12 +16,16 @@ function getBackupOptions(adatok = ajax_post("/backupTolt", 1, {})){ //RD
 }
 function saveBackup(){ //RD
     var adatok = ajax_post("/MentBackup", 1, {})
+    if(adatok["error"]) {
+        toastMsg("Hiba!",adatok["error"], "danger");
+        return;
+    }
     getBackupOptions(adatok);
 }
 
 function restoreBackup(){ //RD
     var selectedbackup = document.getElementById("backupSelect").value
     var valasz = ajax_post("/RestoreBackup", 1, { dumpNev: selectedbackup })
-    alert(valasz.str)
+    toastMsg("Figyelmeztetés", valasz.str, "warning")
 }
     

@@ -344,7 +344,7 @@
                         let id = ['I_Hozzaad', 'I_Modosit', 'I_Torol'][i]
                         let btn = html.querySelector(`#${id}`)
                         
-                        btn.addEventListener('click', () => {toggleInstitutionRadio(btn); setInstitutionOption(i)})
+                        btn.addEventListener('click', () => {toggleInstitutionRadio(btn); toggleInstitutionOption(i)})
                     }
 
 
@@ -608,7 +608,7 @@
         const optionsDiv = document.getElementById('options').children
         optionsDiv[0].addEventListener('click', () => allowUserDataEdit())
         optionsDiv[1].addEventListener('click', () => themeSwitch())
-        optionsDiv[2].addEventListener('click', () => {window.location.href = `/segitseg/sugo.html?role=${CurrentUserData.Jogosultsag == 'Tanár' ? 'tanár' : 'admin'}`})
+        optionsDiv[2].addEventListener('click', () => {window.location.href = `/help/sugo.html?role=${CurrentUserData.Jogosultsag == 'Tanár' ? 'tanár' : 'admin'}`})
         optionsDiv[3].addEventListener('click', () => logout())
 
         //szűrő
