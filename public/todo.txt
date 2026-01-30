@@ -1,11 +1,14 @@
-
 változó, funkció nevek egyértelműsítése
 
 while (teszteles.errors.length > 0){
     debug()
 }
 
-módosít feladat -> törlés  nem jó; fájl módosítás nem jó
+módosít feladat -> törlés  nem jó
+
+megosztott feladatoknál ne feladatid szerint rendezzünk hanem megosztottid szerint
+
+PROGRESSBAR SAFE DOM MANIPULATION!!!!!!!
 
 intézmény hozzáadás
 

@@ -1083,19 +1083,16 @@ app.post("/ment-feladat", async (req, res) => { //BBB
     
     adat["alfeladatok"].forEach(async (alfeladat) => {
       let fajlId = alfeladat["fajlId"]; 
-      console.log(alfeladat["alfId"])
-      console.log(Boolean(alfeladat["alfId"]))
-      console.log(isNumber(alfeladat["alfId"]))
-	  console.log(!alfeladat["alfIf"])
 
-      let insert = !alfeladat["alfId"] // ha nem kaptunk id-t akkor ez egy új alfeladat
+      let update = Boolean(alfeladat["alfId"]) // ha nem kaptunk id-t akkor ez egy új alfeladat
       let delte = alfeladat["isDelete"] == true
       let injection = []
             
       let sql = "";
-      if (insert){
-        sql = `INSERT INTO Alfeladat (Leiras, FeladatId, FajlId, Pont) VALUES(?, ?, ?, ?)`
-        injection.push(alfeladat['leiras'], feladatId, fajlId, alfeladat["pontszam"])
+      if (update && !delte){
+        sql = `UPDATE Alfeladat SET Leiras = ?, FeladatId = ?, FajlId = ?, Pont = ?
+                WHERE id = ${alfeladat["alfId"]}`
+        injection.push(alfeladat['leiras'], feladatId, fajlId, alfeladat["pontszam"], alfeladat["alfId"])
       }     
 
       else if (delte){
@@ -1104,9 +1101,8 @@ app.post("/ment-feladat", async (req, res) => { //BBB
       }  
 
       else {
-        sql = `UPDATE Alfeladat SET Leiras = ?, FeladatId = ?, FajlId = ?, Pont = ?
-                WHERE id = ${alfeladat["alfId"]}`
-        injection.push(alfeladat['leiras'], feladatId, fajlId, alfeladat["pontszam"], alfeladat["alfId"])
+        sql = `INSERT INTO Alfeladat (Leiras, FeladatId, FajlId, Pont) VALUES(?, ?, ?, ?)`
+        injection.push(alfeladat['leiras'], feladatId, fajlId, alfeladat["pontszam"])
       }
 
       console.log('injection')

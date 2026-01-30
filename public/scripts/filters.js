@@ -13,7 +13,6 @@ filters.js -------------
 */
 
 function setSearchFilter(ker){//PR
-    console.log('??')
     ActiveFilters.kereso = ker ? ker.toLowerCase() : "" // save the search filter globally
     loadPageData()          // reload the data with the new filter
 }

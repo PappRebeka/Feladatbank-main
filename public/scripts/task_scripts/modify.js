@@ -45,7 +45,7 @@ class ProgressBar { //BBB
         }
 
         progressBarModal.show();
-
+                                        //nem jó
         $("#uploadProgressBody").append(`
             <div id="${this.id}" class="mb-2 w-100">
                 <span class="me-2">${this.fileName} - ${this.progress}%</span>
@@ -76,7 +76,7 @@ class ProgressBar { //BBB
         this.progress = value;
 
         if (value >= 100) {
-            this.span.textContent = `${this.fileName} - Feltöltve`;
+            this.span.textContent = `${this.fileName} - Feltöltve`; //ok
             $(`#${this.id}`).remove();
             
             
@@ -115,7 +115,7 @@ class ContinousProgressBar {
     let modal = bootstrap.Modal.getInstance(modalEl);
     if (!modal) modal = new bootstrap.Modal(modalEl);
     modal.show();
-
+                                    //nem jó
     $("#uploadProgressBody").append(`
       <div id="${this.id}" class="mb-2 w-100">
         <div class="progress">
@@ -164,7 +164,6 @@ class ContinousProgressBar {
 
 
 async function uploadSubtaskFile(fajlInput) {//BBB
-        
     const form = new FormData();
     const file = fajlInput.files[0];
     form.append('fajl', file);
@@ -344,12 +343,12 @@ async function createSubtaskObjects(ujFeladat, slimMode, containerId) {//BBB
 
     items.forEach((item, index) => {
         const $item = $(item);
-        console.log($item.find(".alfeladat").prevObject[0].id.substring(3))
+        console.log('item:')
+        console.log(item)
 
         const leiras = $item.find(".alfeladatLeiras")[0].value || null;
         const pontszam = $item.find(".alfeladatPont")[0].value || null;
-        console.log($item.find(".alfeladat").prevObject[0].children[0].id.substring(15))
-        const alfId = $item.find(".alfeladat").prevObject[0].id.substring(3) || $item.find(".alfeladat").prevObject[0].children[0].id.substring(15) || null;
+        const alfId = /*$item.find(".alfeladat").prevObject[0].id.substring(3) || */item.children[0].id.substring(15) || null;
 
         alfeladat = {
             leiras,
@@ -433,9 +432,9 @@ function buildFakeFileInput(id, fileName, fileIdentifier){ //PR
 }
 
 function subtaskDelete(id){//PR
-    console.log(id)
-    console.log(document.getElementById(`${id}`))
-    document.getElementById(`${id}`).remove(); 
+    const parent = document.getElementById(`${id}`).parentElement
+    parent.replaceChildren()
+    parent.remove(); 
 }
 
 function updateTask(task, subtasks){//PR
@@ -448,9 +447,9 @@ function updateTask(task, subtasks){//PR
         Tema: task.Tema, 
         Evfolyam: task.Evfolyam, 
         Nehezseg: task.Nehezseg, 
-        alfDb: task.alfDb
+        alfDb: subtasks.length
     }
-    const container = buildTaskCardPrimaryData(task, null, null, null)
+    const container = buildTaskCardPrimaryData(feladatAdatai, null, null, null)
     document.getElementById(`task-${task.id}`).replaceChildren(container.querySelector('div'))         
     
     CancelEditingThisFeladat(true, ''); // and stop the editing process
