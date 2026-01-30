@@ -98,81 +98,70 @@ class ProgressBar { //BBB
 }
 
 class ContinousProgressBar {
-    constructor() {
-        this.minProgress = 0;
-        this.maxProgress = 100;
-        this.progress = this.minProgress;
+  constructor() {
+    this.minProgress = 0;
+    this.maxProgress = 100;
+    this.progress = this.minProgress;
 
-        this.id = `${crypto.randomUUID()}-continous`;
-        this.running = true;
+    this.id = `${crypto.randomUUID()}-continous`;
+    this.running = true;
 
-        this.bar = null;
-    }
+    this.bar = null;
+    this.timer = null;
+  }
 
-    start() {
-        const modalId = document.getElementById("uploadProgressModal");
-        let progressBarModal = bootstrap.Modal.getInstance(modalId);
-        if(progressBarModal == null) {
-            progressBarModal = new bootstrap.Modal(modalId);
+  start() {
+    const modalEl = document.getElementById("uploadProgressModal");
+    let modal = bootstrap.Modal.getInstance(modalEl);
+    if (!modal) modal = new bootstrap.Modal(modalEl);
+    modal.show();
+
+    $("#uploadProgressBody").append(`
+      <div id="${this.id}" class="mb-2 w-100">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped progress-bar-animated"
+               role="progressbar"
+               style="width: 0%"
+               aria-valuenow="0"
+               aria-valuemin="0"
+               aria-valuemax="100"></div>
+        </div>
+        <hr class="w-75 mx-auto">
+      </div>
+    `);
+
+    this.bar = document.querySelector(`#${this.id} .progress-bar`);
+
+    const tick = () => {
+      if (!this.running) {
+        clearInterval(this.timer);
+        this.timer = null;
+
+        $(`#${this.id}`).remove();
+
+        if ($("#uploadProgressBody").children().length === 0) {
+          const m = bootstrap.Modal.getInstance(modalEl);
+          $("#uploadProgressBody").empty();
+          m?.hide();
         }
+        return;
+      }
 
-        progressBarModal.show();
+      this.progress = (this.progress + 10) % (this.maxProgress + 10); // 0..100..0
+      const value = Math.floor((this.progress / this.maxProgress) * 100);
 
-        $("#uploadProgressBody").append(`
-            <div id="${this.id}" class="mb-2 w-100">
-                <div class="progress">
-                    <div class="progress-bar 
-                                progress-bar-striped 
-                                progress-bar-animated" 
-                        role="progressbar" 
-                        style="width: 0%" 
-                        aria-valuenow="0" 
-                        aria-valuemin="0" 
-                        aria-valuemax="100">
-                    </div>
-                </div>
-                <hr class="w-75 mx-auto>
-            </div>
-        `);
+      this.bar.setAttribute("aria-valuenow", value);
+      this.bar.style.width = `${value}%`;
+    };
 
-        this.bar = $(`#${this.id} .progress-bar`)[0];
+    this.timer = setInterval(tick, 250);
+  }
 
-        const loadFn = () => {
-            console.log("loadfn")
-            
-            if (this.progress < this.maxProgress) {
-                this.progress += 10;
-            } else { this.progress = this.minProgress }
-            
-            let value = Math.floor(this.progress / this.maxProgress * 100)
-
-            this.bar.setAttribute("aria-valuenow", value);
-            this.bar.style.width = `${value}%`;
-
-            setTimeout(checkFn(), 250);
-        }
-
-        const checkFn = () => {
-            if (this.running === true) {
-                loadFn();
-            } else {
-                $(`#${this.id}`).remove();
-
-                if ($("#uploadProgressBody").children().length === 0) {
-                    const progressBarModal = bootstrap.Modal.getInstance(document.getElementById("uploadProgressModal"));
-                    $("#uploadProgressBody").empty();
-                    progressBarModal.hide();
-                }
-            }
-        }
-
-        setTimeout(checkFn(), 250);
-    }
-
-    remove() {
-        this.running = false;
-    }
+  remove() {
+    this.running = false;
+  }
 }
+
 
 async function uploadSubtaskFile(fajlInput) {//BBB
         

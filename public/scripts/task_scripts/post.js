@@ -63,13 +63,13 @@ async function loadAvailableCourses(){ //RD
 }
 
 async function postTaskToClassroom(){ //RD
+    var pb = new ContinousProgressBar();
+    pb.start();
+
     const feladatModal = document.getElementById("shareFeladat")
 
     const select = document.getElementById("kurzusSelect");
     const modeSelect = feladatModal.querySelector("#modeSelect")
-
-    var pb = new ContinousProgressBar();
-    pb.start();
 
     const opt = select.options[select.selectedIndex];
     var kurzusId = opt.value.split("-")[0]
