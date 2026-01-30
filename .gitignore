@@ -16,6 +16,7 @@ logs/
 !logs/error/.gitkeep
 !logs/normal/.gitkeep
 
+# Ne legyen semmilyen biztonsági mentés commitelve
 backups/
 !backups/.gitkeep
 

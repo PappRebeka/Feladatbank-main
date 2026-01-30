@@ -516,17 +516,17 @@
 
         const icon = `<i class="bi bi-exclamation-triangle-fill"></i>&nbsp;`;
         const sql = editor.getValue().trim();
-        let $sql_data = $("#sql-data");
-        let $sql_headers = $("#headers");
-        let $sql_error = $("#sql-error");
+        let $sql_data = document.querySelector("#sql-data");
+        let $sql_headers = document.querySelector("#headers");
+        let $sql_error = document.querySelector("#sql-error");
 
 
         $("#sql-table").removeClass("d-none");
         $("#sql-placeholder").addClass("d-none");
 
-        $sql_data.empty();
-        $sql_headers.empty();
-        $sql_error.empty();
+        $sql_data.replaceChildren();
+        $sql_headers.replaceChildren();
+        $sql_error.replaceChildren();
 
         if ((!sql) || (sql === "")) {
             showErrorMsg("Nincs semmi az SQL bevíteli mezőben!")
@@ -538,13 +538,17 @@
                 return;
             }
 
-            $sql_headers.append(`<th scope="col">#</th>`)
+            let col = document.createElement('th')
+            col.scope = 'col'
+            col.textContent = '#'
+            $sql_headers.appendChild(col)
 
             for (const head of Object.keys(adat.results[0])) {
                 let th = document.createElement('th')
                 th.scope = 'col'
                 th.textContent = head
-                $("#headers").appendChild(th)
+                console.log(th)
+                document.getElementById('headers').appendChild(th)
             }
 
             for (let i = 0; i < adat.results.length; i++) {

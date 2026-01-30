@@ -173,7 +173,9 @@ function databasePageTemplate(){//BBB, PR
                                         <hr class='w-75 mx-auto'>
                                         <div class='w-100 justify-content-center'>
                                             <input type="text" id="intezmenyMezo" hint="intezmenyMezo" placeholder='Új intézmény neve' class="rounded mb-2">
-                                            <button data-bind="intAddClick" class="btn p-2 btn-warning"><i class="bi bi-plus"></i>Hozzáadás</button>
+                                            <button data-bind="intAddClick" class="btn p-2 btn-warning">
+                                                <i class="bi bi-plus"></i> Hozzáadás
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -186,9 +188,11 @@ function databasePageTemplate(){//BBB, PR
                                         <h3>Intézmény módosítása</h3>
                                         <hr class='w-75 mx-auto'>
                                         <div class='w-100 justify-content-center'>
-                                            <select id="javitIntezmeny" class="rounded"></select>
+                                            <select id="javitIntezmeny" class="rounded mb-2"></select>
                                             <input type="text" id="ujIntezmeny" hint="ujIntezmeny" placeholder='Az intézmény új neve' class="rounded mb-2">
-                                            <button data-bind="intEditClick" class="btn p-2 btn-warning"><i class="bi bi-pencil"></i>Módosítás</button>
+                                            <button data-bind="intEditClick" class="btn p-2 btn-warning">
+                                                <i class="bi bi-pencil"></i> Módosítás
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -201,8 +205,10 @@ function databasePageTemplate(){//BBB, PR
                                         <h3>Intézmény törlése</h3>
                                         <hr class='w-75 mx-auto'>
                                         <div class='w-100 justify-content-center'>
-                                            <select id="torolIntezmeny" class="rounded"></select>
-                                            <button data-bind="intDeleteClick" class="btn p-2 btn-warning"><i class="bi bi-trash3-fill"></i>Törlés</button>
+                                            <select id="torolIntezmeny" class="rounded mb-2"></select>
+                                            <button data-bind="intDeleteClick" class="btn p-2 btn-warning">
+                                                <i class="bi bi-trash3-fill"></i> Törlés
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -351,7 +357,7 @@ function hibajelentesDefaultTemplate(){
 function nincsAdatTemplate(){
     const div = document.createElement('div')
     div.classList.add('bg-dark', 'border', 'border-dark', 'rounded', 'p-3')
-    div.innerHTML = `<span class='text-light h2'>Még nincsenek adatok</span>`
+    div.innerHTML = `<span class='text-dark h2'>Még nincsenek adatok</span>`
     return div
 }
 

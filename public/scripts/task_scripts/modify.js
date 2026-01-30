@@ -97,6 +97,83 @@ class ProgressBar { //BBB
     } 
 }
 
+class ContinousProgressBar {
+    constructor() {
+        this.minProgress = 0;
+        this.maxProgress = 100;
+        this.progress = this.minProgress;
+
+        this.id = `${crypto.randomUUID()}-continous`;
+        this.running = true;
+
+        this.bar = null;
+    }
+
+    start() {
+        const modalId = document.getElementById("uploadProgressModal");
+        let progressBarModal = bootstrap.Modal.getInstance(modalId);
+        if(progressBarModal == null) {
+            progressBarModal = new bootstrap.Modal(modalId);
+        }
+
+        progressBarModal.show();
+
+        $("#uploadProgressBody").append(`
+            <div id="${this.id}" class="mb-2 w-100">
+                <div class="progress">
+                    <div class="progress-bar 
+                                progress-bar-striped 
+                                progress-bar-animated" 
+                        role="progressbar" 
+                        style="width: 0%" 
+                        aria-valuenow="0" 
+                        aria-valuemin="0" 
+                        aria-valuemax="100">
+                    </div>
+                </div>
+                <hr class="w-75 mx-auto>
+            </div>
+        `);
+
+        this.bar = $(`#${this.id} .progress-bar`)[0];
+
+        const loadFn = () => {
+            console.log("loadfn")
+            
+            if (this.progress < this.maxProgress) {
+                this.progress += 10;
+            } else { this.progress = this.minProgress }
+            
+            let value = Math.floor(this.progress / this.maxProgress * 100)
+
+            this.bar.setAttribute("aria-valuenow", value);
+            this.bar.style.width = `${value}%`;
+
+            setTimeout(checkFn(), 250);
+        }
+
+        const checkFn = () => {
+            if (this.running === true) {
+                loadFn();
+            } else {
+                $(`#${this.id}`).remove();
+
+                if ($("#uploadProgressBody").children().length === 0) {
+                    const progressBarModal = bootstrap.Modal.getInstance(document.getElementById("uploadProgressModal"));
+                    $("#uploadProgressBody").empty();
+                    progressBarModal.hide();
+                }
+            }
+        }
+
+        setTimeout(checkFn(), 250);
+    }
+
+    remove() {
+        this.running = false;
+    }
+}
+
 async function uploadSubtaskFile(fajlInput) {//BBB
         
     const form = new FormData();
@@ -143,9 +220,9 @@ async function uploadSubtaskFile(fajlInput) {//BBB
     });
 }
 
-async function saveTask(ujFeladat) {
-    console.log(ujFeladat)
-    const containerId = ujFeladat ? 'alfeladatBox' : 'alfeladatokContainer'; // új feladat vagy egy meglévő szerkesztése
+async function saveTask(isUjFeladat) {
+    console.log(isUjFeladat)
+    const containerId = isUjFeladat ? 'alfeladatBox' : 'alfeladatokContainer'; // új feladat vagy egy meglévő szerkesztése
     const slimMode = slim_felAdd ? '-s' : ''; // slim mód
 
     let feladatData = {
@@ -162,7 +239,7 @@ async function saveTask(ujFeladat) {
         return;
     }
 
-    let alfeladatok = await createSubtaskObjects(ujFeladat, slimMode, containerId);
+    let alfeladatok = await createSubtaskObjects(isUjFeladat, slimMode, containerId);
 
     let deletedFeladatok = getDeletedTasks();
     if (deletedFeladatok.length > 0) {
@@ -170,10 +247,12 @@ async function saveTask(ujFeladat) {
     }
 
     alfeladatok = alfeladatok.filter(f => isCompleteSubtask(f));
+    console.log('alfeladatok')
+    console.log(alfeladatok)
 
-    const payload = createTaskPayload(feladatData, alfeladatok, ujFeladat);
+    const payload = createTaskPayload(feladatData, alfeladatok, isUjFeladat);
 
-    uploadTasks(payload, ujFeladat);
+    uploadTasks(payload, isUjFeladat);
 }
 
 function isCompleteSubtask(alfeladat) { //BBB
@@ -248,6 +327,7 @@ function createTaskPayload(feladatData, alfeladatok, ujFeladat) {//BBB
 }
 
 async function createSubtaskObjects(ujFeladat, slimMode, containerId) {//BBB
+
     let alfeladatok = [];
     let items;
 
@@ -279,8 +359,8 @@ async function createSubtaskObjects(ujFeladat, slimMode, containerId) {//BBB
 
         const leiras = $item.find(".alfeladatLeiras")[0].value || null;
         const pontszam = $item.find(".alfeladatPont")[0].value || null;
-        const alfId = $item.find(".alfeladat").prevObject[0].id.substring(3) || null;
-
+        console.log($item.find(".alfeladat").prevObject[0].children[0].id.substring(15))
+        const alfId = $item.find(".alfeladat").prevObject[0].id.substring(3) || $item.find(".alfeladat").prevObject[0].children[0].id.substring(15) || null;
 
         alfeladat = {
             leiras,
@@ -289,9 +369,6 @@ async function createSubtaskObjects(ujFeladat, slimMode, containerId) {//BBB
             isDelete: false,
             alfId: alfId || null,
         }
-        console.log("ALFELADAT OBJECT")
-        console.log(alfeladat)
-        
         alfeladatok.push(alfeladat);
     });
 

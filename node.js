@@ -35,6 +35,7 @@ const { createOAuthClient, createClientUsingCredentials, SCOPES, baseUrl, client
 const { sendMail } = require("./services/emailsend")
 const { loggerConfig, getLogger, terminal_wss_tokens, startWss } = require("./config/logging");
 const { log } = require("console");
+const { isNumber } = require("util");
 
 
 const pad = (s, n) => s.padEnd(n);
@@ -1078,13 +1079,15 @@ app.post("/ment-feladat", async (req, res) => { //BBB
 
     var feladat = await queryAsync(sql, felInjection)
     feladatId = Boolean(feladat.insertId) ? feladat.insertId : adat["id"]
-    console.log('feladatId')
-    console.log(feladatId)
+    console.log('feladatId '+feladatId)
     
     adat["alfeladatok"].forEach(async (alfeladat) => {
       let fajlId = alfeladat["fajlId"]; 
+      console.log(alfeladat["alfId"])
+      console.log(Boolean(alfeladat["alfId"]))
+      console.log(isNumber(alfeladat["alfId"]))
 
-      let insert = Boolean(alfeladat["alfId"]) // na nem kaptunk id-t akkor ez egy új alfeladat
+      let insert = !Boolean(alfeladat["alfId"]) // na nem kaptunk id-t akkor ez egy új alfeladat
       let delte = alfeladat["isDelete"] == true
       let injection = []
             
@@ -1195,13 +1198,14 @@ app.post("/sendClassroomCourses", async (req, res) =>{ //RD, kiszedett kurzusok 
 
 })
 
-async function fajlFeltoltClassroom (fajlId) {//BBB?
+async function fajlFeltoltClassroom (fajlId) {//BBB
 
   let fileExtension, filePath;
   let dbResults = await queryAsync("SELECT BackendNev, AlapNev FROM Fajl WHERE id = ?", [fajlId]);
+  console.log(dbResults)
   
   const fileMetadata = {
-    name: results[0]["AlapNev"],
+    name: dbResults[0]["AlapNev"],
   };
 
   fileExtension = path.extname(dbResults[0]["AlapNev"]);
@@ -2003,8 +2007,11 @@ cron.schedule('0 18 * * 7', async () => { //BBB minden héten vasárnap biztons�
 })
 
 app.post("/AthelyezUser", (req, res) =>{//RD, felhasználó áthelyezése(intézmény)
+  console.log("athelyezes")
   const hova = req.body.hova
   const userId = req.body.userId
+  console.log(hova)
+  console.log(userId)
 
   var sql = `UPDATE Users 
               SET IntezmenyId = ?
@@ -2020,6 +2027,8 @@ app.post("/AthelyezUser", (req, res) =>{//RD, felhasználó áthelyezése(intéz
 
 app.post("/getUserIntezmeny", (req, res)=>{
   var userId = req.body.uid
+  console.log("USER")
+  console.log(userId)
   var sql = `SELECT Intezmenyek.id, intezmenyNev
               FROM Intezmenyek LEFT JOIN Users ON Users.IntezmenyId = Intezmenyek.id
               WHERE not Intezmenyek.id = (SELECT IntezmenyId FROM Users WHERE Users.id = ?)
@@ -2049,6 +2058,7 @@ app.post("/heartbeat", (req, res) => {
   if (!isPositiveInt(userId)) {
     // could be an admin without a userId
     // no problem, just ignore
+    res.sendStatus(204);
     return res.end();
   }
 
@@ -2058,6 +2068,7 @@ app.post("/heartbeat", (req, res) => {
     [now, userId]
   ).then(() => {
     //console.log(`User ${userId} last online at ${new Date(now).toISOString()}`);
+    res.sendStatus(204);
     res.end();
   })
 })

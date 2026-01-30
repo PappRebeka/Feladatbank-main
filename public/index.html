@@ -163,7 +163,7 @@
         </div>
       `;
       
-      form.querySelector('button').addEventListener('click', () => Boolean(existingUser) ? registerIntezmeny() : loginIntezmeny())
+      form.querySelector('button').addEventListener('click', () => Boolean(existingUser) ? loginIntezmeny() : registerIntezmeny())
       form.querySelector('a').addEventListener('click', () => renderLogin())
 
       autofillInstituteArray();
@@ -305,7 +305,6 @@
     function loginIntezmeny() {
       const sel = document.getElementById("intezmenySelect");
       const intezmId = sel.value;
-
       ajax_post("/updateUserIntezmeny", 1, { ujIntezmId: intezmId });
       toastMsg("Sikeres frissítés", "Sikeresen frissítettük az ön fiókjához tartozó intézményt", "success");
       setTimeout(() => window.location.href = "/homepage.html", 1500);

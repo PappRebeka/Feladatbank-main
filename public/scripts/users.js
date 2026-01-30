@@ -9,13 +9,13 @@ users.js -------------
 
 
 function userCardClick(id){ //RD
+    userId_ToChangeInstitute = id
     setUserModal(0, id);
     selectionReset()
 }
 
 function loadUsers(item){ //PR    
     const div = felhasznaloCardTemplate()
-
     if (item.id == CurrentUserData.id) {
         div.firstChild.classList.add('noHover');
     }
@@ -79,6 +79,7 @@ function loadUsers(item){ //PR
 function moveUserClick(){ //RD
     console.log(userId_ToChangeInstitute)
     var intezmenyek = ajax_post("/getUserIntezmeny", 1, { uid: userId_ToChangeInstitute })
+    console.log("users.js intezmenyek")
     console.log(intezmenyek)
     autofillOtherInstitutions(intezmenyek.results)
 }

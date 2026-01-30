@@ -111,23 +111,26 @@ function setTaskModalContent(adat, felhasznalo){ //PR, RD
     const modal = document.getElementById("modalFeladatContent")
     modal.innerHTML = taskModalTemplate(); // safe because its pure
     $bind(modal, "tantargy").textContent = adat.Tantargy;
-    $bind(modal, "tema").textContent = adat.Tema;
-    $bind(modal, "leiras").textContent = adat.Leiras;
+    $bind(modal, "tema")    .textContent = adat.Tema;
+    $bind(modal, "leiras")  .textContent = adat.Leiras;
     $bind(modal, "nehezseg").textContent = adat.Nehezseg;
     $bind(modal, "evfolyam").textContent = adat.Evfolyam + ".";
 
+    console.log('adat')
+    console.log(adat)
     
     if(!alfeladatok.results) {
         $bind(modal, "alfeladatokList").innerHTML = "<p class='nincsen m-auto'>Nincsenek alfeladatok ehhez a feladathoz</p>"
     }
     else{
-        for (const adat of alfeladatok.results) {
-            var leiras = adat.Leiras
-            var fajl = adat.FajlInfo ? adat.FajlInfo : null
-            var pont = adat.Pont
+        for (const a of alfeladatok.results) {
+            var leiras = a.Leiras
+            var fajl = a.FajlInfo ? a.FajlInfo : null
+            var pont = a.Pont
+            console.log(a)
 
             const alfeladatDiv = taskModal_AlfeladatTemplate();
-            alfeladatDiv.firstChild.id = `ThisIsAlfeladat${adat.id}`;
+            alfeladatDiv.firstChild.id = `ThisIsAlfeladat${a.id}`;
 
             $bind(alfeladatDiv, "alfeladatPont").textContent = pont;
             $bind(alfeladatDiv, "alfeladatLeiras").textContent = leiras;

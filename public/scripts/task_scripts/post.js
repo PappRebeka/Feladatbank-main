@@ -68,6 +68,9 @@ async function postTaskToClassroom(){ //RD
     const select = document.getElementById("kurzusSelect");
     const modeSelect = feladatModal.querySelector("#modeSelect")
 
+    var pb = new ContinousProgressBar();
+    pb.start();
+
     const opt = select.options[select.selectedIndex];
     var kurzusId = opt.value.split("-")[0]
     var kurzusNev = opt.text
@@ -88,6 +91,7 @@ async function postTaskToClassroom(){ //RD
     } else {
         toastMsg("Hiba", result.error || "Nem sikerült közzétenni a feladatot", "danger")
     }
+    pb.remove();
 }
 
 function getCoursesFromClassroomAPI(){ //RD

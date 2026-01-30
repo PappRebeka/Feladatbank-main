@@ -12,15 +12,21 @@ institution.js ---------
 function addInstitution(){ //RD
     var intezmValue = document.getElementById("intezmenyMezo").value
     ajax_post("/MentIntezmeny", 1, { intezmeny: intezmValue })
+    toggleInstitutionOption(0)
+    toastMsg("Sikeres művelet", `Sikeresen létrejött a(z) ${intezmValue} intézmény`, "success")
 }
 
 function editInstitution(){ //RD
     var intezmValue = document.getElementById("ujIntezmeny").value
     ajax_post("/modositIntezmeny", 1, { id: intezmenyId, intezmeny: intezmValue })
+    toggleInstitutionOption(1)
+    toastMsg("Sikeres művelet", `Sikeresen módosította az intézmény`, "success")
 }
 
 function deleteInstitution(){ //RD
     ajax_post("/torolIntezmeny", 1, { id: intezmenyId })
+    toggleInstitutionOption(2)
+    toastMsg("Sikeres művelet", `Sikeresen eltávolította az intézmény`, "success")
 }
 
 function toggleInstitutionRadio(chosenOne){ //PR
@@ -43,7 +49,10 @@ function toggleInstitutionOption(index){ //RD, PR
     //let html = intezmenyOptionTemplate(index)
     var type = ["", "javit", "torol"][index] || ""
 
-    document.querySelectorAll('#IntezmenyOptions .bg-login')[index].classList.toggle('d-none')
+    var thatone = document.querySelectorAll('#IntezmenyOptions .bg-login')[index]
+
+    thatone.classList.toggle('d-none')
+    try{thatone.querySelector('input').value = ''}catch{}
     //document.getElementById("currentDatabaseOption").replaceChildren(html)
     autofillInstitutions(type)
     
@@ -72,6 +81,7 @@ function autofillInstitutions(mit, lista){//RD
 }
 
 function autofillOtherInstitutions(lista){//RD
+    console.log("autofill intezmeny")
     console.log(lista)
     document.getElementById("ujIntezmeny").innerHTML = "";
     var html = []

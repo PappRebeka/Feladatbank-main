@@ -18,7 +18,7 @@ stats.js ---------------
 
 function setUserModal(statLap, id){ //PR, RD
     if(id != undefined) StatUserId = id
-    userId_ToChangeInstitute = id
+    //userId_ToChangeInstitute = id
     const tanarAdatai = document.querySelector("#modalTanarContent")
     tanarAdatai.innerHTML = ""
 
