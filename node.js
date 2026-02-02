@@ -501,7 +501,26 @@ app.post("/nemtomTeszt", (req, res) =>{
   var userToken = req.session.userId
 })
 
-app.post("/GetUserData", async (req, res) => { //PR, az összes felhasználó fontos adatai, 
+function instanceLock(req, res, next) {
+  const intanceId = req.body?.instanceId;
+
+  if (!tabId) {
+    return res.status(400).send({ error: "MISSING_INSTANCE_ID" });
+  }
+
+  // First tab that talks to the server "claims" this session
+  if (!req.session.instanceId) {
+    req.session.instanceId = instanceId;
+  }
+
+  // Another tab tries to use the same session cookie → block
+  if (req.session.instanceId != instanceId) {
+    return res.status(409).send({ error: "SESSION_IN_USE" });
+  }
+	next()
+}
+
+app.post("/GetUserData", instanceLock, async (req, res) => { //PR, az összes felhasználó fontos adatai, 
   //(issue!) néha nem kap?
   console.log("getuserdata fut")
   console.log("session")
