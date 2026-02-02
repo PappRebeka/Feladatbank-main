@@ -33,6 +33,7 @@ function applyFilters() { //RD
     ActiveFilters.order.field = TempFilters.order.field
     ActiveFilters.order.desc  = TempFilters.order.desc
     loadPageData()
+    toastMsg('Szűrő alkalmazva!', 'A szűrő sikeresen alkalmazva', 'success');
 }
 
 function toggleDifficultyRadio(chosenOne){ //PR

@@ -4,12 +4,11 @@ while (teszteles.errors.length > 0){
     debug()
 }
 
-módosít feladat -> törlés  nem jó
+Nem kap kuzusnevet
 
-megosztott feladatoknál ne feladatid szerint rendezzünk hanem megosztottid szerint
+engedjük meg a feladat módosítást az általam megosztott oldalon
+felhasználót kéne sok functionön keresztül adogatni
 
-PROGRESSBAR SAFE DOM MANIPULATION!!!!!!!
-
-intézmény hozzáadás
+dupla bejelentkezés
 
 dokumentálás

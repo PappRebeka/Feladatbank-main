@@ -15,6 +15,7 @@ function kozzeteszButtonClick(id){   //RD, PR
         return;
     }*/
 
+    getCoursesFromClassroomAPI();
     resetKozzetevesModal();
     
     const select = document.createElement('select')
@@ -23,6 +24,10 @@ function kozzeteszButtonClick(id){   //RD, PR
     select.id = 'kurzusSelect'
 
     document.getElementById("tanulokSelect").replaceChildren()
+
+    console.log('debug')
+    console.log(kurzusok_nevek)
+    console.log(typeof kurzusok_nevek)
     
     for (let i = 0; i < kurzusok_nevek.length; i++) {
         let option = document.createElement('option')

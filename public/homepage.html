@@ -55,8 +55,6 @@
 /* ------------------------------------- - Document ready - ----------------------------------------*/
 
     $(document).ready(function(){
-        
-
         try{
             setThemeIndicators(getCookie("darkMode") == "1")
             setUserData();
@@ -115,8 +113,6 @@
                 switchTo(CurrentUserData.Jogosultsag == "Főadmin" ? "Felhasználók" : "Feladataim", 
                          CurrentUserData.Jogosultsag == "Főadmin" ? "user_page"    : "fel_page")
             }
-            
-            getCoursesFromClassroomAPI();
 
             responsivity();
             window.addEventListener("resize", responsivity);
@@ -133,7 +129,7 @@
             //marker
             createSlimSelect('tanulokSelect', tanulokChanged)
             createSlimSelect('tantargySzuro', tantargyChanged)
-            createSlimSelect('ujIntezmeny', AthelyezTeszt)
+            createSlimSelect('ujIntezmenySelect', AthelyezTeszt)
             createSlimSelect('modeSelect', AthelyezTeszt)
             
             createSlimSelect('javitIntezmeny', AthelyezTeszt)
@@ -162,7 +158,7 @@
         }};
 
         heartbeat();
-        setInterval(() => heartbeat(), 2000);
+        setInterval(() => heartbeat(), 10000);
     });
 
     function AthelyezTeszt(){}
@@ -596,7 +592,7 @@
     }
     
     function logout(){ //PR
-        killCookie('stayLoggedIn'); killCookie('userToken'); killCookie('currentPage'); killCookie('currentKikapcsId');
+        killCookie('stayLoggedIn'); /*sessionStorage.removeItem("userToken")*/; killCookie('currentPage'); killCookie('currentKikapcsId');
         window.location.href='/index.html'
         ajax_post("/logout", 1)
     }
@@ -660,7 +656,7 @@
         
 
         
-        document.getElementById('ujIntezmeny').addEventListener('click', () => AthelyezHova())
+        document.getElementById('ujIntezmenySelect').addEventListener('click', () => AthelyezHova())
         document.querySelector('#intezmenyValt .btn-info').addEventListener('click', () => moveUserInstitution())
         
         //backup betöltése
@@ -1122,8 +1118,8 @@
                     </div>
                     <div class="modal-body">
                             
-                            <label for="ujIntezmeny" class="form-label fw-semibold">Hová:</label>
-                            <select id="ujIntezmeny" class="slim-select"></select>
+                            <label for="ujIntezmenySelect" class="form-label fw-semibold">Hová:</label>
+                            <select id="ujIntezmenySelect" class="slim-select"></select>
                         <div id="local"></div>
                     </div>
                     

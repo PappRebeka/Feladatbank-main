@@ -25,7 +25,38 @@ task_scripts/load.js ---------------
 
 // BENETT: Merge uploadFile and uploadSubtaskFile
 
+function progressTemplateBuild(id, infoText) {
+    let uploadDiv = document.createElement('div');
+    uploadDiv.setAttribute("id", id)
+    uploadDiv.className = "mb-2 w-100";
 
+    let progressDiv = document.createElement('div');
+    progressDiv.className = "progress";
+
+    let progressBar = document.createElement('div');
+    progressBar.className = "progress-bar progress-bar-striped progress-bar-animated"
+    progressBar.setAttribute("role", "progressbar");
+    progressBar.style.width = "0%";
+    progressBar.setAttribute("aria-valuenow", "0");
+    progressBar.setAttribute("aria-valuemin", "0");
+    progressBar.setAttribute("aria-valuemax", "100");
+
+    let infoSpan = document.createElement('span');
+    infoSpan.className = "me-2";
+    infoSpan.textContent = infoText;
+
+    progressDiv.appendChild(progressBar);
+
+    let hr = document.createElement('hr');
+    hr.className = "w-75 mx-auto";
+
+    uploadDiv.appendChild(infoSpan)
+    uploadDiv.appendChild(progressDiv);
+    uploadDiv.appendChild(hr);
+
+    console.log(uploadDiv);
+    return uploadDiv;
+}
 
 class ProgressBar { //BBB
     constructor(fileName) {
@@ -45,24 +76,9 @@ class ProgressBar { //BBB
         }
 
         progressBarModal.show();
-                                        //nem jó
-        $("#uploadProgressBody").append(`
-            <div id="${this.id}" class="mb-2 w-100">
-                <span class="me-2">${this.fileName} - ${this.progress}%</span>
-                <div class="progress">
-                    <div class="progress-bar 
-                                progress-bar-striped 
-                                progress-bar-animated" 
-                        role="progressbar" 
-                        style="width: 0%" 
-                        aria-valuenow="0" 
-                        aria-valuemin="0" 
-                        aria-valuemax="100">
-                    </div>
-                </div>
-                <hr class="w-75 mx-auto>
-            </div>
-        `)
+
+        document.querySelector("#uploadProgressBody").appendChild(
+            progressTemplateBuild(this.id, `${this.fileName} - ${this.progress}%`));
         
         this.span = $(`#${this.id} span`)[0];
         this.bar = $(`#${this.id} .progress-bar`)[0];
@@ -81,9 +97,7 @@ class ProgressBar { //BBB
             
             
             if ($("#uploadProgressBody").children().length === 0) {
-                $("#uploadProgressBody").html(`
-                    <h6 class="display6">Minden fájl feltöltve!</h6>
-                `)
+                $("#uploadProgressBody").innerText = `<h6 class="display6">Minden fájl feltöltve!</h6>`
 
                 const progressBarModal = bootstrap.Modal.getInstance(document.getElementById("uploadProgressModal"));
 
@@ -115,20 +129,11 @@ class ContinousProgressBar {
     let modal = bootstrap.Modal.getInstance(modalEl);
     if (!modal) modal = new bootstrap.Modal(modalEl);
     modal.show();
-                                    //nem jó
-    $("#uploadProgressBody").append(`
-      <div id="${this.id}" class="mb-2 w-100">
-        <div class="progress">
-          <div class="progress-bar progress-bar-striped progress-bar-animated"
-               role="progressbar"
-               style="width: 0%"
-               aria-valuenow="0"
-               aria-valuemin="0"
-               aria-valuemax="100"></div>
-        </div>
-        <hr class="w-75 mx-auto">
-      </div>
-    `);
+
+    progressTemplateBuild();
+
+    document.querySelector("#uploadProgressBody").appendChild(
+            progressTemplateBuild(this.id, `Közzétevés...`));
 
     this.bar = document.querySelector(`#${this.id} .progress-bar`);
 
@@ -267,8 +272,6 @@ function getDeletedTasks() { //BBB
 }
 
 function uploadTasks(payload, ujFeladat) { //BBB
-    console.log('payload')
-    console.log(payload)
     $.ajax({
         url: '/ment-feladat',
         method: "POST",
@@ -297,7 +300,6 @@ function validateTaskInputs(feladatData) {//BBB
 }
 
 function createTaskPayload(feladatData, alfeladatok, ujFeladat) {//BBB
-    console.log(ujFeladat)
     return {
         "Nev":      feladatData.Nev,
         "Leiras":   feladatData.Leiras,
@@ -453,6 +455,7 @@ function updateTask(task, subtasks){//PR
     document.getElementById(`task-${task.id}`).replaceChildren(container.querySelector('div'))         
     
     CancelEditingThisFeladat(true, ''); // and stop the editing process
+    toastMsg('Sikeres módosítás!', 'Feladat sikeresen módosítva', 'success');
 }
 
 function archiveTask(state){  //PR
@@ -461,6 +464,8 @@ function archiveTask(state){  //PR
     
     ajax_post("/feladatArchivalas", 1, { id: feladatAdatai.id, state: state })
     document.getElementById(`task-${feladatAdatai.id}`).remove(); 
+    toastMsg('Sikeres módosítás!', 'Feladat sikeresen archiválva', 'success');
+
 }
 
 function addTextInputTo(place, object){
@@ -573,8 +578,8 @@ function editThisFeladat(){ // PR
                             <i class="bi bi-x"></i>&nbsp;
                             Mégse
                         </button>`
-
-    const felhasznalo = "";                
+        
+    const felhasznalo = ""
     footer.children[0].addEventListener('click', () => { saveTask(false), resetCreateNewTask()})
     footer.children[1].addEventListener('click', () => CancelEditingThisFeladat(true, felhasznalo))
 }
@@ -596,7 +601,7 @@ function buildDeleteButton(id){
 
 function AlfFileChanged(fileInput, id) {//PR
     let text = document.getElementById(id) //fake file name
-    let def = text.innerText // the text pre uploas
+    let def = text.innerText // the text pre upload
     
     if (fileInput.files.length > 0) { // successful upload
         text.innerText = fileInput.files[0].name; //update name
@@ -618,9 +623,11 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR
     footer.replaceChildren()
     if(document.getElementById("hozzaadGoesHere")) document.getElementById("HozzaadGoesHere").innerHTML = "" 
 
-    if(ActiveLocation == "Feladataim" || ActiveLocation == 'Csillagozva') {
+    
+    if(ActiveLocation == "Feladataim" || ActiveLocation == 'Csillagozva' || ActiveLocation == "Általam megosztott") {
         header.innerHTML += `<button class="btn"><i class="bi bi-pencil-square fs-5"></i></button>`
-        footer.innerHTML = `<button type="button" class="btn btn-warning" data-bind="arch" data-bs-dismiss="modal">
+        if (ActiveLocation != "Általam megosztott")
+                footer.innerHTML = `<button type="button" class="btn btn-warning" data-bind="arch" data-bs-dismiss="modal">
                                 <i class="bi bi-archive-fill"></i>&nbsp;
                                 Archiválás
                             </button>
@@ -631,8 +638,8 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR
     
 
         header.children[1].addEventListener("click", () => editThisFeladat());
-        $bind(footer, 'arch').addEventListener("click", () => archiveTask(1));
-        $bind(footer, 'megoszt').addEventListener("click", () => autocompleteShare_TeacherSelect());
+        $bind(footer, 'arch')?.addEventListener("click", () => archiveTask(1));
+        $bind(footer, 'megoszt')?.addEventListener("click", () => autocompleteShare_TeacherSelect());
     }
     
     if (ActiveLocation == "Archívum"){
@@ -664,6 +671,7 @@ function TorolFeladat(){//PR?
     document.getElementById(`task-${feladatAdatai.id}`).remove();           // remove the div
     ajax_post("/feladatTorol", 1, { id: feladatAdatai.id })                 // update database
     talalatSzam.innerHTML = parseInt(talalatSzam.innerHTML) - 1;            // reduce count
+    toastMsg('Sikeres módosítás!', 'Feladat sikeresen törölve', 'success');
 }
 
 function bookmarkTaskClick(feladatId, button, dataset){
@@ -673,4 +681,7 @@ function bookmarkTaskClick(feladatId, button, dataset){
     button.classList.toggle('bi-star')
     let oldal = Object.keys(AvailablePages).indexOf(ActiveLocation).toString()
     ajax_post(`/updateBookmarkedState`, 1, {feladatId: feladatId, oldal: oldal, felado: dataset.felhasznalo})
+    toastMsg('Sikeres módosítás!', 
+        button.classList.contains('bi-star-fill') ? 'Feladat sikeresen csillagozva' : 'Feladat sikeresen kicsillagozva', 
+        'success');
 }

@@ -15,7 +15,13 @@ const util       = require("util");
 const ansiToHtml = require('ansi-to-html');
 
 const multer = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const upload = multer({
+  fileFilter: function(req, file, callback) {
+    file.originalname = Buffer.from(file.originalname, 'latin1').toString('UTF-8');
+    callback(null, true);
+  },
+  dest: 'uploads/' 
+});
 
 const app = express();
 const convert = new ansiToHtml();
@@ -309,15 +315,32 @@ app.post("/setIntezmeny", async (req, res) => { //PR, a user intézményének ad
   }
 })
 
+async function checkLoggedIn(id) {
+  try {
+    const pingResults = await queryAsync("SELECT UtolsoPing FROM Users WHERE id = ?", [id]);
+    const lastPing = parseInt(String(pingResults?.[0]?.UtolsoPing), 10);
+    if (lastPing) {
+
+      const now = Date.now();
+      const diff = now - lastPing;
+      if (diff < (25 * 1000)) {
+        return { error: "ALREADY_LOGGED_IN", waitUntil: diff };
+      }
+    } else {
+      return null;
+    }
+  } catch (e) {
+    logger.log({ level: 'error', message: `ping check failed: ${e.message}` });
+  }
+
+  return null;
+}
 
 app.post("/loginUser", async (req, res) => { //RD, PR
   var user = req.body.user;                // login adatok ellenőrzése, az email és a felhasználónév is elfogadott,
   var passwd = req.body.passwd;           // pontosabban a helyes bejelentekzési adatokkal rendelkező userek megszámolása, 
   var user_token = req.body.userToken    // ha tobb mint 0 akkor bejelentkeztetjük
   var mail = req.body.mail
-
-  
-
   const noMail = !Boolean(mail)
   
   
@@ -338,26 +361,13 @@ app.post("/loginUser", async (req, res) => { //RD, PR
       });
       throw err
     }
-    
+    console.log("/loginUser")
+    console.log(results[0]['id'])
     if(results[0]['COUNT(id)'] > 0){
       // lets hope this works
-      try {
-        const pingResults = await queryAsync("SELECT UtolsoPing FROM Users WHERE id = ?", [results[0]['id']]);
-        const lastPing = pingResults?.[0]?.UtolsoPing;
-        if (lastPing) {
-          const now = Date.now();
-          console.log(now - lastPing);
-          if ((now - lastPing) < (5 * 1000)) {
-            return res.send({ 
-              error: "ALREADY_LOGGED_IN",
-            }).end();
-          }
-        } else {
-          console.log("nincs last ping")
-        }
-      } catch (e) {
-        logger.log({ level: 'error', message: `ping check failed: ${e.message}` });
-        // fall through (or decide to fail)
+      let loginCheck = await checkLoggedIn(results[0]['id']);
+      if(loginCheck) {
+        return res.status(200).send(loginCheck);
       }
 
       req.session.userId = results[0]['id'];
@@ -401,42 +411,61 @@ app.post("/sendMailTo", (req, res) => { //PR  //email
 
 
 
-async function refreshAccessTokenIfNeeded(user) {//RD, ha lejárt az accesstoken akkor egy új készül
-  var client = createOAuthClient();
+async function refreshAccessTokenIfNeeded(user) {//RD, ha lej�rt az accesstoken akkor egy �j k�sz�l
+  const client = createOAuthClient();
+  if (!user.RefreshToken) {
+    return {
+      access_token: user.AccessToken,
+      expiry_date: user.AccessEletTartam,
+      requiresReauth: true,
+      error: "missing_refresh_token"
+    };
+  }
+
   client.setCredentials({
     access_token: user.AccessToken,
     refresh_token: user.RefreshToken,
     expiry_date: user.AccessEletTartam,
   });
-  // token frissitése automatikusan
-  if (Date.now() >= user.AccessEletTartam) {
-    const newTokens = await client.refreshAccessToken();
-    const { access_token, expiry_date } = newTokens.credentials;
+  // token frissit�se automatikusan (1 perc buffer)
+  if (Date.now() >= (user.AccessEletTartam - 60 * 1000)) {
+    try {
+      const newTokens = await client.refreshAccessToken();
+      const { access_token, refresh_token, expiry_date } = newTokens.credentials;
 
-    // adatbázis frissítés
-    await queryAsync(
-      `UPDATE Users SET AccessToken=?, AccessEletTartam=FROM_UNIXTIME((? + 3600000)/1000) WHERE id=?`, //időzóna cucc
-      [access_token, expiry_date, user.id]
-    );
+      // adatb�zis friss�t�s
+      await queryAsync(
+        `UPDATE Users SET AccessToken=?, RefreshToken=COALESCE(?, RefreshToken), AccessEletTartam=FROM_UNIXTIME((? + 3600000)/1000) WHERE id=?`, //id�z�na cucc
+        [access_token, refresh_token || null, expiry_date, user.id]
+      );
 
-    return { access_token: access_token, expiry_date: expiry_date };
+      return { access_token: access_token, expiry_date: expiry_date };
+    } catch (err) {
+      const isInvalidGrant = err?.response?.data?.error === "invalid_grant" || err?.message?.includes("invalid_grant");
+      if (isInvalidGrant) {
+        await queryAsync(
+          `UPDATE Users SET AccessToken=NULL, RefreshToken=NULL, AccessEletTartam=NULL WHERE id=?`,
+          [user.id]
+        );
+        return {
+          access_token: null,
+          expiry_date: null,
+          requiresReauth: true,
+          error: "invalid_grant"
+        };
+      }
+      throw err;
+    }
   }
 
   return { access_token: user.AccessToken, expiry_date: user.AccessEletTartam };
 }
 
 
-
-
-
-
-
 async function getUserDataFromSessionId (id){ //RD a user összes adata a sessionId segítségével
   const results = await queryAsync(`SELECT * FROM Users WHERE id=?`, [id])
   return results[0]
 }
-
-
 
 
 app.post("/updatePassword" , (req, res) => { //PR, jelszó reset esetén jelszó frissítése az adatbázisban
@@ -468,20 +497,30 @@ app.post("/updatePassword" , (req, res) => { //PR, jelszó reset esetén jelszó
   naplozz(`update_password email=${email}`, 0)
 });
 
+app.post("/nemtomTeszt", (req, res) =>{
+  var userToken = req.session.userId
+})
 
 app.post("/GetUserData", async (req, res) => { //PR, az összes felhasználó fontos adatai, 
-  //(issue!) néha nem kap
-  
+  //(issue!) néha nem kap?
+  console.log("getuserdata fut")
+  console.log("session")
+  console.log(req.session.userId)
+
   try{
-
-    if(req.session.Jog == undefined || req.session.userId == undefined || req.session.intezmenyId == undefined) {
-      let sessionValues = await queryAsync('select id, Jogosultsag, IntezmenyId from Users where UserToken = ?', [req.body.UserToken]);
-      req.session.Jog = sessionValues[0].Jogosultsag
-      req.session.userId = sessionValues[0].id
-      req.session.intezmenyId = sessionValues[0].IntezmenyId
-    }
-
     
+      let sessionValues = await queryAsync('select id, Jogosultsag, IntezmenyId from Users where id = ?', [req.session.userId]);
+      req.session.Jog = sessionValues[0].Jogosultsag;
+      req.session.userId = sessionValues[0].id;
+      req.session.intezmenyId = sessionValues[0].IntezmenyId;
+      console.log(sessionValues[0].id)
+      let loginCheck = await checkLoggedIn(req.session.userId);
+      console.log("loginCheck")
+      console.log(loginCheck)
+      if(loginCheck) {
+        return res.status(200).send(loginCheck);
+      }
+
     
   }
   catch(err){
@@ -768,7 +807,7 @@ app.post("/SendFeladatok", (req, res) =>{ //RD, BBB, PR
   var offsetSql = ` OFFSET ${offset}`
 
   if (rendezesTema != ""){
-    order += ` ORDER BY ${rendezesTema == 'id' ? 'Feladatok.id' : rendezesTema} ${rendezesFajta == 0 ? "" : "DESC"}`
+    order += ` ORDER BY ${rendezesTema == 'id' ? oldal < 2 ? 'Feladatok.id' : "Megosztott.id" : rendezesTema} ${rendezesFajta == 0 ? "" : "DESC"}`
   }
   if (evfolyamSz != ""){
     where += ` AND Evfolyam = ${evfolyamSz}`

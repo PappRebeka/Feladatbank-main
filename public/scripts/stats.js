@@ -198,15 +198,15 @@ function top3Data(){//RD, PR
     var dataset = [2, 3, 1]
     var adatok = ajax_post("/topHaromTanarData", 1, {})
     
-    labels.push(adatok.results[1] ? adatok.results[1].Nev : "") //2.helyezett
-    feladatDb.push(adatok.results[1] ? adatok.results[1].FeladatDb : 0)
+    labels.push(adatok.results[1]?.Nev || "") //2.helyezett
+    feladatDb.push(adatok.results[1].FeladatDb || 0)
     if(!adatok.results[1]) dataset[0] = 0 // if there is no 2nd place, set data to 0 so the chart shows it correctly
 
     labels.push(adatok.results[0].Nev) //1.helyezett
     feladatDb.push(adatok.results[0].FeladatDb)
 
-    labels.push(adatok.results[2] ? adatok.results[2].Nev : "") //3.helyezett
-    feladatDb.push(adatok.results[2] ? adatok.results[2].FeladatDb : 0)
+    labels.push(adatok.results[2].Nev || "") //3.helyezett
+    feladatDb.push(adatok.results[2].FeladatDb || 0)
     if(!adatok.results[2]) dataset[2] = 0 // same as above
     
     return {labels, feladatDb, dataset}

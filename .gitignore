@@ -3,7 +3,8 @@
 
 # Ne legyenek commitelve a szenzitív adatok
 .server-config.json      
-.vscode    
+.vscode
+node_modules/
 
 # Ne legyenek commitelve a feltöltött fájlok
 uploads/

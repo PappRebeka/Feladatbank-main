@@ -5,7 +5,7 @@ institution.js ---------
     - deleteInstitution          -RD
     - toggleInstitutionRadio     -PR
     - toggleInstitutionOption       -RD, PR
-    - autofillInstitutions       -RD
+    - autofillInstitutionSelect       -RD
     - autofillOtherInstitutions  -RD
 */
 
@@ -14,6 +14,7 @@ function addInstitution(){ //RD
     ajax_post("/MentIntezmeny", 1, { intezmeny: intezmValue })
     toggleInstitutionOption(0)
     toastMsg("Sikeres művelet", `Sikeresen létrejött a(z) ${intezmValue} intézmény`, "success")
+    moveUserClick()
 }
 
 function editInstitution(){ //RD
@@ -21,12 +22,14 @@ function editInstitution(){ //RD
     ajax_post("/modositIntezmeny", 1, { id: intezmenyId, intezmeny: intezmValue })
     toggleInstitutionOption(1)
     toastMsg("Sikeres művelet", `Sikeresen módosította az intézmény`, "success")
+    moveUserClick()
 }
 
 function deleteInstitution(){ //RD
     ajax_post("/torolIntezmeny", 1, { id: intezmenyId })
     toggleInstitutionOption(2)
     toastMsg("Sikeres művelet", `Sikeresen eltávolította az intézmény`, "success")
+    moveUserClick()
 }
 
 function toggleInstitutionRadio(chosenOne){ //PR
@@ -54,11 +57,11 @@ function toggleInstitutionOption(index){ //RD, PR
     thatone.classList.toggle('d-none')
     try{thatone.querySelector('input').value = ''}catch{}
     //document.getElementById("currentDatabaseOption").replaceChildren(html)
-    autofillInstitutions(type)
+    autofillInstitutionSelect(type)
     
 }
 
-function autofillInstitutions(mit, lista){//RD
+function autofillInstitutionSelect(mit, lista){//RD
     var inst = ajax_post("/SendIntezmeny", 1, {})
     var html = []
     for (const item of inst.results) {
@@ -81,9 +84,7 @@ function autofillInstitutions(mit, lista){//RD
 }
 
 function autofillOtherInstitutions(lista){//RD
-    console.log("autofill intezmeny")
-    console.log(lista)
-    document.getElementById("ujIntezmeny").innerHTML = "";
+    document.getElementById("ujIntezmenySelect").innerHTML = "";
     var html = []
     for (const asdf of lista) {
         let opt = document.createElement('option')
@@ -92,5 +93,5 @@ function autofillOtherInstitutions(lista){//RD
 
         html.push(opt)
     }  
-    document.getElementById("ujIntezmeny").replaceChildren(...html);
+    document.getElementById("ujIntezmenySelect").replaceChildren(...html)
 }

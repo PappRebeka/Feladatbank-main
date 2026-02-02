@@ -212,6 +212,14 @@
       }
     }
 
+    var time = 0;
+    var interval;
+    function beVanJelentkezveTimer(){
+      if(time == 0) {clearInterval(interval); clearError()}
+      showError(`Már egy másik eszközön be van jelentkezve! Kérem várjon ${time} másodpercet`);
+      time -= 1;
+    }
+
     function tryLogin(mail) {
       clearError();
 
@@ -237,7 +245,8 @@
       });
 
       if(result.error == "ALREADY_LOGGED_IN") {
-        showError("Már egy másik eszközön be van jelentkezve!");
+        time = 25 - Math.round(result.waitUntil / 1000);
+        showError(`Már egy másik eszközön be van jelentkezve! Próbálja meg újra később.`);
         return;
       }
 
@@ -248,7 +257,8 @@
 
         const date = new Date();
         date.setDate(date.getDate() + 14);
-        document.cookie = `userToken=${result.UserToken}; expires=${date.toUTCString()};`;
+        //document.cookie = `userToken=${result.UserToken}; expires=${date.toUTCString()};`;
+        sessionStorage.setItem("userToken", result.UserToken)
 
         if (intezmenyCount?.results?.[0]?.Db >= 1) {
           window.location.href = "/homepage.html";
@@ -289,8 +299,8 @@
 
       const date = new Date();
       date.setFullYear(date.getFullYear() + 10);
-      document.cookie = `userToken=${data.userToken}; expires=${date.toUTCString()};`;
-
+      //document.cookie = `userToken=${data.userToken}; expires=${date.toUTCString()};`;
+      sessionStorage.setItem("userToken", data.userToken)
       renderSelectInstitute(false);
     }
 
@@ -340,7 +350,7 @@
     }
 
     $(document).ready(function() {
-      sessionStorage.clear();
+      //sessionStorage.clear();
 
       cookieModal();
       checkDarkMode();
@@ -348,11 +358,11 @@
       const stay = getCookie("stayLoggedIn");
       if (stay == "1") {
         var van = null
-        
+        var utoken = sessionStorage.getItem("userToken")
         van = ajax_post("/loginUser", 1, { 
           user: "", 
           passwd: "", 
-          userToken: getCookie("userToken") || "" 
+          userToken: utoken || "" 
         });
 
         if(van.error == "ALREADY_LOGGED_IN") {

@@ -32,8 +32,8 @@ var ActiveLocation = 'Feladataim'; // current active page, default set onload
 var feladatAdatai = [] // active task data
 
 // user's course data
-var kurzusok_nevek; 
-var kurzusok_idk;
+var kurzusok_nevek = []; 
+var kurzusok_idk = [];
 var pId = 1; // ??
 
 var slim_felAdd = false // whether slim task addition ui is active

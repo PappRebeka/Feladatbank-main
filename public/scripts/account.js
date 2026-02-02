@@ -13,8 +13,21 @@ account.js -------------
 
 function setUserData(){//PR
 
-    if (!CurrentUserData.id) { // agyrák
-        let response = ajax_post("/GetUserData", 1, { UserToken: getCookie("userToken") })
+    if (!CurrentUserData.id) { // agy fajdalom
+        console.log("ad")
+        console.log(CurrentUserData)
+        let utoken = sessionStorage.getItem("userToken")
+        console.log("kurva utoken")
+        console.log(utoken)
+        //var userdatafasz = ajax_post("/nemtomTeszt", 1, {UserToken: utoken})
+        let response = ajax_post("/GetUserData", 1, { UserToken: utoken })
+
+        if(response.error == "ALREADY_LOGGED_IN") {
+            let time = Math.round(response.waitUntil / 1000);
+            window.location.href = "hiba.html?code=4"
+            return;
+        }
+
         /*if (response.statusCode == 403) {
             window.location.href = "hiba.html?code=0";
             // user is already logged in on another device
@@ -23,6 +36,8 @@ function setUserData(){//PR
             CurrentUserData = response.dataset;
         //}
     }
+
+    
 
     sessionStorage.setItem("loggedIn", true);
         
@@ -188,7 +203,7 @@ function saveUserData(){//PR, BBB
         }
     }
     
-    const result = ajax_post("/updateUserdata", 1, { userToken: getCookie("userToken"), newNev: newNev, newEmail: newEmail });
+    const result = ajax_post("/updateUserdata", 1, { userToken: sessionStorage.getItem("userToken"), newNev: newNev, newEmail: newEmail });
 
     if(result.success){
         CurrentUserData.Email = newEmail

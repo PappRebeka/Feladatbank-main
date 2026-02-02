@@ -115,9 +115,6 @@ function setTaskModalContent(adat, felhasznalo){ //PR, RD
     $bind(modal, "leiras")  .textContent = adat.Leiras;
     $bind(modal, "nehezseg").textContent = adat.Nehezseg;
     $bind(modal, "evfolyam").textContent = adat.Evfolyam + ".";
-
-    console.log('adat')
-    console.log(adat)
     
     if(!alfeladatok.results) {
         $bind(modal, "alfeladatokList").innerHTML = "<p class='nincsen m-auto'>Nincsenek alfeladatok ehhez a feladathoz</p>"
