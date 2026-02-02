@@ -497,32 +497,24 @@ app.post("/updatePassword" , (req, res) => { //PR, jelszó reset esetén jelszó
   naplozz(`update_password email=${email}`, 0)
 });
 
-app.post("/nemtomTeszt", (req, res) =>{
-  var userToken = req.session.userId
-})
-
 app.post("/GetUserData", async (req, res) => { //PR, az összes felhasználó fontos adatai, 
   //(issue!) néha nem kap?
-  console.log("getuserdata fut")
   console.log("session")
-  console.log(req.session.userId)
-
+  var userId = req.session.userId
+  var userToken = req.body.UserToken
+  console.log(userId)
+  console.log(userToken)
   try{
-    
-      let sessionValues = await queryAsync('select id, Jogosultsag, IntezmenyId from Users where id = ?', [req.session.userId]);
+    let sql = `select id, Jogosultsag, IntezmenyId from Users where UserToken = '${userToken}'`;
+    //if(req.session.Jog == undefined && req.session.userId == undefined && req.session.intezmenyId == undefined){
+      var sessionValues = await queryAsync(sql)
+      console.log(sessionValues)
+      let loginCheck = await checkLoggedIn(req.session.userId);
       req.session.Jog = sessionValues[0].Jogosultsag;
       req.session.userId = sessionValues[0].id;
       req.session.intezmenyId = sessionValues[0].IntezmenyId;
-      console.log(sessionValues[0].id)
-      let loginCheck = await checkLoggedIn(req.session.userId);
-      console.log("loginCheck")
-      console.log(loginCheck)
-      if(loginCheck) {
-        return res.status(200).send(loginCheck);
-      }
-
-    
-  }
+    }
+  //}
   catch(err){
     logger.log({
       level:'error',

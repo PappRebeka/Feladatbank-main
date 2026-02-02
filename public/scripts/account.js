@@ -14,13 +14,10 @@ account.js -------------
 function setUserData(){//PR
 
     if (!CurrentUserData.id) { // agy fajdalom
-        console.log("ad")
         console.log(CurrentUserData)
         let utoken = sessionStorage.getItem("userToken")
-        console.log("kurva utoken")
-        console.log(utoken)
         //var userdatafasz = ajax_post("/nemtomTeszt", 1, {UserToken: utoken})
-        let response = ajax_post("/GetUserData", 1, { UserToken: utoken })
+        let response = ajax_post("/GetUserData", 1, { UserToken: utoken})
 
         if(response.error == "ALREADY_LOGGED_IN") {
             let time = Math.round(response.waitUntil / 1000);
