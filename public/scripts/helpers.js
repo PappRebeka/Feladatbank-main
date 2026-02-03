@@ -66,15 +66,6 @@ function ajax_post( urlsor, tipus, data ) { //KA // json restapi-hoz használjuk
     return s;
 };
 
-function getIntanceId(){
-    let id = sessionStorage.getItem("instanceId")
-    if(!id){ // ai ajánlotta
-        id = (crypto.randomUUID?.() ?? (Date.now() + "-" + Math.random()));
-        sessionStorage.setItem("tabInstanceId", id);
-    }
-    return id;
-}
-
 function checkDarkMode(){//PR
     var isDark = getCookie("darkMode") == "1" || false;
 
