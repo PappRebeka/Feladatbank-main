@@ -301,6 +301,7 @@
       date.setFullYear(date.getFullYear() + 10);
       //document.cookie = `userToken=${data.userToken}; expires=${date.toUTCString()};`;
       sessionStorage.setItem("userToken", data.userToken)
+      
       renderSelectInstitute(false);
     }
 
@@ -350,7 +351,13 @@
     }
 
     $(document).ready(function() {
-      //sessionStorage.clear();
+      console.log('before')
+      
+
+      sessionStorage.clear();
+
+      console.log('after')
+      
 
       cookieModal();
       checkDarkMode();
@@ -482,6 +489,10 @@
                             </div>
                         </div>
                     </div>
+                    <div class="text-center">
+                      <a class="link link-secondary" href="/help/sugo.html?role=login">Bővebb segíségért kattintson ide</a>
+                    </div>
+                  
                 </div>
               </div>
             </div>

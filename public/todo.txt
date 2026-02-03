@@ -7,7 +7,7 @@ while (teszteles.errors.length > 0){
 Nem kap kuzusnevet
 
 engedjük meg a feladat módosítást az általam megosztott oldalon
-felhasználót kéne sok functionön keresztül adogatni
+felhasználót kéne sok functionón keresztül adogatni
 
 dupla bejelentkezés
 

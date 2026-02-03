@@ -225,6 +225,7 @@ app.post("/registerData", async (req, res) =>{ //RD, PR
     
     const insertSql = await queryAsync(sql, [username, email, passwd, req.session.access_token, req.session.refresh_token, req.session.userToken, req.session.expiry_date, randomHatterszin()]) //insert végrehajtása
     const letrejottId = insertSql.insertId //user idjének kiszedése
+
     
     req.session.userId = letrejottId //tulajdonképpen meg lesz jelölve bejelentkezettként a user // id eltárolása a sessionbe
     req.session.Jog = 'Tanár'
@@ -243,7 +244,7 @@ app.post("/registerData", async (req, res) =>{ //RD, PR
       message: logFormat(`User ${username} succesfully registered!`, "POST", req.ip),
     });
 
-    res.send(JSON.stringify({"userToken":req.session.userToken}))
+    res.send(JSON.stringify({"userToken":md5(req.session.userToken)}))
     
     delete req.session.userToken
   }
@@ -361,8 +362,6 @@ app.post("/loginUser", async (req, res) => { //RD, PR
       });
       throw err
     }
-    console.log("/loginUser")
-    console.log(results[0]['id'])
     if(results[0]['COUNT(id)'] > 0){
       // lets hope this works
       let loginCheck = await checkLoggedIn(results[0]['id']);
@@ -498,23 +497,17 @@ app.post("/updatePassword" , (req, res) => { //PR, jelszó reset esetén jelszó
 });
 
 app.post("/GetUserData", async (req, res) => { //PR, az összes felhasználó fontos adatai, 
-  //(issue!) néha nem kap?
-  console.log("session")
   var userId = req.session.userId
   var userToken = req.body.UserToken
-  console.log(userId)
-  console.log(userToken)
   try{
     let sql = `select id, Jogosultsag, IntezmenyId from Users where UserToken = '${userToken}'`;
     //if(req.session.Jog == undefined && req.session.userId == undefined && req.session.intezmenyId == undefined){
       var sessionValues = await queryAsync(sql)
-      console.log(sessionValues)
-      let loginCheck = await checkLoggedIn(req.session.userId);
+      //let loginCheck = await checkLoggedIn(req.session.userId);
       req.session.Jog = sessionValues[0].Jogosultsag;
       req.session.userId = sessionValues[0].id;
       req.session.intezmenyId = sessionValues[0].IntezmenyId;
     }
-  //}
   catch(err){
     logger.log({
       level:'error',
@@ -799,7 +792,7 @@ app.post("/SendFeladatok", (req, res) =>{ //RD, BBB, PR
   var offsetSql = ` OFFSET ${offset}`
 
   if (rendezesTema != ""){
-    order += ` ORDER BY ${rendezesTema == 'id' ? oldal < 2 ? 'Feladatok.id' : "Megosztott.id" : rendezesTema} ${rendezesFajta == 0 ? "" : "DESC"}`
+    order += ` ORDER BY ${rendezesTema == 'id' ? oldal <= 2 ? 'Feladatok.id' : "Megosztott.id" : rendezesTema} ${rendezesFajta == 0 ? "" : "DESC"}`
   }
   if (evfolyamSz != ""){
     where += ` AND Evfolyam = ${evfolyamSz}`
@@ -1110,7 +1103,6 @@ app.post("/ment-feladat", async (req, res) => { //BBB
 
     var feladat = await queryAsync(sql, felInjection)
     feladatId = Boolean(feladat.insertId) ? feladat.insertId : adat["id"]
-    console.log('feladatId '+feladatId)
     
     adat["alfeladatok"].forEach(async (alfeladat) => {
       let fajlId = alfeladat["fajlId"]; 
@@ -1136,8 +1128,6 @@ app.post("/ment-feladat", async (req, res) => { //BBB
         injection.push(alfeladat['leiras'], feladatId, fajlId, alfeladat["pontszam"])
       }
 
-      console.log('injection')
-      console.log(injection)
       await queryAsync(sql, injection)
       /*conn.query(sql, injection, (err, results) => { 
         if (err) { 
@@ -1230,7 +1220,6 @@ async function fajlFeltoltClassroom (fajlId) {//BBB
 
   let fileExtension, filePath;
   let dbResults = await queryAsync("SELECT BackendNev, AlapNev FROM Fajl WHERE id = ?", [fajlId]);
-  console.log(dbResults)
   
   const fileMetadata = {
     name: dbResults[0]["AlapNev"],
@@ -1349,9 +1338,6 @@ async function biztosFileShare(fileId) {
 }
 
 async function createClassroomTask(title, description, maxPoints, year, month, day, hours, minutes, courseid, fajlIds, tanulok, shareMode){ //RD, classroom feladat létrehozása adott kurzusba(feltöltése)
-  //console.log("fájlok")
-  //console.log(fajlIds)
-
   /*
     shareMode:
         "UNKNOWN_SHARE_MODE"  => No sharing mode specified. This should never be returned.
@@ -1368,7 +1354,6 @@ async function createClassroomTask(title, description, maxPoints, year, month, d
     }
   }));
 
-  console.log(`"materials" Object: ${JSON.stringify(materials, null, 2)}`);
   //tanulok = String(tanulok || "").split(",").map(s => s.trim()).filter(s => s.length > 0);
   var selectedStudents = (Boolean(tanulok?.length))
   //if(tanulok.length > 0)
@@ -1485,7 +1470,6 @@ app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok köz�
   let sql = `INSERT INTO Megosztott(FeladatId, FeladoId, VevoId, Csillagozva)
             VALUES(?, ?, (SELECT id FROM Users WHERE Email = ? OR Nev = ? limit 1), 0)`
 
-            console.log(sql, injection)
   conn.query(sql, injection, (err, results) => {
     if (err) { 
       logger.log({
@@ -1871,7 +1855,6 @@ app.post("/update-report", (req, res) => { // BBB
 })
 
 async function backupCreate(backups) {//BBB, PR, RD, sql backup készítése backups mappába(max 6db) 
-  console.log("backup készítés fut")
   const dbUser = config.database.user;
   const dbPsw = config.database.password;
   const dbName = config.database.name;
@@ -2035,12 +2018,8 @@ cron.schedule('0 18 * * 7', async () => { //BBB minden héten vasárnap biztons�
 })
 
 app.post("/AthelyezUser", (req, res) =>{//RD, felhasználó áthelyezése(intézmény)
-  console.log("athelyezes")
   const hova = req.body.hova
   const userId = req.body.userId
-  console.log(hova)
-  console.log(userId)
-
   var sql = `UPDATE Users 
               SET IntezmenyId = ?
               WHERE Users.id = ?`
@@ -2055,8 +2034,7 @@ app.post("/AthelyezUser", (req, res) =>{//RD, felhasználó áthelyezése(intéz
 
 app.post("/getUserIntezmeny", (req, res)=>{
   var userId = req.body.uid
-  console.log("USER")
-  console.log(userId)
+
   var sql = `SELECT Intezmenyek.id, intezmenyNev
               FROM Intezmenyek LEFT JOIN Users ON Users.IntezmenyId = Intezmenyek.id
               WHERE not Intezmenyek.id = (SELECT IntezmenyId FROM Users WHERE Users.id = ?)
@@ -2095,7 +2073,6 @@ app.post("/heartbeat", (req, res) => {
     "UPDATE Users SET UtolsoPing = ? WHERE id = ?",
     [now, userId]
   ).then(() => {
-    //console.log(`User ${userId} last online at ${new Date(now).toISOString()}`);
     res.sendStatus(204);
     res.end();
   })
@@ -2145,11 +2122,8 @@ const server = app.listen(config.server.port, () => {
   }
 
   async function IsFeladatSharedWithThisUser(feladatId, UserId){
-    console.log(feladatId )
-    console.log(UserId)
     sql = "SELECT COUNT(id) AS db FROM Megosztott WHERE FeladatId = ? AND VevoId = ?"
     var feladatok = await queryAsync(sql, [feladatId, UserId])
-    console.log(feladatok[0].db)
     return feladatok[0].db > 0
   }
 
@@ -2160,7 +2134,6 @@ const server = app.listen(config.server.port, () => {
     var whereParameters = ""
     switch(parseInt(oldal)){
       case 1: //Csillagozva, injection: userid
-      console.log("nemtom")
         selectTable = "Feladatok"
         whereParameters = "Tanar = ? AND Csillagozva = 1"
       break;
@@ -2198,7 +2171,6 @@ const server = app.listen(config.server.port, () => {
     var tablaToUpdate = ""
     var whereParameters = ""
     var injection = []
-    console.log(await IsFeladatSharedWithThisUser(feladatId, vevoId))
     
     const sharedFeladat = await IsFeladatSharedWithThisUser(feladatId, vevoId)
     if(sharedFeladat){
@@ -2220,7 +2192,6 @@ const server = app.listen(config.server.port, () => {
                 END	
               WHERE ${whereParameters}`;
     
-    console.log(sql, injection)
     conn.query(sql, injection, (err, results) => {
       if (err) {
         return res.send(JSON.stringify({ 
@@ -2231,9 +2202,4 @@ const server = app.listen(config.server.port, () => {
       res.end()
     })
   })
-
-  //getUtolsoId()
-
-  /*console.log(server.address().address, server.address().port);*/
-  //startWss(server);
 });

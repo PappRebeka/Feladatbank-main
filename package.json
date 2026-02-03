@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "node.js",
   "scripts": {
-    "test": "jest",
+    "test": "node node_modules/jest/bin/jest.js",
     "start": "node node.js",
     "start-nohup": "./start.sh",
     "stop-nohup": "./stop.sh"
