@@ -365,9 +365,9 @@ function chartCardTemplate(){
     const div = document.createElement('div')
     div.classList.add('col-12', 'col-lg-6', 'p-2',)
     div.innerHTML = `<div class='card h-100'>
-                        <div class='card-body h-100' style="flex: 0 0 auto !important;">
+                        <div class='card-body h-100' style="flex: 0 0 auto !important; min-height:40vh;">
                             <h3 class='card-title text-center'></h3>
-                            <div class="chart-wrapper mx-auto mt-2 p-2 align-items-center h-100" style="max-height:30vh">
+                            <div class="chart-wrapper mx-auto mt-2 p-2 align-items-center h-100" style="max-height:30vh;">
                                 <canvas class='mb-0 mt-auto'></canvas>
                             </div>
                         </div>

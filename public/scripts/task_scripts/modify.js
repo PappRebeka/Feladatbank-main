@@ -448,7 +448,7 @@ function updateTask(task, subtasks){//PR
     const container = buildTaskCardPrimaryData(feladatAdatai, null, null, null)
     document.getElementById(`task-${task.id}`).replaceChildren(container.querySelector('div'))         
     
-    CancelEditingThisFeladat(true, ''); // and stop the editing process
+    CancelEditingThisFeladat(true, '', `task-${task.id}`); // and stop the editing process
     toastMsg('Sikeres módosítás!', 'Feladat sikeresen módosítva', 'success');
 }
 
@@ -494,7 +494,7 @@ function returnEditNehezsegSlider(){
     return {nehLabel, nehInput}
 }
 
-function editThisFeladat(){ // PR
+function editThisFeladat(feladatId){ // PR
     // replace the text with input fields
     deleteIds = [];
     let o = {'0': {id: 'feladatNevEdit', value: feladatAdatai.Nev ?? ""}}
@@ -573,8 +573,9 @@ function editThisFeladat(){ // PR
                         </button>`
         
     const felhasznalo = ""
+
     footer.children[0].addEventListener('click', () => { saveTask(false), resetCreateNewTask()})
-    footer.children[1].addEventListener('click', () => CancelEditingThisFeladat(true, felhasznalo))
+    footer.children[1].addEventListener('click', () => CancelEditingThisFeladat(true, felhasznalo, feladatId))
 }
 
 function buildDeleteButton(id){
@@ -603,11 +604,12 @@ function AlfFileChanged(fileInput, id) {//PR
     }
 }
 
-function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR 
+function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId){ //PR 
     // set teh input fields back to texts and change the buttons
     const footer = editFeladat.querySelector(".modal-footer")
     const header = editFeladat.querySelector(".modal-header")
 
+    
     const h5 = document.createElement('h5')
     h5.classList.add('modal-title', 'fw-semibold')
     h5.id = 'feladatCime'
@@ -616,6 +618,15 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR
     footer.replaceChildren()
     if(document.getElementById("hozzaadGoesHere")) document.getElementById("HozzaadGoesHere").innerHTML = "" 
 
+    let feladatContainer = document.getElementById(feladatId);
+    let felhasznaloRow = $bind(feladatContainer, "felhasznaloRow");
+
+    let felhasznaloCircle = $bind(felhasznaloRow, "felhasznaloCircle");
+    let felhasznaloName = $bind(felhasznaloRow, "felhasznaloName");
+
+    console.log("CancelEditingThisFeladat");
+    console.log(felhasznaloCircle.outerHTML);
+    console.log(felhasznaloName.outerHTML);
     
     if(ActiveLocation == "Feladataim" || ActiveLocation == 'Csillagozva' || ActiveLocation == "Általam megosztott") {
         header.innerHTML += `<button class="btn"><i class="bi bi-pencil-square fs-5"></i></button>`
@@ -630,7 +641,7 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR
                             </button>`
     
 
-        header.children[1].addEventListener("click", () => editThisFeladat());
+        header.children[1].addEventListener("click", () => editThisFeladat(feladatId));
         $bind(footer, 'arch')?.addEventListener("click", () => archiveTask(1));
         $bind(footer, 'megoszt')?.addEventListener("click", () => autocompleteShare_TeacherSelect());
     }
@@ -655,9 +666,14 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo){ //PR
     btn.setAttribute('data-bs-dismiss', 'modal')
     btn.textContent = 'Bezárás'
 
+    document.getElementById(feladatId)
+
     footer.appendChild(btn)
     
-    if(call_setModal) setTaskModalContent(feladatAdatai, felhasznalo)   
+    if(call_setModal) setTaskModalContent(feladatAdatai, felhasznalo);
+    else {
+        
+    }
 }
 
 function TorolFeladat(){//PR?

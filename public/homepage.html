@@ -127,7 +127,6 @@
                                     // brother nincs is ilyen idjű elem a kurva anyádat
              })
             
-            //marker
             createSlimSelect('tanulokSelect', tanulokChanged)
             createSlimSelect('tantargySzuro', tantargyChanged)
             createSlimSelect('ujIntezmenySelect', AthelyezTeszt)
@@ -142,7 +141,7 @@
        }
         catch (err){
             console.log(err)
-            //window.location.href= 'hiba.html?code=2'
+            window.location.href= 'hiba.html?code=2'
         }
             
         checkWindowSize();
@@ -165,19 +164,31 @@
     function AthelyezTeszt(){}
 
     function registerWebsocket(url) {
-        console.log("asd")
         let webSocket = new WebSocket(url);
         let userToken = sessionStorage.getItem("userToken")
-        webSocket.addEventListener("open", (event) => {
+        webSocket.onopen = (event) => {
+            console.log("valami")
             webSocket.send(JSON.stringify({
                 "event": "authentication",
                 "userToken": userToken
             })) // auth 
-        });
 
-        webSocket.addEventListener("message", (event) =>{
-            console.log(JSON.parse(event.data));
-        });
+            setInterval(() => {
+                webSocket.send(JSON.stringify({
+                    "event": "heartbeat"
+                }))
+            }, 2500)
+        };
+
+        webSocket.onmessage = (event) => {
+            let jsonData = JSON.parse(event.data);
+            
+            switch (jsonData["event"]) {
+                case "userDelete":
+                    window.location = `hiba.html?code=0&info=${encodeURIComponent("A fiók törölve lett.")}`;
+                    break;
+            }
+        };
     }
 
     function switchTo(where, kikapcsId){ //PR, RD
@@ -254,7 +265,6 @@
     }
 
     function loadReports(javitott) { // BBB
-
         if (!javitott) {
             javitott = 0;
         }
@@ -304,8 +314,6 @@
             Array.from(buttons).forEach(e => {
                 $bind(div, 'buttons').appendChild(e)
             });
-
-            
 
             $reportContainer.append(div); 
         }
@@ -641,7 +649,7 @@
         var buttons = $bind(document.getElementById('szuro'), 'buttons').children
         buttons[0].addEventListener('click', () => {
             resetFilters();
-            setPageContent(); 
+            loadPageData(); 
             applyFilters()
         });
         buttons[1].addEventListener('click', () => applyFilters())

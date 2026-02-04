@@ -20,7 +20,7 @@ function setUserModal(statLap, id){ //PR, RD
     if(id != undefined) StatUserId = id
     //userId_ToChangeInstitute = id
     const tanarAdatai = document.querySelector("#modalTanarContent")
-    tanarAdatai.innerHTML = ""
+    tanarAdatai.replaceChildren()
 
     let nev = document.getElementById("UserName_"+StatUserId).innerText
     let nevh2 = document.createElement('h2'); nevh2.textContent = nev
@@ -54,23 +54,25 @@ function setUserModal(statLap, id){ //PR, RD
     }
     if(!isDatasetEmpty(dataset)){
         ujChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: labels,
-            datasets: [
-            {
-                data: dataset,
-            }]},
-        options:{
-            responsive: true,
-            maintainAspectRatio: false,
-            useRandomColors: true
-        }
-            
-    })
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [
+                {
+                    data: dataset,
+                }]},
+            options:{
+                responsive: true,
+                maintainAspectRatio: false,
+                useRandomColors: true
+            }
+                
+        })
+        tanarAdatai.style.height = ''
     }
     else{
         tanarAdatai.classList.add("d-flex", "justify-content-center", "align-items-center")
+        tanarAdatai.style.height = '30vh'
         tanarAdatai.replaceChildren(nincsAdatTemplate())
         ctx.style.height = 0
     }
@@ -175,7 +177,8 @@ function evfArchivaltStat(){//RD
     var dataset1 = constructArchDataset(labels, dataset1)
     var dataset2 = constructArchDataset(labels, dataset2)
     labels= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-    dataset.push(dataset1, dataset2)
+
+    dataset.push(dataset2, dataset1)
     return {labels, dataset}
 }
 
@@ -199,14 +202,14 @@ function top3Data(){//RD, PR
     var adatok = ajax_post("/topHaromTanarData", 1, {})
     
     labels.push(adatok.results[1]?.Nev || "") //2.helyezett
-    feladatDb.push(adatok.results[1].FeladatDb || 0)
+    feladatDb.push(adatok.results[1]?.FeladatDb || 0)
     if(!adatok.results[1]) dataset[0] = 0 // if there is no 2nd place, set data to 0 so the chart shows it correctly
 
     labels.push(adatok.results[0].Nev) //1.helyezett
     feladatDb.push(adatok.results[0].FeladatDb)
 
-    labels.push(adatok.results[2].Nev || "") //3.helyezett
-    feladatDb.push(adatok.results[2].FeladatDb || 0)
+    labels.push(adatok.results[2]?.Nev || "") //3.helyezett
+    feladatDb.push(adatok.results[2]?.FeladatDb || 0)
     if(!adatok.results[2]) dataset[2] = 0 // same as above
     
     return {labels, feladatDb, dataset}
@@ -228,11 +231,11 @@ function createChart(hova, errorHova, tipus, cimkek, dataset, subtitleText, x, y
             datasets: tipus == "line" ?
             [
                 {
-                    label: "Archivált",
+                    label: "Aktív",
                     data: dataset[0],
                 },
                 {
-                    label: "Aktív",
+                    label: "Archivált",
                     data: dataset[1],
                 }
             ] : [

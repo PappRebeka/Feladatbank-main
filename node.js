@@ -48,31 +48,42 @@ const { isNumber } = require("util");
 const pad = (s, n) => s.padEnd(n);
 const activeSessions = new Set()
 
-const wss = new WebSocket.Server({ port: 8080 });
+var wss;
 
-wss.on("connenction", (ws) =>{
-  console.log("Új kliens csatlakozott")
-  ws.userToken = null;
+function startWsServer() {
+  wss = new WebSocket.Server({ port: 8080 });
 
-  ws.on("message", (data) => {
-    let jsonData = JSON.parse(data);
-    console.log(jsonData);
+  wss.on("connection", (ws) =>{
+    console.log("Új kliens csatlakozott")
+    ws.userToken = null;
 
-    switch (jsonData["event"]) {
-      case "authentication":
-        ws.userToken = jsonData["userToken"];
-        break;
-      default:
-        console.log("mi a fasz");
-        ws.close();
-        break;
-    }
+    ws.on("message", async (data) => {
+      //console.log("jött message")
+      let jsonData = JSON.parse(data);
+      //console.log(jsonData);
+
+      switch (jsonData["event"]) {
+        case "authentication":
+          ws.userToken = jsonData["userToken"];
+          break;
+        case "heartbeat":
+          if (ws.userToken) {
+            let now = Date.now();
+            await queryAsync("UPDATE Users SET UtolsoPing = ? WHERE UserToken = ?", [now, ws.userToken]);
+          }
+          break;
+        default:
+          console.log("mi a fasz");
+          ws.close();
+          break;
+      }
+    })
+
+    ws.on("close", () => {
+      console.log("megdoglott");
+    })
   })
-
-  ws.on("close", () => {
-    console.log("megdoglott");
-  })
-})
+}
 
 
 
@@ -353,7 +364,7 @@ async function checkLoggedIn(id) {
 
       const now = Date.now();
       const diff = now - lastPing;
-      if (diff < (25 * 1000)) {
+      if (diff < (1000)) {
         return { error: "ALREADY_LOGGED_IN", waitUntil: diff };
       }
     } else {
@@ -1042,7 +1053,7 @@ app.post("/deleteUser", (req, res) => { //PR, BBB
   var tanarId = parseInt(req.body.id); 
   let sql = "SELECT id FROM Feladatok WHERE Tanar=?";
 
-  conn.query(sql, [tanarId], (err, results) => {
+  conn.query(sql, [tanarId], async (err, results) => {
     if (err){
       logger.log({
         level: 'error',
@@ -1059,7 +1070,17 @@ app.post("/deleteUser", (req, res) => { //PR, BBB
       conn.query("DELETE FROM Feladatok WHERE id=?", [id["id"]])
     })
 
+    const userToken = await queryAsync("SELECT UserToken FROM Users WHERE id = ?", [tanarId])
+
+    wss.clients.forEach((client) => {
+      if (client.userToken === userToken[0]["UserToken"]) {
+        client.send(JSON.stringify({ "event": "userDelete" }))
+      }
+    })
+    
+
     conn.query("DELETE FROM Users WHERE id=?", [tanarId])
+
     
     logger.log({
       level: 'info',
@@ -2084,6 +2105,7 @@ app.post("/wss", (req, res) => { // Ez mi?(RD)
   res.send({ "wss": wssToken });
 })
 
+/*
 // explanation: client sends a "heartbeat" every let's say 30 seconds
 // so that the server knows when the client discoonnects
 app.post("/heartbeat", (req, res) => { 
@@ -2105,7 +2127,7 @@ app.post("/heartbeat", (req, res) => {
     res.sendStatus(204);
     res.end();
   })
-})
+})*/
 
 const server = app.listen(config.server.port, () => {
   logger.log({
@@ -2122,6 +2144,8 @@ const server = app.listen(config.server.port, () => {
       console.log("mariadb-dump package installálva van");
     }
   })
+
+  startWsServer();
   
   const tabla_lista = ["Alfeladat", "Fajl", "Feladatok", "Hibajelentes", "Intezmenyek", "Kozzetett", "Megosztott", "Naplo", "Users"];
   let loadBase = false;

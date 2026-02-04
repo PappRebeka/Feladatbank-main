@@ -104,7 +104,7 @@ function setTaskModalContent(adat, felhasznalo){ //PR, RD
     feladatAdatai = adat
     var counter = 1;
     var alfeladatok = ajax_post("/SendAlFeladatok", 1, { feladatId: adat.id })
-    CancelEditingThisFeladat(false, felhasznalo);
+    CancelEditingThisFeladat(false, felhasznalo, `task-${adat.id}`);
 
     const modal = document.getElementById("modalFeladatContent")
     modal.innerHTML = taskModalTemplate(); // safe because its pure

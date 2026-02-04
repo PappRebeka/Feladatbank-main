@@ -52,7 +52,7 @@
     let info = params.get("info");
 
     let extra = "";
-    if (code == 3 && info) extra = String(info);
+    if (/*code == 3 && */info) extra = String(info);
 
     document.getElementById("msg").textContent = hibaMessages[code] + extra;
 
