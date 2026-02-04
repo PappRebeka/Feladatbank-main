@@ -21,18 +21,14 @@ function setUserData(){//PR
             window.location.href = "hiba.html?code=4"
             return;
         }
-
         CurrentUserData = response.dataset;
     }
-
-    
-
     sessionStorage.setItem("loggedIn", true);
         
     
     let rgb = `${CurrentUserData.HatterSzin}`;
     document.querySelectorAll(".letter").forEach(a => {a.textContent = CurrentUserData.Nev[0].toUpperCase();
-                                                        a.classList.add(`text-${isBackgroundDark(rgb) ? "light" : "dark"}-important`)})
+                                                       a.classList.add(`text-${isBackgroundDark(rgb) ? "light" : "dark"}-important`)})
 
     document.getElementById("usernev").textContent = CurrentUserData.Nev;
     document.getElementById("emailcim").textContent = CurrentUserData.Email;
@@ -88,8 +84,11 @@ function allowUserDataEdit(){ //PR
     const editNameButton = buildButtonWithIcon('bi-pencil-square', ['fs-5'])
     editNameButton.addEventListener('click', () => changeFieldToInput('usernev'))
 
-    const editEmailButton = buildButtonWithIcon('bi-pencil-square')
-    editEmailButton.addEventListener('click', () => changeFieldToInput('emailcim'))
+    var editEmailButton
+    if (CurrentUserData.id != 2){
+        editEmailButton = buildButtonWithIcon('bi-pencil-square')
+        editEmailButton.addEventListener('click', () => changeFieldToInput('emailcim'))
+    }
 
     document.getElementById("details").innerHTML = //the stuff that can be edited -- name email
         `<div id="usernev" class="fw-semibold h3">
@@ -104,7 +103,7 @@ function allowUserDataEdit(){ //PR
     document.querySelector('#details #usernev').appendChild(editNameButton)
 
     document.querySelector('#details #emailcim').textContent = CurrentUserData.Email
-    document.querySelector('#details #emailcim').appendChild(editEmailButton)
+    if (editEmailButton) document.querySelector('#details #emailcim').appendChild(editEmailButton)
                    
     document.getElementById("options").classList.add('d-none')
 

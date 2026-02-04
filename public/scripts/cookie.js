@@ -1,13 +1,13 @@
 /* ------ CONTENT ------
 helpers.js -------------
-    - killCookie        -PR
+    - killCookie        -RD, PR
     - getCookie         -RD?
     - setThemeCookie    -PR
     - themeSwitch       -PR
     - setLocationCookie -PR
 */
 
-function killCookie(name) { //PR
+function killCookie(name) { //RD, PR
     // we delete a cookie by setting its expiration date to the past
     const date = new Date();
     date.setFullYear(date.getDate() - 32); //get vanilla iced bitch

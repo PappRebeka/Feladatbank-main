@@ -9,7 +9,7 @@ const AvailablePages = {
   "Csillagozva":         { hideElements: false, pageId: 'star_page',  requredJogosultsag: ['Tanár']},
   "Archívum":            { hideElements: false, pageId: 'arch_page',  requredJogosultsag: ['Tanár']},
   "Velem megosztott":    { hideElements: false, pageId: 'velem_page', requredJogosultsag: ['Tanár']},
-  "Általam megosztott":  { hideElements: false, pageId: 'meg_page',   requredJogosultsag: ['Tanár']}, // + maybe csillagozva
+  "Általam megosztott":  { hideElements: false, pageId: 'meg_page',   requredJogosultsag: ['Tanár']},
   "Felhasználók":        { hideElements: false, pageId: 'user_page',  requredJogosultsag: ['Admin']},
   "Hibajelentés":        { hideElements: true,  pageId: 'hiba_page',  requredJogosultsag: ['Tanár', 'Főadmin']},
   "Adatbázis műveletek": { hideElements: true,  pageId: 'db_page',    requredJogosultsag: ['Főadmin']}, 

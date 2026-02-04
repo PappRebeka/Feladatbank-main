@@ -951,7 +951,7 @@ app.post("/SendAlFeladatok",  (req, res) => {//RD, BBB
 })
 
 function checkIfUniqueUserName(newNev) { // BBB
-  conn.query(
+  conn.query( // not case sensitive
     `SELECT COUNT(*) AS userCount 
       FROM Users as user
       WHERE user.Nev = ?`,
@@ -965,7 +965,7 @@ function checkIfUniqueUserName(newNev) { // BBB
 
         return false; // just in case
       } else {
-        return results[0];
+        return results[0].userCount > 0;
       }
     }
   )
@@ -977,14 +977,14 @@ app.post("/updateUserdata", (req, res) => { //RD
   var newNev = req.body.newNev
   var newEmail = req.body.newEmail
 
-  if (!isEmail(newEmail) || !isNonEmptyString(newNev)) {
+  if ((!isEmail(newEmail) && req.session.Jog != 'Főadmin') || !isNonEmptyString(newNev)) {
     return res.send(JSON.stringify({ 
       success: false, 
       error: 'invalid_input' 
     }));
   }
 
-  if (!checkIfUniqueUserName(newNev)) {
+  if (checkIfUniqueUserName(newNev)) {
     return res.send(JSON.stringify({
       success: false,
       error: "username_exists"
