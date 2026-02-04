@@ -77,10 +77,7 @@ function loadUsers(item){ //PR
 }
 
 function moveUserClick(){ //RD
-    console.log(userId_ToChangeInstitute)
     var intezmenyek = ajax_post("/getUserIntezmeny", 1, { uid: userId_ToChangeInstitute })
-    console.log("users.js intezmenyek")
-    console.log(intezmenyek)
     autofillOtherInstitutions(intezmenyek.results)
 }
 
@@ -104,7 +101,6 @@ function updateUserAuth(id, from, to, nev){ //PR
 
 function moveUserInstitution(){ //RD
     var hova = document.getElementById("ujIntezmeny").value
-    console.log("hova: "+hova)
     const result = ajax_post("/AthelyezUser", 1, { hova: hova, userId: userId_ToChangeInstitute })
     
     if (result.success) {

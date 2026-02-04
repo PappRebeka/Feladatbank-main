@@ -54,10 +54,11 @@
 
 /* ------------------------------------- - Document ready - ----------------------------------------*/
 
-    $(document).ready(function(){
+    $(document).ready(function() {
         try{
             setThemeIndicators(getCookie("darkMode") == "1")
             setUserData();
+            registerWebsocket("ws://localhost:8080");
             setEvents()
             let opt = document.getElementById('menuOptions')
             switch (CurrentUserData.Jogosultsag) {
@@ -150,7 +151,7 @@
             checkWindowSize();
         })
 
-        const heartbeat = () => { {
+        /*const heartbeat = () => { {
             $.ajax({
                 url: `/heartbeat`,
                 type: "post",
@@ -158,10 +159,26 @@
         }};
 
         heartbeat();
-        setInterval(() => heartbeat(), 10000);
+        setInterval(() => heartbeat(), 10000);*/
     });
 
     function AthelyezTeszt(){}
+
+    function registerWebsocket(url) {
+        console.log("asd")
+        let webSocket = new WebSocket(url);
+        let userToken = sessionStorage.getItem("userToken")
+        webSocket.addEventListener("open", (event) => {
+            webSocket.send(JSON.stringify({
+                "event": "authentication",
+                "userToken": userToken
+            })) // auth 
+        });
+
+        webSocket.addEventListener("message", (event) =>{
+            console.log(JSON.parse(event.data));
+        });
+    }
 
     function switchTo(where, kikapcsId){ //PR, RD
         ActiveLocation = where;
@@ -543,7 +560,6 @@
                 let th = document.createElement('th')
                 th.scope = 'col'
                 th.textContent = head
-                console.log(th)
                 document.getElementById('headers').appendChild(th)
             }
 

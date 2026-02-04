@@ -23,12 +23,7 @@ module.exports = function (oauth2Client, logger, google) {
         }
         AccessToken, AccessEletTartam = await refreshAccessTokenIfNeeded(user)
         const client = createClientUsingCredentials(AccessToken, RefreshToken, AccessEletTartam)
-    
-        /*console.log("token present?", !!access_token, "exp(ms):", expiry_date)
-        const oauth2 = google.oauth2({ version: 'v2', auth: client })
-        const me = await oauth2.userinfo.get()
-        console.log("acting as:", me.data.email)*/
-    
+        
         classroom = await google.classroom({ version:"v1", auth: client})
         drive = await google.drive({ version: 'v3', auth: client }); // create authenticated drive client
         const courses = await classroom.courses.list({ teacherId: "me", pageSize: 5 })
@@ -161,7 +156,7 @@ module.exports = function (oauth2Client, logger, google) {
         });
     }),
 
-    router.delete("/tasks/:id", (req, res) => {
+    router.delete("/tasks/:id", async (req, res) => {
         const kurzusId = req.params.id
         const kurzusFeladatId = req.query.kurzusFeladatId
 

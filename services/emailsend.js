@@ -13,8 +13,6 @@ async function sendMail(to, type = 'request') { // RD, PR
       return;
     }
 
-    //console.log("(/sendMail) results: ");
-    //console.log(results)
     const accessToken = results[0]["AccessToken"]
     const refreshToken = results[0]["RefreshToken"]
     const accesseletTartam = results[0]["AccessEletTartam"]
@@ -40,13 +38,11 @@ async function sendMail(to, type = 'request') { // RD, PR
         raw: rawMessage,
       },
     });
-    //console.log("Email sent to "+to)
 
     SCOPES.slice(0, SCOPES.length - 1); //tsundere gmail.send scope after sending email
     }
   catch(err){
-    //console.log("mailsend error")
-    //console.log(err)
+    return;
   }
   })
 }

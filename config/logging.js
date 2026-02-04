@@ -65,7 +65,6 @@ function loggerConfig(szint, loggolj) {
                 printf(info => {
                     let str = `${info.timestamp} [${info.label}] ${info.level}: ${info.message}`;
                     try { 
-                        //console.log("niggler", convert.toHtml(str + '\n'))
                         sendMsg(wss, convert.toHtml(str + '\n')); }
                     catch(e){}
                   /*if(info.level === 'debug')*/ return str;

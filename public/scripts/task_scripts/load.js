@@ -9,8 +9,6 @@ task_scripts/load.js ---------------
 
 function feladatCardClick(element){ //PR
     const adat = JSON.parse(decodeURIComponent(element.adat));
-    console.log('adat')
-    console.log(adat)
     const felhasznalo = element.Felhasznalo;
 
     setTaskModalContent(adat, felhasznalo);
@@ -124,7 +122,6 @@ function setTaskModalContent(adat, felhasznalo){ //PR, RD
             var leiras = a.Leiras
             var fajl = a.FajlInfo ? a.FajlInfo : null
             var pont = a.Pont
-            console.log(a)
 
             const alfeladatDiv = taskModal_AlfeladatTemplate();
             alfeladatDiv.firstChild.id = `ThisIsAlfeladat${a.id}`;

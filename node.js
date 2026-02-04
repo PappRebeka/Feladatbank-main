@@ -13,6 +13,7 @@ const path       = require("path");
 const { exec }   = require("child_process");
 const util       = require("util");
 const ansiToHtml = require('ansi-to-html');
+const WebSocket = require('ws');
 
 const multer = require('multer')
 const upload = multer({
@@ -46,6 +47,34 @@ const { isNumber } = require("util");
 
 const pad = (s, n) => s.padEnd(n);
 const activeSessions = new Set()
+
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on("connenction", (ws) =>{
+  console.log("Új kliens csatlakozott")
+  ws.userToken = null;
+
+  ws.on("message", (data) => {
+    let jsonData = JSON.parse(data);
+    console.log(jsonData);
+
+    switch (jsonData["event"]) {
+      case "authentication":
+        ws.userToken = jsonData["userToken"];
+        break;
+      default:
+        console.log("mi a fasz");
+        ws.close();
+        break;
+    }
+  })
+
+  ws.on("close", () => {
+    console.log("megdoglott");
+  })
+})
+
+
 
 MSG_PAD = 30;
 METHOD_PAD = 16;
@@ -476,7 +505,7 @@ app.post("/updatePassword" , (req, res) => { //PR, jelszó reset esetén jelszó
   var email = req.body.email;
   var newPasswd = req.body.password;
 
-  if (!isEmail(email) || !isNonEmptyString(newPasswd)) {
+  if ((!isEmail(email) && req.session.Jog != 'Főadmin') || !isNonEmptyString(newPasswd)) {
     return res.send(JSON.stringify({ error: 'invalid input' }));
   }
 

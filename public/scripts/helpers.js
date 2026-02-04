@@ -33,10 +33,6 @@ function ajax_get( urlsor, hova, tipus, aszinkron ) { //KA // html oldalak besz√
         beforeSend:function(xhr) { },
         success: function(data) { $(hova).html(data); },
         error: function(jqXHR, textStatus, errorThrown) {
-            //console.log("ajax_get error:")
-            //console.log(jqXHR.responseText, "danger");
-            //console.log(`textStatus: ${textStatus}`);
-            //console.log(`error: ${errorThrown}`)
         },
         complete: function() { }
     });
@@ -49,10 +45,6 @@ function ajax_post( urlsor, tipus, data ) { //KA // json restapi-hoz haszn√°ljuk
         beforeSend: function(xhr) { },
         success: function(response) { s = response; },
         error: function(jqXHR, textStatus, errorThrown) {
-            //console.log("ajax_post error:")
-            //console.log(jqXHR.responseText, "danger");
-            //console.log(`textStatus: ${textStatus}`);
-            //console.log(`error: ${errorThrown}`)
         },
         complete: function() { }
     };
@@ -86,7 +78,6 @@ function setThemeIndicators(isDark){//PR
 }
 
 function validateField() { // BBB
-    console.log("validateField")
     jo = true
     reasonok = []
 

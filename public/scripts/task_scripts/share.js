@@ -32,12 +32,7 @@ function megosztSelectTeszt(){}
 function shareTaskWithTeacher(){ //RD
     const cimzett = document.getElementById("vevoInputText").value
     const feladatId = feladatAdatai.id
-    console.log("megoszt element:"+document.getElementById("vevoInputText"))
-    console.log("megoszt cimzett: "+document.getElementById("vevoInputText").value)
-    console.log("megoszt index: "+document.getElementById("vevoInputText").selectedIndex)
-    console.log(document.getElementById("vevoInputText")[document.getElementById("vevoInputText").selectedIndex])
-    console.log("megoszt indexed value: "+document.getElementById("vevoInputText")[document.getElementById("vevoInputText").selectedIndex].value)
-
+    
     const result = ajax_post("/FeladatMegosztasaTanarral", 1, { cimzett: cimzett, feladatId: feladatId })
     
     if (result.success) {

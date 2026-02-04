@@ -8,13 +8,6 @@ task_scripts/load.js ---------------
 */ 
 
 function kozzeteszButtonClick(id){   //RD, PR
-    /*console.log("asd", ActiveLocation != "Feladataim" && ActiveLocation != "Velem megosztott")
-
-    if(ActiveLocation != "Feladataim" && ActiveLocation != "Velem megosztott"){
-        toastMsg("Hiba", "Ezzel a feladattal nem lehet ezt a műveletet végrehajtani", "warning")
-        return;
-    }*/
-
     getCoursesFromClassroomAPI();
     resetKozzetevesModal();
     
@@ -24,10 +17,6 @@ function kozzeteszButtonClick(id){   //RD, PR
     select.id = 'kurzusSelect'
 
     document.getElementById("tanulokSelect").replaceChildren()
-
-    console.log('debug')
-    console.log(kurzusok_nevek)
-    console.log(typeof kurzusok_nevek)
     
     for (let i = 0; i < kurzusok_nevek.length; i++) {
         let option = document.createElement('option')
@@ -51,8 +40,7 @@ async function loadAvailableCourses(){ //RD
     var kurzusId = chosenOne.split("-")[0]
     var tanulok = ajax_post("/getStudentList", 1, { kurzusId: kurzusId })
     var tanulokLista = Array.from(tanulok?.diakok || []) || []
-    console.log("tanulok lista")
-    console.log(tanulokLista)    
+    
     document.getElementById("tanulokSelect").replaceChildren()
     for (let index = 0; index < tanulokLista.length; index++) {
         tanuloObject.Idk.push(tanulokLista[index].userId)

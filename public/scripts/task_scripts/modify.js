@@ -54,7 +54,6 @@ function progressTemplateBuild(id, infoText) {
     uploadDiv.appendChild(progressDiv);
     uploadDiv.appendChild(hr);
 
-    console.log(uploadDiv);
     return uploadDiv;
 }
 
@@ -214,7 +213,6 @@ async function uploadSubtaskFile(fajlInput) {//BBB
 }
 
 async function saveTask(isUjFeladat) {
-    console.log(isUjFeladat)
     const containerId = isUjFeladat ? 'alfeladatBox' : 'alfeladatokContainer'; // új feladat vagy egy meglévő szerkesztése
     const slimMode = slim_felAdd ? '-s' : ''; // slim mód
 
@@ -240,8 +238,6 @@ async function saveTask(isUjFeladat) {
     }
 
     alfeladatok = alfeladatok.filter(f => isCompleteSubtask(f));
-    console.log('alfeladatok')
-    console.log(alfeladatok)
 
     const payload = createTaskPayload(feladatData, alfeladatok, isUjFeladat);
 
@@ -345,8 +341,6 @@ async function createSubtaskObjects(ujFeladat, slimMode, containerId) {//BBB
 
     items.forEach((item, index) => {
         const $item = $(item);
-        console.log('item:')
-        console.log(item)
 
         const leiras = $item.find(".alfeladatLeiras")[0].value || null;
         const pontszam = $item.find(".alfeladatPont")[0].value || null;
@@ -459,7 +453,6 @@ function updateTask(task, subtasks){//PR
 }
 
 function archiveTask(state){  //PR
-    console.log(`feladat state: ${state}`)
     talalatSzam.innerHTML = parseInt(talalatSzam.innerHTML)-1 
     
     ajax_post("/feladatArchivalas", 1, { id: feladatAdatai.id, state: state })
@@ -675,7 +668,6 @@ function TorolFeladat(){//PR?
 }
 
 function bookmarkTaskClick(feladatId, button, dataset){
-    //console.log(dataset)
     button.classList.toggle('text-warning')
     button.classList.toggle('bi-star-fill')
     button.classList.toggle('bi-star')

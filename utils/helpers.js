@@ -22,18 +22,14 @@ function randomFajlNev(length) {
 }
 
 async function base64Ment(kep, tipus) { //BBB
-    //console.log(`kep: ${kep}`)
     if(kep) { // van kép
       const buffer = Buffer.from(kep, 'base64');
       fajlNev = `${randomFajlNev(16)}${tipus}`;
       const outputPath = path.join(process.cwd(), 'feladat_kepek', fajlNev);
-      //console.log(`kep -> ${outputPath}`)
   
       await sharp(buffer)
-      //  .resize(300, 300)
         .toFile(outputPath);
   
-      //console.log(`kep mentve -> ${fajlNev}`);
       return Promise.resolve(fajlNev);
     } else { // nincs kép
       return Promise.resolve(null)
@@ -81,14 +77,12 @@ function userTokenCreate (){ //RD
     else user_token += jelek[rnd(0, jelek.length - 1)] //10% eséllyel írásjel
   }
   var sql = `SELECT COUNT(id) FROM Users WHERE UserToken = MD5(?)`
-  conn.query(sql, [user_token], (err, results) => { // SQLINJECTION TESZT
-    if(err){/*console.log("(/userTokenCreate) error: "+err);*/ throw err;}
+  conn.query(sql, [user_token], (err, results) => { 
+    if(err){ throw err;}
     if (results[0]['COUNT(id)'] > 0){ // ha már van ilyen token akkor újrageneráljuk
-      //user_token = "";
       userTokenCreate();
     }
   })
-  //console.log("(userTokenCreate) user token: " + user_token)
   return user_token;
 }
 
@@ -108,11 +102,6 @@ async function classroomGetCourses(userid){ //Nem ez miatt hal meg ha nincs kurz
   }
   AccessToken, AccessEletTartam = await refreshAccessTokenIfNeeded(user)
   const client = createClientUsingCredentials(AccessToken, RefreshToken, AccessEletTartam)
-
-  /*//console.log("token present?", !!access_token, "exp(ms):", expiry_date)
-  const oauth2 = google.oauth2({ version: 'v2', auth: client })
-  const me = await oauth2.userinfo.get()
-  //console.log("acting as:", me.data.email)*/
 
   classroom = await google.classroom({ version:"v1", auth: client})
   drive = await google.drive({ version: 'v3', auth: client }); // create authenticated drive client

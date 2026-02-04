@@ -33,7 +33,7 @@
     "sharp": "^0.34.4",
     "util": "^0.12.5",
     "winston": "^3.18.3",
-    "ws": "^8.18.3"
+    "ws": "^8.19.0"
   },
   "description": "",
   "devDependencies": {

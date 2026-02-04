@@ -272,8 +272,7 @@ module.exports = function (oauth2Client) {
                   sql = `SELECT COUNT(Kozzetett.id) as db FROM Feladatok RIGHT JOIN Kozzetett ON Kozzetett.FeladatId = Feladatok.id
                           WHERE Tanar = ${userId}${where}`
             }
-            console.log("oldal "+oldal)
-            console.log(sql)
+            
             conn.query(sql, (err, results) => {
                   if (err) { 
                       logger.log({
@@ -293,7 +292,6 @@ module.exports = function (oauth2Client) {
             })
         }
         catch(err){
-            console.log("tsundere kód "+err)
         }
     });
 
