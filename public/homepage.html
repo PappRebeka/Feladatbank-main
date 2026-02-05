@@ -58,7 +58,7 @@
         try{
             setThemeIndicators(getCookie("darkMode") == "1")
             setUserData();
-            registerWebsocket("ws://localhost:8080");
+            registerWebsocket("ws://localhost:9091");
             setEvents()
             let opt = document.getElementById('menuOptions')
             switch (CurrentUserData.Jogosultsag) {

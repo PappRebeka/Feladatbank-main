@@ -51,7 +51,7 @@ const activeSessions = new Set()
 var wss;
 
 function startWsServer() {
-  wss = new WebSocket.Server({ port: 8080 });
+  wss = new WebSocket.Server({ port: 9091 });
 
   wss.on("connection", (ws) =>{
     console.log("Új kliens csatlakozott")

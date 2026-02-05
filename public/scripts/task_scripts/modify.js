@@ -134,7 +134,7 @@ class ContinousProgressBar {
     document.querySelector("#uploadProgressBody").appendChild(
             progressTemplateBuild(this.id, `Közzétevés...`));
 
-    this.bar = document.querySelector(`#${this.id} .progress-bar`);
+    this.bar = document.getElementById(`${this.id}`).querySelector('.progress-bar');
 
     const tick = () => {
       if (!this.running) {
@@ -212,7 +212,8 @@ async function uploadSubtaskFile(fajlInput) {//BBB
     });
 }
 
-async function saveTask(isUjFeladat) {
+async function saveTask(isUjFeladat, feladatId, felhasznalo) {
+    console.log("savetasknigga")
     const containerId = isUjFeladat ? 'alfeladatBox' : 'alfeladatokContainer'; // új feladat vagy egy meglévő szerkesztése
     const slimMode = slim_felAdd ? '-s' : ''; // slim mód
 
@@ -241,7 +242,7 @@ async function saveTask(isUjFeladat) {
 
     const payload = createTaskPayload(feladatData, alfeladatok, isUjFeladat);
 
-    uploadTasks(payload, isUjFeladat);
+    uploadTasks(payload, isUjFeladat, feladatId, felhasznalo);
 }
 
 function isCompleteSubtask(alfeladat) { //BBB
@@ -267,7 +268,7 @@ function getDeletedTasks() { //BBB
     return [];
 }
 
-function uploadTasks(payload, ujFeladat) { //BBB
+function uploadTasks(payload, ujFeladat, feladatId, felhasznalo) { //BBB
     $.ajax({
         url: '/ment-feladat',
         method: "POST",
@@ -278,7 +279,7 @@ function uploadTasks(payload, ujFeladat) { //BBB
                 loadPageData();
                 toastMsg("Feladat hozzáadva!", "A feladat hozzáadódott az adatbázishoz.", "success");
             } else {
-                updateTask(payload, payload.alfeladatok.filter(a => !(a["isDelete"]))); 
+                updateTask(payload, payload.alfeladatok.filter(a => !(a["isDelete"])), felhasznalo); 
                 toastMsg("Feladat frissítve!", "A feladat frissítése sikeres volt.", "info");
             }
         },
@@ -288,7 +289,7 @@ function uploadTasks(payload, ujFeladat) { //BBB
             toastMsg("Valami borzasztó dolog történt!", "Nem sikerült végrahajtani a műveletet.", "danger");
         }
     });
-    resetCreateNewTask();
+    resetCreateNewTask(feladatId, felhasznaloCircle, felhasznaloCircle);
 }
 
 function validateTaskInputs(feladatData) {//BBB
@@ -372,8 +373,19 @@ function uploadFile(fileInput) {//BBB
     }
 }
 
-function resetCreateNewTask(){ //PR
+function resetCreateNewTask(feladatId, felhCircleOrig, felhNameOrig){ //PR
+    console.log("resetcreate")
     var s = slim_felAdd ? "-s" : "";
+
+    if (feladatId && felhCircleOrig && felhNameOrig) {
+        console.log("original beszur")
+        let felhCont = document.getElementById(feladatId);
+        let felhRow = $bind(felhCont, "felhasznaloRow");
+
+        $bind(felhRow, "felhasznaloCircle").innerText = felhCircleOrig;
+        $bind(felhRow, "felhasznaloName").innerText = felhNameOrig;
+    }
+    
     // set the input values back to empty
     document.getElementById("feladatNev"+s)  .value = "";
     document.getElementById("leiras"+s)      .value = "";
@@ -433,7 +445,7 @@ function subtaskDelete(id){//PR
     parent.remove(); 
 }
 
-function updateTask(task, subtasks){//PR
+function updateTask(task, subtasks, felhasznalo){//PR
     // update the task with the new data
     feladatAdatai = {
         id: task.id, 
@@ -445,7 +457,7 @@ function updateTask(task, subtasks){//PR
         Nehezseg: task.Nehezseg, 
         alfDb: subtasks.length
     }
-    const container = buildTaskCardPrimaryData(feladatAdatai, null, null, null)
+    const container = buildTaskCardPrimaryData(feladatAdatai, felhasznalo, null, null)
     document.getElementById(`task-${task.id}`).replaceChildren(container.querySelector('div'))         
     
     CancelEditingThisFeladat(true, '', `task-${task.id}`); // and stop the editing process
@@ -495,7 +507,16 @@ function returnEditNehezsegSlider(){
 }
 
 function editThisFeladat(feladatId){ // PR
+    let feladatContainer = document.getElementById(feladatId);
+    let felhasznaloRow = $bind(feladatContainer, "felhasznaloRow");
+
+    let felhasznaloCircle = $bind(felhasznaloRow, "felhasznaloCircle");
+    let felhasznaloName = $bind(felhasznaloRow, "felhasznaloName");
+    let felhasznaloCircleOriginalHTML = felhasznaloCircle.textContent;
+    let felhasznaloNameOriginalHTML = felhasznaloName.textContent;
+
     // replace the text with input fields
+    console.log("szekesztes")
     deleteIds = [];
     let o = {'0': {id: 'feladatNevEdit', value: feladatAdatai.Nev ?? ""}}
     addTextInputTo(editFeladat.querySelectorAll(".modal-header"), o)
@@ -574,8 +595,22 @@ function editThisFeladat(feladatId){ // PR
         
     const felhasznalo = ""
 
-    footer.children[0].addEventListener('click', () => { saveTask(false), resetCreateNewTask()})
-    footer.children[1].addEventListener('click', () => CancelEditingThisFeladat(true, felhasznalo, feladatId))
+    footer.children[0].addEventListener('click', () => { saveTask(
+        false,
+        feladatId,
+        felhasznalo),
+        resetCreateNewTask(
+        feladatId,
+        felhasznaloCircleOriginalHTML,
+        felhasznaloNameOriginalHTML
+    )})
+    footer.children[1].addEventListener('click', () => CancelEditingThisFeladat(
+        true, 
+        felhasznalo, 
+        feladatId, 
+        felhasznaloCircleOriginalHTML, 
+        felhasznaloNameOriginalHTML
+    ));
 }
 
 function buildDeleteButton(id){
@@ -604,11 +639,12 @@ function AlfFileChanged(fileInput, id) {//PR
     }
 }
 
-function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId){ //PR 
+function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId, felhasznaloCircle, felhasznaloName){ //PR 
     // set teh input fields back to texts and change the buttons
     const footer = editFeladat.querySelector(".modal-footer")
     const header = editFeladat.querySelector(".modal-header")
 
+    
     
     const h5 = document.createElement('h5')
     h5.classList.add('modal-title', 'fw-semibold')
@@ -617,16 +653,6 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId){ //PR
     header.replaceChildren(h5)
     footer.replaceChildren()
     if(document.getElementById("hozzaadGoesHere")) document.getElementById("HozzaadGoesHere").innerHTML = "" 
-
-    let feladatContainer = document.getElementById(feladatId);
-    let felhasznaloRow = $bind(feladatContainer, "felhasznaloRow");
-
-    let felhasznaloCircle = $bind(felhasznaloRow, "felhasznaloCircle");
-    let felhasznaloName = $bind(felhasznaloRow, "felhasznaloName");
-
-    console.log("CancelEditingThisFeladat");
-    console.log(felhasznaloCircle.outerHTML);
-    console.log(felhasznaloName.outerHTML);
     
     if(ActiveLocation == "Feladataim" || ActiveLocation == 'Csillagozva' || ActiveLocation == "Általam megosztott") {
         header.innerHTML += `<button class="btn"><i class="bi bi-pencil-square fs-5"></i></button>`
