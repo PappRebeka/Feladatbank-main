@@ -62,4 +62,4 @@
 3. Google OAuth2 API
 
 ## Használat
-[Ha egy használati útmutatót szeretne...](http://localhost:9071/sugo/tanar.html)
+[Ha egy használati útmutatót szeretne...](http://localhost:9071/help/sugo.html?role=tanár)

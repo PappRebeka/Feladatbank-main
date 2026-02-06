@@ -277,9 +277,10 @@ function uploadTasks(payload, ujFeladat, feladatId, felhasznalo) { //BBB
             if (ujFeladat) {
                 loadPageData();
                 toastMsg("Feladat hozzáadva!", "A feladat hozzáadódott az adatbázishoz.", "success");
+                resetCreateNewTask();
             } else {
                 updateTask(payload, payload.alfeladatok.filter(a => !(a["isDelete"])), felhasznalo); 
-                toastMsg("Feladat frissítve!", "A feladat frissítése sikeres volt.", "info");
+                toastMsg("Feladat módosítva!", "A feladat módosítása sikeres volt.", "success");
             }
         },
         error: function (xhr) {
@@ -288,7 +289,7 @@ function uploadTasks(payload, ujFeladat, feladatId, felhasznalo) { //BBB
             toastMsg("Valami borzasztó dolog történt!", "Nem sikerült végrahajtani a műveletet.", "danger");
         }
     });
-    resetCreateNewTask(feladatId, felhasznalo);
+    //resetCreateNewTask(feladatId, felhasznalo);
 }
 
 function validateTaskInputs(feladatData) {//BBB
@@ -372,8 +373,7 @@ function uploadFile(fileInput) {//BBB
     }
 }
 
-function resetCreateNewTask(feladatId, felhasznalo, felhasznaloColor){ //PR
-    console.log("resetcreate")
+function resetCreateNewTask(/*feladatId, felhasznalo, felhasznaloColor*/){ //PR
     var s = slim_felAdd ? "-s" : "";
     
     // set the input values back to empty
@@ -385,20 +385,6 @@ function resetCreateNewTask(feladatId, felhasznalo, felhasznaloColor){ //PR
     document.getElementById("nehezseg"+s)    .value = 5;
     document.getElementById("Difficulty"+s)  .innerText = "Nehézség - 5";
     document.getElementById("alfeladatBox"+s).innerHTML = "";
-
-    let container = document.getElementById(feladatId);
-
-    console.log(felhasznalo); 
-    if (felhasznalo){ $bind(container, 'felhasznaloName').textContent = felhasznalo; }
-
-  /*if (feladatId && felhCircleOrig && felhNameOrig) {
-        console.log("original beszur")
-        let felhCont = document.getElementById(feladatId);
-        let felhRow = $bind(felhCont, "felhasznaloRow");
-        
-        $bind(felhRow, "felhasznaloCircle").innerText = felhCircleOrig;
-        $bind(felhRow, "felhasznaloName").innerText = felhNameOrig;
-    }*/
 }
 
 function createSubtask(where){ //PR
@@ -473,8 +459,8 @@ function updateTask(task, subtasks, felhasznalo){//PR
     const container = buildTaskCardPrimaryData(feladatAdatai, felhasznalo, szin, null)
     document.getElementById(`task-${task.id}`).replaceChildren(container.querySelector('div'))         
     
-    CancelEditingThisFeladat(true, '', `task-${task.id}`); // and stop the editing process
-    toastMsg('Sikeres módosítás!', 'Feladat sikeresen módosítva', 'success');
+    setTaskModalContent(feladatAdatai, '');
+    //CancelEditingThisFeladat(true, '', `task-${task.id}`); // stop the editing process
 }
 
 function archiveTask(state){  //PR
@@ -605,19 +591,10 @@ function editThisFeladat(feladatId, felhasznalo){ // PR
                             Mégse
                         </button>`
 
-    footer.children[0].addEventListener('click', () => { saveTask(
-        false,
-        feladatId,
-        felhasznalo),
-        resetCreateNewTask(
-        feladatId,
-        felhasznalo,
-    )})
-    footer.children[1].addEventListener('click', () => CancelEditingThisFeladat(
-        true, 
-        felhasznalo, 
-        feladatId, 
-    ));
+    footer.children[0].addEventListener('click', () => { saveTask(false, feladatId, felhasznalo)/*, I think this is completely useless here, since it resets NEW taks and this is EDIT branch...
+                                                         resetCreateNewTask(feladatId, felhasznalo)*/})
+
+    footer.children[1].addEventListener('click', () => {setTaskModalContent(feladatAdatai, felhasznalo);/*CancelEditingThisFeladat(true, felhasznalo, feladatId, )*/});
 }
 
 function buildDeleteButton(id){
@@ -647,11 +624,10 @@ function AlfFileChanged(fileInput, id) {//PR
 }
 
 function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId){ //PR 
-    // set teh input fields back to texts and change the buttons
+    // set the input fields back to texts and change the buttons
     const footer = editFeladat.querySelector(".modal-footer")
     const header = editFeladat.querySelector(".modal-header")
 
-    
     
     const h5 = document.createElement('h5')
     h5.classList.add('modal-title', 'fw-semibold')
@@ -706,7 +682,7 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId){ //PR
 
     footer.appendChild(btn)
     
-    if(call_setModal) setTaskModalContent(feladatAdatai, felhasznalo);
+    //if(call_setModal) setTaskModalContent(feladatAdatai, felhasznalo);
 }
 
 function TorolFeladat(){//PR?

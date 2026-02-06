@@ -97,13 +97,8 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
 }
 
 function buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev){//PR
-    
-    // this function has been reduced to dust
     const container = buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev)
     document.getElementById("BigDih").appendChild(container);
-
-
-    
 }
 
 function setTaskModalContent(adat, felhasznalo){ //PR, RD
