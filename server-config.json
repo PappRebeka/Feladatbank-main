@@ -4,6 +4,9 @@
         "base_url": "http://localhost",
         "session_secret": "0268a0277098ab1b894132c196135c381183e065e66948f2277883ed4f0fd5440414125ba4f564c72d9218f9366f11b5"
     },
+    "websocket": {
+        "port": 9091
+    },
     "database": {
         "host": "193.227.198.214",
         "port": 9406,

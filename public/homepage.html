@@ -141,7 +141,7 @@
        }
         catch (err){
             console.log(err)
-            window.location.href= 'hiba.html?code=2'
+            //window.location.href= 'hiba.html?code=2'
         }
             
         checkWindowSize();
@@ -469,11 +469,11 @@
         if (talalatSzam.innerText == "0") toastMsg("Nem találtunk feladatokat!", "A megadott paraméterek alapján nem találtunk önhöz tartozó feladatokat.", "warning")
         if(results){ if(results.length!= undefined) {
             for (const adat of results) {
-                let felhasznalo      = (oldal == "3" || oldal == '4' ? adat.Felhasznalo: "")
-                let felhasznaloColor = (oldal == "3" || oldal == '4' ? adat.FelhasznaloColor: "")
-                let kurzusnev        = (oldal == "5" ? adat.Kurzus: "")
-                let kurzusId         = (oldal == "5" ? adat.kurzusId: "")
-                let kurzusFeladatId  = (oldal == "5" ? adat.kurzusFeladatId: "")
+                let felhasznalo      = (oldal == "3" || oldal == '4' ? adat.Felhasznalo : "")
+                let felhasznaloColor = (oldal == "3" || oldal == '4' ? adat.FelhasznaloColor : "")
+                let kurzusnev        = (oldal == "5" ? adat.Kurzus : "")
+                let kurzusId         = (oldal == "5" ? adat.kurzusId : "")
+                let kurzusFeladatId  = (oldal == "5" ? adat.kurzusFeladatId : "")
                 
                 userpage ? loadUsers(adat) :
                            buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev, kurzusId, kurzusFeladatId)

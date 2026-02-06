@@ -114,10 +114,13 @@ function isBackgroundDark(rgb) {//PR
     // determine if a background color is dark or light. found it on the internet
 
     // Uses the ITU-R BT.601 luminance formula to estimate perceived brightness
-
-    const [r, g, b] = rgb.substring(4, rgb.length - 1).split(" ").map(Number);
-    const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
-    return brightness < 128;
+    console.log(rgb)
+    try{
+        const [r, g, b] = rgb.substring(4, rgb.length - 1).split(" ").map(Number);
+        const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+        return brightness < 128;
+    } catch{ return false; }
+    
     
     // Source: standard perceptual luminance formula (0.299R + 0.587G + 0.114B)
     // Commonly used in accessibility and theming utilities

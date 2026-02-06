@@ -49,6 +49,8 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
         $bind(container, 'felhasznaloName').textContent = felhasznalo;
         setBgColor(container, 'felhasznaloCircle', felhasznaloColor);
 
+        console.log('felhasznaloColor', felhasznaloColor)
+
         const icon = document.createElement('span');
         icon.className = `text-${isBackgroundDark(felhasznaloColor) ? "light" : "dark"}-important`;
         icon.style.fontSize = '0.75rem';
@@ -95,9 +97,13 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
 }
 
 function buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev){//PR
+    
     // this function has been reduced to dust
     const container = buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev)
     document.getElementById("BigDih").appendChild(container);
+
+
+    
 }
 
 function setTaskModalContent(adat, felhasznalo){ //PR, RD

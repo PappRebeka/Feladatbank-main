@@ -213,7 +213,6 @@ async function uploadSubtaskFile(fajlInput) {//BBB
 }
 
 async function saveTask(isUjFeladat, feladatId, felhasznalo) {
-    console.log("savetasknigga")
     const containerId = isUjFeladat ? 'alfeladatBox' : 'alfeladatokContainer'; // új feladat vagy egy meglévő szerkesztése
     const slimMode = slim_felAdd ? '-s' : ''; // slim mód
 
@@ -289,7 +288,7 @@ function uploadTasks(payload, ujFeladat, feladatId, felhasznalo) { //BBB
             toastMsg("Valami borzasztó dolog történt!", "Nem sikerült végrahajtani a műveletet.", "danger");
         }
     });
-    resetCreateNewTask(feladatId, felhasznaloCircle, felhasznaloCircle);
+    resetCreateNewTask(feladatId, felhasznalo);
 }
 
 function validateTaskInputs(feladatData) {//BBB
@@ -373,18 +372,9 @@ function uploadFile(fileInput) {//BBB
     }
 }
 
-function resetCreateNewTask(feladatId, felhCircleOrig, felhNameOrig){ //PR
+function resetCreateNewTask(feladatId, felhasznalo, felhasznaloColor){ //PR
     console.log("resetcreate")
     var s = slim_felAdd ? "-s" : "";
-
-    if (feladatId && felhCircleOrig && felhNameOrig) {
-        console.log("original beszur")
-        let felhCont = document.getElementById(feladatId);
-        let felhRow = $bind(felhCont, "felhasznaloRow");
-
-        $bind(felhRow, "felhasznaloCircle").innerText = felhCircleOrig;
-        $bind(felhRow, "felhasznaloName").innerText = felhNameOrig;
-    }
     
     // set the input values back to empty
     document.getElementById("feladatNev"+s)  .value = "";
@@ -395,6 +385,20 @@ function resetCreateNewTask(feladatId, felhCircleOrig, felhNameOrig){ //PR
     document.getElementById("nehezseg"+s)    .value = 5;
     document.getElementById("Difficulty"+s)  .innerText = "Nehézség - 5";
     document.getElementById("alfeladatBox"+s).innerHTML = "";
+
+    let container = document.getElementById(feladatId);
+
+    console.log(felhasznalo); 
+    if (felhasznalo){ $bind(container, 'felhasznaloName').textContent = felhasznalo; }
+
+  /*if (feladatId && felhCircleOrig && felhNameOrig) {
+        console.log("original beszur")
+        let felhCont = document.getElementById(feladatId);
+        let felhRow = $bind(felhCont, "felhasznaloRow");
+        
+        $bind(felhRow, "felhasznaloCircle").innerText = felhCircleOrig;
+        $bind(felhRow, "felhasznaloName").innerText = felhNameOrig;
+    }*/
 }
 
 function createSubtask(where){ //PR
@@ -457,7 +461,16 @@ function updateTask(task, subtasks, felhasznalo){//PR
         Nehezseg: task.Nehezseg, 
         alfDb: subtasks.length
     }
-    const container = buildTaskCardPrimaryData(feladatAdatai, felhasznalo, null, null)
+
+    var szin = 'rgb(127,127,127)'; // fallback
+    try{
+        var cont = document.getElementById('task-' + feladatAdatai.id)
+        var cir = $bind(cont, 'felhasznaloCircle')
+        szin = cir.style.backgroundColor;
+    } 
+    catch(err){console.log(err)}
+
+    const container = buildTaskCardPrimaryData(feladatAdatai, felhasznalo, szin, null)
     document.getElementById(`task-${task.id}`).replaceChildren(container.querySelector('div'))         
     
     CancelEditingThisFeladat(true, '', `task-${task.id}`); // and stop the editing process
@@ -506,14 +519,13 @@ function returnEditNehezsegSlider(){
     return {nehLabel, nehInput}
 }
 
-function editThisFeladat(feladatId){ // PR
+function editThisFeladat(feladatId, felhasznalo){ // PR
     let feladatContainer = document.getElementById(feladatId);
     let felhasznaloRow = $bind(feladatContainer, "felhasznaloRow");
 
     let felhasznaloCircle = $bind(felhasznaloRow, "felhasznaloCircle");
-    let felhasznaloName = $bind(felhasznaloRow, "felhasznaloName");
-    let felhasznaloCircleOriginalHTML = felhasznaloCircle.textContent;
-    let felhasznaloNameOriginalHTML = felhasznaloName.textContent;
+
+    console.log('felhasznaloCircle', felhasznaloCircle)
 
     // replace the text with input fields
     console.log("szekesztes")
@@ -592,8 +604,6 @@ function editThisFeladat(feladatId){ // PR
                             <i class="bi bi-x"></i>&nbsp;
                             Mégse
                         </button>`
-        
-    const felhasznalo = ""
 
     footer.children[0].addEventListener('click', () => { saveTask(
         false,
@@ -601,15 +611,12 @@ function editThisFeladat(feladatId){ // PR
         felhasznalo),
         resetCreateNewTask(
         feladatId,
-        felhasznaloCircleOriginalHTML,
-        felhasznaloNameOriginalHTML
+        felhasznalo,
     )})
     footer.children[1].addEventListener('click', () => CancelEditingThisFeladat(
         true, 
         felhasznalo, 
         feladatId, 
-        felhasznaloCircleOriginalHTML, 
-        felhasznaloNameOriginalHTML
     ));
 }
 
@@ -639,7 +646,7 @@ function AlfFileChanged(fileInput, id) {//PR
     }
 }
 
-function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId, felhasznaloCircle, felhasznaloName){ //PR 
+function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId){ //PR 
     // set teh input fields back to texts and change the buttons
     const footer = editFeladat.querySelector(".modal-footer")
     const header = editFeladat.querySelector(".modal-header")
@@ -665,9 +672,12 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId, felhasz
                                 <i class="bi bi-share-fill"></i>&nbsp;
                                 Megosztás
                             </button>`
-    
 
-        header.children[1].addEventListener("click", () => editThisFeladat(feladatId));
+
+        let taskDiv = document.getElementById(feladatId);
+        let felhasznalo = $bind(taskDiv, "felhasznaloName").innerText;
+
+        header.children[1].addEventListener("click", () => editThisFeladat(feladatId, felhasznalo));
         $bind(footer, 'arch')?.addEventListener("click", () => archiveTask(1));
         $bind(footer, 'megoszt')?.addEventListener("click", () => autocompleteShare_TeacherSelect());
     }
@@ -697,9 +707,6 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId, felhasz
     footer.appendChild(btn)
     
     if(call_setModal) setTaskModalContent(feladatAdatai, felhasznalo);
-    else {
-        
-    }
 }
 
 function TorolFeladat(){//PR?
