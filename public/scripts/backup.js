@@ -17,7 +17,7 @@ backup.js --------------
     }
 }*/
 async function saveBackup(){ //RD
-    var adatok = await ajax_post("/MentBackup", 1, {})
+    var adatok = await ajax_post("/MentBackup", 1, {}, true)
     if(adatok["error"]) {
         toastMsg("Hiba!",adatok["error"], "danger");
         return;
@@ -27,7 +27,7 @@ async function saveBackup(){ //RD
 
 async function restoreBackup(){ //RD
     var selectedbackup = document.getElementById("backupSelect").value
-    var valasz = await ajax_post("/RestoreBackup", 1, { dumpNev: selectedbackup })
+    var valasz = await ajax_post("/RestoreBackup", 1, { dumpNev: selectedbackup }, true)
     toastMsg("Figyelmeztetés", valasz.str, "warning")
 }
     

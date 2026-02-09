@@ -12,9 +12,9 @@ filters.js -------------
     - autofillTeacherFilter     -PR
 */
 
-function setSearchFilter(ker){//PR
+async function setSearchFilter(ker){//PR
     ActiveFilters.kereso = ker ? ker.toLowerCase() : "" // save the search filter globally
-    loadPageData()          // reload the data with the new filter
+    await loadPageData()          // reload the data with the new filter
 }
 
 function resetSearchFilter(){ //PR
@@ -23,7 +23,7 @@ function resetSearchFilter(){ //PR
     ActiveFilters.kereso = ""
 }
 
-function applyFilters() { //RD
+async function applyFilters() { //RD
     ActiveFilters.nehezseg   = TempFilters.nehezseg 
     ActiveFilters.evfolyam   = document.getElementById("evfolyamSzuro").value
     ActiveFilters.tantargy   = TempFilters.tantargy
@@ -32,7 +32,7 @@ function applyFilters() { //RD
     
     ActiveFilters.order.field = TempFilters.order.field
     ActiveFilters.order.desc  = TempFilters.order.desc
-    loadPageData()
+    await loadPageData()
     toastMsg('Szűrő alkalmazva!', 'A szűrő sikeresen alkalmazva', 'success');
 }
 
@@ -101,6 +101,7 @@ function getSortField(){ //PR
 }
 
 function autofillSubjectFilter(tantargyak, selectedTantargy){ //PR, RD, selectedTantargy: a szűrő alkalmazása előtti kiválasztott tantárgy, azért van hogy a tantárgy selected maradjon
+    createSlimSelect('tantargySzuro', tantargyChanged)
     document.getElementById('tantargySzuro').innerHTML = `<option value="" class="d-none" hidden></option>`
     for (const id in tantargyak) {
         var t = tantargyak[id].Tantargy
@@ -112,7 +113,7 @@ function autofillSubjectFilter(tantargyak, selectedTantargy){ //PR, RD, selected
 }
 
 async function autofillTeacherFilter(){ //PR
-    const options = await ajax_post("/getTanarForAuto", 1, { vevoId: CurrentUserData.id })
+    const options = await ajax_post("/getTanarForAuto", 1, { vevoId: CurrentUserData.id }, false)
     document.getElementById("tanarSzuro").innerHTML = `<option value="" class="d-none" hidden></option>`
     for (const item of options.results){
         let opt = document.createElement('option')

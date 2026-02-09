@@ -21,7 +21,7 @@ function updateNavigationButtons(){ //RD
     kovetkezo.disabled = isUtolso;
 }
 
-function changeNavigationLocation(merre, mennyit){ //RD
+async function changeNavigationLocation(merre, mennyit){ //RD
     if(merre == "tovabb"){
         if(mennyit == "1"){//következő lap
                 // az oldalszámlálóhoz +1 pl 2.oldalról => 3.oldalra változik
@@ -57,7 +57,7 @@ function changeNavigationLocation(merre, mennyit){ //RD
     }
     updateNavigationButtons()
     window.scrollTo(0, 0);
-    setPageContent()
+    await setPageContent()
 }
 
 function changeLimitOffset(){ //PR
