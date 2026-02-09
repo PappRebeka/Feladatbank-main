@@ -154,7 +154,7 @@ module.exports = function (oauth2Client) {
         res.send({ "id": feladat_utolso_id }).status(200).end()
     });
 
-    router.get("/subtasks", (req, res) => {
+    router.get("/subtasks", async (req, res) => {
         var feladatId = req.query.feladatId ? parseInt(req.query.feladatId) : null;
         if (!isPositiveInt(feladatId)) {
             res.end(); return

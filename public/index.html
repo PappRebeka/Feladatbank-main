@@ -179,8 +179,8 @@
     }
 
     // ---------- Data fetch helpers ----------
-    function autofillInstituteArray() {
-      const institute = ajax_post("/SendIntezmeny", 1, {});
+    async function autofillInstituteArray() {
+      const institute = await ajax_post("/SendIntezmeny", 1, {});
       const sel = document.getElementById("intezmenySelect");
 
       sel.replaceChildren();
@@ -195,7 +195,7 @@
     }
 
     // ---------- Actions ----------
-    function getRegisterData() {
+    async function getRegisterData() {
       const params = new URLSearchParams(window.location.search);
       const name = params.get("name");
       const mail = params.get("email");
@@ -204,7 +204,7 @@
 
       if (mail && name) {
         email = mail;
-        if (ajax_post("/isRegistered", 0, { email: mail }) == "false") {
+        if (await ajax_post("/isRegistered", 0, { email: mail }) == "false") {
           renderRegister(name, mail);
         } else {
           tryLogin(mail);
@@ -220,7 +220,7 @@
       time -= 1;
     }
 
-    function tryLogin(mail) {
+    async function tryLogin(mail) {
       clearError();
 
       const loginWithGoogle = Boolean(mail);
@@ -237,7 +237,7 @@
       }
 
 
-      const result = ajax_post("/loginUser", 1, { 
+      const result = await ajax_post("/loginUser", 1, { 
         user: user, 
         passwd: passwd, 
         userToken: "", 
@@ -251,7 +251,7 @@
       }
 
       if (result.db == 1) {
-        const intezmenyCount = ajax_post("/VanIntezmeny", 1, {});
+        const intezmenyCount = await ajax_post("/VanIntezmeny", 1, {});
 
         emlekezz();
 
@@ -271,7 +271,7 @@
       }
     }
 
-    function registerNext() {
+    async function registerNext() {
       clearError();
 
       const username = document.getElementById("username").value;
@@ -285,7 +285,7 @@
 
       if (!isNameValid(username) || !isValidEmail(email) || !jelszoValidal(p1)) return;
 
-      const data = ajax_post("/registerData", 1, { username: username, email: email, password: p1 });
+      const data = await ajax_post("/registerData", 1, { username: username, email: email, password: p1 });
 
       if (data.error == 'username_exists') {
         showError("Ezt a felhasználónevet már foglalta valaki! Kérjük válasszon másikat.");
@@ -305,23 +305,23 @@
       renderSelectInstitute(false);
     }
 
-    function registerIntezmeny() {
+    async function registerIntezmeny() {
       const sel = document.getElementById("intezmenySelect");
       const intezmId = sel.value;
 
-      ajax_post("/setIntezmeny", 1, { email: email, intezmeny: intezmId });
+      await ajax_post("/setIntezmeny", 1, { email: email, intezmeny: intezmId });
       window.location.href = "/homepage.html";
     }
 
-    function loginIntezmeny() {
+    async function loginIntezmeny() {
       const sel = document.getElementById("intezmenySelect");
       const intezmId = sel.value;
-      ajax_post("/updateUserIntezmeny", 1, { ujIntezmId: intezmId });
+      await ajax_post("/updateUserIntezmeny", 1, { ujIntezmId: intezmId });
       toastMsg("Sikeres frissítés", "Sikeresen frissítettük az ön fiókjához tartozó intézményt", "success");
       setTimeout(() => window.location.href = "/homepage.html", 1500);
     }
 
-    function emailCheck() {
+    async function emailCheck() {
       clearError();
       const mail = document.getElementById("email").value;
 
@@ -330,8 +330,8 @@
         return;
       }
 
-      if (ajax_post("/isRegistered", 0, { email: mail }) == "true") {
-        ajax_post("/sendMailTo", 1, { email: mail, type: 'request' });
+      if (await ajax_post("/isRegistered", 0, { email: mail }) == "true") {
+        await ajax_post("/sendMailTo", 1, { email: mail, type: 'request' });
         toastMsg("Email elküldve", "Ha létezik fiók ezzel az email címmel, küldtünk helyreállító linket.", "success");
       } else {
         showError("Nincs ilyen email című felhasználó!");
@@ -350,7 +350,7 @@
       });
     }
 
-    $(document).ready(function() {
+    $(document).ready(async function() {
       sessionStorage.clear();
 
       cookieModal();
@@ -360,7 +360,7 @@
       if (stay == "1") {
         var van = null
         var utoken = sessionStorage.getItem("userToken")
-        van = ajax_post("/loginUser", 1, { 
+        van = await ajax_post("/loginUser", 1, { 
           user: "", 
           passwd: "", 
           userToken: utoken || "" 
