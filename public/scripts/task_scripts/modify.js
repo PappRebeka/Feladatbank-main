@@ -110,61 +110,81 @@ class ProgressBar { //BBB
     } 
 }
 
-class ContinousProgressBar {
+class ContinuousProgressBar {
   constructor() {
-    this.minProgress = 0;
-    this.maxProgress = 100;
-    this.progress = this.minProgress;
+    //this.min = 0;
+    this.max = 100;
+    //this.step = 10;
+    //this.intervalMs = 250;
 
-    this.id = `${crypto.randomUUID()}-continous`;
-    this.running = true;
+    //this.progress = this.min;
+    this.id = `${crypto.randomUUID()}-continuous`;
 
+    //this.timer = null;
     this.bar = null;
-    this.timer = null;
+    this.modal = null;
   }
 
   start() {
-    const modalEl = document.getElementById("uploadProgressModal");
-    let modal = bootstrap.Modal.getInstance(modalEl);
-    if (!modal) modal = new bootstrap.Modal(modalEl);
-    modal.show();
-
-    progressTemplateBuild();
-
-    document.querySelector("#uploadProgressBody").appendChild(
-            progressTemplateBuild(this.id, `Közzétevés...`));
-
-    this.bar = document.getElementById(`${this.id}`).querySelector('.progress-bar');
-
-    const tick = () => {
-      if (!this.running) {
-        clearInterval(this.timer);
-        this.timer = null;
-
-        $(`#${this.id}`).remove();
-
-        if ($("#uploadProgressBody").children().length === 0) {
-          const m = bootstrap.Modal.getInstance(modalEl);
-          $("#uploadProgressBody").empty();
-          m?.hide();
-        }
-        return;
-      }
-
-      this.progress = (this.progress + 10) % (this.maxProgress + 10); // 0..100..0
-      const value = Math.floor((this.progress / this.maxProgress) * 100);
-
-      this.bar.setAttribute("aria-valuenow", value);
-      this.bar.style.width = `${value}%`;
-    };
-
-    this.timer = setInterval(tick, 250);
+    this.showModal();
+    this.mountBar();
+    //this.startTimer();
   }
+
+  showModal() {
+    const modalEl = document.getElementById("uploadProgressModal");
+    this.modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    this.modal.show();
+  }
+
+  mountBar() {
+    const container = document.getElementById("uploadProgressBody");
+
+    const node = progressTemplateBuild(this.id, "Közzétevés... ez több másodpercig is eltarthat.");
+    container.appendChild(node);
+
+    this.bar = node.querySelector(".progress-bar");
+    this.bar.classList.add("progress-bar-animated");
+    this.bar.style.width = `${this.max}%`
+    this.bar.setAttribute("aria-valuenow", this.max);
+  }
+
+  /*startTimer() {
+    this.timer = setInterval(() => {
+      this.tick();
+    }, this.intervalMs);
+  }*/
+
+  /*tick() {
+    this.progress += this.step;
+
+    if (this.progress > this.max) {
+      this.progress = this.min;
+    }
+
+    const percent = Math.floor((this.progress / this.max) * 100);
+
+    this.bar.style.width = `${percent}%`;
+    this.bar.setAttribute("aria-valuenow", percent);
+  }*/
 
   remove() {
-    this.running = false;
+    //if (this.timer) {
+    //  clearInterval(this.timer);
+    //  this.timer = null;
+    //}
+
+    const node = document.getElementById(this.id);
+    if (node) node.remove();
+
+    const container = document.getElementById("uploadProgressBody");
+    if (container.children.length === 0) {
+      container.innerHTML = "";
+      this.modal?.hide();
+    }
   }
 }
+
 
 
 async function uploadSubtaskFile(fajlInput) {//BBB
