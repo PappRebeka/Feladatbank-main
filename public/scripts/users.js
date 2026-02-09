@@ -48,8 +48,8 @@ async function loadUsers(item){ //PR
     buttons[0].classList.add(`btn-${item.Jogosultsag == "Tanár" ? "primary" : "dark"}`)
     buttons[1].classList.add(`btn-${item.Jogosultsag != "Tanár" ? "primary" : "dark" }`)
 
-    buttons[0].addEventListener('click', async () => {await updateUserAuth(item.id, buttons[1], buttons[0], item.Nev)})
-    buttons[1].addEventListener('click', async () => {await updateUserAuth(item.id, buttons[0], buttons[1], item.Nev)})
+    buttons[0].addEventListener('click', async () => await updateUserAuth(item.id, buttons[1], buttons[0], item.Nev))
+    buttons[1].addEventListener('click', async () => await updateUserAuth(item.id, buttons[0], buttons[1], item.Nev))
 
     document.getElementById("BigDih").appendChild(div)
 

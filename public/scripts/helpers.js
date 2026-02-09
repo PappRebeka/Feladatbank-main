@@ -1,8 +1,8 @@
 
 /* ------ CONTENT ------
 helpers.js -------------
-  - await ajax_get 
-  - await ajax_post
+  - ajax_get 
+  - ajax_post
   - checkDarkMode           -PR
   - setThemeIndicators      -PR
   - validateField           -BBB
@@ -29,8 +29,10 @@ helpers.js -------------
 */
 
 function ajax_get(urlsor, hova, tipus, mutassTolt = true) {
+    console.log("Ciganyt fogok tolteni")
+    console.log(mutassTolt)
     document.documentElement.style.cursor = "wait";
-    if (mutassTolt) showLoadingModal();
+    if (mutassTolt) { showLoadingModal(); }
 
     return $.ajax({
         url: urlsor,
@@ -41,11 +43,13 @@ function ajax_get(urlsor, hova, tipus, mutassTolt = true) {
         if (hova) $(hova).html(data);
     }).always(function() {
         document.documentElement.style.cursor = "default";
-        if (mutassTolt) hideLoadingModal();
+        if (mutassTolt) { hideLoadingModal(); }
     });
 }
 
 function ajax_post(urlsor, tipus, data, mutassTolt = true) {
+    console.log("Ciganyt fogok tolteni "+ urlsor)
+    console.log(mutassTolt)
     document.documentElement.style.cursor = "wait";
     if (mutassTolt) showLoadingModal();
 
@@ -105,15 +109,15 @@ function await ajax_post( urlsor, tipus, data, aszinkron = false ) { //KA // jso
     return s;
 };*/
 
-function showLoadingModal(message = "Töltés...") {;
-    $("#loadingMessage").text(message);
-    $("#loadingDiv").removeClass("d-none");
-}
+    function showLoadingModal(message = "Töltés...") {;
+        $("#loadingMessage").text(message);
+        $("#loadingDiv").removeClass("d-none");
+    }
 
-function hideLoadingModal() {
-    $("#loadingDiv").addClass("d-none");
-    $("#loadingMessage").text("");
-}
+    function hideLoadingModal() {
+        $("#loadingDiv").addClass("d-none");
+        $("#loadingMessage").text("");
+    }
 
 function checkDarkMode(){//PR
     var isDark = getCookie("darkMode") == "1" || false;

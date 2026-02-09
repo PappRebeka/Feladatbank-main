@@ -16,10 +16,10 @@
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13"></script>
     
-    <script src="https://unpkg.com/slim-select@latest/dist/slimselect.js"></script>
-    <link href="https://unpkg.com/slim-select@latest/dist/slimselect.css" rel="stylesheet"></link>
+    <script src="https://unpkg.com/slim-select@3.3.0/dist/slimselect.js"></script>
+    <link href="https://unpkg.com/slim-select@3.3.0/dist/slimselect.css" rel="stylesheet"></link>
 
     <script src="scripts/globals.js"></script>
     <script src="scripts/cookie.js"></script>
@@ -46,7 +46,7 @@
 
     <link rel="stylesheet" href="main.css"> 
     <link rel="stylesheet" href="themes.css"> 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
     <link rel="icon" type="image/x-icon" href="img/fav.png">
     <title>Feladatbank - Home</title>
 </head>
@@ -434,7 +434,7 @@
         console.log("loadpagedata fut")
         let oldal = Object.keys(AvailablePages).indexOf(ActiveLocation).toString()
         
-        var SubjectList = await ajax_post("/GetTantargyak", 1, {oldal: oldal}, true)
+        var SubjectList = await ajax_post("/GetTantargyak", 1, {oldal: oldal}, false)
         let userpage = ActiveLocation == "Felhasználók"
         var selectedTantargy = ActiveFilters.tantargy
         let temp = {tanarId: CurrentUserData.id,
@@ -455,8 +455,8 @@
         const par = new URLSearchParams(temp).toString();
         var adat      = userpage ? await ajax_post("/SendUsers", 1, { limit: localStorage.getItem("limit"), offset: localStorage.getItem("offset"), kereso: ActiveFilters.kereso }, true) : 
                                    await ajax_post("/SendFeladatok", 1, temp, true)    
-        var adatCount = userpage ? await ajax_post("/getUserCount", 1, { kereso: ActiveFilters.kereso }, true) : 
-                                   await ajax_post("/getFeladatNumber", 1, temp, true)     
+        var adatCount = userpage ? await ajax_post("/getUserCount", 1, { kereso: ActiveFilters.kereso }, false) : 
+                                   await ajax_post("/getFeladatNumber", 1, temp, false)     
         var results = adat.results
         resultsCount = adatCount.db   
         changeLimitOffset();

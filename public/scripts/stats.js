@@ -103,7 +103,7 @@ async function selectionReset(){//RD?
 }
 
 async function DefaultStat(){//RD
-    var generalFeladatok = await ajax_post("/generalFeladatokData", 1, { felhId: StatUserId }, true)
+    var generalFeladatok = await ajax_post("/generalFeladatokData", 1, { felhId: StatUserId }, false)
     var Letrehozott = generalFeladatok.FeladatDB
     var Kozzetett = generalFeladatok.KozzetettDB
     var Megosztott = generalFeladatok.MegosztottDB

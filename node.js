@@ -1818,7 +1818,7 @@ app.post("/updateUserIntezmeny", (req, res) =>{//RD
     if (err) {
       return res.status(500).send(JSON.stringify({ error: err.message }));
     }
-    res.end()
+    res.status(200).send(JSON.stringify({ ok: true }));
   });
 })
 
@@ -1829,7 +1829,7 @@ app.post("/torolintezmeny", (req, res) =>{//RD, intézmény eltávolítása, az 
     if (err) {
       return res.status(500).send(JSON.stringify({ error: err.message }));
     }
-    res.end()
+    res.status(200).send(JSON.stringify({ ok: true }));
   });
 })
 
@@ -1869,7 +1869,7 @@ app.post("/send-report", (req, res) => { // BBB
         return res.status(500).send(JSON.stringify({ error: "Nem sikerült a hibajelentést elküldeni." }))
       }
       else {
-        res.status(200).json({ ok: true });
+        res.status(200).send(JSON.stringify({ ok: true }));
       }
     }
   )
