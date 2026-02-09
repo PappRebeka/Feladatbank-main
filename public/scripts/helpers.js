@@ -28,25 +28,62 @@ helpers.js -------------
   - escapeRegex             -PR
 */
 
-function ajax_get( urlsor, hova, tipus, aszinkron ) { //KA // html oldalak beszúrására használjuk
+function ajax_get(urlsor, hova, tipus) {
+    document.documentElement.style.cursor = "wait";
+
+    return $.ajax({
+        url: urlsor,
+        type: "get",
+        cache: false,
+        dataType: tipus === 0 ? 'html' : 'json'
+    }).done(function(data) {
+        if (hova) $(hova).html(data);
+    }).always(function() {
+        document.documentElement.style.cursor = "default";
+    });
+}
+
+function ajax_post(urlsor, tipus, data) {
+    document.documentElement.style.cursor = "wait";
+
+    return $.ajax({
+        url: urlsor,
+        type: "post",
+        cache: false,
+        dataType: tipus === 0 ? 'html' : 'json',
+        contentType: data ? 'application/json' : undefined,
+        data: data ? JSON.stringify(data) : undefined
+    }).always(function() {
+        document.documentElement.style.cursor = "default";
+    });
+}
+
+/*function ajax_get( urlsor, hova, tipus, aszinkron ) { //KA // html oldalak beszúrására használjuk
+    document.documentElement.style.cursor = "wait";
     $.ajax({url: urlsor, type:"get", async:aszinkron, cache:false, dataType:tipus===0?'html':'json',
         beforeSend:function(xhr) { },
         success: function(data) { $(hova).html(data); },
         error: function(jqXHR, textStatus, errorThrown) {
         },
-        complete: function() { }
+        complete: function() { 
+
+            document.documentElement.style.cursor="default";    
+        }
     });
     return true;
 };
 
-function ajax_post( urlsor, tipus, data ) { //KA // json restapi-hoz használjuk
+function ajax_post( urlsor, tipus, data, aszinkron = false ) { //KA // json restapi-hoz használjuk
+    document.documentElement.style.cursor = "wait";
     var s = "";
-    var ajaxConfig = {url: urlsor, type: "post", async: false, cache: false, dataType: tipus===0?'html':'json',
+    var ajaxConfig = {url: urlsor, type: "post", async: aszinkron, cache: false, dataType: tipus===0?'html':'json',
         beforeSend: function(xhr) { },
         success: function(response) { s = response; },
         error: function(jqXHR, textStatus, errorThrown) {
         },
-        complete: function() { }
+        complete: function() { 
+            document.documentElement.style.cursor="default";
+        }
     };
     
     if (data) {
@@ -56,7 +93,7 @@ function ajax_post( urlsor, tipus, data ) { //KA // json restapi-hoz használjuk
     
     $.ajax(ajaxConfig);
     return s;
-};
+};*/
 
 function checkDarkMode(){//PR
     var isDark = getCookie("darkMode") == "1" || false;
