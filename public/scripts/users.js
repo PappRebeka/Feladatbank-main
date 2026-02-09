@@ -76,12 +76,12 @@ function loadUsers(item){ //PR
     footer.children[1].addEventListener('click', () => moveUserClick())
 }
 
-async function moveUserClick(){ //RD
-    var intezmenyek = await ajax_post("/getUserIntezmeny", 1, { uid: userId_ToChangeInstitute })
+function moveUserClick(){ //RD
+    var intezmenyek = ajax_post("/getUserIntezmeny", 1, { uid: userId_ToChangeInstitute })
     autofillOtherInstitutions(intezmenyek.results)
 }
 
-async function updateUserAuth(id, from, to, nev){ //PR
+function updateUserAuth(id, from, to, nev){ //PR
     from.classList.remove("btn-primary")
     from.classList.add("btn-dark")
 
@@ -90,7 +90,7 @@ async function updateUserAuth(id, from, to, nev){ //PR
 
     document.getElementById(`jogText_${id}`).children[1].textContent = to.textContent
     
-    const result = await ajax_post("/changeJog", 1, { id: id, mire: to.textContent })
+    const result = ajax_post("/changeJog", 1, { id: id, mire: to.textContent })
     
     if (result.success) {
         toastMsg("Jogostultság frissítve", `A(z) ${nev} felhasználó mostantól ${to.textContent}`, 'info');
@@ -99,9 +99,9 @@ async function updateUserAuth(id, from, to, nev){ //PR
     }
 }
 
-async function moveUserInstitution(){ //RD
+function moveUserInstitution(){ //RD
     var hova = document.getElementById("ujIntezmeny").value
-    const result = await ajax_post("/AthelyezUser", 1, { hova: hova, userId: userId_ToChangeInstitute })
+    const result = ajax_post("/AthelyezUser", 1, { hova: hova, userId: userId_ToChangeInstitute })
     
     if (result.success) {
         toastMsg("Sikeres művelet", "A felhasználó sikeresen áthelyezve", "success")

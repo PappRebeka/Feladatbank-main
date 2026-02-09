@@ -1,8 +1,8 @@
 
 /* ------ CONTENT ------
 helpers.js -------------
-  - await ajax_get 
-  - await ajax_post
+  - ajax_get 
+  - ajax_post
   - checkDarkMode           -PR
   - setThemeIndicators      -PR
   - validateField           -BBB
@@ -58,7 +58,7 @@ function ajax_post(urlsor, tipus, data) {
     });
 }
 
-/*function await ajax_get( urlsor, hova, tipus, aszinkron ) { //KA // html oldalak beszúrására használjuk
+/*function ajax_get( urlsor, hova, tipus, aszinkron ) { //KA // html oldalak beszúrására használjuk
     document.documentElement.style.cursor = "wait";
     $.ajax({url: urlsor, type:"get", async:aszinkron, cache:false, dataType:tipus===0?'html':'json',
         beforeSend:function(xhr) { },
@@ -73,7 +73,7 @@ function ajax_post(urlsor, tipus, data) {
     return true;
 };
 
-function await ajax_post( urlsor, tipus, data, aszinkron = false ) { //KA // json restapi-hoz használjuk
+function ajax_post( urlsor, tipus, data, aszinkron = false ) { //KA // json restapi-hoz használjuk
     document.documentElement.style.cursor = "wait";
     var s = "";
     var ajaxConfig = {url: urlsor, type: "post", async: aszinkron, cache: false, dataType: tipus===0?'html':'json',

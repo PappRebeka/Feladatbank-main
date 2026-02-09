@@ -101,10 +101,10 @@ function buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev){//PR
     document.getElementById("BigDih").appendChild(container);
 }
 
-async function setTaskModalContent(adat, felhasznalo){ //PR, RD
+function setTaskModalContent(adat, felhasznalo){ //PR, RD
     feladatAdatai = adat
     var counter = 1;
-    var alfeladatok = await ajax_post("/SendAlFeladatok", 1, { feladatId: adat.id })
+    var alfeladatok = ajax_post("/SendAlFeladatok", 1, { feladatId: adat.id })
     CancelEditingThisFeladat(false, felhasznalo, `task-${adat.id}`);
 
     const modal = document.getElementById("modalFeladatContent")

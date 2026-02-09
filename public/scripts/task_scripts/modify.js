@@ -483,10 +483,10 @@ function updateTask(task, subtasks, felhasznalo){//PR
     //CancelEditingThisFeladat(true, '', `task-${task.id}`); // stop the editing process
 }
 
-async function archiveTask(state){  //PR
+function archiveTask(state){  //PR
     talalatSzam.innerHTML = parseInt(talalatSzam.innerHTML)-1 
     
-    await ajax_post("/feladatArchivalas", 1, { id: feladatAdatai.id, state: state })
+    ajax_post("/feladatArchivalas", 1, { id: feladatAdatai.id, state: state })
     document.getElementById(`task-${feladatAdatai.id}`).remove(); 
     toastMsg('Sikeres módosítás!', 'Feladat sikeresen archiválva', 'success');
 
@@ -705,19 +705,19 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId){ //PR
     //if(call_setModal) setTaskModalContent(feladatAdatai, felhasznalo);
 }
 
-async function TorolFeladat(){//PR?
+function TorolFeladat(){//PR?
     document.getElementById(`task-${feladatAdatai.id}`).remove();           // remove the div
-    await ajax_post("/feladatTorol", 1, { id: feladatAdatai.id })                 // update database
+    ajax_post("/feladatTorol", 1, { id: feladatAdatai.id })                 // update database
     talalatSzam.innerHTML = parseInt(talalatSzam.innerHTML) - 1;            // reduce count
     toastMsg('Sikeres módosítás!', 'Feladat sikeresen törölve', 'success');
 }
 
-async function bookmarkTaskClick(feladatId, button, dataset){
+function bookmarkTaskClick(feladatId, button, dataset){
     button.classList.toggle('text-warning')
     button.classList.toggle('bi-star-fill')
     button.classList.toggle('bi-star')
     let oldal = Object.keys(AvailablePages).indexOf(ActiveLocation).toString()
-    await ajax_post(`/updateBookmarkedState`, 1, {feladatId: feladatId, oldal: oldal, felado: dataset.felhasznalo})
+    ajax_post(`/updateBookmarkedState`, 1, {feladatId: feladatId, oldal: oldal, felado: dataset.felhasznalo})
     toastMsg('Sikeres módosítás!', 
         button.classList.contains('bi-star-fill') ? 'Feladat sikeresen csillagozva' : 'Feladat sikeresen kicsillagozva', 
         'success');

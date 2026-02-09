@@ -4,18 +4,18 @@
 
 ### Before:
 ```javascript
-await ajax_post(`/endpoint?param1=${value1}&param2=${value2}`, 1)
+ajax_post(`/endpoint?param1=${value1}&param2=${value2}`, 1)
 ```
 
 ### After:
 ```javascript
-await ajax_post("/endpoint", 1, { param1: value1, param2: value2 })
+ajax_post("/endpoint", 1, { param1: value1, param2: value2 })
 ```
 
-## Updated await ajax_post Function
+## Updated ajax_post Function
 
 ```javascript
-function await ajax_post( urlsor, tipus, data ) {
+function ajax_post( urlsor, tipus, data ) {
     var s = "";
     var ajaxConfig = {
         url: urlsor, 
@@ -52,25 +52,25 @@ function await ajax_post( urlsor, tipus, data ) {
 ### Simple Single Parameter
 ```javascript
 // Before:
-await ajax_post(`/isRegistered?email=${mail}`, 0)
+ajax_post(`/isRegistered?email=${mail}`, 0)
 
 // After:
-await ajax_post("/isRegistered", 0, { email: mail })
+ajax_post("/isRegistered", 0, { email: mail })
 ```
 
 ### Multiple Parameters
 ```javascript
 // Before:
-await ajax_post(`/loginUser?user=${user}&passwd=${passwd}&userToken=&mail=${mail}`, 1)
+ajax_post(`/loginUser?user=${user}&passwd=${passwd}&userToken=&mail=${mail}`, 1)
 
 // After:
-await ajax_post("/loginUser", 1, { user: user, passwd: passwd, userToken: "", mail: mail })
+ajax_post("/loginUser", 1, { user: user, passwd: passwd, userToken: "", mail: mail })
 ```
 
 ### Complex Object
 ```javascript
 // Before:
-await ajax_post(`/SendFeladatok?${par}`, 1)
+ajax_post(`/SendFeladatok?${par}`, 1)
 
 // After:
 const temp = {
@@ -79,16 +79,16 @@ const temp = {
     tantargy: filter2,
     // ... more properties
 };
-await ajax_post("/SendFeladatok", 1, temp)
+ajax_post("/SendFeladatok", 1, temp)
 ```
 
 ### No Parameters
 ```javascript
 // Before:
-await ajax_post("/SendIntezmeny", 1)
+ajax_post("/SendIntezmeny", 1)
 
 // After:
-await ajax_post("/SendIntezmeny", 1, {})
+ajax_post("/SendIntezmeny", 1, {})
 ```
 
 ## Backend Notes

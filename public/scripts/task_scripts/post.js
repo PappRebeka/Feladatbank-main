@@ -38,7 +38,7 @@ function resetKozzetevesModal(){ //PR
 async function loadAvailableCourses(){ //RD
     var chosenOne = document.getElementById("kurzusSelect")?.value
     var kurzusId = chosenOne.split("-")[0]
-    var tanulok = await ajax_post("/getStudentList", 1, { kurzusId: kurzusId })
+    var tanulok = ajax_post("/getStudentList", 1, { kurzusId: kurzusId })
     var tanulokLista = Array.from(tanulok?.diakok || []) || []
     
     document.getElementById("tanulokSelect").replaceChildren()
@@ -121,8 +121,8 @@ async function postTaskToClassroom() {
   }
 }
 
-async function getCoursesFromClassroomAPI(){ //RD
-        var kurzus = await ajax_post("/sendClassroomCourses", 1, {})
+function getCoursesFromClassroomAPI(){ //RD
+        var kurzus = ajax_post("/sendClassroomCourses", 1, {})
         if (kurzus) {
             kurzusok_nevek = kurzus.nevek
             kurzusok_idk = kurzus.idk

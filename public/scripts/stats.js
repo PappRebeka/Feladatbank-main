@@ -102,8 +102,8 @@ function selectionReset(){//RD?
     statToggle(document.getElementById("Letrehozott"), 1)
 }
 
-async function DefaultStat(){//RD
-    var generalFeladatok = await ajax_post("/generalFeladatokData", 1, { felhId: StatUserId })
+function DefaultStat(){//RD
+    var generalFeladatok = ajax_post("/generalFeladatokData", 1, { felhId: StatUserId })
     var Letrehozott = generalFeladatok.FeladatDB
     var Kozzetett = generalFeladatok.KozzetettDB
     var Megosztott = generalFeladatok.MegosztottDB
@@ -115,10 +115,10 @@ async function DefaultStat(){//RD
     return {labels, dataset}
 }
 
-async function MegosztottStat(){//RD
-    //var baseData = await ajax_post("/ChartDataGet?statLap=2&statCaller="+StatUserId).results
-    //await ajax_post(`megosztottFeladatokData?felhId=${StatUserId}`)
-    var megosztottFeladatok = await ajax_post("/megosztottFeladatokData", 1, { felhId: StatUserId })
+function MegosztottStat(){//RD
+    //var baseData = ajax_post("/ChartDataGet?statLap=2&statCaller="+StatUserId).results
+    //ajax_post(`megosztottFeladatokData?felhId=${StatUserId}`)
+    var megosztottFeladatok = ajax_post("/megosztottFeladatokData", 1, { felhId: StatUserId })
     var labels = []
     var dataset = []
     //var szinek = hslSzinGeneral(megosztottFeladatok.results.length)
@@ -129,9 +129,9 @@ async function MegosztottStat(){//RD
     return {labels, dataset}
 }
 
-async function KozzetettStat(){//RD
-    //var baseData = await ajax_post("/ChartDataGet?statLap=3&statCaller="+StatUserId).results
-    var kozzetettFeladatok = await ajax_post("/kozzetettFeladatokData", 1, { felhId: StatUserId })
+function KozzetettStat(){//RD
+    //var baseData = ajax_post("/ChartDataGet?statLap=3&statCaller="+StatUserId).results
+    var kozzetettFeladatok = ajax_post("/kozzetettFeladatokData", 1, { felhId: StatUserId })
     var labels = []
     var dataset = []
     //var szinek = hslSzinGeneral(kozzetettFeladatok.results.length)
@@ -142,9 +142,9 @@ async function KozzetettStat(){//RD
     return {labels, dataset}
 }
 
-async function avgNehezsegStat(){//RD
-    //var baseData = await ajax_post("/ChartDataGet?statLap=3&statCaller="+StatUserId).results
-    var avgFeladatok = await ajax_post("/averageNehezsegData", 1, { felhId: StatUserId })
+function avgNehezsegStat(){//RD
+    //var baseData = ajax_post("/ChartDataGet?statLap=3&statCaller="+StatUserId).results
+    var avgFeladatok = ajax_post("/averageNehezsegData", 1, { felhId: StatUserId })
     var labels = []
     var dataset = []
     //var szinek = hslSzinGeneral(avgFeladatok.results.length)
@@ -162,8 +162,8 @@ function isDatasetEmpty(dataset){ //RD
     return true
 }
 
-async function evfArchivaltStat(){//RD
-    var evfFeladatok = await ajax_post("/evfolyamArchivaltData", 1, { felhId: StatUserId })
+function evfArchivaltStat(){//RD
+    var evfFeladatok = ajax_post("/evfolyamArchivaltData", 1, { felhId: StatUserId })
     var labels = []
     var dataset = []
     var dataset1 = []
@@ -195,11 +195,11 @@ function constructArchDataset(evfolyamok, alapDataset){//RD
     return ujDataset
 }
 
-async function top3Data(){//RD, PR
+function top3Data(){//RD, PR
     var labels = []
     var feladatDb = []
     var dataset = [2, 3, 1]
-    var adatok = await ajax_post("/topHaromTanarData", 1, {})
+    var adatok = ajax_post("/topHaromTanarData", 1, {})
     
     labels.push(adatok.results[1]?.Nev || "") //2.helyezett
     feladatDb.push(adatok.results[1]?.FeladatDb || 0)
@@ -292,7 +292,7 @@ function createChart(hova, errorHova, tipus, cimkek, dataset, subtitleText, x, y
     return ujChart
 }
 
-async function createStatisticCard(){ //RD, PR
+function createStatisticCard(){ //RD, PR
     var statAdat
     var tipus = ""
     var title = ""
@@ -329,7 +329,7 @@ async function createStatisticCard(){ //RD, PR
             x = "Évfolyam"; y = "Darab"
             break;
         case 5:
-            statAdat = await top3Data()
+            statAdat = top3Data()
             tipus = "bar"
             title = "Feladat toplista"
             sub = "Legtöbb feladattal rendelkező tanárok"

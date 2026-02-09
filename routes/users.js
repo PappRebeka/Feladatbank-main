@@ -2,7 +2,7 @@ module.exports = function (oauth2Client) {
     const express = require("express");
     const router = express.Router();
 
-    router.get("/me", async (req, res) => {
+    router.get("/me", (req, res) => {
         connectToDatabase();
         conn = connMegszerez();
         if(req.session.userId == undefined) {req.session.userId = (await queryAsync('select id from Users where UserToken = ?', [req.query.UserToken]))[0].id;}
