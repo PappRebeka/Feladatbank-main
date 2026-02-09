@@ -28,7 +28,7 @@
 
         document.getElementById('password').addEventListener('click', () => pswCheck())
         document.getElementById('passwordAgain').addEventListener('click', () => pswCheck())
-        document.getElementById('frissites').addEventListener('click', () => updatePass())
+        document.getElementById('frissites').addEventListener('click', async () => await updatePass())
     });
 
     function jelszoValidal(jelszoInput) { // BBB
@@ -71,8 +71,8 @@
             errorMessage.textContent = "A jelszó nem egyezik!";
             return;
         }
-        await ajax_post(`/updatePassword`, 1, { email: email, password: password.value });
-        await ajax_post("/sendMailTo", 1, { email: email, type: 'confirm' });
+        await ajax_post(`/updatePassword`, 1, { email: email, password: password.value }, false);
+        await ajax_post("/sendMailTo", 1, { email: email, type: 'confirm' }, false);
 
         box.children[0].innerHTML = `<h1 id="title" class="text-center mb-4 text-secondary">Sikeres jelszó frissítés!</h1><h4 class="text-center mb-4 text-secondary">Átirányítás a bejelentkezési oldalra...</h4>`;
         setTimeout(function() {window.location.href = "/index.html"}, 2000);

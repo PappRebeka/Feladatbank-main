@@ -276,9 +276,9 @@ function databasePageTemplate(){//BBB, PR
                         </div>
                     </div>`
 
-    $bind(div, 'intAddClick').addEventListener('click', () => addInstitution())
-    $bind(div, 'intEditClick').addEventListener('click', () => editInstitution())
-    $bind(div, 'intDeleteClick').addEventListener('click', () => deleteInstitution())
+    $bind(div, 'intAddClick').addEventListener('click', async () => await addInstitution())
+    $bind(div, 'intEditClick').addEventListener('click', async () => await editInstitution())
+    $bind(div, 'intDeleteClick').addEventListener('click', async () => await deleteInstitution())
     return div
 
 }
@@ -308,7 +308,7 @@ function hibajelentesFoadminTemplate(){
     return div
 }
 
-function hibajelentesDefaultTemplate(){
+async function hibajelentesDefaultTemplate(){
     const div = document.createElement('div')
     div.classList.add('container-fluid', 'mx-auto', 'bg-light', 'border-light', 'p-3', 'rounded', 'shadow', 'd-flex', 'flex-column')
     div.style += "backdrop-filter: blur(5px); height: 70vh; overflow: hidden;"
@@ -343,7 +343,7 @@ function hibajelentesDefaultTemplate(){
                                 
                             </form>
                             <div class="mb-3">
-                                <button data-bind="sendBtn" onclick="sendFeedback()" class="btn btn-primary">
+                                <button data-bind="sendBtn" class="btn btn-primary">
                                     <i class="bi bi-send-fill"></i>&nbsp;
                                     Küldés
                                 </button>
@@ -351,6 +351,7 @@ function hibajelentesDefaultTemplate(){
                             
                         </div>
                     </div>`
+    //$bind(div, 'sendBtn').addEventListener('click', async () => await sendFeedback())
     return div
 }
 

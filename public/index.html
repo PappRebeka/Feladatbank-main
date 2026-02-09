@@ -90,22 +90,22 @@
     let email = null; // set when Google redirect gives it
     let pendingUserToken = null;
 
-    function renderLogin() {
+    async function renderLogin() {
       clearError();
       const form = document.getElementById('form')
       form.innerHTML = loginFormTemplate()
 
       $bind(form, 'redirect').addEventListener('click', () => window.location.href = '/redirect')
-      form.querySelector('#user')  .addEventListener('keyup', () => {if (event.key === 'Enter') tryLogin()})
-      form.querySelector('#jelszo').addEventListener('keyup', () => {if (event.key === 'Enter') tryLogin()})
+      form.querySelector('#user')  .addEventListener('keyup', async () => {if (event.key === 'Enter')await tryLogin()})
+      form.querySelector('#jelszo').addEventListener('keyup', async () => {if (event.key === 'Enter')await tryLogin()})
 
       form.querySelector('#passwordButton').addEventListener('click', () => jelszoVisibility(form.querySelector('#passwordButton'), '#jelszo'))
       
-      $bind(form, 'passReset').addEventListener('click', () => renderPassReset())
-      form.querySelector('#bejelentkezes').addEventListener('click', () => tryLogin())
+      $bind(form, 'passReset').addEventListener('click', async () =>await renderPassReset())
+      form.querySelector('#bejelentkezes').addEventListener('click', async () => await tryLogin())
     }
 
-    function renderRegister(nameFromGoogle, emailFromGoogle) {
+    async function renderRegister(nameFromGoogle, emailFromGoogle) {
       clearError();
       const form = document.getElementById('form')
       form.innerHTML = registerFormTemplate();
@@ -119,10 +119,10 @@
       const buttons = form.querySelectorAll('button')
       buttons[0].addEventListener('click', () => jelszoVisibility(buttons[0], '#password'))
       buttons[1].addEventListener('click', () => jelszoVisibility(buttons[1], '#passwordAgain'))
-      buttons[2].addEventListener('click', () => registerNext())
+      buttons[2].addEventListener('click', async () => await registerNext())
 
       form.querySelector('#rememberMe').addEventListener('change', () => emlekezz())
-      form.querySelector('a').addEventListener('click', () => formReset())
+      //form.querySelector('a').addEventListener('click', () => formReset())
     }
 
     function pswCheck() {
@@ -134,7 +134,7 @@
         }
     }
 
-    function renderSelectInstitute(existingUser) {
+    async function renderSelectInstitute(existingUser) {
       clearError();
       const btnText = Boolean(existingUser) ? 'Bejelentkezés' : 'Regisztráció'
       const form = document.getElementById('form')
@@ -163,24 +163,24 @@
         </div>
       `;
       
-      form.querySelector('button').addEventListener('click', () => Boolean(existingUser) ? loginIntezmeny() : registerIntezmeny())
-      form.querySelector('a').addEventListener('click', () => renderLogin())
+      form.querySelector('button').addEventListener('click', async () => Boolean(existingUser) ? await loginIntezmeny() : await registerIntezmeny())
+      form.querySelector('a').addEventListener('click', async () => await renderLogin())
 
-      autofillInstituteArray();
+      await autofillInstituteArray();
     }
 
-    function renderPassReset() {
+    async function renderPassReset() {
       clearError();
       const form = document.getElementById('form')
       form.innerHTML = elfelejtettJelszoFormTemplate()
 
-      form.querySelector('button').addEventListener('click', () => emailCheck())
-      form.querySelector('a').addEventListener('click', () => renderLogin())
+      form.querySelector('button').addEventListener('click', async () => await emailCheck())
+      form.querySelector('a').addEventListener('click', async () => await renderLogin())
     }
 
     // ---------- Data fetch helpers ----------
     async function autofillInstituteArray() {
-      const institute = await ajax_post("/SendIntezmeny", 1, {});
+      const institute = await ajax_post("/SendIntezmeny", 1, {}, false);
       const sel = document.getElementById("intezmenySelect");
 
       sel.replaceChildren();
@@ -200,14 +200,15 @@
       const name = params.get("name");
       const mail = params.get("email");
 
-      renderLogin();
+      await renderLogin();
 
       if (mail && name) {
         email = mail;
-        if (await ajax_post("/isRegistered", 0, { email: mail }) == "false") {
-          renderRegister(name, mail);
+        let isregistered = await ajax_post("/isRegistered", 0, { email: mail }, false)
+        if (isregistered == "false") {
+          await renderRegister(name, mail);
         } else {
-          tryLogin(mail);
+          await tryLogin(mail);
         }
       }
     }
@@ -237,12 +238,7 @@
       }
 
 
-      const result = await ajax_post("/loginUser", 1, { 
-        user: user, 
-        passwd: passwd, 
-        userToken: "", 
-        mail: loginWithGoogle ? mail : "" 
-      });
+      const result = await ajax_post("/loginUser", 1, { user: user, passwd: passwd, userToken: "", mail: loginWithGoogle ? mail : "" }, false);
 
       if(result.error == "ALREADY_LOGGED_IN") {
         time = (1000 - result.waitUntil) / 1000.0;
@@ -251,7 +247,7 @@
       }
 
       if (result.db == 1) {
-        const intezmenyCount = await ajax_post("/VanIntezmeny", 1, {});
+        const intezmenyCount = await ajax_post("/VanIntezmeny", 1, {}, false);
 
         emlekezz();
 
@@ -264,7 +260,7 @@
           window.location.href = "/homepage.html";
         } else {
           pendingUserToken = result.UserToken;
-          renderSelectInstitute(true);
+          await renderSelectInstitute(true);
         }
       } else {
         showError("Hibás felhasználónév vagy jelszó!");
@@ -285,7 +281,7 @@
 
       if (!isNameValid(username) || !isValidEmail(email) || !jelszoValidal(p1)) return;
 
-      const data = await ajax_post("/registerData", 1, { username: username, email: email, password: p1 });
+      const data = await ajax_post("/registerData", 1, { username: username, email: email, password: p1 }, false);
 
       if (data.error == 'username_exists') {
         showError("Ezt a felhasználónevet már foglalta valaki! Kérjük válasszon másikat.");
@@ -302,21 +298,21 @@
       //document.cookie = `userToken=${data.userToken}; expires=${date.toUTCString()};`;
       sessionStorage.setItem("userToken", data.userToken)
       
-      renderSelectInstitute(false);
+      await renderSelectInstitute(false);
     }
 
     async function registerIntezmeny() {
       const sel = document.getElementById("intezmenySelect");
       const intezmId = sel.value;
 
-      await ajax_post("/setIntezmeny", 1, { email: email, intezmeny: intezmId });
+      await ajax_post("/setIntezmeny", 1, { email: email, intezmeny: intezmId }, false);
       window.location.href = "/homepage.html";
     }
 
     async function loginIntezmeny() {
       const sel = document.getElementById("intezmenySelect");
       const intezmId = sel.value;
-      await ajax_post("/updateUserIntezmeny", 1, { ujIntezmId: intezmId });
+      await ajax_post("/updateUserIntezmeny", 1, { ujIntezmId: intezmId }, false);
       toastMsg("Sikeres frissítés", "Sikeresen frissítettük az ön fiókjához tartozó intézményt", "success");
       setTimeout(() => window.location.href = "/homepage.html", 1500);
     }
@@ -330,8 +326,9 @@
         return;
       }
 
-      if (await ajax_post("/isRegistered", 0, { email: mail }) == "true") {
-        await ajax_post("/sendMailTo", 1, { email: mail, type: 'request' });
+      let isregistered = await ajax_post("/isRegistered", 0, { email: mail }, false)
+      if ( isregistered == "true") {
+        await ajax_post("/sendMailTo", 1, { email: mail, type: 'request' }, false);
         toastMsg("Email elküldve", "Ha létezik fiók ezzel az email címmel, küldtünk helyreállító linket.", "success");
       } else {
         showError("Nincs ilyen email című felhasználó!");
@@ -360,11 +357,7 @@
       if (stay == "1") {
         var van = null
         var utoken = sessionStorage.getItem("userToken")
-        van = await ajax_post("/loginUser", 1, { 
-          user: "", 
-          passwd: "", 
-          userToken: utoken || "" 
-        });
+        van = await ajax_post("/loginUser", 1, { user: "", passwd: "", userToken: utoken || "" }, false);
 
         if(van.error == "ALREADY_LOGGED_IN") {
           showError("Már egy másik eszközön be van jelentkezve!");
@@ -377,7 +370,7 @@
         }
       }
 
-      getRegisterData();
+      await getRegisterData();
     });
   </script>
 <body class="hazy">

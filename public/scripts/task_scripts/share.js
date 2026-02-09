@@ -6,7 +6,7 @@ task_scripts/share.js ---------------
 */ 
 
 async function autocompleteShare_TeacherSelect(){ //RD
-    const user_email = await ajax_post("/autocompleteArrayTolt", 1, {})
+    const user_email = await ajax_post("/autocompleteArrayTolt", 1, {}, false)
     var tolteniValo = []; 
     const input = document.getElementById("vevoInputText")
     input.replaceChildren()
@@ -33,7 +33,7 @@ async function shareTaskWithTeacher(){ //RD
     const cimzett = document.getElementById("vevoInputText").value
     const feladatId = feladatAdatai.id
     
-    const result = await ajax_post("/FeladatMegosztasaTanarral", 1, { cimzett: cimzett, feladatId: feladatId })
+    const result = await ajax_post("/FeladatMegosztasaTanarral", 1, { cimzett: cimzett, feladatId: feladatId }, false)
     
     if (result.success) {
       toastMsg("Sikeres megosztás", `A feladat sikeresen meg lett osztva ${cimzett}`, "success")
@@ -43,7 +43,7 @@ async function shareTaskWithTeacher(){ //RD
 }
 
 async function removeSharedTask(id, vevo){ //PR
-  const result = await ajax_post('megosztasVisszavon', 1, {id, vevo})
+  const result = await ajax_post('megosztasVisszavon', 1, {id, vevo}, false)
   
   if (result.success) {
     toastMsg("Megosztás visszavonva", "", 'success')

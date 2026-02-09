@@ -8,13 +8,13 @@ users.js -------------
 */
 
 
-function userCardClick(id){ //RD
+async function userCardClick(id){ //RD
     userId_ToChangeInstitute = id
-    setUserModal(0, id);
-    selectionReset()
+    await setUserModal(0, id);
+    await selectionReset()
 }
 
-function loadUsers(item){ //PR    
+async function loadUsers(item){ //PR    
     const div = felhasznaloCardTemplate()
     if (item.id == CurrentUserData.id) {
         div.firstChild.classList.add('noHover');
@@ -22,7 +22,7 @@ function loadUsers(item){ //PR
     else{
         div.setAttribute('data-bs-toggle', 'modal')
         div.setAttribute('data-bs-target', '#tanarAdatai')
-        div.addEventListener('click', () => userCardClick(item.id))
+        div.addEventListener('click', async () => await userCardClick(item.id))
     }
 
     div.querySelector('#hatter').style.backgroundColor = `${item.HatterSzin}`
@@ -48,8 +48,8 @@ function loadUsers(item){ //PR
     buttons[0].classList.add(`btn-${item.Jogosultsag == "Tanár" ? "primary" : "dark"}`)
     buttons[1].classList.add(`btn-${item.Jogosultsag != "Tanár" ? "primary" : "dark" }`)
 
-    buttons[0].addEventListener('click', () => {updateUserAuth(item.id, buttons[1], buttons[0], item.Nev)})
-    buttons[1].addEventListener('click', () => {updateUserAuth(item.id, buttons[0], buttons[1], item.Nev)})
+    buttons[0].addEventListener('click', async () => {await updateUserAuth(item.id, buttons[1], buttons[0], item.Nev)})
+    buttons[1].addEventListener('click', async () => {await updateUserAuth(item.id, buttons[0], buttons[1], item.Nev)})
 
     document.getElementById("BigDih").appendChild(div)
 
@@ -72,12 +72,12 @@ function loadUsers(item){ //PR
                             Bezárás
                         </button>`
 
-    footer.children[0].addEventListener('click', () => {deleteThisUser(item.id); loadPageData()})
-    footer.children[1].addEventListener('click', () => moveUserClick())
+    footer.children[0].addEventListener('click', async () => {await deleteThisUser(item.id); await loadPageData()})
+    footer.children[1].addEventListener('click', async () => await moveUserClick())
 }
 
 async function moveUserClick(){ //RD
-    var intezmenyek = await ajax_post("/getUserIntezmeny", 1, { uid: userId_ToChangeInstitute })
+    var intezmenyek = await ajax_post("/getUserIntezmeny", 1, { uid: userId_ToChangeInstitute }, false)
     autofillOtherInstitutions(intezmenyek.results)
 }
 
@@ -90,7 +90,7 @@ async function updateUserAuth(id, from, to, nev){ //PR
 
     document.getElementById(`jogText_${id}`).children[1].textContent = to.textContent
     
-    const result = await ajax_post("/changeJog", 1, { id: id, mire: to.textContent })
+    const result = await ajax_post("/changeJog", 1, { id: id, mire: to.textContent }, false)
     
     if (result.success) {
         toastMsg("Jogostultság frissítve", `A(z) ${nev} felhasználó mostantól ${to.textContent}`, 'info');
@@ -101,7 +101,7 @@ async function updateUserAuth(id, from, to, nev){ //PR
 
 async function moveUserInstitution(){ //RD
     var hova = document.getElementById("ujIntezmeny").value
-    const result = await ajax_post("/AthelyezUser", 1, { hova: hova, userId: userId_ToChangeInstitute })
+    const result = await ajax_post("/AthelyezUser", 1, { hova: hova, userId: userId_ToChangeInstitute }, false)
     
     if (result.success) {
         toastMsg("Sikeres művelet", "A felhasználó sikeresen áthelyezve", "success")

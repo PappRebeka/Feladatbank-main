@@ -54,12 +54,12 @@
 
 /* ------------------------------------- - Document ready - ----------------------------------------*/
 
-    $(document).ready(function() {
+    $(document).ready(async function() {
         try{
             setThemeIndicators(getCookie("darkMode") == "1")
-            setUserData();
+            await setUserData();
             registerWebsocket("ws://localhost:9091");
-            setEvents()
+            await setEvents()
             let opt = document.getElementById('menuOptions')
             switch (CurrentUserData.Jogosultsag) {
                 
@@ -107,16 +107,16 @@
                     console.log("No saved location exists in cookies")
                     setLocationCookie('null', 'null');
                 }
-                else switchTo(PageById[getCookie("currentPage")], getCookie("currentKikapcsId"))
+                else await switchTo(PageById[getCookie("currentPage")], getCookie("currentKikapcsId"))
             }
 
             catch{
-                switchTo(CurrentUserData.Jogosultsag == "Főadmin" ? "Felhasználók" : "Feladataim", 
-                         CurrentUserData.Jogosultsag == "Főadmin" ? "user_page"    : "fel_page")
+                await switchTo(CurrentUserData.Jogosultsag == "Főadmin" ? "Felhasználók" : "Feladataim", 
+                               CurrentUserData.Jogosultsag == "Főadmin" ? "user_page"    : "fel_page")
             }
 
-            responsivity();
-            window.addEventListener("resize", responsivity);
+            await responsivity();
+            window.addEventListener("resize", await responsivity);
 
             document.getElementById("splash").remove();
             
@@ -128,7 +128,6 @@
              })
             
             createSlimSelect('tanulokSelect', tanulokChanged)
-            createSlimSelect('tantargySzuro', tantargyChanged)
             createSlimSelect('ujIntezmenySelect', AthelyezTeszt)
             createSlimSelect('modeSelect', AthelyezTeszt)
             
@@ -191,7 +190,7 @@
         };
     }
 
-    function switchTo(where, kikapcsId){ //PR, RD
+    async function switchTo(where, kikapcsId){ //PR, RD
         ActiveLocation = where;
         document.getElementById("placeTitle").textContent = where;
         
@@ -221,15 +220,16 @@
 
         setLocationCookie(AvailablePages[where].pageId, kikapcsId)
         //setPageContent();
-        changeNavigationLocation('vissza', 'összes')
+        await changeNavigationLocation('vissza', 'összes')
         
         for (const item of document.querySelectorAll(".navOptionButton")) item.classList.remove("disabled") 
         document.getElementById(`${kikapcsId}`).classList.add("disabled");
     }
 
     async function updateReport(action, id, javitott) { //BBB
-        let res = await ajax_post("/update-report", 1, { action: action, id: id });
-
+        console.log("updatereport fut")
+        let res = await ajax_post("/update-report", 1, { action: action, id: id }, true);
+        console.log(res)
         if (res.error) {
             toastMsg(`Hiba`, `Hiba történt a hibajelentés frissítésekor`, `danger`);
         } else {
@@ -270,7 +270,7 @@
         }
 
         let $reportContainer = $("#reportContainer");
-        let adat = await ajax_post("/get-reports", 1, { javitott: javitott });
+        let adat = await ajax_post("/get-reports", 1, { javitott: javitott }, true);
         $reportContainer.empty();
 
         if(adat.results.length === 0) {
@@ -287,19 +287,19 @@
                               bad:  {text:'Törlés',  action: 'delete',  buttonClass: 'danger',  bi: 'bi-trash-fill',}}
 
             if (javitott) {
-                let div = buildReportButton(difference['bad'], report.id, javitott)
+                let div = await buildReportButton(difference['bad'], report.id, javitott)
                 div.classList.add('col-md-12', 'p-1')
                 
                 buttons.push(div)
 
             } else {
                 
-                let div = buildReportButton(difference['good'], report.id, javitott)
+                let div = await buildReportButton(difference['good'], report.id, javitott)
                 div.classList.add('col-md-6', 'p-1')
                 
                 buttons.push(div)
 
-                div = buildReportButton(difference['bad'], report.id, javitott)
+                div = await buildReportButton(difference['bad'], report.id, javitott)
                 div.classList.add('col-md-6', 'p-1')
                 
                 buttons.push(div)
@@ -319,7 +319,7 @@
         }
     }
 
-    function buildReportButton(specs, id, javitott){
+    async function buildReportButton(specs, id, javitott){
         let btn = buildButtonWithIcon(specs.bi)
         btn.innerText += specs.text
         btn.classList.add(`btn-${specs.buttonClass}`, `text-${specs.buttonClass}-emphasis`,'w-100')
@@ -343,7 +343,7 @@
         if(!AvailablePages[ActiveLocation]?.hideElements){
             kicsiMeretu = false //force large size then it can sort itself out
             document.querySelector(".searchbarInNav").classList.remove("d-none");
-            showNeededSearchbar();
+            await showNeededSearchbar();
         } 
         else {
             document.querySelector(".searchbarInNav").classList.add("d-none");
@@ -365,14 +365,14 @@
                         let id = ['I_Hozzaad', 'I_Modosit', 'I_Torol'][i]
                         let btn = html.querySelector(`#${id}`)
                         
-                        btn.addEventListener('click', () => {toggleInstitutionRadio(btn); toggleInstitutionOption(i)})
+                        btn.addEventListener('click', async () => {toggleInstitutionRadio(btn); await toggleInstitutionOption(i)})
                     }
 
 
                     let runBtn = $bind(html, 'sqlBtn')
-                    runBtn.addEventListener('click', async () =>  runSql())
+                    runBtn.addEventListener('click', async () => await runSql())
                     let mentBtn = $bind(html, 'backupMentBtn')
-                    mentBtn.addEventListener('click', () => saveBackup())
+                    mentBtn.addEventListener('click', async () => await saveBackup())
 
                     runAfterDOM = sqlStuff;
                     document.querySelector("#fullpageSize").replaceChildren(html)
@@ -391,14 +391,14 @@
                 case "Hibajelentés":
                     if (CurrentUserData.Jogosultsag == "Főadmin") {
                        html = hibajelentesFoadminTemplate()
-                       html.querySelector("#nemjavitott").addEventListener('click', () => reportToggle(0))
+                       html.querySelector("#nemjavitott").addEventListener('click', async () => await reportToggle(0))
                        html.querySelector("#javitott").addEventListener('click', async () => await reportToggle(1))
-                       runAfterDOM = loadReports;
+                       runAfterDOM = await loadReports;
                     } else {
-                        html = hibajelentesDefaultTemplate();
+                        html = await hibajelentesDefaultTemplate();
                         html.querySelector('#feedback-email').textContent = CurrentUserData.Email
                         html.querySelector('#feedback-nev').textContent   = CurrentUserData.Nev
-                        $bind(html, 'sendBtn').addEventListener('click', () => sendFeedback())
+                        $bind(html, 'sendBtn').addEventListener('click', async () => await sendFeedback())
                         //runAfterDOM = feedbackStuff;
                         
                     }
@@ -407,7 +407,7 @@
             }
             
             if(ActiveLocation == "Adatbázis műveletek") await getBackupOptions();
-            if(ActiveLocation == "Statisztikák")StatisztikaOnLoad();
+            if(ActiveLocation == "Statisztikák") await StatisztikaOnLoad();
             // runAfterDOM egy funkciót tartalmaz ami a html beillesztése után fut le
             if (runAfterDOM != null) { runAfterDOM(); } // quick hack de jól működik
             
@@ -423,7 +423,7 @@
             if(ActiveLocation == "Felhasználók") document.getElementById("filterBtn").classList.add("d-none")
             else                                 document.getElementById("filterBtn").classList.remove("d-none")
 
-            loadPageData();
+            await loadPageData();
             
         }
 
@@ -431,9 +431,10 @@
     }
 
     async function loadPageData(){ //PR, RD
+        console.log("loadpagedata fut")
         let oldal = Object.keys(AvailablePages).indexOf(ActiveLocation).toString()
         
-        var SubjectList = await ajax_post("/GetTantargyak", 1, {oldal: oldal})
+        var SubjectList = await ajax_post("/GetTantargyak", 1, {oldal: oldal}, true)
         let userpage = ActiveLocation == "Felhasználók"
         var selectedTantargy = ActiveFilters.tantargy
         let temp = {tanarId: CurrentUserData.id,
@@ -452,11 +453,12 @@
                     offset: localStorage.getItem("offset")}
                     
         const par = new URLSearchParams(temp).toString();
-        var results      = userpage ? await ajax_post("/SendUsers", 1, { limit: localStorage.getItem("limit"), offset: localStorage.getItem("offset"), kereso: ActiveFilters.kereso }).results : 
-                                      await ajax_post("/SendFeladatok", 1, temp).results    
-            resultsCount = userpage ? await ajax_post("/getUserCount", 1, { kereso: ActiveFilters.kereso }).db : 
-                                      await ajax_post("/getFeladatNumber", 1, temp).db       
-                                   
+        var adat      = userpage ? await ajax_post("/SendUsers", 1, { limit: localStorage.getItem("limit"), offset: localStorage.getItem("offset"), kereso: ActiveFilters.kereso }, true) : 
+                                   await ajax_post("/SendFeladatok", 1, temp, true)    
+        var adatCount = userpage ? await ajax_post("/getUserCount", 1, { kereso: ActiveFilters.kereso }, true) : 
+                                   await ajax_post("/getFeladatNumber", 1, temp, true)     
+        var results = adat.results
+        resultsCount = adatCount.db   
         changeLimitOffset();
         talalatSzam.textContent = resultsCount
         maxPageNumber = Math.max(1, Math.ceil(resultsCount / localStorage.getItem("limit")))
@@ -475,42 +477,42 @@
                 let kurzusId         = (oldal == "5" ? adat.kurzusId : "")
                 let kurzusFeladatId  = (oldal == "5" ? adat.kurzusFeladatId : "")
                 
-                userpage ? loadUsers(adat) :
-                           buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev, kurzusId, kurzusFeladatId)
+                userpage ? await loadUsers(adat) :
+                           await buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev, kurzusId, kurzusFeladatId)
             }
         }}
         autofillSubjectFilter(SubjectList.results, selectedTantargy);
-        autofillTeacherFilter()
+        await autofillTeacherFilter()
     }
   
-    function responsivity() { // PR
+    async function responsivity() { // PR
         if(AvailablePages[ActiveLocation]?.hideElements) return;
         localStorage.setItem("offset", 0)
         activePageNumber = 1
         var valtozott = changeLimitOffset();
         if(valtozott){  // if the limit changed, only then call the function
             //loadPageData()
-            setPageContent(); 
+            await setPageContent(); 
         }
         
         //showNeededTaskcreate();
-        showNeededSearchbar();
+        await showNeededSearchbar();
     }  
 
-    function showNeededSearchbar(){ //PR
+    async function showNeededSearchbar(){ //PR
         let width = window.innerWidth;
         if(!AvailablePages[ActiveLocation]?.hideElements){
             if (width < 576 && !kicsiMeretu) { // smaller than bootstrap sm and not yet in small size
                 kicsiMeretu = true
                 document.querySelector(".searchbarInNav").classList.add("d-none"); 
                 document.querySelector("#searchbar_mobile").classList.remove("d-none");
-                setSearchFilter(null) // reset the search
+                await setSearchFilter(null) // reset the search
             } 
             else if (width >= 576 && kicsiMeretu){  // larger than bootstrap sm and still in small size
                 kicsiMeretu = false
                 document.querySelector(".searchbarInNav").classList.remove("d-none");
                 document.querySelector("#searchbar_mobile").classList.add("d-none");
-                setSearchFilter(null)
+                await setSearchFilter(null)
             }
         }
     } 
@@ -553,7 +555,7 @@
             showErrorMsg("Nincs semmi az SQL bevíteli mezőben!")
             return;
         } else {
-            let adat = await ajax_post("/customSql", 1, { sql: sql });
+            let adat = await ajax_post("/customSql", 1, { sql: sql }, false);
             if (adat.error) {
                 $sql_error.html(icon + adat["error"])
                 return;
@@ -608,7 +610,7 @@
         if ((message == "") || !message) {
             return;
         } else {
-            await ajax_post("/send-report", 1, { email: email, nev: nev, message: message, ido: ido });
+            await ajax_post("/send-report", 1, { email: email, nev: nev, message: message, ido: ido }, false);
             toastMsg("Köszönjük a visszajelzését!", "A hibajelentés sikeresen elküldve.", "success");
         
             document.getElementById("feedback-form").reset();
@@ -618,22 +620,22 @@
     async function logout(){ //PR
         killCookie('stayLoggedIn'); sessionStorage.removeItem("userToken"); killCookie('currentPage'); killCookie('currentKikapcsId');
         window.location.href='/index.html'
-        await ajax_post("/logout", 1)
+        await ajax_post("/logout", 1, null, false)
     }
 
-    function setEvents(){
+    async function setEvents(){
         //kereső
-        document.getElementById('keresoButton').addEventListener('click', () => 
-            setSearchFilter(document.getElementById('searchbar_nav').value))
-        document.getElementById('keresoButtonOffcanvas').addEventListener('click', () => 
-            setSearchFilter(document.getElementById('searchbar_offcanvas').value))
+        document.getElementById('keresoButton').addEventListener('click', async () => 
+            await setSearchFilter(document.getElementById('searchbar_nav').value))
+        document.getElementById('keresoButtonOffcanvas').addEventListener('click', async () => 
+            await setSearchFilter(document.getElementById('searchbar_offcanvas').value))
         
         //fiók lehetőségek
         const optionsDiv = document.getElementById('options').children
         optionsDiv[0].addEventListener('click', () => allowUserDataEdit())
         optionsDiv[1].addEventListener('click', () => themeSwitch())
         optionsDiv[2].addEventListener('click', () => {window.location.href = `/help/sugo.html?role=${CurrentUserData.Jogosultsag == 'Tanár' ? 'tanár' : 'admin'}`})
-        optionsDiv[3].addEventListener('click', () => logout())
+        optionsDiv[3].addEventListener('click', async () => await logout())
 
         //szűrő
         //document.getElementById('filterBtn').addEventListener('click', () => autocompleteFilters())
@@ -647,19 +649,19 @@
         document.getElementById('sortDesc').addEventListener('click', () => setSortDirection(1))
 
         var buttons = $bind(document.getElementById('szuro'), 'buttons').children
-        buttons[0].addEventListener('click', () => {
+        buttons[0].addEventListener('click', async () => {
             resetFilters();
-            loadPageData(); 
-            applyFilters()
+            await loadPageData(); 
+            await applyFilters()
         });
-        buttons[1].addEventListener('click', () => applyFilters())
+        buttons[1].addEventListener('click', async () => await applyFilters())
 
         //lapozás
         var buttons = document.querySelectorAll('#bottom button')
-        buttons[0].addEventListener('click', () => changeNavigationLocation('vissza', 'elso'))
-        buttons[1].addEventListener('click', () => changeNavigationLocation('vissza', '1'))
-        buttons[2].addEventListener('click', () => changeNavigationLocation('tovabb', '1'))
-        buttons[3].addEventListener('click', () => changeNavigationLocation('tovabb', 'utolso'))
+        buttons[0].addEventListener('click', async () => await changeNavigationLocation('vissza', 'elso'))
+        buttons[1].addEventListener('click', async () => await changeNavigationLocation('vissza', '1'))
+        buttons[2].addEventListener('click', async () => await changeNavigationLocation('tovabb', '1'))
+        buttons[3].addEventListener('click', async () => await changeNavigationLocation('tovabb', 'utolso'))
 
         //új feladat
         document.getElementById('evfolyam').addEventListener('input', () => checkNumber(document.getElementById('evfolyam'), maxEvfolyamValue))
@@ -667,24 +669,24 @@
                 document.getElementById('Difficulty').textContent = 'Nehézség - ' + document.getElementById('nehezseg').value
         })
         $bind(document.getElementById('newFeladat'), 'hozzaadButton').addEventListener('click', () => createSubtask('alfeladatBox'))
-        document.querySelector('#newFeladat .modal-footer').children[0].addEventListener('click', () => saveTask(true))
+        document.querySelector('#newFeladat .modal-footer').children[0].addEventListener('click', async () => await saveTask(true))
 
         //tanár adatai
         var radios = document.querySelectorAll('#chips input')
-        for (let i = 0; i < 3; i++) radios[i].addEventListener('click', () => statToggle(radios[i], i + 1))
+        for (let i = 0; i < 3; i++) radios[i].addEventListener('click', async () => await statToggle(radios[i], i + 1))
         
         //egyéb
-        document.querySelector('#UserDel .btn-warning').addEventListener('click', () => deleteThisUser(CurrentUserData.id))
-        document.querySelector('#shareFeladat .modal-footer').children[0].addEventListener('click', () => postTaskToClassroom())
-        document.querySelector('#megosztFeladat .btn-warning').addEventListener('click', () => shareTaskWithTeacher())
+        document.querySelector('#UserDel .btn-warning').addEventListener('click', async () => await deleteThisUser(CurrentUserData.id))
+        document.querySelector('#shareFeladat .modal-footer').children[0].addEventListener('click', async () => await postTaskToClassroom())
+        document.querySelector('#megosztFeladat .btn-warning').addEventListener('click', async () => await shareTaskWithTeacher())
         
 
         
         document.getElementById('ujIntezmenySelect').addEventListener('click', () => AthelyezHova())
-        document.querySelector('#intezmenyValt .btn-info').addEventListener('click', () => moveUserInstitution())
+        document.querySelector('#intezmenyValt .btn-info').addEventListener('click', async () => await moveUserInstitution())
         
         //backup betöltése
-        document.querySelector('#BiztosBackup .btn-warning').addEventListener('click', () => restoreBackup())
+        document.querySelector('#BiztosBackup .btn-warning').addEventListener('click', async () => await restoreBackup())
     }
    
 </script>
@@ -1211,6 +1213,13 @@
                 <p>A készülék képernyője túl kicsi a weboldal megtekintéséhez.</p>
             </div>
         </div>
+
+        <div id="loadingDiv" class="container-fluid m-0 p-0 bg-dark d-flex d-none position-fixed top-0 start-0 text-light flex-column justify-content-center align-items-center" 
+             style="z-index: 2000; width: 100vw; height: 100vh;">
+            <div class="spinner-grow" role="status" style="width: 4rem; height: 4rem;"></div>
+            <div id="loadingMessage" class="mt-4 fs-4">Loading...</div>
+        </div>
+
 
         <div class="modal fade" id="uploadProgressModal">
             <div class="modal-dialog">

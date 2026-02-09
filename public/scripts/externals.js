@@ -30,7 +30,8 @@ function tanulokChanged(e){
 }
 
 function createSlimSelect(hovaId, functionNev){ //PR, RD
-    //document.getElementById(hovaId)?.selectedIndex = -1
+  const selectEl = document.getElementById(hovaId);
+
     var ss = new SlimSelect({
             select: document.getElementById(hovaId),
             cssClasses: {
@@ -41,10 +42,9 @@ function createSlimSelect(hovaId, functionNev){ //PR, RD
                 allowDeselect: true,
                 focusSearch: true,
                 searchPlaceholder: 'Keresés…',
-                //contentPosition: 'fixed',
-                currentLocation: document.querySelector("#local"),
-                contentLocation: document.querySelector(hovaId == "tantargySzuro" ? "#szuro .dropdown-menu" :
-                                                        hovaId == "tanarSzuro"    ? "#szuro .dropdown-menu" : "body")
+                contentPosition: 'fixed',
+                currentLocation: selectEl,
+                contentLocation: document.body
             },
             events: {
                 afterChange: (e) => {
@@ -62,6 +62,12 @@ function createSlimSelect(hovaId, functionNev){ //PR, RD
     //ss.setSelected(null);
     ss.selectedIndex = -1
 }
+
+document.addEventListener("mousedown", (e) => {
+  if (e.target.closest(".ss-content, .ss-main")) {
+    e.stopPropagation();
+  }
+}, true);
 
 function setFlatPicker(id){ //PR
     flatPicker = $(`#${id}`).flatpickr({

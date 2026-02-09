@@ -28,8 +28,9 @@ helpers.js -------------
   - escapeRegex             -PR
 */
 
-function ajax_get(urlsor, hova, tipus) {
+function ajax_get(urlsor, hova, tipus, mutassTolt = true) {
     document.documentElement.style.cursor = "wait";
+    if (mutassTolt) showLoadingModal();
 
     return $.ajax({
         url: urlsor,
@@ -40,11 +41,13 @@ function ajax_get(urlsor, hova, tipus) {
         if (hova) $(hova).html(data);
     }).always(function() {
         document.documentElement.style.cursor = "default";
+        if (mutassTolt) hideLoadingModal();
     });
 }
 
-function ajax_post(urlsor, tipus, data) {
+function ajax_post(urlsor, tipus, data, mutassTolt = true) {
     document.documentElement.style.cursor = "wait";
+    if (mutassTolt) showLoadingModal();
 
     return $.ajax({
         url: urlsor,
@@ -52,9 +55,16 @@ function ajax_post(urlsor, tipus, data) {
         cache: false,
         dataType: tipus === 0 ? 'html' : 'json',
         contentType: data ? 'application/json' : undefined,
-        data: data ? JSON.stringify(data) : undefined
+        data: data ? JSON.stringify(data) : undefined,
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('error')
+            console.log(jqXHR)
+            console.log(textStatus)
+            console.log(errorThrown)
+        },
     }).always(function() {
         document.documentElement.style.cursor = "default";
+        if (mutassTolt) hideLoadingModal();
     });
 }
 
@@ -94,6 +104,16 @@ function await ajax_post( urlsor, tipus, data, aszinkron = false ) { //KA // jso
     $.ajax(ajaxConfig);
     return s;
 };*/
+
+function showLoadingModal(message = "Töltés...") {;
+    $("#loadingMessage").text(message);
+    $("#loadingDiv").removeClass("d-none");
+}
+
+function hideLoadingModal() {
+    $("#loadingDiv").addClass("d-none");
+    $("#loadingMessage").text("");
+}
 
 function checkDarkMode(){//PR
     var isDark = getCookie("darkMode") == "1" || false;
