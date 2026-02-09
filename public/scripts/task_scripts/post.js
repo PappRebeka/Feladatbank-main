@@ -55,70 +55,36 @@ async function loadAvailableCourses(){ //RD
     }
 }
 
-function postJSON(url, data) {
-  return $.ajax({
-    url: url,
-    method: "POST",
-    contentType: "application/json",
-    dataType: "json",
-    data: JSON.stringify(data)
-  });
-}
+async function postTaskToClassroom(){ //RD
+    var pb = new ContinousProgressBar();
+    pb.start();
 
-async function postTaskToClassroom() {
-  const pb = new ContinuousProgressBar();
-  pb.start();
+    const feladatModal = document.getElementById("shareFeladat")
 
-  try {
-    const feladatModal = $("#shareFeladat");
-    const select = $("#kurzusSelect")[0];
-    const modeSelect = feladatModal.find("#modeSelect");
+    const select = document.getElementById("kurzusSelect");
+    const modeSelect = feladatModal.querySelector("#modeSelect")
 
     const opt = select.options[select.selectedIndex];
-    const [kurzusId, feladatId] = opt.value.split("-");
-    const kurzusNev = opt.text;
-    const shareMode = modeSelect.val();
+    var kurzusId = opt.value.split("-")[0]
+    var kurzusNev = opt.text
+    var feladatId = opt.value.split("-")[1]
+    var shareMode = modeSelect.value;
+    //var tanuloIdk = $('#tanulokSelect').val()
+    
+    var dueDate =  DateAndTimePicker.value?.split(" ")[0] || ""
+    var dueTime =  DateAndTimePicker.value?.split(" ")[1] || ""
+    
+    var kurz = ajax_post("/postClassroomFeladat", 1, { kurzusid: kurzusId, feladatid: feladatId, dueDate: dueDate, dueTime: dueTime, tanulok: tanuloIdk, shareMode: shareMode })
+    var kurzusFeladatId = kurz.courseWorkId
 
-    const [dueDate = "", dueTime = ""] =
-      DateAndTimePicker.value?.split(" ") ?? [];
-
-    const kurz = await postJSON("/postClassroomFeladat", {
-      kurzusid: kurzusId,
-      feladatid: feladatId,
-      dueDate,
-      dueTime,
-      tanulok: tanuloIdk,
-      shareMode
-    });
-
-    const kurzusFeladatId = kurz.courseWorkId;
-
-    const result = await postJSON("/saveClassroomFeladatKozzetett", {
-      feladatid: feladatId,
-      kurzusNev,
-      kurzusId,
-      kurzusFeladatId
-    });
-
-    if (!result.success) {
-      throw new Error(result.error || "Nem sikerült közzétenni a feladatot");
+    const result = ajax_post("/saveClassroomFeladatKozzetett", 1, { feladatid: feladatId, kurzusNev: kurzusNev, kurzusId: kurzusId, kurzusFeladatId: kurzusFeladatId })
+    
+    if (result.success) {
+        toastMsg("Feladat közzétéve", `A feladat sikeresen közzétéve a(z) ${kurzusNev} kurzusban`, "success")
+    } else {
+        toastMsg("Hiba", result.error || "Nem sikerült közzétenni a feladatot", "danger")
     }
-
-    toastMsg(
-      "Feladat közzétéve",
-      `A feladat sikeresen közzétéve a(z) ${kurzusNev} kurzusban`,
-      "success"
-    );
-  } catch (err) {
-    console.error(err);
-    toastMsg(
-      "Hiba",
-      err.responseJSON?.error || err.message || "Ismeretlen hiba",
-      "danger"
-    );
-  } finally {
     pb.remove();
-  }
 }
 
 function getCoursesFromClassroomAPI(){ //RD
