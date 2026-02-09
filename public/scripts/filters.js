@@ -111,8 +111,8 @@ function autofillSubjectFilter(tantargyak, selectedTantargy){ //PR, RD, selected
     }
 }
 
-function autofillTeacherFilter(){ //PR
-    const options = ajax_post("/getTanarForAuto", 1, { vevoId: CurrentUserData.id })
+async function autofillTeacherFilter(){ //PR
+    const options = await ajax_post("/getTanarForAuto", 1, { vevoId: CurrentUserData.id })
     document.getElementById("tanarSzuro").innerHTML = `<option value="" class="d-none" hidden></option>`
     for (const item of options.results){
         let opt = document.createElement('option')

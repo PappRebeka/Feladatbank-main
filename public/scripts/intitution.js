@@ -9,24 +9,24 @@ institution.js ---------
     - autofillOtherInstitutions  -RD
 */
 
-function addInstitution(){ //RD
+async function addInstitution(){ //RD
     var intezmValue = document.getElementById("intezmenyMezo").value
-    ajax_post("/MentIntezmeny", 1, { intezmeny: intezmValue })
+    await ajax_post("/MentIntezmeny", 1, { intezmeny: intezmValue })
     toggleInstitutionOption(0)
     toastMsg("Sikeres művelet", `Sikeresen létrejött a(z) ${intezmValue} intézmény`, "success")
     moveUserClick()
 }
 
-function editInstitution(){ //RD
+async function editInstitution(){ //RD
     var intezmValue = document.getElementById("ujIntezmeny").value
-    ajax_post("/modositIntezmeny", 1, { id: intezmenyId, intezmeny: intezmValue })
+    await ajax_post("/modositIntezmeny", 1, { id: intezmenyId, intezmeny: intezmValue })
     toggleInstitutionOption(1)
     toastMsg("Sikeres művelet", `Sikeresen módosította az intézmény`, "success")
     moveUserClick()
 }
 
-function deleteInstitution(){ //RD
-    ajax_post("/torolIntezmeny", 1, { id: intezmenyId })
+async function deleteInstitution(){ //RD
+    await ajax_post("/torolIntezmeny", 1, { id: intezmenyId })
     toggleInstitutionOption(2)
     toastMsg("Sikeres művelet", `Sikeresen eltávolította az intézmény`, "success")
     moveUserClick()
@@ -61,8 +61,8 @@ function toggleInstitutionOption(index){ //RD, PR
     
 }
 
-function autofillInstitutionSelect(mit, lista){//RD
-    var inst = ajax_post("/SendIntezmeny", 1, {})
+async function autofillInstitutionSelect(mit, lista){//RD
+    var inst = await ajax_post("/SendIntezmeny", 1, {})
     var html = []
     for (const item of inst.results) {
         intezmenyek.push(item.IntezmenyNev)

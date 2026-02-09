@@ -86,7 +86,7 @@ module.exports = function (oauth2Client, logger) {
         }
     });
 
-    router.post("/register", (req, res) => { // POST /auth/register
+    router.post("/register", async (req, res) => { // POST /auth/register
         try {
             const username = req.query.username
             const email = req.query.email

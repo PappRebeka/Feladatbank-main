@@ -11,11 +11,11 @@ account.js -------------
     - getPageOptionsFor     -PR
 */
 
-function setUserData(){//PR
+async function setUserData(){//PR
 
     if (!CurrentUserData.id) {
         let utoken = sessionStorage.getItem("userToken")
-        let response = ajax_post("/GetUserData", 1, {UserToken: utoken})
+        let response = await ajax_post("/GetUserData", 1, {UserToken: utoken})
 
         if(response.error == "ALREADY_LOGGED_IN") {
             window.location.href = "hiba.html?code=4"
@@ -163,7 +163,7 @@ function setFieldToText(which){//PR
     target.appendChild(button)
 }
 
-function saveUserData(){//PR, BBB
+async function saveUserData(){//PR, BBB
     // update the user data in the database
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ //simple email pattern by BBB
 
@@ -179,7 +179,7 @@ function saveUserData(){//PR, BBB
     } 
 
     if(valtozottEmail){
-        const isRegistered = ajax_post("/isRegistered", 0, { email: newEmail })
+        const isRegistered = await ajax_post("/isRegistered", 0, { email: newEmail })
         const isValidEmail = emailPattern.test(newEmail)
 
         if (isRegistered || !isValidEmail){
@@ -190,7 +190,7 @@ function saveUserData(){//PR, BBB
         }
     }
     
-    const result = ajax_post("/updateUserdata", 1, { userToken: sessionStorage.getItem("userToken"), newNev: newNev, newEmail: newEmail });
+    const result = await ajax_post("/updateUserdata", 1, { userToken: sessionStorage.getItem("userToken"), newNev: newNev, newEmail: newEmail });
 
     if(result.success){
         CurrentUserData.Email = newEmail
@@ -213,12 +213,12 @@ function saveUserData(){//PR, BBB
         
 }
 
-function deleteThisUser(id){//PR
+async function deleteThisUser(id){//PR
     if(id == CurrentUserData.id && CurrentUserData.Jogosultsag == "Főadmin"){  // prevent deleting main admin
         toastMsg("Tiltott művelet!", "A főadmin nem törölhető", "danger")
     }
     else{   // proceed with deletion
-        const result = ajax_post("/deleteUser", 1, { id: id });
+        const result = await ajax_post("/deleteUser", 1, { id: id });
         
         if (result.success) {
             toastMsg("Sikeres művelet!", "A felhasználó törölve lett", "success")

@@ -136,7 +136,7 @@
             createSlimSelect('deleteInstitution', AthelyezTeszt)
             
             createSlimSelect('vevoInputText', megosztSelectTeszt)
-            setPageContent();
+            await setPageContent();
             
        }
         catch (err){
@@ -227,8 +227,8 @@
         document.getElementById(`${kikapcsId}`).classList.add("disabled");
     }
 
-    function updateReport(action, id, javitott) { //BBB
-        let res = ajax_post("/update-report", 1, { action: action, id: id });
+    async function updateReport(action, id, javitott) { //BBB
+        let res = await ajax_post("/update-report", 1, { action: action, id: id });
 
         if (res.error) {
             toastMsg(`Hiba`, `Hiba történt a hibajelentés frissítésekor`, `danger`);
@@ -236,10 +236,10 @@
             toastMsg(`Sikeres frissítés`, `Hibajelentés státusza sikeresen frissítve`, `success`);
         }        
 
-        loadReports(javitott)
+        await loadReports(javitott)
     }
 
-    function reportToggle(i) { //BBB
+    async function reportToggle(i) { //BBB
         let $nemjavitott = $("#nemjavitott");
         let $javitott = $("#javitott");
 
@@ -261,16 +261,16 @@
             $nemjavitott.removeClass("btn-outline-secondary");
         }
 
-        loadReports(i);
+       await loadReports(i);
     }
 
-    function loadReports(javitott) { // BBB
+    async function loadReports(javitott) { // BBB
         if (!javitott) {
             javitott = 0;
         }
 
         let $reportContainer = $("#reportContainer");
-        let adat = ajax_post("/get-reports", 1, { javitott: javitott });
+        let adat = await ajax_post("/get-reports", 1, { javitott: javitott });
         $reportContainer.empty();
 
         if(adat.results.length === 0) {
@@ -323,7 +323,7 @@
         let btn = buildButtonWithIcon(specs.bi)
         btn.innerText += specs.text
         btn.classList.add(`btn-${specs.buttonClass}`, `text-${specs.buttonClass}-emphasis`,'w-100')
-        btn.addEventListener('click', () => updateReport(specs.action, id, javitott))
+        btn.addEventListener('click', async () => await updateReport(specs.action, id, javitott))
 
         let div = document.createElement('div')
         div.appendChild(btn)
@@ -331,7 +331,7 @@
         return div
     }
     
-    function setPageContent() { //PR, RD, BBB
+    async function setPageContent() { //PR, RD, BBB
         document.getElementById("BigDih").replaceChildren()
         console.log("(setPageContent) oldal: "+ ActiveLocation)
         if (!AvailablePages[ActiveLocation]) { //shouldnt be possible to get this error
@@ -370,7 +370,7 @@
 
 
                     let runBtn = $bind(html, 'sqlBtn')
-                    runBtn.addEventListener('click', () => runSql())
+                    runBtn.addEventListener('click', async () =>  runSql())
                     let mentBtn = $bind(html, 'backupMentBtn')
                     mentBtn.addEventListener('click', () => saveBackup())
 
@@ -392,7 +392,7 @@
                     if (CurrentUserData.Jogosultsag == "Főadmin") {
                        html = hibajelentesFoadminTemplate()
                        html.querySelector("#nemjavitott").addEventListener('click', () => reportToggle(0))
-                       html.querySelector("#javitott").addEventListener('click', () => reportToggle(1))
+                       html.querySelector("#javitott").addEventListener('click', async () => await reportToggle(1))
                        runAfterDOM = loadReports;
                     } else {
                         html = hibajelentesDefaultTemplate();
@@ -406,7 +406,7 @@
                     break;
             }
             
-            if(ActiveLocation == "Adatbázis műveletek")getBackupOptions();
+            if(ActiveLocation == "Adatbázis műveletek") await getBackupOptions();
             if(ActiveLocation == "Statisztikák")StatisztikaOnLoad();
             // runAfterDOM egy funkciót tartalmaz ami a html beillesztése után fut le
             if (runAfterDOM != null) { runAfterDOM(); } // quick hack de jól működik
@@ -430,10 +430,10 @@
         
     }
 
-    function loadPageData(){ //PR, RD
+    async function loadPageData(){ //PR, RD
         let oldal = Object.keys(AvailablePages).indexOf(ActiveLocation).toString()
         
-        var SubjectList = ajax_post("/GetTantargyak", 1, {oldal: oldal})
+        var SubjectList = await ajax_post("/GetTantargyak", 1, {oldal: oldal})
         let userpage = ActiveLocation == "Felhasználók"
         var selectedTantargy = ActiveFilters.tantargy
         let temp = {tanarId: CurrentUserData.id,
@@ -452,10 +452,10 @@
                     offset: localStorage.getItem("offset")}
                     
         const par = new URLSearchParams(temp).toString();
-        var results      = userpage ? ajax_post("/SendUsers", 1, { limit: localStorage.getItem("limit"), offset: localStorage.getItem("offset"), kereso: ActiveFilters.kereso }).results : 
-                                      ajax_post("/SendFeladatok", 1, temp).results    
-            resultsCount = userpage ? ajax_post("/getUserCount", 1, { kereso: ActiveFilters.kereso }).db : 
-                                      ajax_post("/getFeladatNumber", 1, temp).db       
+        var results      = userpage ? await ajax_post("/SendUsers", 1, { limit: localStorage.getItem("limit"), offset: localStorage.getItem("offset"), kereso: ActiveFilters.kereso }).results : 
+                                      await ajax_post("/SendFeladatok", 1, temp).results    
+            resultsCount = userpage ? await ajax_post("/getUserCount", 1, { kereso: ActiveFilters.kereso }).db : 
+                                      await ajax_post("/getFeladatNumber", 1, temp).db       
                                    
         changeLimitOffset();
         talalatSzam.textContent = resultsCount
@@ -533,7 +533,7 @@
         
     }
 
-    function runSql() { //BBB
+    async function runSql() { //BBB
 
         const icon = `<i class="bi bi-exclamation-triangle-fill"></i>&nbsp;`;
         const sql = editor.getValue().trim();
@@ -553,7 +553,7 @@
             showErrorMsg("Nincs semmi az SQL bevíteli mezőben!")
             return;
         } else {
-            let adat = ajax_post("/customSql", 1, { sql: sql });
+            let adat = await ajax_post("/customSql", 1, { sql: sql });
             if (adat.error) {
                 $sql_error.html(icon + adat["error"])
                 return;
@@ -595,7 +595,7 @@
         }
     }
 
-    function sendFeedback() { //BBB
+    async function sendFeedback() { //BBB
         $("#feedback-email").text(CurrentUserData.Email)
         $("#feedback-nev").text(CurrentUserData.Nev)
 
@@ -608,17 +608,17 @@
         if ((message == "") || !message) {
             return;
         } else {
-            ajax_post("/send-report", 1, { email: email, nev: nev, message: message, ido: ido });
+            await ajax_post("/send-report", 1, { email: email, nev: nev, message: message, ido: ido });
             toastMsg("Köszönjük a visszajelzését!", "A hibajelentés sikeresen elküldve.", "success");
         
             document.getElementById("feedback-form").reset();
         }
     }
     
-    function logout(){ //PR
+    async function logout(){ //PR
         killCookie('stayLoggedIn'); sessionStorage.removeItem("userToken"); killCookie('currentPage'); killCookie('currentKikapcsId');
         window.location.href='/index.html'
-        ajax_post("/logout", 1)
+        await ajax_post("/logout", 1)
     }
 
     function setEvents(){
