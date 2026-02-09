@@ -7,14 +7,14 @@ task_scripts/load.js ---------------
 */ 
 
 
-async function feladatCardClick(element){ //PR
+function feladatCardClick(element){ //PR
     const adat = JSON.parse(decodeURIComponent(element.adat));
     const felhasznalo = element.Felhasznalo;
 
-    await setTaskModalContent(adat, felhasznalo);
+    setTaskModalContent(adat, felhasznalo);
 }
 
-async function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev){
+function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev){
     const container = taskCardTemplate();
     container.id = `task-${adat.id}`;
 
@@ -29,7 +29,7 @@ async function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kur
     card.dataset.felhasznalo = felhasznalo ?? '';
     card.style.border = `4px solid ${borderColor(adat.Nehezseg)}`;
 
-    card.addEventListener('click', async () => await feladatCardClick(card.dataset));
+    card.addEventListener('click', () => feladatCardClick(card.dataset));
 
     const nevText = adat.Nev
     highlightSearchedText(ActiveFilters.kereso, nevText, $bind(container, 'nev'))
@@ -79,16 +79,16 @@ async function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kur
     b.classList.toggle('d-none', (ActiveLocation == "Archívum" || ActiveLocation == 'Általam megosztott') )
 
         
-    p.addEventListener('click', async (e) => {
-        await kozzeteszButtonClick(adat.id); 
+    p.addEventListener('click', (e) => {
+        kozzeteszButtonClick(adat.id); 
         e.stopPropagation();
     })
-    v.addEventListener('click', async (e) => {
-        await removeSharedTask(adat.id, felhasznalo);
+    v.addEventListener('click', (e) => {
+        removeSharedTask(adat.id, felhasznalo);
         e.stopPropagation();
     })
-    b.addEventListener('click', async (e) => {
-        await bookmarkTaskClick(adat.id, b, card.dataset);
+    b.addEventListener('click', (e) => {
+        bookmarkTaskClick(adat.id, b, card.dataset);
         e.stopPropagation();
     })
     
@@ -96,15 +96,15 @@ async function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kur
     return container
 }
 
-async function buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev){//PR
-    const container = await buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev)
+function buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev){//PR
+    const container = buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev)
     document.getElementById("BigDih").appendChild(container);
 }
 
 async function setTaskModalContent(adat, felhasznalo){ //PR, RD
     feladatAdatai = adat
     var counter = 1;
-    var alfeladatok = await ajax_post("/SendAlFeladatok", 1, { feladatId: adat.id }, true)
+    var alfeladatok = await ajax_post("/SendAlFeladatok", 1, { feladatId: adat.id })
     CancelEditingThisFeladat(false, felhasznalo, `task-${adat.id}`);
 
     const modal = document.getElementById("modalFeladatContent")

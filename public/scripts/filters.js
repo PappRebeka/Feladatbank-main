@@ -12,9 +12,9 @@ filters.js -------------
     - autofillTeacherFilter     -PR
 */
 
-async function setSearchFilter(ker){//PR
+function setSearchFilter(ker){//PR
     ActiveFilters.kereso = ker ? ker.toLowerCase() : "" // save the search filter globally
-    await loadPageData()          // reload the data with the new filter
+    loadPageData()          // reload the data with the new filter
 }
 
 function resetSearchFilter(){ //PR
@@ -23,7 +23,7 @@ function resetSearchFilter(){ //PR
     ActiveFilters.kereso = ""
 }
 
-async function applyFilters() { //RD
+function applyFilters() { //RD
     ActiveFilters.nehezseg   = TempFilters.nehezseg 
     ActiveFilters.evfolyam   = document.getElementById("evfolyamSzuro").value
     ActiveFilters.tantargy   = TempFilters.tantargy
@@ -32,7 +32,7 @@ async function applyFilters() { //RD
     
     ActiveFilters.order.field = TempFilters.order.field
     ActiveFilters.order.desc  = TempFilters.order.desc
-    await loadPageData()
+    loadPageData()
     toastMsg('Szűrő alkalmazva!', 'A szűrő sikeresen alkalmazva', 'success');
 }
 
@@ -101,7 +101,6 @@ function getSortField(){ //PR
 }
 
 function autofillSubjectFilter(tantargyak, selectedTantargy){ //PR, RD, selectedTantargy: a szűrő alkalmazása előtti kiválasztott tantárgy, azért van hogy a tantárgy selected maradjon
-    createSlimSelect('tantargySzuro', tantargyChanged)
     document.getElementById('tantargySzuro').innerHTML = `<option value="" class="d-none" hidden></option>`
     for (const id in tantargyak) {
         var t = tantargyak[id].Tantargy
@@ -113,7 +112,7 @@ function autofillSubjectFilter(tantargyak, selectedTantargy){ //PR, RD, selected
 }
 
 async function autofillTeacherFilter(){ //PR
-    const options = await ajax_post("/getTanarForAuto", 1, { vevoId: CurrentUserData.id }, false)
+    const options = await ajax_post("/getTanarForAuto", 1, { vevoId: CurrentUserData.id })
     document.getElementById("tanarSzuro").innerHTML = `<option value="" class="d-none" hidden></option>`
     for (const item of options.results){
         let opt = document.createElement('option')

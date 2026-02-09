@@ -4,16 +4,6 @@
 /*          GENERAL STYLES & LAYOUT            */
 /*==============================================*/
 
-/*.dropdown-menu {
-  overflow: visible !important;
-}
-
-.ss-content {
-  z-index: 1056 !important; 
-  max-height: 40vh;
-  overflow-y: auto;
-}*/
-
 body {
   position: relative;
   --bg-tile-url: url("/img/LogoDefault.png");
@@ -122,7 +112,6 @@ mark {
 #modalFeladatContent .card:hover, #statsHere .card:hover {
   cursor: default !important;
 }
-
 
 /*==============================================*/
 /*          TEXT & COLOR UTILITIES             */

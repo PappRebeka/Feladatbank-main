@@ -16,7 +16,7 @@ stats.js ---------------
   - StatisztikaOnLoad    -RD
 */ 
 
-async function setUserModal(statLap, id){ //PR, RD
+function setUserModal(statLap, id){ //PR, RD
     if(id != undefined) StatUserId = id
     //userId_ToChangeInstitute = id
     const tanarAdatai = document.querySelector("#modalTanarContent")
@@ -32,15 +32,15 @@ async function setUserModal(statLap, id){ //PR, RD
     var temp;
     switch (statLap){
         case 2:
-            temp = await MegosztottStat()
+            temp = MegosztottStat()
             modalTanarContent.innerHTML = "<p class='my-2 h5 text-center'>Megosztott feladatok száma tanáronként</p>"
             break;
         case 3:
-            temp = await KozzetettStat()
+            temp = KozzetettStat()
             modalTanarContent.innerHTML = "<p class='my-2 h5 text-center'>Közzétett feladatok száma kurzusonként</p>"
             break;
         default:
-            temp = await DefaultStat()
+            temp = DefaultStat()
             modalTanarContent.innerHTML = "<p class='my-2 h5 text-center'>Feladatok eloszlása kategóriánként</p>"
             break;
     }
@@ -78,7 +78,7 @@ async function setUserModal(statLap, id){ //PR, RD
     }
 }
 
-async function statToggle(chosenOne, page){ //PR
+function statToggle(chosenOne, page){ //PR
     if(StatPageCounter == page) return; //if the user clicks the same button again, dont do anything
 
     let id = chosenOne.id+"Stat" //get the corresponding label id
@@ -95,15 +95,15 @@ async function statToggle(chosenOne, page){ //PR
     document.getElementById(id).classList.remove(`btn-light`)
     chosenOne.checked = true    //turn on the clicked button 
     StatPageCounter = page     //set the global page counter
-    await setUserModal(page) //set the modal content based on the clicked button
+    setUserModal(page) //set the modal content based on the clicked button
 }
 
-async function selectionReset(){//RD?
-    await statToggle(document.getElementById("Letrehozott"), 1)
+function selectionReset(){//RD?
+    statToggle(document.getElementById("Letrehozott"), 1)
 }
 
 async function DefaultStat(){//RD
-    var generalFeladatok = await ajax_post("/generalFeladatokData", 1, { felhId: StatUserId }, true)
+    var generalFeladatok = await ajax_post("/generalFeladatokData", 1, { felhId: StatUserId })
     var Letrehozott = generalFeladatok.FeladatDB
     var Kozzetett = generalFeladatok.KozzetettDB
     var Megosztott = generalFeladatok.MegosztottDB
@@ -118,7 +118,7 @@ async function DefaultStat(){//RD
 async function MegosztottStat(){//RD
     //var baseData = await ajax_post("/ChartDataGet?statLap=2&statCaller="+StatUserId).results
     //await ajax_post(`megosztottFeladatokData?felhId=${StatUserId}`)
-    var megosztottFeladatok = await ajax_post("/megosztottFeladatokData", 1, { felhId: StatUserId }, false)
+    var megosztottFeladatok = await ajax_post("/megosztottFeladatokData", 1, { felhId: StatUserId })
     var labels = []
     var dataset = []
     //var szinek = hslSzinGeneral(megosztottFeladatok.results.length)
@@ -131,7 +131,7 @@ async function MegosztottStat(){//RD
 
 async function KozzetettStat(){//RD
     //var baseData = await ajax_post("/ChartDataGet?statLap=3&statCaller="+StatUserId).results
-    var kozzetettFeladatok = await ajax_post("/kozzetettFeladatokData", 1, { felhId: StatUserId }, false)
+    var kozzetettFeladatok = await ajax_post("/kozzetettFeladatokData", 1, { felhId: StatUserId })
     var labels = []
     var dataset = []
     //var szinek = hslSzinGeneral(kozzetettFeladatok.results.length)
@@ -144,7 +144,7 @@ async function KozzetettStat(){//RD
 
 async function avgNehezsegStat(){//RD
     //var baseData = await ajax_post("/ChartDataGet?statLap=3&statCaller="+StatUserId).results
-    var avgFeladatok = await ajax_post("/averageNehezsegData", 1, { felhId: StatUserId }, false)
+    var avgFeladatok = await ajax_post("/averageNehezsegData", 1, { felhId: StatUserId })
     var labels = []
     var dataset = []
     //var szinek = hslSzinGeneral(avgFeladatok.results.length)
@@ -158,12 +158,12 @@ async function avgNehezsegStat(){//RD
 function isDatasetEmpty(dataset){ //RD
     for (const data of dataset) {
         if (data != 0) return false 
-    }   
+    }
     return true
 }
 
 async function evfArchivaltStat(){//RD
-    var evfFeladatok = await ajax_post("/evfolyamArchivaltData", 1, { felhId: StatUserId }, false)
+    var evfFeladatok = await ajax_post("/evfolyamArchivaltData", 1, { felhId: StatUserId })
     var labels = []
     var dataset = []
     var dataset1 = []
@@ -199,7 +199,7 @@ async function top3Data(){//RD, PR
     var labels = []
     var feladatDb = []
     var dataset = [2, 3, 1]
-    var adatok = await ajax_post("/topHaromTanarData", 1, {}, false)
+    var adatok = await ajax_post("/topHaromTanarData", 1, {})
     
     labels.push(adatok.results[1]?.Nev || "") //2.helyezett
     feladatDb.push(adatok.results[1]?.FeladatDb || 0)
@@ -302,27 +302,27 @@ async function createStatisticCard(){ //RD, PR
     var statHely = document.getElementById("statsHere")
     switch (generatedChartNumber) {
         case 1:
-            statAdat = await MegosztottStat()
+            statAdat = MegosztottStat()
             tipus = "doughnut"
             title = "Megosztott feladatok"
             sub =  "Ön által megosztott feladatok száma tanáronként"
             break;
         case 2:
-            statAdat = await KozzetettStat()
+            statAdat = KozzetettStat()
             tipus = "bar"
             title = "Közzétett feladatok"
             sub = "Közzétett feladatok száma kurzusonként"
             x = "Kuzus"; y = "Darab"
             break;
         case 3:
-            statAdat = await avgNehezsegStat()
+            statAdat = avgNehezsegStat()
             tipus = "bar"
             title = "Kurzusonkénti nehézség"
             sub = "Feladatok átlagos nehézsége kurzusonként"
             x = "Kuzus"; y = "Átl. nehézség"; axis = "y"
             break;
         case 4:
-            statAdat = await evfArchivaltStat()
+            statAdat = evfArchivaltStat()
             tipus = "line"
             title = "Évfolyamonkénti státusz"
             sub = "Feladatok státusza évolyamokra bontava"
@@ -337,7 +337,7 @@ async function createStatisticCard(){ //RD, PR
             break;
     
         default:
-            statAdat = await DefaultStat()
+            statAdat = DefaultStat()
             tipus = "polarArea"
             title = "Feladatok összesítve"
             sub = "Feladatok elszlása kategóriánként"
@@ -361,10 +361,10 @@ async function createStatisticCard(){ //RD, PR
     generatedChartNumber++;
 }
 
-async function StatisztikaOnLoad(){ //RD
+function StatisztikaOnLoad(){ //RD
     StatUserId = CurrentUserData.id;
     generatedChartNumber = 0
     for (let i = 0; i < 6; i++) {
-        await createStatisticCard();
+        createStatisticCard();
     }
 }

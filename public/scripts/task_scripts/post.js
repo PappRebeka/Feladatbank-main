@@ -7,12 +7,12 @@ task_scripts/load.js ---------------
     - getCoursesFromClassroomAPI  -RD
 */ 
 
-async function kozzeteszButtonClick(id){   //RD, PR
-    await getCoursesFromClassroomAPI();
+function kozzeteszButtonClick(id){   //RD, PR
+    getCoursesFromClassroomAPI();
     resetKozzetevesModal();
     
     const select = document.createElement('select')
-    select.addEventListener('change', async () => await loadAvailableCourses())
+    select.addEventListener('change', () => loadAvailableCourses())
     select.classList.add('slim-select', 'w-100', 'form-select-lg', 'mb-3')
     select.id = 'kurzusSelect'
 
@@ -26,7 +26,7 @@ async function kozzeteszButtonClick(id){   //RD, PR
         select.appendChild(option)
     } 
     document.getElementById("megosztasId").replaceChildren(select);
-    await loadAvailableCourses()
+    loadAvailableCourses()
 }
 
 function resetKozzetevesModal(){ //PR
@@ -38,7 +38,7 @@ function resetKozzetevesModal(){ //PR
 async function loadAvailableCourses(){ //RD
     var chosenOne = document.getElementById("kurzusSelect")?.value
     var kurzusId = chosenOne.split("-")[0]
-    var tanulok = await ajax_post("/getStudentList", 1, { kurzusId: kurzusId }, false)
+    var tanulok = await ajax_post("/getStudentList", 1, { kurzusId: kurzusId })
     var tanulokLista = Array.from(tanulok?.diakok || []) || []
     
     document.getElementById("tanulokSelect").replaceChildren()
@@ -122,7 +122,7 @@ async function postTaskToClassroom() {
 }
 
 async function getCoursesFromClassroomAPI(){ //RD
-        var kurzus = await ajax_post("/sendClassroomCourses", 1, {}, false)
+        var kurzus = await ajax_post("/sendClassroomCourses", 1, {})
         if (kurzus) {
             kurzusok_nevek = kurzus.nevek
             kurzusok_idk = kurzus.idk

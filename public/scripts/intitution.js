@@ -11,25 +11,25 @@ institution.js ---------
 
 async function addInstitution(){ //RD
     var intezmValue = document.getElementById("intezmenyMezo").value
-    await ajax_post("/MentIntezmeny", 1, { intezmeny: intezmValue }, false)
-    await toggleInstitutionOption(0)
+    await ajax_post("/MentIntezmeny", 1, { intezmeny: intezmValue })
+    toggleInstitutionOption(0)
     toastMsg("Sikeres művelet", `Sikeresen létrejött a(z) ${intezmValue} intézmény`, "success")
-    await moveUserClick()
+    moveUserClick()
 }
 
 async function editInstitution(){ //RD
     var intezmValue = document.getElementById("ujIntezmeny").value
-    await ajax_post("/modositIntezmeny", 1, { id: intezmenyId, intezmeny: intezmValue }, false)
-    await toggleInstitutionOption(1)
+    await ajax_post("/modositIntezmeny", 1, { id: intezmenyId, intezmeny: intezmValue })
+    toggleInstitutionOption(1)
     toastMsg("Sikeres művelet", `Sikeresen módosította az intézmény`, "success")
-    await moveUserClick()
+    moveUserClick()
 }
 
 async function deleteInstitution(){ //RD
-    await ajax_post("/torolIntezmeny", 1, { id: intezmenyId }, false)
-    awaittoggleInstitutionOption(2)
+    await ajax_post("/torolIntezmeny", 1, { id: intezmenyId })
+    toggleInstitutionOption(2)
     toastMsg("Sikeres művelet", `Sikeresen eltávolította az intézmény`, "success")
-    await moveUserClick()
+    moveUserClick()
 }
 
 function toggleInstitutionRadio(chosenOne){ //PR
@@ -48,7 +48,7 @@ function toggleInstitutionRadio(chosenOne){ //PR
     chosenOne.checked = true
 }
 
-async function toggleInstitutionOption(index){ //RD, PR
+function toggleInstitutionOption(index){ //RD, PR
     //let html = intezmenyOptionTemplate(index)
     var type = ["", "javit", "torol"][index] || ""
 
@@ -57,12 +57,12 @@ async function toggleInstitutionOption(index){ //RD, PR
     thatone.classList.toggle('d-none')
     try{thatone.querySelector('input').value = ''}catch{}
     //document.getElementById("currentDatabaseOption").replaceChildren(html)
-    await autofillInstitutionSelect(type)
+    autofillInstitutionSelect(type)
     
 }
 
 async function autofillInstitutionSelect(mit, lista){//RD
-    var inst = await ajax_post("/SendIntezmeny", 1, {}, false)
+    var inst = await ajax_post("/SendIntezmeny", 1, {})
     var html = []
     for (const item of inst.results) {
         intezmenyek.push(item.IntezmenyNev)

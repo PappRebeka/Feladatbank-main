@@ -1865,17 +1865,15 @@ app.post("/send-report", (req, res) => { // BBB
     ],
     (err, results) => {
       if(err) {
-        console.log(err)
         return res.status(500).send(JSON.stringify({ error: "Nem sikerült a hibajelentést elküldeni." }))
-      }
-      else {
-        res.status(200).json({ ok: true });
+      } else {
+        res.end();
       }
     }
   )
 })
 
-app.post("/update-report", async (req, res) => { // BBB
+app.post("/update-report", (req, res) => { // BBB
   const action = req.body.action;
   const reportId = req.body.id;
   let sql;
@@ -2182,7 +2180,7 @@ const server = app.listen(config.server.port, () => {
     return feladatok[0].db > 0
   }
 
-  app.post("/GetTantargyak", async (req, res) =>{
+  app.post("/GetTantargyak", (req, res) =>{
     const UserId = req.session.userId
     const oldal = req.body.oldal
     var selectTable = ""

@@ -185,6 +185,8 @@ class ContinuousProgressBar {
   }
 }
 
+
+
 async function uploadSubtaskFile(fajlInput) {//BBB
     const form = new FormData();
     const file = fajlInput.files[0];
@@ -259,7 +261,7 @@ async function saveTask(isUjFeladat, feladatId, felhasznalo) {
 
     const payload = createTaskPayload(feladatData, alfeladatok, isUjFeladat);
 
-    await uploadTasks(payload, isUjFeladat, feladatId, felhasznalo);
+    uploadTasks(payload, isUjFeladat, feladatId, felhasznalo);
 }
 
 function isCompleteSubtask(alfeladat) { //BBB
@@ -285,19 +287,19 @@ function getDeletedTasks() { //BBB
     return [];
 }
 
-async function uploadTasks(payload, ujFeladat, feladatId, felhasznalo) { //BBB
+function uploadTasks(payload, ujFeladat, feladatId, felhasznalo) { //BBB
     $.ajax({
         url: '/ment-feladat',
         method: "POST",
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: async function (res) {
+        success: function (res) {
             if (ujFeladat) {
-                await loadPageData();
+                loadPageData();
                 toastMsg("Feladat hozzáadva!", "A feladat hozzáadódott az adatbázishoz.", "success");
                 resetCreateNewTask();
             } else {
-                await updateTask(payload, payload.alfeladatok.filter(a => !(a["isDelete"])), felhasznalo); 
+                updateTask(payload, payload.alfeladatok.filter(a => !(a["isDelete"])), felhasznalo); 
                 toastMsg("Feladat módosítva!", "A feladat módosítása sikeres volt.", "success");
             }
         },
@@ -453,7 +455,7 @@ function subtaskDelete(id){//PR
     parent.remove(); 
 }
 
-async function updateTask(task, subtasks, felhasznalo){//PR
+function updateTask(task, subtasks, felhasznalo){//PR
     // update the task with the new data
     feladatAdatai = {
         id: task.id, 
@@ -474,17 +476,17 @@ async function updateTask(task, subtasks, felhasznalo){//PR
     } 
     catch(err){console.log(err)}
 
-    const container = await buildTaskCardPrimaryData(feladatAdatai, felhasznalo, szin, null)
+    const container = buildTaskCardPrimaryData(feladatAdatai, felhasznalo, szin, null)
     document.getElementById(`task-${task.id}`).replaceChildren(container.querySelector('div'))         
     
-    await setTaskModalContent(feladatAdatai, '');
+    setTaskModalContent(feladatAdatai, '');
     //CancelEditingThisFeladat(true, '', `task-${task.id}`); // stop the editing process
 }
 
 async function archiveTask(state){  //PR
     talalatSzam.innerHTML = parseInt(talalatSzam.innerHTML)-1 
     
-    await ajax_post("/feladatArchivalas", 1, { id: feladatAdatai.id, state: state }, false)
+    await ajax_post("/feladatArchivalas", 1, { id: feladatAdatai.id, state: state })
     document.getElementById(`task-${feladatAdatai.id}`).remove(); 
     toastMsg('Sikeres módosítás!', 'Feladat sikeresen archiválva', 'success');
 
@@ -609,10 +611,10 @@ function editThisFeladat(feladatId, felhasznalo){ // PR
                             Mégse
                         </button>`
 
-    footer.children[0].addEventListener('click', async () => { await saveTask(false, feladatId, felhasznalo)/*, I think this is completely useless here, since it resets NEW taks and this is EDIT branch...
+    footer.children[0].addEventListener('click', () => { saveTask(false, feladatId, felhasznalo)/*, I think this is completely useless here, since it resets NEW taks and this is EDIT branch...
                                                          resetCreateNewTask(feladatId, felhasznalo)*/})
 
-    footer.children[1].addEventListener('click', async () => {await setTaskModalContent(feladatAdatai, felhasznalo);/*CancelEditingThisFeladat(true, felhasznalo, feladatId, )*/});
+    footer.children[1].addEventListener('click', () => {setTaskModalContent(feladatAdatai, felhasznalo);/*CancelEditingThisFeladat(true, felhasznalo, feladatId, )*/});
 }
 
 function buildDeleteButton(id){
@@ -672,8 +674,8 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId){ //PR
         let felhasznalo = $bind(taskDiv, "felhasznaloName").innerText;
 
         header.children[1].addEventListener("click", () => editThisFeladat(feladatId, felhasznalo));
-        $bind(footer, 'arch')?.addEventListener("click", async () => await  archiveTask(1));
-        $bind(footer, 'megoszt')?.addEventListener("click", async () => await autocompleteShare_TeacherSelect());
+        $bind(footer, 'arch')?.addEventListener("click", () => archiveTask(1));
+        $bind(footer, 'megoszt')?.addEventListener("click", () => autocompleteShare_TeacherSelect());
     }
     
     if (ActiveLocation == "Archívum"){
@@ -686,8 +688,8 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId){ //PR
                                  Visszaálít
                              </button>`
         
-        footer.children[0].addEventListener("click", async () => await TorolFeladat());
-        footer.children[1].addEventListener("click", async () => await archiveTask(0));
+        footer.children[0].addEventListener("click", () => TorolFeladat());
+        footer.children[1].addEventListener("click", () => archiveTask(0));
     }
     
     const btn = document.createElement('button')
@@ -699,11 +701,13 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId){ //PR
     document.getElementById(feladatId)
 
     footer.appendChild(btn)
+    
+    //if(call_setModal) setTaskModalContent(feladatAdatai, felhasznalo);
 }
 
 async function TorolFeladat(){//PR?
     document.getElementById(`task-${feladatAdatai.id}`).remove();           // remove the div
-    await ajax_post("/feladatTorol", 1, { id: feladatAdatai.id }, false)                 // update database
+    await ajax_post("/feladatTorol", 1, { id: feladatAdatai.id })                 // update database
     talalatSzam.innerHTML = parseInt(talalatSzam.innerHTML) - 1;            // reduce count
     toastMsg('Sikeres módosítás!', 'Feladat sikeresen törölve', 'success');
 }
@@ -713,7 +717,7 @@ async function bookmarkTaskClick(feladatId, button, dataset){
     button.classList.toggle('bi-star-fill')
     button.classList.toggle('bi-star')
     let oldal = Object.keys(AvailablePages).indexOf(ActiveLocation).toString()
-    await ajax_post(`/updateBookmarkedState`, 1, {feladatId: feladatId, oldal: oldal, felado: dataset.felhasznalo}, false)
+    await ajax_post(`/updateBookmarkedState`, 1, {feladatId: feladatId, oldal: oldal, felado: dataset.felhasznalo})
     toastMsg('Sikeres módosítás!', 
         button.classList.contains('bi-star-fill') ? 'Feladat sikeresen csillagozva' : 'Feladat sikeresen kicsillagozva', 
         'success');

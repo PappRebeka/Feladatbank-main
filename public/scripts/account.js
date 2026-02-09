@@ -15,7 +15,7 @@ async function setUserData(){//PR
 
     if (!CurrentUserData.id) {
         let utoken = sessionStorage.getItem("userToken")
-        let response = await ajax_post("/GetUserData", 1, {UserToken: utoken}, true)
+        let response = await ajax_post("/GetUserData", 1, {UserToken: utoken})
 
         if(response.error == "ALREADY_LOGGED_IN") {
             window.location.href = "hiba.html?code=4"
@@ -120,7 +120,7 @@ function allowUserDataEdit(){ //PR
             Fiók törlése
          </button>`;
 
-    options.children[1].addEventListener('click', async () => await saveUserData())
+    options.children[1].addEventListener('click', () => saveUserData())
     options.children[0].addEventListener('click', () =>{window.location.href=`/passreset.html?email=${CurrentUserData.Email}`;
                                                          toastMsg('Helyreállító email külve.', '')})
 
@@ -179,7 +179,7 @@ async function saveUserData(){//PR, BBB
     } 
 
     if(valtozottEmail){
-        const isRegistered = await ajax_post("/isRegistered", 0, { email: newEmail }, false)
+        const isRegistered = await ajax_post("/isRegistered", 0, { email: newEmail })
         const isValidEmail = emailPattern.test(newEmail)
 
         if (isRegistered || !isValidEmail){
@@ -190,7 +190,7 @@ async function saveUserData(){//PR, BBB
         }
     }
     
-    const result = await ajax_post("/updateUserdata", 1, { userToken: sessionStorage.getItem("userToken"), newNev: newNev, newEmail: newEmail }, false);
+    const result = await ajax_post("/updateUserdata", 1, { userToken: sessionStorage.getItem("userToken"), newNev: newNev, newEmail: newEmail });
 
     if(result.success){
         CurrentUserData.Email = newEmail
@@ -218,7 +218,7 @@ async function deleteThisUser(id){//PR
         toastMsg("Tiltott művelet!", "A főadmin nem törölhető", "danger")
     }
     else{   // proceed with deletion
-        const result = await ajax_post("/deleteUser", 1, { id: id }, false);
+        const result = await ajax_post("/deleteUser", 1, { id: id });
         
         if (result.success) {
             toastMsg("Sikeres művelet!", "A felhasználó törölve lett", "success")
@@ -247,7 +247,7 @@ function getPageOptionsFor(jog){ //PR
             let div = document.createElement('div')
             div.classList.add('navOptionButton','btn','btn-light','w-100', 'my-2')
             div.setAttribute('data-bs-dismiss', 'offcanvas')
-            div.addEventListener('click', async () => await switchTo(key, div.id))
+            div.addEventListener('click', () => switchTo(key, div.id))
             div.id = element.pageId
             if(key == ActiveLocation) div.classList.add('disabled')
             div.textContent = key
