@@ -48,6 +48,8 @@ const { isNumber } = require("util");
 const pad = (s, n) => s.padEnd(n);
 const activeSessions = new Set()
 
+const lastPings = [];
+
 var wss;
 
 function startWsServer() {
@@ -66,14 +68,25 @@ function startWsServer() {
 
       switch (jsonData["event"]) {
         case "authentication":
+          let canLogIn = true;
+
           wss.clients.forEach((client) => {
             if (client.userToken === jsonData["userToken"]) {
-              ws.send("alreadyLoggedIn");
-              return;
+              canLogIn = false;
             }
           });
-          ws.userToken = jsonData["userToken"];
 
+          if(canLogIn) { // this just seems like taking extra steps
+            ws.send("canLogIn");
+            ws.userToken = jsonData["userToken"];
+          }
+          else{
+            ws.send("canNotLogIn");
+            ws.userToken = jsonData["userToken"];
+          }
+            
+
+          
           /*if (wss.clients.map((client) => {
             console.log(client)
             return client.userToken == jsonData["userToken"]
@@ -373,19 +386,26 @@ app.post("/setIntezmeny", async (req, res) => { //PR, a user intézményének ad
   }
 })
 
-async function checkLoggedIn(id) {
+async function checkLoggedIn(id, token) {
   try {
-    const pingResults = await queryAsync("SELECT UtolsoPing FROM Users WHERE id = ?", [id]);
+    //const pingResults = await queryAsync("SELECT UtolsoPing FROM Users WHERE id = ?", [id]);
+
     const lastPing = parseInt(String(pingResults?.[0]?.UtolsoPing), 10);
     if (lastPing) {
 
       const now = Date.now();
       const diff = now - lastPing;
-      if (diff < (1000)) {
-        return true//{ error: "ALREADY_LOGGED_IN", waitUntil: diff };
+      if (diff < (2500)) { 
+        return true;//{ error: "ALREADY_LOGGED_IN", waitUntil: diff };
       }
     } else {
-      return false;
+      let wssCheck = false
+      wss.clients.forEach(client => {
+        if (client.userToken === token) {
+          wssCheck = true
+        }
+      });
+      return wssCheck;
     }
   } catch (e) {
     logger.log({ level: 'error', message: `ping check failed: ${e.message}` });
@@ -420,7 +440,9 @@ app.post("/loginUser", async (req, res) => { //RD, PR
       throw err
     }
     if(results[0]['COUNT(id)'] > 0){
-      let loginCheck = await checkLoggedIn(results[0]['id']);
+      console.log("loginCHeckk")
+      console.log(results[0]["id"])
+      let loginCheck = await checkLoggedIn(results[0]['id'], user_token);
       if(loginCheck) {
         return res.status(200).send({ error: "ALREADY_LOGGED_IN" });
       }
@@ -2270,7 +2292,7 @@ const server = app.listen(config.server.port, () => {
           error: err.message 
         }));
       }
-      res.sendStatus(200).send(JSON.stringify({'ok': true})).end();
+      res.send(JSON.stringify({'ok': true})).end();
     })
   })
 });

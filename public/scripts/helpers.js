@@ -106,6 +106,52 @@ function await ajax_post( urlsor, tipus, data, aszinkron = false ) { //KA // jso
     return s;
 };*/
 
+function registerWebsocket(url) {
+        let webSocket = new WebSocket(url);
+        let userToken = sessionStorage.getItem("userToken")
+        webSocket.onopen = (event) => {
+            webSocket.send(JSON.stringify({
+                "event": "authentication",
+                "userToken": userToken
+            })) // auth 
+
+            let heartbeatFunction = () => {webSocket.send(JSON.stringify({
+                "event": "heartbeat"
+            }))}; heartbeatFunction();
+
+            setInterval(() => heartbeatFunction, 1000)
+        };
+
+        webSocket.onmessage = (event) => {
+            console.log('jsonData')
+            console.log(event)
+            console.log(event.data)
+            let jsonData = event.data;
+            
+            /*switch (jsonData) {
+                case "userDelete":
+                    window.location = `hiba.html?code=0&info=${encodeURIComponent("A fiók törölve lett.")}`;
+                    break;
+                case "canLogIn":
+                    canLogIn = true;
+                    break;
+            }*/
+            console.log(jsonData)
+            if(jsonData == 'userDelete'){
+                window.location = `hiba.html?code=0&info=${encodeURIComponent("A fiók törölve lett.")}`;
+            }
+            else if (jsonData == 'canLogIn'){
+                canLogIn = true;
+            }
+            else {
+                window.location.href = 'hiba.html?code=4'
+                killCookie('stayLoggedIn') //might suck, because kills the cookie in the entire browser. mabe add a temporary blocker instead somewhere
+            }
+            
+        };
+    }
+
+
     function showLoadingModal(message = "Töltés...") {;
         $("#loadingMessage").text(message);
         $("#loadingDiv").removeClass("d-none");

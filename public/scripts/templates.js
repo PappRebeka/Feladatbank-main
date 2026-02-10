@@ -223,7 +223,7 @@ function databasePageTemplate(){//BBB, PR
 
                         <div class="container-fluid row mx-auto p-2">
                             <div class="col-lg-6 mt-3 d-flex flex-column">
-                                <textarea id="sql-input" class="form-control" size="5"></textarea>
+                                <textarea id="sql-input" class="form-control" style="resize: none;" size="5"></textarea>
                                 
                                 <div class="d-flex justify-content-end m-2">
                                     <div class="col-md-4 col-sm-6">

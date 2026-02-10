@@ -42,7 +42,7 @@
     <script src="scripts/users.js"></script>
     <script src="scripts/intitution.js"></script>
 
-    <script>checkDarkMode(); // called so the site doesnt flicker</script>
+    <script>checkDarkMode(); registerWebsocket("ws://localhost:9091");// called so the site doesnt flicker</script>
 
     <link rel="stylesheet" href="main.css"> 
     <link rel="stylesheet" href="themes.css"> 
@@ -54,11 +54,14 @@
 
 /* ------------------------------------- - Document ready - ----------------------------------------*/
 
+
+    
+
+
     $(document).ready(async function() {
         try{
             setThemeIndicators(getCookie("darkMode") == "1")
             await setUserData();
-            registerWebsocket("ws://localhost:9091");
             await setEvents()
             let opt = document.getElementById('menuOptions')
             switch (CurrentUserData.Jogosultsag) {
@@ -161,36 +164,6 @@
     });
 
     function AthelyezTeszt(){}
-
-    function registerWebsocket(url) {
-        let webSocket = new WebSocket(url);
-        let userToken = sessionStorage.getItem("userToken")
-        webSocket.onopen = (event) => {
-            webSocket.send(JSON.stringify({
-                "event": "authentication",
-                "userToken": userToken
-            })) // auth 
-
-            setInterval(() => {
-                webSocket.send(JSON.stringify({
-                    "event": "heartbeat"
-                }))
-            }, 2500)
-        };
-
-        webSocket.onmessage = (event) => {
-            let jsonData = JSON.parse(event.data);
-            
-            switch (jsonData["event"]) {
-                case "userDelete":
-                    window.location = `hiba.html?code=0&info=${encodeURIComponent("A fiók törölve lett.")}`;
-                    break;
-                case "alreadyLoggedIn":
-                    window.location = ``;
-                    break;
-            }
-        };
-    }
 
     async function switchTo(where, kikapcsId){ //PR, RD
         ActiveLocation = where;
@@ -409,7 +382,7 @@
             }
             
             if(ActiveLocation == "Adatbázis műveletek") await getBackupOptions();
-            if(ActiveLocation == "Statisztikák") await StatisztikaOnLoad();
+            else if(ActiveLocation == "Statisztikák")   await StatisztikaOnLoad();
             // runAfterDOM egy funkciót tartalmaz ami a html beillesztése után fut le
             if (runAfterDOM != null) { runAfterDOM(); } // quick hack de jól működik
             
@@ -541,17 +514,17 @@
 
         const icon = `<i class="bi bi-exclamation-triangle-fill"></i>&nbsp;`;
         const sql = editor.getValue().trim();
-        let $sql_data = document.querySelector("#sql-data");
-        let $sql_headers = document.querySelector("#headers");
-        let $sql_error = document.querySelector("#sql-error");
+        let sql_data = document.querySelector("#sql-data");
+        let sql_headers = document.querySelector("#headers");
+        let sql_error = document.querySelector("#sql-error");
 
 
         $("#sql-table").removeClass("d-none");
         $("#sql-placeholder").addClass("d-none");
 
-        $sql_data.replaceChildren();
-        $sql_headers.replaceChildren();
-        $sql_error.replaceChildren();
+        sql_data.replaceChildren();
+        sql_headers.replaceChildren();
+        sql_error.replaceChildren();
 
         if ((!sql) || (sql === "")) {
             showErrorMsg("Nincs semmi az SQL bevíteli mezőben!")
@@ -559,14 +532,14 @@
         } else {
             let adat = await ajax_post("/customSql", 1, { sql: sql }, false);
             if (adat.error) {
-                $sql_error.html(icon + adat["error"])
+                sql_error.innerHTML = icon + adat["error"]
                 return;
             }
 
             let col = document.createElement('th')
             col.scope = 'col'
             col.textContent = '#'
-            $sql_headers.appendChild(col)
+            sql_headers.appendChild(col)
 
             for (const head of Object.keys(adat.results[0])) {
                 let th = document.createElement('th')
@@ -594,7 +567,7 @@
                     html.appendChild(td)
                 }
 
-                $sql_data.appendChild(html);
+                sql_data.appendChild(html);
             }
         }
     }

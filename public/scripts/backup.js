@@ -5,8 +5,9 @@ backup.js --------------
     - restoreBackup         -RD
 */
 
-//mi a fasz
-/*async function getBackupOptions(adatok = await ajax_post("/backupTolt", 1, {})){ //RD
+//ki volt az a cigány aki kikommentelte?
+async function getBackupOptions(kapottAdatok){ //RD
+    var adatok = kapottAdatok ?? await ajax_post("/backupTolt", 1, {})
     document.getElementById("backupSelect").replaceChildren()
     for (const file of adatok.fajlok) {
         let opt = document.createElement('option')
@@ -15,14 +16,14 @@ backup.js --------------
 
         document.getElementById("backupSelect").appendChild(opt)
     }
-}*/
+}
 async function saveBackup(){ //RD
     var adatok = await ajax_post("/MentBackup", 1, {}, true)
     if(adatok["error"]) {
         toastMsg("Hiba!",adatok["error"], "danger");
         return;
     }
-    getBackupOptions(adatok);
+    await getBackupOptions(adatok);
 }
 
 async function restoreBackup(){ //RD

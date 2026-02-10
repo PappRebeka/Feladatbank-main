@@ -82,7 +82,7 @@ module.exports = function (oauth2Client, logger) {
             res.redirect(`/?name=${felhNev}&email=${encodeURIComponent(email)}`);
         } catch(err) {
             console.error(err);
-            res.redirect("hiba.html");
+            res.redirect("hiba.html?code=0&info="+err);
         }
     });
 

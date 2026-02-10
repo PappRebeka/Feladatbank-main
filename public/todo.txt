@@ -4,9 +4,6 @@ while (teszteles.errors.length > 0){
     debug()
 }
 
-
-'feltöltés folyamatban' közzétevéskor nem jó
-
 nem látom a külömbséget a 'csak megtekintés' és a 'megtekintés és szerkesztés' fájl megosztási mód között
 
 sugo kepek
@@ -14,3 +11,20 @@ sugo kepek
 dokumentálás
 
 intézmény nélkül ne lehessen regisztrálni
+
+
+weird effect in edge (not an issue just weird) amikor touchpadon görget a user, ku tud görgetni a html bounds-ból, és effectek nélköl látszódik a világos háttérkép
+
+slimselect dark mode nem dark intézménynév módosításnál és törlésnél
+
+sima admin más adminokat ne helyezhessen át
+
+ha csak egy intézmény van és át akarunk valakit helyezni a slimselect üres.
+A toast message az sql hibát jeleníti meg
+
+súgó tartalomjegyzék kijelölhetné az accordion elemet
+lehetne rakni linkeket a másik súgokhoz
+
+súgó téma !== regular téma
+témánál válhtat a user vilásos témára de amikor visszalép sötét lesz a homepage. ha ez után megint megnyitja a súgót, a súgó világos
+újra vissszavépésnél SendUsers forbidden for some reason, de reload után jó. so its probably unrelated
