@@ -166,7 +166,6 @@
         let webSocket = new WebSocket(url);
         let userToken = sessionStorage.getItem("userToken")
         webSocket.onopen = (event) => {
-            console.log("valami")
             webSocket.send(JSON.stringify({
                 "event": "authentication",
                 "userToken": userToken
@@ -185,6 +184,9 @@
             switch (jsonData["event"]) {
                 case "userDelete":
                     window.location = `hiba.html?code=0&info=${encodeURIComponent("A fiók törölve lett.")}`;
+                    break;
+                case "alreadyLoggedIn":
+                    window.location = ``;
                     break;
             }
         };

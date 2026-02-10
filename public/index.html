@@ -159,7 +159,7 @@
         </button>
 
         <div class="mt-2">
-          <a href="#">Vissza</a>
+          <a class="link link-secondary" href="#">Vissza</a>
         </div>
       `;
       
@@ -213,14 +213,7 @@
       }
     }
 
-    var time = 0;
-    var interval;
-    function beVanJelentkezveTimer(){
-      if(time == 0) {clearInterval(interval); clearError()}
-      showError(`Már egy másik eszközön be van jelentkezve! Kérem várjon ${time} másodpercet`);
-      time -= 1;
-    }
-
+    
     async function tryLogin(mail) {
       clearError();
 
@@ -241,7 +234,6 @@
       const result = await ajax_post("/loginUser", 1, { user: user, passwd: passwd, userToken: "", mail: loginWithGoogle ? mail : "" }, false);
 
       if(result.error == "ALREADY_LOGGED_IN") {
-        time = (1000 - result.waitUntil) / 1000.0;
         showError(`Már egy másik eszközön be van jelentkezve! Próbálja meg újra később.`);
         return;
       }
@@ -254,6 +246,7 @@
         const date = new Date();
         date.setDate(date.getDate() + 14);
         //document.cookie = `userToken=${result.UserToken}; expires=${date.toUTCString()};`;
+        if(getCookie('stayLoggedIn') == '1') document.cookie = `stayLoggedIn=${result.UserToken}; expires=${date.toUTCString()};`;
         sessionStorage.setItem("userToken", result.UserToken)
 
         if (intezmenyCount?.results?.[0]?.Db >= 1) {
@@ -350,21 +343,26 @@
     $(document).ready(async function() {
       sessionStorage.clear();
 
+      renderLogin();
+
       cookieModal();
       checkDarkMode();
 
       const stay = getCookie("stayLoggedIn");
-      if (stay == "1") {
-        var van = null
-        var utoken = sessionStorage.getItem("userToken")
-        van = await ajax_post("/loginUser", 1, { user: "", passwd: "", userToken: utoken || "" }, false);
+      console.log(stay)
+      if (stay != '0') {
+        console.log("emlekezz")
+        
+        //console.log(utoken)
+        var van = await ajax_post("/loginUser", 1, { user: "", passwd: "", userToken: stay || "" }, false);
 
         if(van.error == "ALREADY_LOGGED_IN") {
           showError("Már egy másik eszközön be van jelentkezve!");
           return;
         }
         
-        if (van?.db == 1) {
+        if (van.db == 1) {
+          sessionStorage.setItem("userToken", stay)
           window.location.href = "/homepage.html";
           return;
         }
@@ -500,7 +498,7 @@
             </div>
         </div>
 
-        <div class="modal fade bg-dark" id="cookieModal" aria-hidden="false" aria-labelledby="suti-label">
+        <div class="modal fade bg-login" id="cookieModal" aria-hidden="false" aria-labelledby="suti-label">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">

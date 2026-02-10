@@ -29,8 +29,6 @@ helpers.js -------------
 */
 
 function ajax_get(urlsor, hova, tipus, mutassTolt = true) {
-    console.log("Ciganyt fogok tolteni")
-    console.log(mutassTolt)
     document.documentElement.style.cursor = "wait";
     if (mutassTolt) { showLoadingModal(); }
 
@@ -48,8 +46,6 @@ function ajax_get(urlsor, hova, tipus, mutassTolt = true) {
 }
 
 function ajax_post(urlsor, tipus, data, mutassTolt = true) {
-    console.log("Ciganyt fogok tolteni "+ urlsor)
-    console.log(mutassTolt)
     document.documentElement.style.cursor = "wait";
     if (mutassTolt) showLoadingModal();
 
@@ -65,6 +61,7 @@ function ajax_post(urlsor, tipus, data, mutassTolt = true) {
             console.log(jqXHR)
             console.log(textStatus)
             console.log(errorThrown)
+            //return "";
         },
     }).always(function() {
         document.documentElement.style.cursor = "default";

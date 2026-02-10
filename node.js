@@ -57,6 +57,8 @@ function startWsServer() {
     console.log("Új kliens csatlakozott")
     ws.userToken = null;
 
+
+
     ws.on("message", async (data) => {
       //console.log("jött message")
       let jsonData = JSON.parse(data);
@@ -64,7 +66,23 @@ function startWsServer() {
 
       switch (jsonData["event"]) {
         case "authentication":
+          wss.clients.forEach((client) => {
+            if (client.userToken === jsonData["userToken"]) {
+              ws.send("alreadyLoggedIn");
+              return;
+            }
+          });
           ws.userToken = jsonData["userToken"];
+
+          /*if (wss.clients.map((client) => {
+            console.log(client)
+            return client.userToken == jsonData["userToken"]
+          }).some((matches) => matches === true)) {
+            ws.send("alreadyLoggedIn");
+          };*/
+
+          
+
           break;
         case "heartbeat":
           if (ws.userToken) {
@@ -73,7 +91,6 @@ function startWsServer() {
           }
           break;
         default:
-          console.log("mi a fasz");
           ws.close();
           break;
       }
@@ -165,7 +182,7 @@ app.get("/redirect", (req, res) => {  //PR, RD
     
     res.redirect(authUrl); // autómatikusan átirányít a Google login oldalra
   } catch (error) {
-    res.status(400).end()
+    res.status(400).send(JSON.stringify({'ok': false})).end()
     logger.log({
       level: 'error',
       message: `/redirect error!  error=${error.message}`
@@ -185,7 +202,7 @@ app.get("/reg", async (req, res) => { //PR, RD
         message: `/reg error! Valamelyik session-token hiányzik, vagy nem egyeznek a tokenek`
       });
 
-      return res.status(400).send('Invalid OAuth state');
+      return res.status(400).send('Invalid OAuth state').end();
     }
 
     const code = req.query.code;
@@ -219,12 +236,12 @@ app.get("/reg", async (req, res) => { //PR, RD
 app.post("/logout", (req, res) =>{ //RD
   const sessionId = req.sessionID;
   req.session.destroy(err => {
-    if (err) return res.status(500).send("Logout error");
+    if (err) return res.status(500).send("Logout error").end();
 
     activeSessions.delete(sessionId);
     res.clearCookie('connect.sid');
     sessionCounter()
-    res.end()
+    res.send(JSON.stringify({'ok': true})).end()
   });
 })
 
@@ -345,7 +362,7 @@ app.post("/setIntezmeny", async (req, res) => { //PR, a user intézményének ad
 
       req.session.intezmenyId = intezmeny
       res.set('Content-Type', 'text/html', 'charset=utf-8');
-      res.end();
+      res.send(JSON.stringify({'ok': true})).end();
   });}
   catch (err){
     logger.log({
@@ -365,16 +382,16 @@ async function checkLoggedIn(id) {
       const now = Date.now();
       const diff = now - lastPing;
       if (diff < (1000)) {
-        return { error: "ALREADY_LOGGED_IN", waitUntil: diff };
+        return true//{ error: "ALREADY_LOGGED_IN", waitUntil: diff };
       }
     } else {
-      return null;
+      return false;
     }
   } catch (e) {
     logger.log({ level: 'error', message: `ping check failed: ${e.message}` });
   }
 
-  return null;
+  return false;
 }
 
 app.post("/loginUser", async (req, res) => { //RD, PR
@@ -403,11 +420,11 @@ app.post("/loginUser", async (req, res) => { //RD, PR
       throw err
     }
     if(results[0]['COUNT(id)'] > 0){
-      // lets hope this works
       let loginCheck = await checkLoggedIn(results[0]['id']);
       if(loginCheck) {
-        return res.status(200).send(loginCheck);
+        return res.status(200).send({ error: "ALREADY_LOGGED_IN" });
       }
+      
 
       req.session.userId = results[0]['id'];
       req.session.Jog = results[0]['Jogosultsag']
@@ -439,7 +456,7 @@ app.post("/sendMailTo", (req, res) => { //PR  //email
     message: "Sending mail to "+email,
   })
     sendMail(email, type);
-    res.end();
+    res.send(JSON.stringify({'ok': true})).end();
 })
 //#endregion
 
@@ -553,7 +570,7 @@ app.post("/GetUserData", async (req, res) => { //PR, az összes felhasználó fo
       level:'error',
       message: 'GetUserData '+err
     })
-    res.send(500).end()
+    res.send(500).send(JSON.stringify({'ok': false})).end()
     return;
   }
   
@@ -592,7 +609,7 @@ app.post("/changeJog", (req, res)=> { //PR, jog változtatása
 app.post("/getUserCount", (req, res) =>{ //RD, a limit offset miatt a felhasználók száma
   
   if(!['Admin', 'Főadmin'].includes(req.session.Jog)){
-    return res.status(403).end();
+    return res.status(403).send(JSON.stringify({'ok': false})).end();
   }
   var injection = []
   const intezmeny = req.session.intezmenyId
@@ -765,7 +782,7 @@ app.post("/topHaromTanarData", (req, res) =>{ //RD, statok
 app.post("/SendUsers", (req, res) =>{ //RD //felhasználók kiszedése(frontenden megjelenítjük)
   
   if(!['Admin', 'Főadmin'].includes(req.session.Jog)){
-    return res.status(403).end();
+    return res.status(403).send(JSON.stringify({'ok': false})).end();
   }
   
   const limit = req.body.limit
@@ -915,7 +932,7 @@ app.get("/letolt-fajl/:id", async (req, res) => { // BBB
       }
 
       if (!results || results.length === 0) { // fajl nem létezik
-        res.status(404).end();
+        res.status(404).send(JSON.stringify({'ok': false})).end();
       }
 
       const fileUt = path.join(__dirname, "uploads", results[0]["BackendNev"]);
@@ -933,7 +950,7 @@ app.get("/letolt-fajl/:id", async (req, res) => { // BBB
       level: 'error',
       message: `(/letolt-fajl/:id) error=${err.message} id=${req.params.id} clientId=${clientId}`
     });
-    res.status(500).end();
+    res.status(500).send(JSON.stringify({'ok': false})).end();
   }
 });
 
@@ -967,18 +984,17 @@ app.post("/SendAlFeladatok",  (req, res) => {//RD, BBB
 
   var feladatId = req.body.feladatId ? parseInt(req.body.feladatId) : null;
   if (!isPositiveInt(feladatId)) {
-    res.end(); return
+    res.send(JSON.stringify({'ok': false})).end(); return
   }
   
   var sql = `SELECT * FROM Alfeladat WHERE FeladatId = ?`
-
   conn.query(sql, [feladatId], async (err, results) => {
     if(err || !results || results.length == 0){
       logger.log({
-        level: 'error',
+        level: 'debug',
         message: `(/SendAlFeladatok) error=${err ? err : "no results"} feladatId=${feladatId}`
       });
-      return res.status(404).end()
+      return res.status(200).send(JSON.stringify({'ok': true})).end()
     }
       
       for (const alfeladat of results) {
@@ -1099,7 +1115,7 @@ async function isArchived(id){
 app.post("/feladatTorol", async (req, res) => { //BBB
   const id = req.body.id
   if(!await isArchived(id)){
-    return res.status(409).end()
+    return res.status(409).send(JSON.stringify({'ok': false})).end()
   }
 
 
@@ -1261,7 +1277,7 @@ app.post("/sendClassroomCourses", async (req, res) =>{ //RD, kiszedett kurzusok 
       level: 'error',
       message: `/sendClassroomCourses error=${e.message} userid=${userid}`
     });
-    res.end()
+    res.send(JSON.stringify({'ok': false})).end()
   }
 
 })
@@ -1315,7 +1331,7 @@ app.post("/saveClassroomFeladatKozzetett", (req, res) =>{ //RD adatbázisba a k�
 app.post("/postClassroomFeladat", async (req, res) =>{ //RD, PR classroom feladat létrehozása adott kurzusba(összeállítása)
   feladatId = req.body.feladatid
   if(await isArchived(feladatId)){
-    return res.status(409).end();
+    return res.status(409).send(JSON.stringify({'ok': false})).end();
   }
 
   kurzusId = req.body.kurzusid
@@ -1455,7 +1471,7 @@ app.post("/feladatArchivalas", async(req, res) =>{ //PR
   var user = req.session.userId
   var id = req.body.id;
   if(await !doesUserOwnsThisTask(user, id)){
-    return res.status(403).end();
+    return res.status(403).send(JSON.stringify({'ok': false})).end();
   }
   
   var state = req.body.state;
@@ -1476,7 +1492,7 @@ app.post("/feladatArchivalas", async(req, res) =>{ //PR
       throw err;
     }
 
-    res.end()
+    res.send(JSON.stringify({'ok': true})).end()
   })
 })
 
@@ -1514,7 +1530,7 @@ app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok köz�
   var injection = [feladatId, felado, cimzett, cimzett]
   var dbszam = await MegosztottFeladatAlreadyExists(injection)
   if (dbszam > 0){
-    return res.status(406).end()
+    return res.status(406).send(JSON.stringify({'ok': false})).end()
   }
 
   let sql = `INSERT INTO Megosztott(FeladatId, FeladoId, VevoId, Csillagozva)
@@ -1543,7 +1559,7 @@ app.post('/megosztasVisszavon', async (req, res) => {
   const vevo = req.body.vevo
   const user = req.session.userId;
   if(await isArchived(feladatId) || !await doesUserOwnsThisTask(user, feladatId)){
-    return res.status(403).end();
+    return res.status(403).send(JSON.stringify({'ok': false})).end();
   }
 
   let sql = `DELETE FROM Megosztott where id 
@@ -1654,7 +1670,7 @@ app.post("/getFeladatNumber", (req, res) =>{//RD limit, offset miatt kell, a fel
     })
   }
   catch(err){
-    res.status(500).end();
+    res.status(500).send(JSON.stringify({'ok': false})).end();
     return
   }
   
@@ -1733,7 +1749,7 @@ app.post("/MentIntezmeny", (req, res) =>{//RD, Új intézmény hozzáadása utá
       })
       throw err;  
     }
-    res.end()
+    res.send(JSON.stringify({'ok': true})).end()
   })
 })
 
@@ -1765,7 +1781,7 @@ app.post("/modositIntezmeny", (req, res) =>{//RD, intézmény módosítása
         message: `/SendIntezmeny error=${err.message}`
       });
     }
-      res.end();
+      res.send(JSON.stringify({'ok': true})).end();
     })
 })
 
@@ -1774,7 +1790,7 @@ app.post("/customSql", (req, res) => {//??? BBB
   const sql = req.body.sql;
 
   if(!['Főadmin'].includes(req.session.Jog)){
-    return res.status(403).end();
+    return res.status(403).send(JSON.stringify({'ok': false})).end();
   }
   
   if ((!sql) || (sql === "")) {
@@ -1818,7 +1834,7 @@ app.post("/updateUserIntezmeny", (req, res) =>{//RD
     if (err) {
       return res.status(500).send(JSON.stringify({ error: err.message }));
     }
-    res.status(200).send(JSON.stringify({ ok: true }));
+    res.status(200).send(JSON.stringify({ 'ok': true }));
   });
 })
 
@@ -1829,7 +1845,7 @@ app.post("/torolintezmeny", (req, res) =>{//RD, intézmény eltávolítása, az 
     if (err) {
       return res.status(500).send(JSON.stringify({ error: err.message }));
     }
-    res.status(200).send(JSON.stringify({ ok: true }));
+    res.status(200).send(JSON.stringify({ 'ok': true }));
   });
 })
 
@@ -1869,7 +1885,7 @@ app.post("/send-report", (req, res) => { // BBB
         return res.status(500).send(JSON.stringify({ error: "Nem sikerült a hibajelentést elküldeni." }))
       }
       else {
-        res.status(200).send(JSON.stringify({ ok: true }));
+        res.status(200).send(JSON.stringify({ 'ok': true }));
       }
     }
   )
@@ -1900,7 +1916,7 @@ app.post("/update-report", async (req, res) => { // BBB
         res.status(500).send(JSON.stringify({ error: "Nem sikerült frissíteni a hibajelentés státuszát."}))
         
       } else {
-        res.end();
+        res.send(JSON.stringify({'ok': false})).end();
       }
     }
   )
@@ -2020,7 +2036,7 @@ function sortFilesByCreation(fileData){
 
 app.post("/MentBackup", async (req, res) =>{
   if(!['Főadmin'].includes(req.session.Jog)){
-    return res.status(403).end();
+    return res.status(403).send(JSON.stringify({'ok': false})).end();
   }
 
   backupPath = path.join(__dirname, 'backups');
@@ -2100,13 +2116,6 @@ app.post("/getUserIntezmeny", (req, res)=>{
   });
 })
 
-app.post("/wss", (req, res) => { // Ez mi?(RD)
-  let wssToken = crypto.randomBytes(32).toString("hex");
-  terminal_wss_tokens.push(wssToken)
-
-  res.send({ "wss": wssToken });
-})
-
 /*
 // explanation: client sends a "heartbeat" every let's say 30 seconds
 // so that the server knows when the client discoonnects
@@ -2130,6 +2139,13 @@ app.post("/heartbeat", (req, res) => {
     res.end();
   })
 })*/
+
+// middleware to send 204 status code if no status code was sent yet
+/*app.use((req, res, next) => {
+  if (!res.headersSent) {
+    res.sendStatus(204);
+  }
+});*/
 
 const server = app.listen(config.server.port, () => {
   logger.log({
@@ -2254,7 +2270,7 @@ const server = app.listen(config.server.port, () => {
           error: err.message 
         }));
       }
-      res.end()
+      res.sendStatus(200).send(JSON.stringify({'ok': true})).end();
     })
   })
 });
