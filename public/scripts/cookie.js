@@ -31,7 +31,7 @@ function getCookie(name) { //RD?
 
 function setCookie(name, value, expiryDate) {
     let cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)};`;
-    if (expiryDate) { cookie += ` expires=${expiryDate.toUTCString()}`; }
+    if (expiryDate) { cookie += ` expires=${expiryDate.toUTCString()};`; }
     cookie += ` path=/; SameSite=Lax;`
 
     document.cookie = cookie;

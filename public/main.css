@@ -4,25 +4,24 @@
 /*          GENERAL STYLES & LAYOUT            */
 /*==============================================*/
 
-/*.dropdown-menu {
-  overflow: visible !important;
-}
-
-.ss-content {
-  z-index: 1056 !important; 
-  max-height: 40vh;
-  overflow-y: auto;
-}*/
 
 body {
   position: relative;
   --bg-tile-url: url("/img/LogoDefault.png");
-
   word-wrap: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
   -ms-hyphens: auto;
   hyphens: auto;
+}
+
+html {
+  overscroll-behavior: none; /* prevents that weird rubber band effect when scrolling with the touchbar on edge */
+}
+
+.highlight-accordion-button{
+  box-shadow: 0 0 0 4px #6c65ee60 !important;
+  z-index: 200;
 }
 
 body::before {
@@ -320,6 +319,11 @@ textarea:focus,
 /*==============================================*/
 /*          CARDS & LAYOUT                     */
 /*==============================================*/
+
+.card {
+  will-change: transform; /* prevents that weird scaling bug in firefox */
+  transform: scale(1.00);
+}
 
 .card:not(.noHover):hover {
   transform: scale(1.02);

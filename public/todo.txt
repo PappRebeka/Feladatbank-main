@@ -12,19 +12,14 @@ dokumentálás
 
 intézmény nélkül ne lehessen regisztrálni
 
-
-weird effect in edge (not an issue just weird) amikor touchpadon görget a user, ku tud görgetni a html bounds-ból, és effectek nélköl látszódik a világos háttérkép
+nem szabad megnezni a websockettel hogy vlki be van jelentkezve mert softlockolja az embert
 
 slimselect dark mode nem dark intézménynév módosításnál és törlésnél
-
-sima admin más adminokat ne helyezhessen át
 
 ha csak egy intézmény van és át akarunk valakit helyezni a slimselect üres.
 A toast message az sql hibát jeleníti meg
 
-súgó tartalomjegyzék kijelölhetné az accordion elemet
-lehetne rakni linkeket a másik súgokhoz
+súgóból vissszalépésnél SendUsers forbidden for some reason, de reload után jó. so its probably unrelated
 
-súgó téma !== regular téma
-témánál válhtat a user vilásos témára de amikor visszalép sötét lesz a homepage. ha ez után megint megnyitja a súgót, a súgó világos
-újra vissszavépésnél SendUsers forbidden for some reason, de reload után jó. so its probably unrelated
+
+!!! Aki volt a súgó.html-en, lehet hogy van egy duplikált sütije /help path-el. Törölje. !!!

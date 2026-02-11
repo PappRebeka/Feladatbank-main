@@ -440,7 +440,6 @@ app.post("/loginUser", async (req, res) => { //RD, PR
       throw err
     }
     if(results[0]['COUNT(id)'] > 0){
-      console.log("loginCHeckk")
       console.log(results[0]["id"])
       let loginCheck = await checkLoggedIn(results[0]['id'], user_token);
       if(loginCheck) {

@@ -448,9 +448,9 @@ function buildFakeFileInput(id, fileName, fileIdentifier){ //PR
 }
 
 function subtaskDelete(id){//PR
-    const parent = document.getElementById(`${id}`).parentElement
-    parent.replaceChildren()
-    parent.remove(); 
+    const that = document.getElementById(`${id}`)
+    that.replaceChildren()
+    that.remove(); 
 }
 
 async function updateTask(task, subtasks, felhasznalo){//PR

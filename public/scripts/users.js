@@ -8,10 +8,32 @@ users.js -------------
 */
 
 
-async function userCardClick(id){ //RD
+async function userCardClick(id, jog){ //RD
     userId_ToChangeInstitute = id
     await setUserModal(0, id);
     await selectionReset()
+
+    //update buttons here
+    var ableToBeMoved = jog == "Tanár" || CurrentUserData.Jogosultsag == "Főadmin"
+    
+    const footer = document.querySelector("#tanarAdatai .modal-footer")
+    footer.innerHTML = `${ableToBeMoved ? `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                                <i class="bi bi-trash-fill"></i>&nbsp;
+                                Törlés
+                            </button>
+                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#intezmenyValt">
+                                <i class="bi bi-arrow-left-right"></i>&nbsp;
+                                Áthelyezés
+                            </button>` : ''}
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="bi bi-x"></i>&nbsp;
+                                Bezárás
+                            </button>`
+                        
+    if(ableToBeMoved){
+        footer.children[0].addEventListener('click', async () => {await deleteThisUser(item.id); await loadPageData()})
+        footer.children[1].addEventListener('click', async () => await moveUserClick())
+    }
 }
 
 async function loadUsers(item){ //PR    
@@ -22,7 +44,7 @@ async function loadUsers(item){ //PR
     else{
         div.setAttribute('data-bs-toggle', 'modal')
         div.setAttribute('data-bs-target', '#tanarAdatai')
-        div.addEventListener('click', async () => await userCardClick(item.id))
+        div.addEventListener('click', async () => await userCardClick(item.id, item.Jogosultsag))
     }
 
     div.querySelector('#hatter').style.backgroundColor = `${item.HatterSzin}`
@@ -57,23 +79,6 @@ async function loadUsers(item){ //PR
         document.getElementById(`adminGomb_${item.id}`).disabled = true;
         document.getElementById(`tanarGomb_${item.id}`).disabled = true;
     }
-
-    const footer = document.querySelector("#tanarAdatai .modal-footer")
-    footer.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                            <i class="bi bi-trash-fill"></i>&nbsp;
-                            Törlés
-                        </button>
-                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#intezmenyValt">
-                            <i class="bi bi-arrow-left-right"></i>&nbsp;
-                            Áthelyezés
-                        </button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            <i class="bi bi-x"></i>&nbsp;
-                            Bezárás
-                        </button>`
-
-    footer.children[0].addEventListener('click', async () => {await deleteThisUser(item.id); await loadPageData()})
-    footer.children[1].addEventListener('click', async () => await moveUserClick())
 }
 
 async function moveUserClick(){ //RD

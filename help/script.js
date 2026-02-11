@@ -52,7 +52,12 @@ function buildToc(adat){
     let a = document.createElement('a')
     a.classList.add('list-group-item', 'btn-hover', 'cursor-pointer', 'text-dark', 'border-secondary') 
     a.setAttribute('href', href)
-
+    a.addEventListener('click', () => {
+      for (const button of document.querySelectorAll('.accordion-button')) {
+        button.classList.remove('highlight-accordion-button')
+      }
+      document.querySelector(`#section-${e.href} button`).classList.add('highlight-accordion-button'); 
+    })
     let span = document.createElement('span')
     span.classList.add('text-truncate')
     span.textContent = cim
@@ -158,10 +163,9 @@ function getDocFile(url){
 }
 
 function setEvents(){
-  document.getElementById('visszaBtn').addEventListener("click", () => 
-    { window.location.href = '/homepage.html'; });
-  document.getElementById('themeBtn').addEventListener("click", () => themeSwitch())
-  document.getElementById('search').addEventListener("click", () => sugoKeres())
+  document.getElementById('visszaBtn').addEventListener("click", () => { window.location.href = '/homepage.html'; });
+  document.getElementById('themeBtn') .addEventListener("click", () => themeSwitch())
+  document.getElementById('search')   .addEventListener("click", () => sugoKeres())
   document.getElementById('tocToggle').addEventListener("click", () => toggleToc())
 }
 
