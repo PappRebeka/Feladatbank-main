@@ -59,8 +59,6 @@ function startWsServer() {
     console.log("Új kliens csatlakozott")
     ws.userToken = null;
 
-
-
     ws.on("message", async (data) => {
       //console.log("jött message")
       let jsonData = JSON.parse(data);
@@ -68,33 +66,33 @@ function startWsServer() {
 
       switch (jsonData["event"]) {
         case "authentication":
-          let canLogIn = true;
+          let query = await queryAsync("SELECT id FROM Users WHERE UserToken = ?", [jsonData["userToken"]])
+          let id = query[0]["id"];
+          if (!id) {
+            // Benett:
+            // either the database is fucked up or client sent malformed json
+            // maybe create an error ws event for that
+          }
 
-          wss.clients.forEach((client) => {
-            if (client.userToken === jsonData["userToken"]) {
-              canLogIn = false;
-            }
-          });
+          let loggedIn = await checkLoggedIn(id);
 
-          if(canLogIn) { // this just seems like taking extra steps
+          if(loggedIn) { // this just seems like taking extra steps // sorry i don't trust async functions being in an if()
+            ws.send("canNotLogIn");
+          }
+          else{
             ws.send("canLogIn");
             ws.userToken = jsonData["userToken"];
           }
-          else{
-            ws.send("canNotLogIn");
-            ws.userToken = jsonData["userToken"];
-          }
-            
-
           
+          // this is bad because the client can randomly drop ws connections,
+          // and the server can't detect that automatically, so the server will 
+          // still see the connection as a running one
           /*if (wss.clients.map((client) => {
             console.log(client)
             return client.userToken == jsonData["userToken"]
           }).some((matches) => matches === true)) {
             ws.send("alreadyLoggedIn");
-          };*/
-
-          
+          };*/          
 
           break;
         case "heartbeat":
@@ -386,7 +384,7 @@ app.post("/setIntezmeny", async (req, res) => { //PR, a user intézményének ad
   }
 })
 
-async function checkLoggedIn(id, token) {
+async function checkLoggedIn(id) {
   try {
     //const pingResults = await queryAsync("SELECT UtolsoPing FROM Users WHERE id = ?", [id]);
 
@@ -399,13 +397,7 @@ async function checkLoggedIn(id, token) {
         return true;//{ error: "ALREADY_LOGGED_IN", waitUntil: diff };
       }
     } else {
-      let wssCheck = false
-      wss.clients.forEach(client => {
-        if (client.userToken === token) {
-          wssCheck = true
-        }
-      });
-      return wssCheck;
+      return false;
     }
   } catch (e) {
     logger.log({ level: 'error', message: `ping check failed: ${e.message}` });
@@ -441,7 +433,7 @@ app.post("/loginUser", async (req, res) => { //RD, PR
     }
     if(results[0]['COUNT(id)'] > 0){
       console.log(results[0]["id"])
-      let loginCheck = await checkLoggedIn(results[0]['id'], user_token);
+      let loginCheck = await checkLoggedIn(results[0]['id']);
       if(loginCheck) {
         return res.status(200).send({ error: "ALREADY_LOGGED_IN" });
       }
@@ -799,6 +791,12 @@ app.post("/topHaromTanarData", (req, res) =>{ //RD, statok
     })
 })
 
+app.post("/instituteAmountNotEnough", (req, res) => {
+  queryAsync("SELECT COUNT(*) as db FROM Intezmenyek").then((result) => {
+    console.log(result);
+    res.send(JSON.stringify({"result": result[0]["db"] <= 1})).end();
+  })
+})
 
 app.post("/SendUsers", (req, res) =>{ //RD //felhasználók kiszedése(frontenden megjelenítjük)
   
@@ -2205,6 +2203,17 @@ const server = app.listen(config.server.port, () => {
       );
     }
   )
+  queryAsync(`INSERT INTO Users(id, Nev, Email, Jelszo, Jogosultsag, AccessToken, RefreshToken, UserToken, AccessEletTartam, HatterSzin, IntezmenyId, UtolsoPing)
+              VALUES(1, '', 'sz7.cloudconsole@gmail.com', '', 'Mailsender', 'ya29.a0ATi6K2vGfIceI0HEy9G051-VmTJL-OvxnbKBtIOpUyoaSSW6WFjuGO1CapRs4szELHJtO7QaMON0e3I4DaC1SJTDTAgSIyD9d5Lur6djZF-VePYpcszfRdNCY0QF1vgQthxq1ZixY6ud7HJsPlCZQJM9B8F8gmDNsyI7LrOGvUfP6cqyIYS7cdSvdDX1QSIhc-yc_fcP7QaCgYKAQgSARcSFQHGX2MiWUsA8QIYjeK-4gc7tKVPwA0209', '1//03RBbpzbUtcFiCgYIARAAGAMSNwF-L9IrxDG3UFlJmq-HZQUN9KDeJGH1UEY4_AQoQlKtU1-hjm9acWbEbQAliRFZewzMZSs9hoQ', 'b3464r5a993dd4500455g787jub1727e', '2025-11-05 14:17:43', '', NULL, NULL)
+              ON DUPLICATE KEY UPDATE id = id`)
+  queryAsync(`INSERT INTO Users(id, Nev, Email, Jelszo, Jogosultsag, AccessToken, RefreshToken, UserToken, AccessEletTartam, HatterSzin, IntezmenyId, UtolsoPing) 
+              VALUES(2, 'admin', '', '21232f297a57a5a743894a0e4a801fc3', 'Főadmin', 'ya29.a0AUMWg_Ino3MMZLU5Lh7ioy_9w2B1T5C4PDBV_iyEzp83_hfAIBru34jmXsE5MwHhRV6zjOX6XVWuPZBVRywkbp9Yt9LZjKxcEBWJxHUsJ7HNnK0WHboCfSG9Dk9pYEzqNma3Pstrp-aTIoI3RsySXwnN-WL8D02FfXIbtimSLq1NzsdJxcSKesFh7FrA9DDQLnCRyHaMswaCgYKAQsSAQ4SFQHGX2MioY-UFWmYzaq83NqTxn810Q0209', '1//03I2Bo4Yf-HM_CgYIARAAGAMSNwF-L9IrOjbeRUm1CQ3SpbcdEV7_nvTcIJmJ0pHCk4BcsrrqwE1HrNlflLivpWwrZQv2LnSGs_U', 'bd9448ca99e4b450045c178283b1727e', '2026-01-20 14:54:28', 'rgb(119 241 205)', NULL, 1770883544957)
+              ON DUPLICATE KEY UPDATE id = id`)
+  queryAsync(`INSERT INTO Intezmenyek(id, IntezmenyNev) 
+              VALUES(1, 'Zalaegerszegi SZC Csány László Technikum')
+              ON DUPLICATE KEY UPDATE id = id`)
+
+
 
   function ExistsUser(){ //RD, ha egy user 2 lapon jelentkezik be
     const userId = req.session.userId

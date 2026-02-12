@@ -57,7 +57,7 @@ function ajax_post(urlsor, tipus, data, mutassTolt = true) {
         contentType: data ? 'application/json' : undefined,
         data: data ? JSON.stringify(data) : undefined,
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log('error')
+            console.log('error in '+urlsor)
             console.log(jqXHR)
             console.log(textStatus)
             console.log(errorThrown)
@@ -69,42 +69,6 @@ function ajax_post(urlsor, tipus, data, mutassTolt = true) {
     });
 }
 
-/*function await ajax_get( urlsor, hova, tipus, aszinkron ) { //KA // html oldalak beszúrására használjuk
-    document.documentElement.style.cursor = "wait";
-    $.ajax({url: urlsor, type:"get", async:aszinkron, cache:false, dataType:tipus===0?'html':'json',
-        beforeSend:function(xhr) { },
-        success: function(data) { $(hova).html(data); },
-        error: function(jqXHR, textStatus, errorThrown) {
-        },
-        complete: function() { 
-
-            document.documentElement.style.cursor="default";    
-        }
-    });
-    return true;
-};
-
-function await ajax_post( urlsor, tipus, data, aszinkron = false ) { //KA // json restapi-hoz használjuk
-    document.documentElement.style.cursor = "wait";
-    var s = "";
-    var ajaxConfig = {url: urlsor, type: "post", async: aszinkron, cache: false, dataType: tipus===0?'html':'json',
-        beforeSend: function(xhr) { },
-        success: function(response) { s = response; },
-        error: function(jqXHR, textStatus, errorThrown) {
-        },
-        complete: function() { 
-            document.documentElement.style.cursor="default";
-        }
-    };
-    
-    if (data) {
-        ajaxConfig.contentType = 'application/json';
-        ajaxConfig.data = JSON.stringify(data);
-    }
-    
-    $.ajax(ajaxConfig);
-    return s;
-};*/
 
 function registerWebsocket(url) {
         let webSocket = new WebSocket(url);

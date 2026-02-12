@@ -75,6 +75,14 @@ html:not(.darkMode) .ss-selected {
   background-color: #161f2e25;
 }
 
+option, .option {
+  background-color: white;
+}
+
+option:nth-of-type(odd), .option:nth-of-type(odd), .recommendItems div:nth-of-type(odd) {
+  background: rgb(206, 206, 206);
+}
+
 /*----------------------*/
 /*   Dark Theme         */
 /*----------------------*/
@@ -286,16 +294,16 @@ html:not(.darkMode) .ss-selected {
 
 /* NOT FOUND BY COPILOT - .ss-option class not used */
 .darkMode option, .darkMode .option, .darkMode .ss-option {
-  background-color: #111827;
+  background-color: #111827 !important;
   color: #F9FAFB !important;
 }
 
 .darkMode option:nth-of-type(odd), .darkMode .option:nth-of-type(odd), .darkMode .recommendItems div:nth-of-type(odd) {
-  background: #1d273ac4;
+  background: #1b2333 !important;
 }
 
 .darkMode .numInput, .darkMode .flatpickr-time-separator {
-  color: rgb(192, 191, 204) !important;
+  color: rgb(212, 210, 221) !important;
 }
 
 .darkMode .numInput:focus, .darkMode .numInput:hover, .darkMode .numInputWrappper > span:hover {

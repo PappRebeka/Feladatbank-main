@@ -426,13 +426,6 @@ textarea:focus,
   padding: .5rem !important;
 }
 
-option, .option {
-  background-color: white;
-}
-
-option:nth-of-type(odd), .option:nth-of-type(odd), .recommendItems div:nth-of-type(odd) {
-  background: rgb(206, 206, 206);
-}
 /*==============================================*/
 /*          RESPONSIVE DESIGN                  */
 /*==============================================*/

@@ -17,24 +17,46 @@ async function userCardClick(id, jog){ //RD
     var ableToBeMoved = jog == "Tanár" || CurrentUserData.Jogosultsag == "Főadmin"
     
     const footer = document.querySelector("#tanarAdatai .modal-footer")
-    footer.innerHTML = `${ableToBeMoved ? `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                                <i class="bi bi-trash-fill"></i>&nbsp;
-                                Törlés
-                            </button>
-                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#intezmenyValt">
+
+    // Benett: intezmenyValt button will be disabled if this returns true
+    // It checks if there are enough institutes for the admin to be able
+    // to change the user's institute
+    let notEnoughInstitutes = await ajax_post("/instituteAmountNotEnough", 1, {}, false);
+    /*if(notEnough["result"]) { 
+        const instituteButton = footer.querySelector("#intezmenyValt");
+
+        instituteButton.classList.add("disabled");
+        instituteButton.setAttribute("aria-disabled", true);
+    }*/
+
+    let htmlString = ``
+    if (ableToBeMoved) {
+        htmlString += `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                          <i class="bi bi-trash-fill"></i>&nbsp;
+                          Törlés
+                      </button>`
+
+        if (!(notEnoughInstitutes["result"])) {
+            htmlString += `<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#intezmenyValt">
                                 <i class="bi bi-arrow-left-right"></i>&nbsp;
                                 Áthelyezés
-                            </button>` : ''}
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                <i class="bi bi-x"></i>&nbsp;
-                                Bezárás
                             </button>`
+        }
+    }
+
+    htmlString += `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x"></i>&nbsp;
+                        Bezárás
+                    </button>`
+
+    footer.innerHTML = htmlString;  
                         
     if(ableToBeMoved){
         footer.children[0].addEventListener('click', async () => {await deleteThisUser(item.id); await loadPageData()})
         footer.children[1].addEventListener('click', async () => await moveUserClick())
     }
 }
+
 
 async function loadUsers(item){ //PR    
     const div = felhasznaloCardTemplate()
@@ -100,7 +122,7 @@ async function updateUserAuth(id, from, to, nev){ //PR
     if (result.success) {
         toastMsg("Jogostultság frissítve", `A(z) ${nev} felhasználó mostantól ${to.textContent}`, 'info');
     } else {
-        toastMsg("Hiba", result.error || "Nem sikerült frissíteni a jogosultságot", "danger")
+        toastMsg("Hiba", "Nem sikerült frissíteni a jogosultságot", "danger")
     }
 }
 
@@ -111,6 +133,6 @@ async function moveUserInstitution(){ //RD
     if (result.success) {
         toastMsg("Sikeres művelet", "A felhasználó sikeresen áthelyezve", "success")
     } else {
-        toastMsg("Hiba", result.error || "Nem sikerült áthelyezni a felhasználót", "danger")
+        toastMsg("Hiba", "Nem sikerült áthelyezni a felhasználót", "danger")
     }
 }

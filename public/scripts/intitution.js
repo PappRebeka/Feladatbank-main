@@ -15,6 +15,9 @@ async function addInstitution(){ //RD
     await toggleInstitutionOption(0)
     toastMsg("Sikeres művelet", `Sikeresen létrejött a(z) ${intezmValue} intézmény`, "success")
     await moveUserClick()
+    for (const element of ['', 'javit', 'torol']) {
+        await autofillInstitutionSelect(element)
+    }
 }
 
 async function editInstitution(){ //RD
@@ -23,13 +26,19 @@ async function editInstitution(){ //RD
     await toggleInstitutionOption(1)
     toastMsg("Sikeres művelet", `Sikeresen módosította az intézmény`, "success")
     await moveUserClick()
+    for (const element of ['', 'javit', 'torol']) {
+        await autofillInstitutionSelect(element)
+    }
 }
 
 async function deleteInstitution(){ //RD
     await ajax_post("/torolIntezmeny", 1, { id: intezmenyId }, false)
-    awaittoggleInstitutionOption(2)
+    await toggleInstitutionOption(2)
     toastMsg("Sikeres művelet", `Sikeresen eltávolította az intézmény`, "success")
     await moveUserClick()
+    for (const element of ['', 'javit', 'torol']) {
+        await autofillInstitutionSelect(element)
+    }
 }
 
 function toggleInstitutionRadio(chosenOne){ //PR
