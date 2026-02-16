@@ -275,7 +275,7 @@ function createChart(hova, errorHova, tipus, cimkek, dataset, subtitleText, x, y
                     title: {
                         display: true,
                         text: x,
-                        color: "#db8d07"
+                        color: "#da8207"
                     }
                 },
                 y:{
@@ -283,7 +283,7 @@ function createChart(hova, errorHova, tipus, cimkek, dataset, subtitleText, x, y
                     title: {
                         display: true,
                         text: y,
-                        color: "#db8d07"
+                        color: "#da8207"
                     }
                 }
             }

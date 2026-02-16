@@ -10,11 +10,6 @@ sugo kepek
 
 dokumentálás
 
-ha csak egy intézmény van és át akarunk valakit helyezni a slimselect üres.
-A toast message az sql hibát jeleníti meg
-
-súgóból vissszalépésnél SendUsers forbidden for some reason, de reload után jó. so its probably unrelated
-
-BENETT: HATALMAS REWORK KELLENE A WEBSOCKETRE MERT EGY NAGY FOS, GET TO WORK NIGGER
+memory leak
 
 !!! Aki volt a súgó.html-en, lehet hogy van egy duplikált sütije /help path-el. Törölje. !!!

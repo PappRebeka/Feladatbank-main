@@ -52,7 +52,7 @@ function taskModalTemplate(){//PR
                     <p class="mb-1 felAdat my-3"><strong>Leírás:</strong> <span class="leirasEdit" data-bind="leiras"></span></p>
 
                     <div class="d-flex align-items-center mb-2" id="HozzaadGoesHere"></div>
-                    <div id='alfeladatokContainer' class="overflow bg-alfeladatBox rounded d-grid gap-2" style="max-height:40vh" data-bind="alfeladatokList">
+                    <div id='alfeladatokContainer' class="overflow bg-alfeladatBox rounded" style="max-height:40vh" data-bind="alfeladatokList">
                         
                     </div>`;
     return content;
@@ -60,8 +60,8 @@ function taskModalTemplate(){//PR
 
 function taskModal_AlfeladatTemplate(){//PR
     const div = document.createElement('div')
-    div.classList.add('p-1', 'alfeladat')
-    div.innerHTML = `<div class="alfId, m-2">
+    div.classList.add('alfeladat', 'alfId', 'm-2', 'card')
+    div.innerHTML = `<div class="card-body m-1">
                         <div class="d-flex mt-0 deleteButtonGoesHere align-items-center justify-content-between fw-semibold">
                             <h6 class="mt-auto mb-3">Alfeladat</h6>
                         </div>
@@ -87,8 +87,7 @@ function taskModal_AlfeladatTemplate(){//PR
                                 </div>
                             </div>
                         </span>
-                    </div>
-                   `; //<hr class="w-100">
+                    </div>`; //<hr class="w-100">
     return div
 }
 

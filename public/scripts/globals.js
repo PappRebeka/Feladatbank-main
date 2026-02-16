@@ -52,6 +52,10 @@ var ActiveFilters = {
     order: {field: "id", desc: 1} // 0 asc, 1 desc
 }
 
+//var abortControllers = new Set();
+var abortController;
+const taskById = new Map();
+
 var TempFilters = structuredClone(ActiveFilters); // temporary storage for filters until confirmation
 const maxEvfolyamValue = 13
 // pagination

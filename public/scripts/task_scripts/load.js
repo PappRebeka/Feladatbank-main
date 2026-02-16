@@ -7,14 +7,19 @@ task_scripts/load.js ---------------
 */ 
 
 
-async function feladatCardClick(element){ //PR
-    const adat = JSON.parse(decodeURIComponent(element.adat));
-    const felhasznalo = element.Felhasznalo;
+
+async function feladatCardClick(dataId){ //PR
+    const id = Number(dataId);
+    const asdf = taskById.get(id);
+
+    const adat = JSON.parse(decodeURIComponent(asdf.adat));
+    const felhasznalo = asdf.Felhasznalo;
 
     await setTaskModalContent(adat, felhasznalo);
 }
 
-async function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev){
+function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev, cardAbortController){
+
     const container = taskCardTemplate();
     container.id = `task-${adat.id}`;
 
@@ -25,11 +30,13 @@ async function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kur
     
     const card = $bind(container, 'card');
 
-    card.dataset.adat = encodeURIComponent(JSON.stringify(adat));
+    //card.dataset.adat = encodeURIComponent(JSON.stringify(adat));
+    card.dataset.id = String(adat.id);
     card.dataset.felhasznalo = felhasznalo ?? '';
     card.style.border = `4px solid ${borderColor(adat.Nehezseg)}`;
 
-    card.addEventListener('click', async () => await feladatCardClick(card.dataset));
+    const cardClick = async (e) => { feladatCardClick(adat.id); };
+    card.addEventListener('click', cardClick, { signal: cardAbortController.signal });
 
     const nevText = adat.Nev
     highlightSearchedText(ActiveFilters.kereso, nevText, $bind(container, 'nev'))
@@ -78,27 +85,24 @@ async function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kur
     v.classList.toggle('d-none', which != 'visszaBtn')
     b.classList.toggle('d-none', (ActiveLocation == "Archívum" || ActiveLocation == 'Általam megosztott') )
 
-        
-    p.addEventListener('click', async (e) => {
-        await kozzeteszButtonClick(adat.id); 
-        e.stopPropagation();
-    })
-    v.addEventListener('click', async (e) => {
-        await removeSharedTask(adat.id, felhasznalo);
-        e.stopPropagation();
-    })
-    b.addEventListener('click', async (e) => {
-        await bookmarkTaskClick(adat.id, b, card.dataset);
-        e.stopPropagation();
-    })
     
+    const kozzeteves = async (e) => { e.stopPropagation(); await kozzeteszButtonClick(adat.id) }
+    p.addEventListener('click', kozzeteves, { signal: cardAbortController.signal })
+
+    const megosztTorol = async (e) => { e.stopPropagation(); await removeSharedTask(adat.id, felhasznalo); }
+    v.addEventListener('click', megosztTorol, { signal: cardAbortController.signal })
+
+    const konyvJelzo = async (e) => { e.stopPropagation(); await bookmarkTaskClick(adat.id, b); }
+    b.addEventListener('click', konyvJelzo, { signal: cardAbortController.signal })
+
+    taskById.set(adat.id, adat); // i don't know
 
     return container
 }
 
-async function buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev){//PR
-    const container = await buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev)
-    document.getElementById("BigDih").appendChild(container);
+function buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev, abortController){//PR
+    const container = buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev, abortController)
+    return container;
 }
 
 async function setTaskModalContent(adat, felhasznalo){ //PR, RD
@@ -116,7 +120,7 @@ async function setTaskModalContent(adat, felhasznalo){ //PR, RD
     $bind(modal, "evfolyam").textContent = adat.Evfolyam + ".";
     
     if(!alfeladatok.results) {
-        $bind(modal, "alfeladatokList").innerHTML = "<p class='nincsen m-auto'>Nincsenek alfeladatok ehhez a feladathoz</p>"
+        $bind(modal, "alfeladatokList").innerHTML = "<p class='nincsen m-auto text-center p-2'>Nincsenek alfeladatok ehhez a feladathoz</p>"
     }
     else{
         for (const a of alfeladatok.results) {
@@ -125,7 +129,7 @@ async function setTaskModalContent(adat, felhasznalo){ //PR, RD
             var pont = a.Pont
 
             const alfeladatDiv = taskModal_AlfeladatTemplate();
-            alfeladatDiv.firstChild.id = `ThisIsAlfeladat${a.id}`;
+            alfeladatDiv/*.firstChild*/.id = `ThisIsAlfeladat${a.id}`;
 
             $bind(alfeladatDiv, "alfeladatPont").textContent = pont;
             $bind(alfeladatDiv, "alfeladatLeiras").textContent = leiras;

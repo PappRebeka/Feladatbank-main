@@ -100,7 +100,7 @@ async function postTaskToClassroom() {
       kurzusFeladatId
     });
 
-    if (!result.success) {
+    if (!result.ok) {
       throw new Error(result.error || "Nem sikerült közzétenni a feladatot");
     }
 

@@ -1,6 +1,78 @@
 /*   I hate css.                              -PR */
 
 /*==============================================*/
+/*          CSS COLOR VARIABLES                */
+/*==============================================*/
+
+:root {
+  /* Whites */
+  --color-white: #ffffff;
+  --color-white-off: #F9FAFB;
+  --color-white-off-dark: #e7eaef;
+  --color-white-trans: #fafbfbc2;
+  --color-white-off-trans: rgba(228, 230, 236, 0.75);
+
+  /* Grays */
+  --color-gray-darkest: #1E293B;
+  --color-gray-dark: #464a50;
+  --color-gray-medium: #606979;
+  --color-gray-light: #959ea8;
+  --color-gray-lighter: #c4c4c4;
+  --color-gray-lightest: #d6dde4;
+  --color-gray-trans-light: #6b7d902b;
+  --color-gray-trans-medium: #4a5e7a80;
+  --color-gray-transer-medium: #1226497c;
+  --color-gray-trans-dark: #1e293bc5;
+  --color-gray-trans-mid: #0b131f7c;
+
+  /* Blacks */
+  --color-black: #0b131f;
+  --color-black-overlay: rgba(0, 0, 0, 0.2);
+  --color-black-transparent: #1E293B00;
+  --color-black-trans-dark: #0b131fd0;
+
+  /* Purples */
+  --color-purple-light: #A58CEB;
+  --color-purple-medium: #7d62c6;
+  --color-purple-bright: #6a63f4;
+  --color-purple-hover: #8375d0;
+  --color-purple-trans-light: #eef5ff16;
+  --color-purple-trans-medium: #776eda75;
+  --color-purple-trans-bright: #6b63ff9f;
+
+  /* Ambers */
+  --color-amber-dark: #da8207;
+  --color-amber-medium: #F59E0B;
+  --color-amber-light: #FBBF24;  
+  --color-mark-bg: #FFD700;
+  --color-amber-trans: #f59f0b6b;
+
+
+  /* Greens */
+  --color-green-dark: #198754;
+  --color-green-light: #10B981;
+  --color-green-trans: #0972096b;
+
+  /* Reds */
+  --color-red-trans: #9214146b;
+
+  /* Blues */
+  --color-blue-vibrant: #1E90FF;
+  --color-blue-dark: #27324e;
+  --color-blue-gray: #8d93ac;
+
+  /* Other - not simplified yet */
+  --color-light-gradient-1: rgb(190, 211, 233);
+  --color-light-gradient-2: rgb(210, 215, 218);
+  --color-light-hazy-grad-1: rgba(114, 114, 133, 0.8);
+  --color-light-hazy-grad-2: rgba(117, 117, 128, 0.5);
+  --color-dark-hazy-grad-1: #212b42;
+  --color-dark-hazy-grad-2: #414d6b;
+
+  --color-gray-trans-mid: ;
+}
+
+/*==============================================*/
 /*          GENERAL STYLES & LAYOUT            */
 /*==============================================*/
 
@@ -20,7 +92,7 @@ html {
 }
 
 .highlight-accordion-button{
-  box-shadow: 0 0 0 4px #6c65ee60 !important;
+  box-shadow: 0 0 0 4px var(--color-purple-trans-medium) !important;
   z-index: 200;
 }
 
@@ -40,11 +112,11 @@ body::before {
   z-index: -1;
 }
 
-body.hazy {
+body.hazy-grad {
   --bg-tile-url: url("/img/LogoDark.png");
 }
 
-html:not(.darkMode) body.hazy {
+html:not(.darkMode) body.hazy-grad {
   --bg-tile-url: url("/img/LogoLight.png");
 }
 
@@ -70,19 +142,19 @@ input::-ms-reveal, input::-ms-clear {
 mark {
   padding: 0 0.15rem;
   border-radius: 0.25rem;
-  background-color: gold;
+  background-color: var(--color-mark-bg);
 }
 
 /*==============================================*/
-/*          OVERLAY & MODAL ELEMENTS           */
+/*          OVERLAY & MODAL ELEMENTS            */
 /*==============================================*/
 
 #splash {
   position: fixed;
   inset: 0;
   z-index: 9900;
-  background: linear-gradient(135deg, #8d93ac, #cfd5db);
-  text-shadow: 3px 3px #82868b80;
+  background: linear-gradient(135deg, var(--color-blue-gray), var(--color-gray-lightest));
+  text-shadow: 3px 3px var(--color-black-overlay);
   letter-spacing: 2px;
 }
 
@@ -99,7 +171,7 @@ mark {
   height: 100vh;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: var(--color-black-overlay);
 }
 
 #tooSmall {
@@ -128,11 +200,11 @@ mark {
 /*==============================================*/
 
 .text-light-important {
-  color: white !important;
+  color: var(--color-white) !important;
 }
 
 .text-dark-important {
-  color: black !important;
+  color: var(--color-black) !important;
 }
 
 
@@ -149,7 +221,7 @@ mark {
 }
 
 .bg-light-seethrough {
-  background-color: #f8f9fac5 !important;
+  background-color: var(--color-white-trans) !important;
   backdrop-filter: blur(5px);
 }
 
@@ -174,24 +246,24 @@ mark {
 /*==============================================*/
 
 .form-control, .form-select, .slim-select {
-  background-color: #bdc4ca33 !important;
+  background-color: var(--color-gray-trans-light) !important;
 }
 
 .form-control:disabled, .form-select:disabled, .slim-select:disabled {
-  background-color: #9aa1a733 !important;
-  color: #636363;
+  background-color: var(--color-gray-trans-light) !important;
+  color: var(--color-gray-medium);
 }
 
 .form-check-input:checked {
-  background-color: #6C63FF;
-  border-color: #6C63FF;
+  background-color: var(--color-purple-bright);
+  border-color: var(--color-purple-bright);
 }
 
 textarea:focus,
 .form-control:focus,
 .form-select:focus,
 .slim-select:focus {
-  box-shadow: 0 0 0 4px #6c65ee60 !important;
+  box-shadow: 0 0 0 4px var(--color-purple-trans-medium) !important;
 }
 
 /*==============================================*/
@@ -199,15 +271,15 @@ textarea:focus,
 /*==============================================*/
 
 .nehezseg::-webkit-slider-thumb {
-  background: #6c63ff;
+  background: var(--color-purple-bright);
 }
 
 .nehezseg:active::-webkit-slider-thumb {
-  background: #6b63ff9f;
+  background: var(--color-purple-trans-bright);
 }
 
 .nehezseg:focus::-webkit-slider-thumb {
-  box-shadow: 0 0 0 4px #6c65ee60 !important;
+  box-shadow: 0 0 0 4px var(--color-purple-trans-medium) !important;
 }
 
 /*==============================================*/
@@ -219,27 +291,27 @@ textarea:focus,
 }
 
 .flatpickr-day.selected {
-  background: #A58CEB !important;
-  border-color: #A58CEB !important;
-  color: #111827;
+  background: var(--color-purple-light) !important;
+  border-color: var(--color-purple-light) !important;
+  color: var(--color-black);
 }
 
 .flatpickr-day.selected:hover {
-  background: #7a5fc4 !important;
-  border-color: #7f65c7 !important;
+  background: var(--color-purple-medium) !important;
+  border-color: var(--color-purple-medium) !important;
 }
 
 .flatpickr-months > span:hover > svg {
-  fill: #D97706 !important;
+  fill: var(--color-amber-dark) !important;
 }
 
 .numInputWrapper span {
-  border-color: rgba(104, 102, 116, 0.712) !important;
+  border-color: var(--color-numInput-spinner) !important;
 }
 
 .numInputWrapper span:after {
-  border-bottom-color: rgb(169, 167, 182) !important;
-  border-top-color: rgb(169, 167, 182) !important;
+  border-bottom-color: var(--color-gray-light) !important;
+  border-top-color: var(--color-gray-light) !important;
 }
 
 /*==============================================*/
@@ -247,7 +319,7 @@ textarea:focus,
 /*==============================================*/
 
 .accordion-button:focus {
-  box-shadow: 0 0 0 4px #6c65ee60 !important;
+  box-shadow: 0 0 0 4px var(--color-purple-trans-medium) !important;
 }
 
 /*==============================================*/
@@ -255,48 +327,48 @@ textarea:focus,
 /*==============================================*/
 
 .btn:focus {
-  box-shadow: 0 0 0 4px #6c65ee60 !important;
+  box-shadow: 0 0 0 4px var(--color-purple-trans-medium) !important;
 }
 
 .btn-white {
-  background-color: white !important;
-  color: black !important;
+  background-color: var(--color-white) !important;
+  color: var(--color-black) !important;
 }
 
 .btn-white:hover {
-  background-color: #e9ecef;
+  background-color: var(--color-white-off-dark);
 }
 
 .btn-primary {
-  background-color: #A58CEB !important;
+  background-color: var(--color-purple-light) !important;
   border: none;
-  color: #FFFFFF;
+  color: var(--color-white);
 }
 
 .btn-primary:hover {
-  background-color: #8B72C5 !important;
+  background-color: var(--color-purple-hover) !important;
 }
 
 .btn-warning {
-  background: #F59E0B;
+  background: var(--color-amber-medium);
   border: none;
-  color: #111827;
+  color: var(--color-black);
 }
 
 .btn-warning:hover {
-  background: #db8d07;
+  background: var(--color-amber-dark);
 }
 
 .btn-outline-warning:hover {
-  background-color: #f59f0b6b;
+  background-color: var(--color-amber-trans);
 }
 
 .btn-outline-success:hover {
-  background-color: #0972096b;
+  background-color: var(--color-green-trans);
 }
 
 .btn-outline-danger:hover {
-  background-color: #9214146b;
+  background-color: var(--color-red-trans);
 }
 
 .fakeFileButton {
@@ -305,15 +377,15 @@ textarea:focus,
 }
 
 #rendezesDropdown .btn:hover {
-  background-color: #9495962a;
+  background-color: var(--color-gray-trans-light);
 }
 
 .navbar .btn:hover, #visszagomb .btn:hover, .card .btn-outline-secondary:hover {
-  background-color: rgba(150, 150, 150, 0.3) !important;
+  background-color: var(--color-gray-trans-light) !important;
 }
 
 .sortDirectionButton:not(.active):hover {
-  background-color: #94959636;
+  background-color: var(--color-gray-trans-light);
 }
 
 /*==============================================*/
@@ -328,7 +400,7 @@ textarea:focus,
 .card:not(.noHover):hover {
   transform: scale(1.02);
   transition: transform 0.1s;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px var(--color-black-overlay);
   cursor: pointer;
 }
 
@@ -344,11 +416,11 @@ textarea:focus,
 
 /* NOT FOUND BY COPILOT - .ss-value class not used */
 .bg-primary, .ss-value {
-  background-color: #6962ee !important;
+  background-color: var(--color-purple-bright) !important;
 }
 
 .bg-success {
-  background-color: #10B981 !important;
+  background-color: var(--color-green-light) !important;
 }
 
 .bg-login {
@@ -366,7 +438,7 @@ textarea:focus,
 /*==============================================*/
 
 .link-secondary {
-  color: #535e70;
+  color: var(--color-gray-dark);
 }
 
 .link-secondary:hover {
@@ -378,7 +450,7 @@ textarea:focus,
 /*==============================================*/
 
 .accordion-button:not(.collapsed) {
-  background-color: #7974e083 !important;
+  background-color: var(--color-purple-trans-medium) !important;
 }
 
 .accordion {
@@ -388,7 +460,7 @@ textarea:focus,
 }
 
 .form-switch .form-check-input:focus {
-  box-shadow: 0 0 0 4px #6c65ee60 !important;
+  box-shadow: 0 0 0 4px var(--color-purple-trans-medium) !important;
 }
 
 /*==============================================*/
@@ -403,23 +475,23 @@ textarea:focus,
 
 .recommendItems {
   position: absolute;
-  border: 1px solid #d4d4d4;
+  border: 1px solid var(--color-gray-light);
   border-bottom: none;
   border-top: none;
   z-index: 99;
   top: 100%;
   left: 0;
   right: 0;
-  color: #050B15;
+  color: var(--color-black);
 }
 
 .recommendItems div:hover {
-  background-color: #e9e9e91f !important;
+  background-color: var(--color-gray-trans-light) !important;
 }
 
 .autocomplete-active {
-  background-color: DodgerBlue !important;
-  color: #ffffff;
+  background-color: var(--color-blue-vibrant) !important;
+  color: var(--color-white);
 }
 
 .option {

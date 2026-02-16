@@ -47,7 +47,7 @@ function ajax_get(urlsor, hova, tipus, mutassTolt = true) {
 
 function ajax_post(urlsor, tipus, data, mutassTolt = true) {
     document.documentElement.style.cursor = "wait";
-    if (mutassTolt) showLoadingModal();
+    //if (mutassTolt) showLoadingModal();
 
     return $.ajax({
         url: urlsor,
@@ -56,6 +56,7 @@ function ajax_post(urlsor, tipus, data, mutassTolt = true) {
         dataType: tipus === 0 ? 'html' : 'json',
         contentType: data ? 'application/json' : undefined,
         data: data ? JSON.stringify(data) : undefined,
+        processData: false,
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('error in '+urlsor)
             console.log(jqXHR)
@@ -65,7 +66,7 @@ function ajax_post(urlsor, tipus, data, mutassTolt = true) {
         },
     }).always(function() {
         document.documentElement.style.cursor = "default";
-        if (mutassTolt) hideLoadingModal();
+        //if (mutassTolt) hideLoadingModal();
     });
 }
 
@@ -77,13 +78,7 @@ function registerWebsocket(url) {
             webSocket.send(JSON.stringify({
                 "event": "authentication",
                 "userToken": userToken
-            })) // auth 
-
-            let heartbeatFunction = () => {webSocket.send(JSON.stringify({
-                "event": "heartbeat"
-            }))}; heartbeatFunction();
-
-            setInterval(() => heartbeatFunction, 1000)
+            }))
         };
 
         webSocket.onmessage = (event) => {
@@ -101,17 +96,29 @@ function registerWebsocket(url) {
                     break;
             }*/
             console.log(jsonData)
-            if(jsonData == 'userDelete'){
-                window.location = `hiba.html?code=0&info=${encodeURIComponent("A fiók törölve lett.")}`;
-            }
-            else if (jsonData == 'canLogIn'){
+            if (jsonData == 'authenticationOk'){
                 canLogIn = true;
-            }
-            else {
+
+                console.log("auth ok")
+
+                let heartbeatFunction = () => {
+                    webSocket.send(JSON.stringify({
+                        "event": "heartbeat",
+                        "userToken": userToken
+                    }
+                ))}; heartbeatFunction();
+
+                setInterval(() => heartbeatFunction(), 2000)
+            } else if (jsonData == 'authenticationBad') {
                 window.location.href = 'hiba.html?code=4'
                 killCookie('stayLoggedIn') //might suck, because kills the cookie in the entire browser. mabe add a temporary blocker instead somewhere
             }
             
+        };
+
+        webSocket.onclose = (event) => {
+            console.log(event.code);
+            console.log(event.reason);
         };
     }
 

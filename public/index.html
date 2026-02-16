@@ -174,7 +174,7 @@
       const form = document.getElementById('form')
       form.innerHTML = elfelejtettJelszoFormTemplate()
 
-      form.querySelector('button').addEventListener('click', async () => await emailCheck())
+      form.querySelector('button').addEventListener('click', async () => {form.querySelector('button').disabled = true; await emailCheck()})
       form.querySelector('a').addEventListener('click', async () => await renderLogin())
     }
 
@@ -311,6 +311,8 @@
     }
 
     async function emailCheck() {
+      const form = document.getElementById('form')
+
       clearError();
       const mail = document.getElementById("email").value;
 
@@ -322,8 +324,14 @@
       let isregistered = await ajax_post("/isRegistered", 0, { email: mail }, false)
       if ( isregistered == "true") {
         await ajax_post("/sendMailTo", 1, { email: mail, type: 'request' }, false);
-        toastMsg("Email elküldve", "Ha létezik fiók ezzel az email címmel, küldtünk helyreállító linket.", "success");
+
+        var p = document.createElement('p')
+        p.classList.add('text-center')
+        p.textContent = `Helyreállító email elküldve a ${mail} címre.`
+        form.replaceChildren(p)
+        //toastMsg("Email elküldve", "Ha létezik fiók ezzel az email címmel, küldtünk helyreállító linket.", "success");
       } else {
+        form.querySelector('button').disabled = false; 
         showError("Nincs ilyen email című felhasználó!");
       }
     }
@@ -371,7 +379,7 @@
       await getRegisterData();
     });
   </script>
-<body class="hazy">
+<body class="hazy-grad">
     <i data-bs-toggle="modal" data-bs-target="#help" class="bi m-4 bi-question-circle-fill position-absolute end-0 border-0 cursor-pointer" title="Súgó"></i> 
     
     <div class="container d-flex min-vh-100 justify-content-center align-items-center">

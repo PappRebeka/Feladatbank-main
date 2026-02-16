@@ -8,12 +8,13 @@ users.js -------------
 */
 
 
-async function userCardClick(id, jog){ //RD
+async function userCardClick(id){ //RD
     userId_ToChangeInstitute = id
     await setUserModal(0, id);
     await selectionReset()
 
     //update buttons here
+    let jog = document.querySelector(`#jogText_${id} span`).innerText
     var ableToBeMoved = jog == "Tanár" || CurrentUserData.Jogosultsag == "Főadmin"
     
     const footer = document.querySelector("#tanarAdatai .modal-footer")
@@ -60,13 +61,14 @@ async function userCardClick(id, jog){ //RD
 
 async function loadUsers(item){ //PR    
     const div = felhasznaloCardTemplate()
+    div.id = 'UserCard_'+item.id
     if (item.id == CurrentUserData.id) {
         div.firstChild.classList.add('noHover');
     }
     else{
         div.setAttribute('data-bs-toggle', 'modal')
         div.setAttribute('data-bs-target', '#tanarAdatai')
-        div.addEventListener('click', async () => await userCardClick(item.id, item.Jogosultsag))
+        div.addEventListener('click', async () => await userCardClick(item.id))
     }
 
     div.querySelector('#hatter').style.backgroundColor = `${item.HatterSzin}`
@@ -119,7 +121,7 @@ async function updateUserAuth(id, from, to, nev){ //PR
     
     const result = await ajax_post("/changeJog", 1, { id: id, mire: to.textContent }, false)
     
-    if (result.success) {
+    if (result.ok) {
         toastMsg("Jogostultság frissítve", `A(z) ${nev} felhasználó mostantól ${to.textContent}`, 'info');
     } else {
         toastMsg("Hiba", "Nem sikerült frissíteni a jogosultságot", "danger")
@@ -127,11 +129,17 @@ async function updateUserAuth(id, from, to, nev){ //PR
 }
 
 async function moveUserInstitution(){ //RD
-    var hova = document.getElementById("ujIntezmeny").value
+    var hova = document.getElementById("ujIntezmenySelect").value
     const result = await ajax_post("/AthelyezUser", 1, { hova: hova, userId: userId_ToChangeInstitute }, false)
-    
-    if (result.success) {
+    console.log(hova)
+    if (result.ok) {
         toastMsg("Sikeres művelet", "A felhasználó sikeresen áthelyezve", "success")
+        if (CurrentUserData.Jogosultsag != 'Főadmin') { // nem tudja a saját intézményébe áthelyezni úgyhogy az nem kell vizsgálni
+            let user = document.getElementById('UserCard_'+userId_ToChangeInstitute);
+            user.replaceChildren()
+            user.remove()
+        }
+
     } else {
         toastMsg("Hiba", "Nem sikerült áthelyezni a felhasználót", "danger")
     }

@@ -43,77 +43,13 @@ const { sendMail } = require("./services/emailsend")
 const { loggerConfig, getLogger, terminal_wss_tokens, startWss } = require("./config/logging");
 const { log } = require("console");
 const { isNumber } = require("util");
+const { createWebsocket } = require("./utils/websocket.js")
 
 
 const pad = (s, n) => s.padEnd(n);
 const activeSessions = new Set()
 
-const lastPings = [];
-
-var wss;
-
-function startWsServer() {
-  wss = new WebSocket.Server({ port: 9091 });
-
-  wss.on("connection", (ws) =>{
-    console.log("Új kliens csatlakozott")
-    ws.userToken = null;
-
-    ws.on("message", async (data) => {
-      //console.log("jött message")
-      let jsonData = JSON.parse(data);
-      //console.log(jsonData);
-
-      switch (jsonData["event"]) {
-        case "authentication":
-          let query = await queryAsync("SELECT id FROM Users WHERE UserToken = ?", [jsonData["userToken"]])
-          let id = query[0]["id"];
-          if (!id) {
-            // Benett:
-            // either the database is fucked up or client sent malformed json
-            // maybe create an error ws event for that
-          }
-
-          let loggedIn = await checkLoggedIn(id);
-
-          if(loggedIn) { // this just seems like taking extra steps // sorry i don't trust async functions being in an if()
-            ws.send("canNotLogIn");
-          }
-          else{
-            ws.send("canLogIn");
-            ws.userToken = jsonData["userToken"];
-          }
-          
-          // this is bad because the client can randomly drop ws connections,
-          // and the server can't detect that automatically, so the server will 
-          // still see the connection as a running one
-          /*if (wss.clients.map((client) => {
-            console.log(client)
-            return client.userToken == jsonData["userToken"]
-          }).some((matches) => matches === true)) {
-            ws.send("alreadyLoggedIn");
-          };*/          
-
-          break;
-        case "heartbeat":
-          if (ws.userToken) {
-            let now = Date.now();
-            await queryAsync("UPDATE Users SET UtolsoPing = ? WHERE UserToken = ?", [now, ws.userToken]);
-          }
-          break;
-        default:
-          ws.close();
-          break;
-      }
-    })
-
-    ws.on("close", () => {
-      console.log("megdoglott");
-    })
-  })
-}
-
-
+createWebsocket();
 
 MSG_PAD = 30;
 METHOD_PAD = 16;
@@ -384,35 +320,12 @@ app.post("/setIntezmeny", async (req, res) => { //PR, a user intézményének ad
   }
 })
 
-async function checkLoggedIn(id) {
-  try {
-    //const pingResults = await queryAsync("SELECT UtolsoPing FROM Users WHERE id = ?", [id]);
-
-    const lastPing = parseInt(String(pingResults?.[0]?.UtolsoPing), 10);
-    if (lastPing) {
-
-      const now = Date.now();
-      const diff = now - lastPing;
-      if (diff < (2500)) { 
-        return true;//{ error: "ALREADY_LOGGED_IN", waitUntil: diff };
-      }
-    } else {
-      return false;
-    }
-  } catch (e) {
-    logger.log({ level: 'error', message: `ping check failed: ${e.message}` });
-  }
-
-  return false;
-}
-
 app.post("/loginUser", async (req, res) => { //RD, PR
   var user = req.body.user;                // login adatok ellenőrzése, az email és a felhasználónév is elfogadott,
   var passwd = req.body.passwd;           // pontosabban a helyes bejelentekzési adatokkal rendelkező userek megszámolása, 
   var user_token = req.body.userToken    // ha tobb mint 0 akkor bejelentkeztetjük
   var mail = req.body.mail
   const noMail = !Boolean(mail)
-  
   
   if (noMail) {
     if ( (user_token == "" && (!isNonEmptyString(passwd) || !isNonEmptyString(user)))) {
@@ -432,12 +345,7 @@ app.post("/loginUser", async (req, res) => { //RD, PR
       throw err
     }
     if(results[0]['COUNT(id)'] > 0){
-      console.log(results[0]["id"])
-      let loginCheck = await checkLoggedIn(results[0]['id']);
-      if(loginCheck) {
-        return res.status(200).send({ error: "ALREADY_LOGGED_IN" });
-      }
-      
+      console.log(results[0]["id"])      
 
       req.session.userId = results[0]['id'];
       req.session.Jog = results[0]['Jogosultsag']
@@ -573,7 +481,6 @@ app.post("/GetUserData", async (req, res) => { //PR, az összes felhasználó fo
     let sql = `select id, Jogosultsag, IntezmenyId from Users where UserToken = '${userToken}'`;
     //if(req.session.Jog == undefined && req.session.userId == undefined && req.session.intezmenyId == undefined){
       var sessionValues = await queryAsync(sql)
-      //let loginCheck = await checkLoggedIn(req.session.userId);
       req.session.Jog = sessionValues[0].Jogosultsag;
       req.session.userId = sessionValues[0].id;
       req.session.intezmenyId = sessionValues[0].IntezmenyId;
@@ -613,9 +520,9 @@ app.post("/changeJog", (req, res)=> { //PR, jog változtatása
         level: 'error',
         message: `/changeJog error=${err.message}`
       });
-      return res.send(JSON.stringify({ success: false, error: err.message }));
+      return res.send(JSON.stringify({ 'ok': false, error: err.message }));
     }
-    res.send(JSON.stringify({ success: true }));
+    res.send(JSON.stringify({ 'ok': true }));
   })
 })
 
@@ -1054,14 +961,14 @@ app.post("/updateUserdata", (req, res) => { //RD
 
   if ((!isEmail(newEmail) && req.session.Jog != 'Főadmin') || !isNonEmptyString(newNev)) {
     return res.send(JSON.stringify({ 
-      success: false, 
+      'ok': false, 
       error: 'invalid_input' 
     }));
   }
 
   if (checkIfUniqueUserName(newNev)) {
     return res.send(JSON.stringify({
-      success: false,
+      'ok': false,
       error: "username_exists"
     }));
   }
@@ -1073,14 +980,14 @@ app.post("/updateUserdata", (req, res) => { //RD
         level: 'error',
         message: `(/updateUserdata) error=${err.message} userToken=${usertoken}`
       });
-      return res.send(JSON.stringify({ success: false, error: err.message }));
+      return res.send(JSON.stringify({ 'ok': false, error: err.message }));
     }
 
     logger.log({
       level: 'info',
       message: logFormat("Userdata updated", "POST", req.ip),
     })
-    res.send(JSON.stringify({ success: true }))
+    res.send(JSON.stringify({ 'ok': true }))
   })
 })
 
@@ -1094,7 +1001,7 @@ app.post("/deleteUser", (req, res) => { //PR, BBB
         level: 'error',
         message: `(/deleteUser) error=${err.message} tanarId=${tanarId}`
       });
-      return res.send(JSON.stringify({ success: false, error: err.message }));
+      return res.send(JSON.stringify({ 'ok': false, error: err.message }));
     }
     
     adat = {"ids":results};
@@ -1122,7 +1029,7 @@ app.post("/deleteUser", (req, res) => { //PR, BBB
       message: logFormat(`User (id=${tanarId}) and their tasks were successfully deleted`, "POST", req.ip),
     })
 
-    res.send(JSON.stringify({ success: true }))
+    res.send(JSON.stringify({ 'ok': true }))
   })
 })
 
@@ -1134,14 +1041,14 @@ async function isArchived(id){
 app.post("/feladatTorol", async (req, res) => { //BBB
   const id = req.body.id
   if(!await isArchived(id)){
-    return res.status(409).send(JSON.stringify({'ok': false})).end()
+    return res.send(JSON.stringify({'ok': false})).end()
   }
 
 
   conn.query("DELETE FROM Megosztott WHERE FeladatId=?", [id])
   conn.query("DELETE FROM Alfeladat WHERE FeladatId=?", [id])
   conn.query("DELETE FROM Feladatok WHERE id=?", [id])
-  res.end();
+  res.send(JSON.stringify({'ok': true})).end();
 })
 
 /*app.post("/get-last-id", (req, res) => {// BBB
@@ -1341,9 +1248,9 @@ app.post("/saveClassroomFeladatKozzetett", (req, res) =>{ //RD adatbázisba a k�
         level: 'error',
         message: `(/saveClassroomFeladatKozzetett) error=${err.message}`
       });
-      return res.send(JSON.stringify({ success: false, error: err.message }));
+      return res.send(JSON.stringify({ 'ok': false, error: err.message }));
     }
-    res.send(JSON.stringify({ success: true }))
+    res.send(JSON.stringify({ 'ok': true }))
   });
 })
 
@@ -1549,7 +1456,8 @@ app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok köz�
   var injection = [feladatId, felado, cimzett, cimzett]
   var dbszam = await MegosztottFeladatAlreadyExists(injection)
   if (dbszam > 0){
-    return res.status(406).send(JSON.stringify({'ok': false})).end()
+    res.send(JSON.stringify({'ok': false})).end()
+    return 
   }
 
   let sql = `INSERT INTO Megosztott(FeladatId, FeladoId, VevoId, Csillagozva)
@@ -1561,7 +1469,7 @@ app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok köz�
         level: 'error',
         message: `(/FeladatMegosztasaTanarral) error=${err.message} feladatId=${feladatId} felado=${felado} cimzett=${cimzett}`
       })
-      return res.send(JSON.stringify({ success: false, error: err.message }));
+      return res.send(JSON.stringify({ 'ok': false }));
     }
     
     logger.log({
@@ -1569,7 +1477,7 @@ app.post("/FeladatMegosztasaTanarral", async (req, res) =>{ //RD, tanárok köz�
       message: `(/FeladatMegosztasaTanarral) Feladat megosztva feladatId=${feladatId} felado=${felado} cimzett=${cimzett}`
     });
 
-    res.send(JSON.stringify({ success: true }));
+    res.send(JSON.stringify({ 'ok': true }));
   });
 })
 
@@ -1586,7 +1494,7 @@ app.post('/megosztasVisszavon', async (req, res) => {
             WHERE	Users.Nev = ? AND Megosztott.FeladatId = ?)`
 
   queryAsync(sql, [vevo, feladatId])
-  res.send(JSON.stringify({ success: true }))
+  res.send(JSON.stringify({ 'ok': true }))
 })
 
 app.post("/getTanarForAuto", (req, res) =>{//RD, autocomplete/suggestion cucc
@@ -1921,6 +1829,9 @@ app.post("/update-report", async (req, res) => { // BBB
       SET Javitva = 1
       WHERE Hibajelentes.id = ?
     `;
+
+    // send email here
+    await reportSendEmail();
   } else if (action === "delete") {
     sql = `
       DELETE FROM Hibajelentes
@@ -1940,6 +1851,21 @@ app.post("/update-report", async (req, res) => { // BBB
     }
   )
 })
+
+async function reportSendEmail(reportId) {
+  conn.query(
+    "SELECT * FROM Hibajelentes WHERE = ?",
+    [reportId], (err, results) => {
+      if (err) {
+        console.log("Hibajelentes adatok lekerese megdoglott")
+      } else {
+        let data = results[0];  
+        
+        sendMail(email, 'report', data); //replace the email
+      }
+    }
+  );
+}
 
 async function backupCreate(backups) {//BBB, PR, RD, sql backup készítése backups mappába(max 6db) 
   const dbUser = config.database.user;
@@ -2113,9 +2039,9 @@ app.post("/AthelyezUser", (req, res) =>{//RD, felhasználó áthelyezése(intéz
               
   conn.query(sql, [hova, userId], (err, results) => {
     if (err) {
-      return res.send(JSON.stringify({ success: false, error: err.message }));
+      return res.send(JSON.stringify({ 'ok': false, error: err.message }));
     }
-    res.send(JSON.stringify({ success: true }))
+    res.send(JSON.stringify({ 'ok': true }))
   });
 })
 
@@ -2182,8 +2108,6 @@ const server = app.listen(config.server.port, () => {
     }
   })
 
-  startWsServer();
-  
   const tabla_lista = ["Alfeladat", "Fajl", "Feladatok", "Hibajelentes", "Intezmenyek", "Kozzetett", "Megosztott", "Naplo", "Users"];
   let loadBase = false;
   conn.query(
@@ -2296,7 +2220,7 @@ const server = app.listen(config.server.port, () => {
     conn.query(sql, injection, (err, results) => {
       if (err) {
         return res.send(JSON.stringify({ 
-          success: false, 
+          'ok': false, 
           error: err.message 
         }));
       }

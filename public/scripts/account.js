@@ -192,7 +192,7 @@ async function saveUserData(){//PR, BBB
     
     const result = await ajax_post("/updateUserdata", 1, { userToken: sessionStorage.getItem("userToken"), newNev: newNev, newEmail: newEmail }, false);
 
-    if(result.success){
+    if(result.ok){
         CurrentUserData.Email = newEmail
         CurrentUserData.Nev = newNev
 
@@ -204,7 +204,7 @@ async function saveUserData(){//PR, BBB
     if (result.error === 'username_exists') {
         showErrorMsg("Felhasználónév foglalt", "Ezt a felhasználónevet már használja valaki! Kérjük válasszon másikat!");
         return;
-    } else if (result.error || !result.success) {
+    } else if (result.error || !result.ok) {
         toastMsg("Hiba", "Az adatok frissítése során hiba történt: "+result.error, "danger");
         return;
     }
@@ -220,7 +220,7 @@ async function deleteThisUser(id){//PR
     else{   // proceed with deletion
         const result = await ajax_post("/deleteUser", 1, { id: id }, false);
         
-        if (result.success) {
+        if (result.ok) {
             toastMsg("Sikeres művelet!", "A felhasználó törölve lett", "success")
         } else {
             toastMsg("Hiba", result.error || "Nem sikerült törölni a felhasználót", "danger")

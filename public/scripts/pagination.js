@@ -6,6 +6,8 @@ pagination.js ----------
 */
 
 
+
+
 function updateNavigationButtons(){ //RD
     const elso = document.getElementById("elso")
     const elozo = document.getElementById("elozo")

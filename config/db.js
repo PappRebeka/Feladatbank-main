@@ -10,6 +10,11 @@ const pool = mysql.createPool({
     database: config.database.name,
     connectionLimit: config.database.connectionLimit || 10,
     waitForConnections: config.database.waitForConnections || true,
+
+    // these are here to fix connection issues
+    acquireTimeout: 10000,
+    connectTimeout: 10000,
+    queueLimit: 0,
 });
 
 pool.on("error", err => {

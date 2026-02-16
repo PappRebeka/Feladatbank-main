@@ -35,19 +35,19 @@ async function shareTaskWithTeacher(){ //RD
     
     const result = await ajax_post("/FeladatMegosztasaTanarral", 1, { cimzett: cimzett, feladatId: feladatId }, false)
     
-    if (result.success) {
+    if (result.ok) {
       toastMsg("Sikeres megosztás", `A feladat sikeresen meg lett osztva ${cimzett}`, "success")
     } else {
-      toastMsg("Hiba történt", result.error || "Nem sikerült megosztani a feladatot", "danger")
+      toastMsg("Hiba történt", "Nem sikerült megosztani a feladatot", "danger")
     }
 }
 
 async function removeSharedTask(id, vevo){ //PR
   const result = await ajax_post('megosztasVisszavon', 1, {id, vevo}, false)
   
-  if (result.success) {
+  if (result.ok) {
     toastMsg("Megosztás visszavonva", "", 'success')
   } else {
-    toastMsg("Hiba", result.error || "Nem sikerült visszavonni a megosztást", "danger")
+    toastMsg("Hiba", "Nem sikerült visszavonni a megosztást", "danger")
   }
 }

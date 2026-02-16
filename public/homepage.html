@@ -42,7 +42,9 @@
     <script src="scripts/users.js"></script>
     <script src="scripts/intitution.js"></script>
 
-    <script>checkDarkMode(); registerWebsocket("ws://localhost:9091");// called so the site doesnt flicker</script>
+    <script>
+        checkDarkMode();
+    </script>
 
     <link rel="stylesheet" href="main.css"> 
     <link rel="stylesheet" href="themes.css"> 
@@ -117,6 +119,8 @@
                 await switchTo(CurrentUserData.Jogosultsag == "Főadmin" ? "Felhasználók" : "Feladataim", 
                                CurrentUserData.Jogosultsag == "Főadmin" ? "user_page"    : "fel_page")
             }
+
+            registerWebsocket("ws://localhost:9091");
 
             await responsivity();
             window.addEventListener("resize", await responsivity);
@@ -406,6 +410,13 @@
     }
 
     async function loadPageData(){ //PR, RD
+        if(abortController) {
+            abortController.abort();
+            abortController = null;
+        }
+
+        abortController = new AbortController();
+
         console.log("loadpagedata fut")
         let oldal = Object.keys(AvailablePages).indexOf(ActiveLocation).toString()
         
@@ -443,6 +454,8 @@
         document.getElementById("maxPageNumber").textContent = maxPageNumber
 
         document.getElementById("BigDih").replaceChildren()
+        const fragment = document.createDocumentFragment();
+        taskById.clear();
         if (talalatSzam.innerText == "0") toastMsg("Nem találtunk feladatokat!", "A megadott paraméterek alapján nem találtunk önhöz tartozó feladatokat.", "warning")
         if(results){ if(results.length!= undefined) {
             for (const adat of results) {
@@ -452,12 +465,22 @@
                 let kurzusId         = (oldal == "5" ? adat.kurzusId : "")
                 let kurzusFeladatId  = (oldal == "5" ? adat.kurzusFeladatId : "")
                 
-                userpage ? await loadUsers(adat) :
-                           await buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev, kurzusId, kurzusFeladatId)
+                if (userpage) {
+                    await loadUsers(adat)
+                } else {
+                    let container = buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev, kurzusId, kurzusFeladatId, abortController)
+                    fragment.appendChild(container);
+                }
             }
         }}
+        document.getElementById("BigDih").appendChild(fragment);
+
         autofillSubjectFilter(SubjectList.results, selectedTantargy);
         await autofillTeacherFilter()
+
+        adat = null;
+        adatCount = null;
+        results = null;
     }
   
     async function responsivity() { // PR

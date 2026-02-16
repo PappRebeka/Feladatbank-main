@@ -343,7 +343,6 @@ async function createSubtaskObjects(ujFeladat, slimMode, containerId) {//BBB
     } else {
         /*items = document.getElementById(containerId)
             .querySelectorAll(".alfeladat");*/
-
         items = Array.from(
             document.getElementById(containerId)
                 .querySelectorAll(".alfeladat")
@@ -363,7 +362,7 @@ async function createSubtaskObjects(ujFeladat, slimMode, containerId) {//BBB
 
         const leiras = $item.find(".alfeladatLeiras")[0].value || null;
         const pontszam = $item.find(".alfeladatPont")[0].value || null;
-        const alfId = /*$item.find(".alfeladat").prevObject[0].id.substring(3) || */item.children[0].id.substring(15) || null;
+        const alfId = ujFeladat ? item.children[0].id.substring(15) : item.id.substring(15) || null;
 
         alfeladat = {
             leiras,
@@ -448,6 +447,7 @@ function buildFakeFileInput(id, fileName, fileIdentifier){ //PR
 }
 
 function subtaskDelete(id){//PR
+    console.log(id)
     const that = document.getElementById(`${id}`)
     that.replaceChildren()
     that.remove(); 
@@ -474,7 +474,7 @@ async function updateTask(task, subtasks, felhasznalo){//PR
     } 
     catch(err){console.log(err)}
 
-    const container = await buildTaskCardPrimaryData(feladatAdatai, felhasznalo, szin, null)
+    const container = buildTaskCardPrimaryData(feladatAdatai, felhasznalo, szin, null)
     document.getElementById(`task-${task.id}`).replaceChildren(container.querySelector('div'))         
     
     await setTaskModalContent(feladatAdatai, '');
@@ -529,10 +529,7 @@ function editThisFeladat(feladatId, felhasznalo){ // PR
 
     let felhasznaloCircle = $bind(felhasznaloRow, "felhasznaloCircle");
 
-    console.log('felhasznaloCircle', felhasznaloCircle)
-
     // replace the text with input fields
-    console.log("szekesztes")
     deleteIds = [];
     let o = {'0': {id: 'feladatNevEdit', value: feladatAdatai.Nev ?? ""}}
     addTextInputTo(editFeladat.querySelectorAll(".modal-header"), o)
@@ -581,7 +578,7 @@ function editThisFeladat(feladatId, felhasznalo){ // PR
         let fileName = alfeladatPlaceholderek[2].querySelector(".uploadedFileName")?.textContent || "Nincs fájl kiválsztva"
         let fileIdentifier = $bind(thisOne, 'alfeladatFajl')?.children[0]?.dataset.fileId || null
          
-        var alfId = thisOne.querySelector("div").id.substring(15);
+        var alfId = thisOne./*querySelector("div").*/id.substring(15);
         thisOne.querySelector(".deleteButtonGoesHere").appendChild(buildDeleteButton(alfId))
         
         
@@ -708,12 +705,15 @@ async function TorolFeladat(){//PR?
     toastMsg('Sikeres módosítás!', 'Feladat sikeresen törölve', 'success');
 }
 
-async function bookmarkTaskClick(feladatId, button, dataset){
+async function bookmarkTaskClick(feladatId, button){
+    const id = Number(feladatId);
+    const adat = taskById.get(id);
+
     button.classList.toggle('text-warning')
     button.classList.toggle('bi-star-fill')
     button.classList.toggle('bi-star')
     let oldal = Object.keys(AvailablePages).indexOf(ActiveLocation).toString()
-    await ajax_post(`/updateBookmarkedState`, 1, {feladatId: feladatId, oldal: oldal, felado: dataset.felhasznalo}, false)
+    await ajax_post(`/updateBookmarkedState`, 1, {feladatId: feladatId, oldal: oldal, felado: adat.felhasznalo}, true)
     toastMsg('Sikeres módosítás!', 
         button.classList.contains('bi-star-fill') ? 'Feladat sikeresen csillagozva' : 'Feladat sikeresen kicsillagozva', 
         'success');

@@ -162,8 +162,10 @@ function getDocFile(url){
   return file
 }
 
-function setEvents(){
-  document.getElementById('visszaBtn').addEventListener("click", () => { window.location.href = '/homepage.html'; });
+function setEvents(){ 
+  console.log(window.history);
+  document.getElementById('visszaBtn').addEventListener("click", () => 
+    { window.location.href = sessionStorage.getItem("userToken") ? '/homepage.html' : '/index.html' ; });
   document.getElementById('themeBtn') .addEventListener("click", () => themeSwitch())
   document.getElementById('search')   .addEventListener("click", () => sugoKeres())
   document.getElementById('tocToggle').addEventListener("click", () => toggleToc())
