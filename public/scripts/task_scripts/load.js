@@ -18,7 +18,7 @@ async function feladatCardClick(dataId){ //PR
     await setTaskModalContent(adat, felhasznalo);
 }
 
-function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev, cardAbortController){
+function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev){
 
     const container = taskCardTemplate();
     container.id = `task-${adat.id}`;
@@ -34,9 +34,9 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
     card.dataset.id = String(adat.id);
     card.dataset.felhasznalo = felhasznalo ?? '';
     card.style.border = `4px solid ${borderColor(adat.Nehezseg)}`;
-
-    const cardClick = async (e) => { feladatCardClick(adat.id); };
-    card.addEventListener('click', cardClick, { signal: cardAbortController.signal });
+    const ezEgyId = adat.id
+    const cardClick = async (e) => { feladatCardClick(ezEgyId); };
+    card.onclick = cardClick;
 
     const nevText = adat.Nev
     highlightSearchedText(ActiveFilters.kereso, nevText, $bind(container, 'nev'))
@@ -86,22 +86,22 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
     b.classList.toggle('d-none', (ActiveLocation == "Archívum" || ActiveLocation == 'Általam megosztott') )
 
     
-    const kozzeteves = async (e) => { e.stopPropagation(); await kozzeteszButtonClick(adat.id) }
-    p.addEventListener('click', kozzeteves, { signal: cardAbortController.signal })
+    const kozzeteves = async (e) => { e.stopPropagation(); await kozzeteszButtonClick(ezEgyId) }
+    p.onclick = kozzeteves;
 
-    const megosztTorol = async (e) => { e.stopPropagation(); await removeSharedTask(adat.id, felhasznalo); }
-    v.addEventListener('click', megosztTorol, { signal: cardAbortController.signal })
+    const megosztTorol = async (e) => { e.stopPropagation(); await removeSharedTask(ezEgyId, felhasznalo); }
+    v.onclick = megosztTorol;
 
-    const konyvJelzo = async (e) => { e.stopPropagation(); await bookmarkTaskClick(adat.id, b); }
-    b.addEventListener('click', konyvJelzo, { signal: cardAbortController.signal })
+    const konyvJelzo = async (e) => { e.stopPropagation(); await bookmarkTaskClick(ezEgyId, b); }
+    b.onclick = konyvJelzo;
 
     taskById.set(adat.id, adat); // i don't know
 
     return container
 }
 
-function buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev, abortController){//PR
-    const container = buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev, abortController)
+function buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev){//PR
+    const container = buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev)
     return container;
 }
 

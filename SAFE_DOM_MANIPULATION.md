@@ -124,7 +124,8 @@ function renderTask(taskData, author, authorColor, courseName) {
     card.style.borderColor = borderColor(taskData.Nehezseg);
 
     // 3. Add interactivity
-    card.addEventListener("click", () => openTaskEditor(card.dataset));
+    
+    card..onclick = () => openTaskEditor(card.dataset);
 
     // 4. Populate text data (SAFE - prevents injection)
     $bind(container, 'tantargy').textContent = adat.Tantargy;
@@ -162,7 +163,7 @@ function renderTask(taskData, author, authorColor, courseName) {
     
     if (shouldShow) {
         preventParentClick(publishBtn);
-        publishBtn.addEventListener('click', () => publishTask(taskData.id));
+        publishBtn.onclick = () => publishTask(taskData.id);
     }
 
     // 9. Add to DOM
@@ -194,7 +195,7 @@ Using `preventDefault()` for proper event control:
 
 // ✅ SAFE - Proper event isolation
 preventParentClick(editBtn);
-editBtn.addEventListener('click', editClick);
+editBtn.onclick = editClick;
 ```
 
 ---

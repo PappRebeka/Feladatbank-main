@@ -44,7 +44,7 @@
   ];
 
   $(document).ready(function () {
-    document.querySelector('button').addEventListener('click', () => window.location.href = "index.html")
+    document.querySelector('button').onclick = () => window.location.href = "index.html"
 
     const params = new URLSearchParams(window.location.search);
 

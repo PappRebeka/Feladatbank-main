@@ -410,7 +410,7 @@ function createSubtask(where){ //PR
     subtask.id = `div${pId}`
 
     const button = $bind(subtask, 'removeButton')
-    button.addEventListener('click', () => subtaskDelete(subtask.id));
+    button.onclick = () => subtaskDelete(subtask.id);
 
     const input = subtask.querySelector('.alfeladatPont')
     input.addEventListener('input',() => checkNumber(input))
@@ -568,7 +568,7 @@ function editThisFeladat(feladatId, felhasznalo){ // PR
                                             <span>Alfeladat Hozzáadása</span>
                                         </button>
                                     </div>`
-    document.querySelector("#HozzaadGoesHere button").addEventListener('click', () => createSubtask('alfeladatokContainer'))
+    document.querySelector("#HozzaadGoesHere button").onclick = () => createSubtask('alfeladatokContainer')
 
     var db
     for (db = 0; db < editFeladat.querySelectorAll(".alfeladat").length; db++) {
@@ -606,10 +606,10 @@ function editThisFeladat(feladatId, felhasznalo){ // PR
                             Mégse
                         </button>`
 
-    footer.children[0].addEventListener('click', async () => { await saveTask(false, feladatId, felhasznalo)/*, I think this is completely useless here, since it resets NEW taks and this is EDIT branch...
-                                                         resetCreateNewTask(feladatId, felhasznalo)*/})
+    footer.children[0].onclick = async () => { await saveTask(false, feladatId, felhasznalo)/*, I think this is completely useless here, since it resets NEW taks and this is EDIT branch...
+                                                         resetCreateNewTask(feladatId, felhasznalo)*/}
 
-    footer.children[1].addEventListener('click', async () => {await setTaskModalContent(feladatAdatai, felhasznalo);/*CancelEditingThisFeladat(true, felhasznalo, feladatId, )*/});
+    footer.children[1].onclick = async () => {await setTaskModalContent(feladatAdatai, felhasznalo);/*CancelEditingThisFeladat(true, felhasznalo, feladatId, )*/};
 }
 
 function buildDeleteButton(id){
@@ -621,8 +621,8 @@ function buildDeleteButton(id){
     i.classList.add('bi', 'bi-x-circle', 'fs-4')
     button.appendChild(i)
 
-    button.addEventListener('click', () => {
-            deleteIds.push(id); subtaskDelete(`ThisIsAlfeladat${id}`)})
+    button.onclick = () => {
+            deleteIds.push(id); subtaskDelete(`ThisIsAlfeladat${id}`)}
     
     return button
 }
@@ -668,9 +668,9 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId){ //PR
         let taskDiv = document.getElementById(feladatId);
         let felhasznalo = $bind(taskDiv, "felhasznaloName").innerText;
 
-        header.children[1].addEventListener("click", () => editThisFeladat(feladatId, felhasznalo));
-        $bind(footer, 'arch')?.addEventListener("click", async () => await  archiveTask(1));
-        $bind(footer, 'megoszt')?.addEventListener("click", async () => await autocompleteShare_TeacherSelect());
+        header.children[1].onclick = () => editThisFeladat(feladatId, felhasznalo);
+        if($bind(footer, 'arch')) $bind(footer, 'arch').onclick = async () => await archiveTask(1);
+        if($bind(footer, 'megoszt')) $bind(footer, 'megoszt').onclick = async () => await autocompleteShare_TeacherSelect();
     }
     
     if (ActiveLocation == "Archívum"){
@@ -683,8 +683,8 @@ function CancelEditingThisFeladat(call_setModal, felhasznalo, feladatId){ //PR
                                  Visszaálít
                              </button>`
         
-        footer.children[0].addEventListener("click", async () => await TorolFeladat());
-        footer.children[1].addEventListener("click", async () => await archiveTask(0));
+        footer.children[0].onclick = async () => await TorolFeladat();
+        footer.children[1].onclick = async () => await archiveTask(0);
     }
     
     const btn = document.createElement('button')

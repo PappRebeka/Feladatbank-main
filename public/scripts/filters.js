@@ -101,7 +101,7 @@ function getSortField(){ //PR
 }
 
 function autofillSubjectFilter(tantargyak, selectedTantargy){ //PR, RD, selectedTantargy: a szűrő alkalmazása előtti kiválasztott tantárgy, azért van hogy a tantárgy selected maradjon
-    createSlimSelect('tantargySzuro', tantargyChanged)
+    //createSlimSelect('tantargySzuro', tantargyChanged) // this is to go even further beyond
     document.getElementById('tantargySzuro').innerHTML = `<option value="" class="d-none" hidden></option>`
     for (const id in tantargyak) {
         var t = tantargyak[id].Tantargy

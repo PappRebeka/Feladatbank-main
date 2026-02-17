@@ -11,5 +11,10 @@ sugo kepek
 dokumentálás
 
 memory leak
+possible issues:
+- slimselect not being destroyed (same goes for charts)
+- old eventlisteners & dom elements being alive
+- console logs
+- 'Event listeners added repeatedly to the same “permanent” elements' 
 
 !!! Aki volt a súgó.html-en, lehet hogy van egy duplikált sütije /help path-el. Törölje. !!!

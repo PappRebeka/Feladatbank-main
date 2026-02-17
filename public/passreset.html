@@ -26,9 +26,9 @@
         if(getCookie("darkMode") == null) setThemeCookie(false);
         else if(isDark) htmlElement.classList.add('darkMode'); 
 
-        document.getElementById('password').addEventListener('click', () => pswCheck())
-        document.getElementById('passwordAgain').addEventListener('click', () => pswCheck())
-        document.getElementById('frissites').addEventListener('click', async () => await updatePass())
+        document.getElementById('password').onclick = () => pswCheck()
+        document.getElementById('passwordAgain').onclick = () => pswCheck()
+        document.getElementById('frissites').onclick = async () => await updatePass()
     });
 
     function jelszoValidal(jelszoInput) { // BBB

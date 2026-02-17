@@ -275,9 +275,9 @@ function databasePageTemplate(){//BBB, PR
                         </div>
                     </div>`
 
-    $bind(div, 'intAddClick').addEventListener('click', async () => await addInstitution())
-    $bind(div, 'intEditClick').addEventListener('click', async () => await editInstitution())
-    $bind(div, 'intDeleteClick').addEventListener('click', async () => await deleteInstitution())
+    $bind(div, 'intAddClick').onclick = async () => await addInstitution()
+    $bind(div, 'intEditClick').onclick = async () => await editInstitution()
+    $bind(div, 'intDeleteClick').onclick = async () => await deleteInstitution()
     return div
 
 }
@@ -350,7 +350,7 @@ async function hibajelentesDefaultTemplate(){
                             
                         </div>
                     </div>`
-    //$bind(div, 'sendBtn').addEventListener('click', async () => await sendFeedback())
+    //$bind(div, 'sendBtn').onclick = async () => await sendFeedback())
     return div
 }
 

@@ -95,14 +95,14 @@
       const form = document.getElementById('form')
       form.innerHTML = loginFormTemplate()
 
-      $bind(form, 'redirect').addEventListener('click', () => window.location.href = '/redirect')
+      $bind(form, 'redirect').onclick = () => window.location.href = '/redirect'
       form.querySelector('#user')  .addEventListener('keyup', async () => {if (event.key === 'Enter')await tryLogin()})
       form.querySelector('#jelszo').addEventListener('keyup', async () => {if (event.key === 'Enter')await tryLogin()})
 
-      form.querySelector('#passwordButton').addEventListener('click', () => jelszoVisibility(form.querySelector('#passwordButton'), '#jelszo'))
+      form.querySelector('#passwordButton').onclick = () => jelszoVisibility(form.querySelector('#passwordButton'), '#jelszo')
       
-      $bind(form, 'passReset').addEventListener('click', async () =>await renderPassReset())
-      form.querySelector('#bejelentkezes').addEventListener('click', async () => await tryLogin())
+      $bind(form, 'passReset').onclick = async () =>await renderPassReset()
+      form.querySelector('#bejelentkezes').onclick = async () => await tryLogin()
     }
 
     async function renderRegister(nameFromGoogle, emailFromGoogle) {
@@ -117,12 +117,12 @@
       form.querySelector("#password").addEventListener("input", pswCheck());
 
       const buttons = form.querySelectorAll('button')
-      buttons[0].addEventListener('click', () => jelszoVisibility(buttons[0], '#password'))
-      buttons[1].addEventListener('click', () => jelszoVisibility(buttons[1], '#passwordAgain'))
-      buttons[2].addEventListener('click', async () => await registerNext())
+      buttons[0].onclick = () => jelszoVisibility(buttons[0], '#password')
+      buttons[1].onclick = () => jelszoVisibility(buttons[1], '#passwordAgain')
+      buttons[2].onclick = async () => await registerNext()
 
       form.querySelector('#rememberMe').addEventListener('change', () => emlekezz())
-      //form.querySelector('a').addEventListener('click', () => formReset())
+      //form.querySelector('a').onclick = () => formReset())
     }
 
     function pswCheck() {
@@ -163,8 +163,8 @@
         </div>
       `;
       
-      form.querySelector('button').addEventListener('click', async () => Boolean(existingUser) ? await loginIntezmeny() : await registerIntezmeny())
-      form.querySelector('a').addEventListener('click', async () => await renderLogin())
+      form.querySelector('button').onclick = async () => Boolean(existingUser) ? await loginIntezmeny() : await registerIntezmeny()
+      form.querySelector('a').onclick = async () => await renderLogin()
 
       await autofillInstituteArray();
     }
@@ -174,8 +174,8 @@
       const form = document.getElementById('form')
       form.innerHTML = elfelejtettJelszoFormTemplate()
 
-      form.querySelector('button').addEventListener('click', async () => {form.querySelector('button').disabled = true; await emailCheck()})
-      form.querySelector('a').addEventListener('click', async () => await renderLogin())
+      form.querySelector('button').onclick = async () => {form.querySelector('button').disabled = true; await emailCheck()}
+      form.querySelector('a').onclick = async () => await renderLogin()
     }
 
     // ---------- Data fetch helpers ----------
@@ -343,9 +343,9 @@
         modal.show();
       }
 
-      document.getElementById('cookieAcceptBtn').addEventListener('click', function() {
+      document.getElementById('cookieAcceptBtn').onclick = function() {
         localStorage.setItem('cookieAccepted', 'true')
-      });
+      };
     }
 
     $(document).ready(async function() {

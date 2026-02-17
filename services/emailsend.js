@@ -26,7 +26,7 @@ async function sendMail(to, type = 'request', data = {}) { // RD, PR
     //admin kliens
     const client = createClientUsingCredentials(accessToken, refreshToken, accesseletTartam);
     
-    let subject;
+    let subject = '';
 
     switch (type){
       case 'request':
@@ -50,7 +50,7 @@ async function sendMail(to, type = 'request', data = {}) { // RD, PR
       },
     });
 
-    SCOPES.slice(0, SCOPES.length - 1); //tsundere gmail.send scope after sending email
+    SCOPES.slice(0, SCOPES.length - 1);
     }
   catch(err){
     return;

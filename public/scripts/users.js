@@ -53,8 +53,8 @@ async function userCardClick(id){ //RD
     footer.innerHTML = htmlString;  
                         
     if(ableToBeMoved){
-        footer.children[0].addEventListener('click', async () => {await deleteThisUser(item.id); await loadPageData()})
-        footer.children[1].addEventListener('click', async () => await moveUserClick())
+        footer.children[0].onclick = async () => {await deleteThisUser(item.id); await loadPageData()}
+        footer.children[1].onclick = async () => await moveUserClick()
     }
 }
 
@@ -68,7 +68,7 @@ async function loadUsers(item){ //PR
     else{
         div.setAttribute('data-bs-toggle', 'modal')
         div.setAttribute('data-bs-target', '#tanarAdatai')
-        div.addEventListener('click', async () => await userCardClick(item.id))
+        div.onclick = async () => await userCardClick(item.id)
     }
 
     div.querySelector('#hatter').style.backgroundColor = `${item.HatterSzin}`
@@ -94,8 +94,8 @@ async function loadUsers(item){ //PR
     buttons[0].classList.add(`btn-${item.Jogosultsag == "Tanár" ? "primary" : "dark"}`)
     buttons[1].classList.add(`btn-${item.Jogosultsag != "Tanár" ? "primary" : "dark" }`)
 
-    buttons[0].addEventListener('click', async () => await updateUserAuth(item.id, buttons[1], buttons[0], item.Nev))
-    buttons[1].addEventListener('click', async () => await updateUserAuth(item.id, buttons[0], buttons[1], item.Nev))
+    buttons[0].onclick = async () => await updateUserAuth(item.id, buttons[1], buttons[0], item.Nev)
+    buttons[1].onclick = async () => await updateUserAuth(item.id, buttons[0], buttons[1], item.Nev)
 
     document.getElementById("BigDih").appendChild(div)
 

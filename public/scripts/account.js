@@ -77,17 +77,17 @@ function allowUserDataEdit(){ //PR
     // let the users data to be edited on buttonclick
     
     const cancelButton = buildButtonWithIcon('bi-x-lg', ['fs-5'])
-    cancelButton.addEventListener('click', () => resetUserOptions())
+    cancelButton.onclick = () => resetUserOptions()
     cancelButton.classList.add('ms-3')
     document.getElementById("visszagomb").replaceChildren(cancelButton);
 
     const editNameButton = buildButtonWithIcon('bi-pencil-square', ['fs-5'])
-    editNameButton.addEventListener('click', () => changeFieldToInput('usernev'))
+    editNameButton.onclick = () => changeFieldToInput('usernev')
 
     var editEmailButton
     if (CurrentUserData.id != 2){
         editEmailButton = buildButtonWithIcon('bi-pencil-square')
-        editEmailButton.addEventListener('click', () => changeFieldToInput('emailcim'))
+        editEmailButton.onclick = () => changeFieldToInput('emailcim')
     }
 
     document.getElementById("details").innerHTML = //the stuff that can be edited -- name email
@@ -120,9 +120,9 @@ function allowUserDataEdit(){ //PR
             Fiók törlése
          </button>`;
 
-    options.children[1].addEventListener('click', async () => await saveUserData())
-    options.children[0].addEventListener('click', () =>{window.location.href=`/passreset.html?email=${CurrentUserData.Email}`;
-                                                         toastMsg('Helyreállító email külve.', '')})
+    options.children[1].onclick = async () => await saveUserData()
+    options.children[0].onclick = () =>{window.location.href=`/passreset.html?email=${CurrentUserData.Email}`;
+                                                         toastMsg('Helyreállító email külve.', '')}
 
     document.getElementById('userOptions').appendChild(options)
 }
@@ -148,14 +148,14 @@ function setFieldToText(which){//PR
     const mezo = document.getElementById("mezo").value;
     if (which == "usernev") { //if its just a name change its simple
         //CurrentUserData.Nev = mezo // update global data
-        button.addEventListener('click', () => changeFieldToInput('usernev'))
+        button.onclick = () => changeFieldToInput('usernev')
 
         target.textContent = mezo
 
         document.getElementById("letter").textContent = mezo[0].toUpperCase();    //set the input back to text
         document.getElementById("Letter").textContent = mezo[0].toUpperCase();   //and update the user icons 
     } else {
-        button.addEventListener('click', () => changeFieldToInput('emailcim'))
+        button.onclick = () => changeFieldToInput('emailcim')
 
         target.textContent = mezo
                        
@@ -247,7 +247,7 @@ function getPageOptionsFor(jog){ //PR
             let div = document.createElement('div')
             div.classList.add('navOptionButton','btn','btn-light','w-100', 'my-2')
             div.setAttribute('data-bs-dismiss', 'offcanvas')
-            div.addEventListener('click', async () => await switchTo(key, div.id))
+            div.onclick = async () => await switchTo(key, div.id)
             div.id = element.pageId
             if(key == ActiveLocation) div.classList.add('disabled')
             div.textContent = key

@@ -52,12 +52,12 @@ function buildToc(adat){
     let a = document.createElement('a')
     a.classList.add('list-group-item', 'btn-hover', 'cursor-pointer', 'text-dark', 'border-secondary') 
     a.setAttribute('href', href)
-    a.addEventListener('click', () => {
+    a.onclick = () => {
       for (const button of document.querySelectorAll('.accordion-button')) {
         button.classList.remove('highlight-accordion-button')
       }
       document.querySelector(`#section-${e.href} button`).classList.add('highlight-accordion-button'); 
-    })
+    }
     let span = document.createElement('span')
     span.classList.add('text-truncate')
     span.textContent = cim
@@ -164,11 +164,11 @@ function getDocFile(url){
 
 function setEvents(){ 
   console.log(window.history);
-  document.getElementById('visszaBtn').addEventListener("click", () => 
-    { window.location.href = sessionStorage.getItem("userToken") ? '/homepage.html' : '/index.html' ; });
-  document.getElementById('themeBtn') .addEventListener("click", () => themeSwitch())
-  document.getElementById('search')   .addEventListener("click", () => sugoKeres())
-  document.getElementById('tocToggle').addEventListener("click", () => toggleToc())
+  document.getElementById('visszaBtn').onclick = () => 
+    { window.location.href = sessionStorage.getItem("userToken") ? '/homepage.html' : '/index.html' ; };
+  document.getElementById('themeBtn') .onclick = () => themeSwitch()
+  document.getElementById('search')   .onclick = () => sugoKeres()
+  document.getElementById('tocToggle').onclick = () => toggleToc()
 }
 
 function toggleToc(){

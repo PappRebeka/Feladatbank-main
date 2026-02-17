@@ -82,9 +82,9 @@ function registerWebsocket(url) {
         };
 
         webSocket.onmessage = (event) => {
-            console.log('jsonData')
-            console.log(event)
-            console.log(event.data)
+            //console.log('jsonData')
+            //console.log(event)
+            //console.log(event.data)
             let jsonData = event.data;
             
             /*switch (jsonData) {
@@ -321,9 +321,9 @@ function setBgColor(container, key, rgb) {
 }
 
 function preventParentClick(btn){
-    btn.addEventListener('click', function(e){
+    btn.onclick = function(e){
         e.stopPropagation();
-    })
+    }
 }
 
 function highlightSearchedText(keres, text, textHely){
