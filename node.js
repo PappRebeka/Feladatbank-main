@@ -363,8 +363,8 @@ app.post("/loginUser", async (req, res) => { //RD, PR
   })
 })
 
-app.post("/sendMailTo", (req, res) => { //PR  //email
-  
+app.post("/sendMailTo", async (req, res) => { //PR  //email
+  console.log("sendmailto fut")
 
   var email = req.body.email;
   var type = req.body.type || 'request'
@@ -376,7 +376,7 @@ app.post("/sendMailTo", (req, res) => { //PR  //email
     level: 'info',
     message: "Sending mail to "+email,
   })
-    sendMail(email, type);
+    await sendMail(email, type);
     res.send(JSON.stringify({'ok': true})).end();
 })
 //#endregion
@@ -1831,7 +1831,7 @@ app.post("/update-report", async (req, res) => { // BBB
     `;
 
     // send email here
-    await reportSendEmail();
+    await reportSendEmail(reportId);
   } else if (action === "delete") {
     sql = `
       DELETE FROM Hibajelentes
@@ -1854,14 +1854,16 @@ app.post("/update-report", async (req, res) => { // BBB
 
 async function reportSendEmail(reportId) {
   conn.query(
-    "SELECT * FROM Hibajelentes WHERE = ?",
-    [reportId], (err, results) => {
+    "SELECT * FROM Hibajelentes WHERE id = ?",
+    [reportId], async (err, results) => {
       if (err) {
         console.log("Hibajelentes adatok lekerese megdoglott")
+        console.log(err)
       } else {
         let data = results[0];  
-        
-        sendMail(email, 'report', data); //replace the email
+        console.log('reportSendEmail')
+        console.log(results)
+        await sendMail(data.Email, 'report', data); 
       }
     }
   );

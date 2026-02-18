@@ -101,9 +101,9 @@ function subtaskCardTemplate(){//PR
                                 <i class="bi bi-x-circle fs-4"></i></button>
                         </div>
                         <p class="mb-1"><strong>Pont:</strong>
-                        <input class="form-control alfeladatPont" type="text" maxlength="100" inputmode="numeric" placeholder="Pontszám"></p>
+                        <input class="form-control alfeladatPont" type="text" maxlength="100" inputmode="numeric" autocomplete="off" placeholder="Pontszám"></p>
                         <p class="mb-1"><strong>Leírás:</strong>
-                        <input class="form-control alfeladatLeiras" type="text" maxlength="10000" placeholder="Leírás"></p>                
+                        <input class="form-control alfeladatLeiras" type="text" maxlength="10000" autocomplete="off" placeholder="Leírás"></p>                
                     </div>`;
     return div
 }
@@ -114,7 +114,7 @@ function fakeFileTemplate(){//PR
     div.innerHTML = `<label class="btn btn-white fakeFileButton">Fájl kiválasztása</label>
                     <span class="fakeFileText">Nincs kiválasztva</span>
 
-                    <input type="file" class="d-none form-control alfeladatFile">`
+                    <input type="file" class="d-none form-control alfeladatFile" autocomplete="off">`
     return div
 }
 
@@ -166,12 +166,12 @@ function databasePageTemplate(){//BBB, PR
                                     <label class="btn w-100 btn-light border border-secondary py-2 text-nowrap overflow-hidden" id="I_Hozzaad_Option" for="I_Hozzaad">
                                         <i class="bi bi-plus-lg"></i>&nbsp;Intézmény hozzáadása
                                     </label>
-                                    <input class="btn-check" name="IntRadio" type="checkbox" id="I_Hozzaad">
+                                    <input class="btn-check" name="IntRadio" type="checkbox" id="I_Hozzaad" autocomplete="off">
                                     <div class='w-100 mt-3 bg-login rounded border border-dark-subtle text-center p-2 d-none'>
                                         <h3>Intézmény hozzáadása</h3>
                                         <hr class='w-75 mx-auto'>
                                         <div class='w-100 justify-content-center'>
-                                            <input type="text" id="intezmenyMezo" hint="intezmenyMezo" placeholder='Új intézmény neve' class="rounded mb-2">
+                                            <input type="text" id="intezmenyMezo" hint="intezmenyMezo" placeholder='Új intézmény neve' class="rounded mb-2" autocomplete="off">
                                             <button data-bind="intAddClick" class="btn p-2 btn-warning">
                                                 <i class="bi bi-plus"></i> Hozzáadás
                                             </button>
@@ -182,13 +182,13 @@ function databasePageTemplate(){//BBB, PR
                                     <label class="btn w-100 btn-light border border-secondary py-2 text-nowrap overflow-hidden" id="I_Modosit_Option" for="I_Modosit">
                                         <i class="bi bi-pencil"></i>&nbsp;Intézmény módosítása
                                     </label>
-                                    <input class="btn-check" name="IntRadio" type="checkbox" id="I_Modosit">
+                                    <input class="btn-check" name="IntRadio" type="checkbox" id="I_Modosit" autocomplete="off">
                                     <div class='w-100 mt-3 bg-login rounded border border-dark-subtle text-center p-2 d-none'>
                                         <h3>Intézmény módosítása</h3>
                                         <hr class='w-75 mx-auto'>
                                         <div class='w-100 justify-content-center'>
                                             <select id="javitIntezmeny" class="rounded mb-2"></select>
-                                            <input type="text" id="ujIntezmeny" hint="ujIntezmeny" placeholder='Az intézmény új neve' class="rounded mb-2">
+                                            <input type="text" id="ujIntezmeny" hint="ujIntezmeny" placeholder='Az intézmény új neve' autocomplete="off" class="rounded mb-2">
                                             <button data-bind="intEditClick" class="btn p-2 btn-warning">
                                                 <i class="bi bi-pencil"></i> Módosítás
                                             </button>
@@ -199,7 +199,7 @@ function databasePageTemplate(){//BBB, PR
                                     <label class="btn w-100 btn-light border border-secondary py-2 text-nowrap overflow-hidden" id="I_Torol_Option" for="I_Torol">
                                         <i class="bi bi-eraser"></i>&nbsp;Intézmény törlése
                                     </label>
-                                    <input class="btn-check" name="IntRadio" type="checkbox" id="I_Torol">
+                                    <input class="btn-check" name="IntRadio" type="checkbox" id="I_Torol" autocomplete="off">
                                     <div class='w-100 mt-3 bg-login rounded border border-dark-subtle text-center p-2 d-none'>
                                         <h3>Intézmény törlése</h3>
                                         <hr class='w-75 mx-auto'>
@@ -222,7 +222,7 @@ function databasePageTemplate(){//BBB, PR
 
                         <div class="container-fluid row mx-auto p-2">
                             <div class="col-lg-6 mt-3 d-flex flex-column">
-                                <textarea id="sql-input" class="form-control" style="resize: none;" size="5"></textarea>
+                                <textarea id="sql-input" class="form-control" style="resize: none;" size="5" autocomplete="off"></textarea>
                                 
                                 <div class="d-flex justify-content-end m-2">
                                     <div class="col-md-4 col-sm-6">
@@ -433,14 +433,14 @@ function loginFormTemplate(){
                     </div>
                     
                     <div class="mb-3"> 
-                        <input type="text" placeholder="Felhasználónév / email" maxlength="320" class="form-control border-0" id="user" required> 
+                        <input type="text" placeholder="Felhasználónév / email" maxlength="320" class="form-control border-0" id="user" autocomplete="off" required> 
                     </div> 
                     <div class="mb-3 col-12 position-relative"> 
                         <button type="button" id="passwordButton" class="btn text-secondary position-absolute top-50 translate-middle-y end-0 me-2 p-0"><i class="bi bi-eye"></i></button>
-                        <input type="password" placeholder="Jelszó" aria-described-by="passwordButton" class="form-control border-0" id="jelszo" required>
+                        <input type="password" placeholder="Jelszó" aria-described-by="passwordButton" class="form-control border-0" id="jelszo" autocomplete="off" required>
                     </div>
                     <div class="form-check mb-2">
-                        <input type="checkbox" class="form-check-input mb-3" id="rememberMe">
+                        <input type="checkbox" class="form-check-input mb-3" id="rememberMe" autocomplete="off">
                         <label for="rememberMe" class="form-check-label mb-2">Emlékezz rám</label>
                     </div>
                     <p class="me-0 text-end"><a class="link link-secondary" data-bind="passReset">Elfelejtett jelszó</a><p>
@@ -451,18 +451,18 @@ function loginFormTemplate(){
 
 function registerFormTemplate(){
     const content = `<h3 class="text-center mb-4" >Regisztráció</h3>
-                    <input type="text" placeholder="Felhasználónév" maxlength="320" class="form-control mb-2" id="username" required>     
+                    <input type="text" placeholder="Felhasználónév" maxlength="320" class="form-control mb-2" id="username" autocomplete="off" required>     
                 
                     <div class="mb-2 position-relative">  
-                        <input type="password" placeholder="Jelszó" class="form-control" id="password" required>  
+                        <input type="password" placeholder="Jelszó" class="form-control" id="password" autocomplete="off" required>  
                         <button type="button" class="btn text-secondary position-absolute top-50 translate-middle-y end-0 me-2 p-0"><i class="bi bi-eye"></i></button>
                     </div>  
                     <div class="mb-3 position-relative">  
-                        <input type="password" placeholder="Jelszó újra" class="form-control" id="passwordAgain" required>  
+                        <input type="password" placeholder="Jelszó újra" class="form-control" id="passwordAgain" autocomplete="off" required>  
                         <button type="button" class="btn text-secondary position-absolute top-50 translate-middle-y end-0 me-2 p-0""><i class="bi bi-eye"></i></button>
                     </div>
                     <div class="form-check mb-2">
-                        <input type="checkbox"  class="form-check-input mb-3" id="rememberMe">
+                        <input type="checkbox"  class="form-check-input mb-3" id="rememberMe" autocomplete="off">
                         <label for="rememberMe" class="form-check-label mb-2">Emlékezz rám</label>
                     </div>  
                     <button type="button" class="btn btn-primary w-100">Tovább</button><br>
@@ -472,7 +472,7 @@ function registerFormTemplate(){
 
 function elfelejtettJelszoFormTemplate(){
     const content = `<h3 class="text-center mb-4">Elfelejtett jelszó</h3>
-                    <input type="text" class="form-control mb-3" id="email" placeholder="Emailcím" required>
+                    <input type="text" class="form-control mb-3" id="email" placeholder="Emailcím" autocomplete="off" required>
                     <button type="button" class="btn btn-primary w-100">Jelszó visszaállító link küldése</button>
                     <p class="text-center text-secondary mt-3">
                         Van fiókja?

@@ -232,15 +232,15 @@ async function uploadSubtaskFile(fajlInput) {//BBB
 
 async function saveTask(isUjFeladat, feladatId, felhasznalo) {
     const containerId = isUjFeladat ? 'alfeladatBox' : 'alfeladatokContainer'; // új feladat vagy egy meglévő szerkesztése
-    const slimMode = slim_felAdd ? '-s' : ''; // slim mód
+    const slimMode = slim_felAdd ? '-s' : ''; // slim mód // no longer used like that
 
     let feladatData = {
-        Nev: getField("feladatNev" + slimMode, containerId),
-        Leiras: getField("leiras" + slimMode, containerId),
-        Evfolyam: getField("evfolyam" + slimMode, containerId),
-        Tantargy: getField("tantargy" + slimMode, containerId),
-        Tema: getField("tema" + slimMode, containerId),
-        Nehezseg: Math.min(getField("nehezseg" + slimMode, containerId) || 5, 10),
+        Nev: getField("feladatNev", containerId),
+        Leiras: getField("leiras", containerId),
+        Evfolyam: getField("evfolyam", containerId),
+        Tantargy: getField("tantargy", containerId),
+        Tema: getField("tema", containerId),
+        Nehezseg: Math.min(getField("nehezseg", containerId) || 5, 10),
     };
 
     if (!validateTaskInputs(feladatData)) {
@@ -248,7 +248,7 @@ async function saveTask(isUjFeladat, feladatId, felhasznalo) {
         return;
     }
 
-    let alfeladatok = await createSubtaskObjects(isUjFeladat, slimMode, containerId);
+    let alfeladatok = await createSubtaskObjects(isUjFeladat, containerId);
 
     let deletedFeladatok = getDeletedTasks();
     if (deletedFeladatok.length > 0) {
@@ -331,13 +331,13 @@ function createTaskPayload(feladatData, alfeladatok, ujFeladat) {//BBB
     };
 }
 
-async function createSubtaskObjects(ujFeladat, slimMode, containerId) {//BBB
+async function createSubtaskObjects(ujFeladat, containerId) {//BBB
 
     let alfeladatok = [];
     let items;
 
     if (ujFeladat) {
-        items = $(`#${containerId}${slimMode}`)
+        items = $(`#${containerId}`)
             .find(".alf_id")
             .toArray();
     } else {
@@ -391,17 +391,17 @@ function uploadFile(fileInput) {//BBB
 }
 
 function resetCreateNewTask(/*feladatId, felhasznalo, felhasznaloColor*/){ //PR
-    var s = slim_felAdd ? "-s" : "";
+    //var s = slim_felAdd ? "-s" : "";
     
     // set the input values back to empty
-    document.getElementById("feladatNev"+s)  .value = "";
-    document.getElementById("leiras"+s)      .value = "";
-    document.getElementById("evfolyam"+s)    .value = "";
-    document.getElementById("tantargy"+s)    .value = "";
-    document.getElementById("tema"+s)        .value = "";
-    document.getElementById("nehezseg"+s)    .value = 5;
-    document.getElementById("Difficulty"+s)  .innerText = "Nehézség - 5";
-    document.getElementById("alfeladatBox"+s).innerHTML = "";
+    document.getElementById("feladatNev")  .value = "";
+    document.getElementById("leiras")      .value = "";
+    document.getElementById("evfolyam")    .value = "";
+    document.getElementById("tantargy")    .value = "";
+    document.getElementById("tema")        .value = "";
+    document.getElementById("nehezseg")    .value = 5;
+    document.getElementById("Difficulty")  .innerText = "Nehézség - 5";
+    document.getElementById("alfeladatBox").innerHTML = "";
 }
 
 function createSubtask(where){ //PR

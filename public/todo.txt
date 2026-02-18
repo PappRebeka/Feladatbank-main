@@ -1,20 +1,21 @@
 változó, funkció nevek egyértelműsítése
 
-while (teszteles.errors.length > 0){
-    debug()
-}
-
-nem látom a külömbséget a 'csak megtekintés' és a 'megtekintés és szerkesztés' fájl megosztási mód között
+tesztelés, debugolás
 
 sugo kepek
 
 dokumentálás
 
-memory leak
-possible issues:
-- slimselect not being destroyed (same goes for charts)
-- old eventlisteners & dom elements being alive
-- console logs
-- 'Event listeners added repeatedly to the same “permanent” elements' 
+tantaryg szuro visszaállítás
 
-!!! Aki volt a súgó.html-en, lehet hogy van egy duplikált sütije /help path-el. Törölje. !!!
+
+
+Fájlos feladat létrehozásakor nem jelent meg a popupban a loading bar. Lehet kicsi volt a fájl
+Másik fájl feltöltésekor nagyon rövid ideig jelent meg
+Nem feltétlenül hiba csak egy megfigyelés
+
+Fájlos alfelat megjelenítése sokáig tart. A modál megnyitódik a fájlos alfeladat nélkül és csak ~1 másodperc múlva jelenik meg
+Több feladat egymás utáni megnyitásakor az alfeladatok cseréje is időbe telik
+A footer gombok cseréje is időbe telik
+
+Kéne engedni olyan feladdatokat ahol nincs kitöltve minden. Pl csak leírás van vagy csak fájl van, de csak pont nem lehet

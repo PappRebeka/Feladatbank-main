@@ -3,7 +3,7 @@ const { createClientUsingCredentials, baseUrl, SCOPES } = require("../config/goo
 const { google } = require("googleapis");
 
 async function sendMail(to, type = 'request', data = {}) { // RD, PR
-  const senderEmail = 'sz7.cloudconsole@gmail.com'; // mindig innen küldjük a visszaállító emailt
+  const senderEmail = 'sz7.cloudconsole@gmail.com'; // mindig innen küldjük az emailt
   SCOPES.push("https://www.googleapis.com/auth/gmail.send");
 
   const sql = `SELECT AccessToken, RefreshToken, AccessEletTartam FROM Users WHERE Email = ? LIMIT 1`;
@@ -42,17 +42,16 @@ async function sendMail(to, type = 'request', data = {}) { // RD, PR
     const gmail = google.gmail({ version: 'v1', auth: client });
 
     const rawMessage = makeMail(to, senderEmail, subject, type, data);
-    
+
     const res = await gmail.users.messages.send({
       userId: senderEmail, // "me" = authenticated user
       requestBody: {
         raw: rawMessage,
       },
     });
-
+    
     SCOPES.slice(0, SCOPES.length - 1);
-    }
-  catch(err){
+  } catch(err) {
     return;
   }
   })
@@ -131,7 +130,7 @@ function newReportFixedEmail(reportId, userName, reportTime, reportMessage) {
                 Ezzel az üzenettel szeretném értesíteni arról, hogy a #${reportId} hibajelentés sikeresen javítva lett.
               </p>
 
-              <div style="width: 100%; margin: 10px 5px; background-color: #222; padding: 8px; border-radius: 14px;">
+              <div style="width: 100%; margin: 10px 5px; background-color: #222; padding: 16px; border-radius: 14px; margin: 16px ">
                 <h3 style="color: #fff">#${reportId} - ${reportTime}</h3>
                 <p style="color: #fff">
                   ${reportMessage}
@@ -150,18 +149,16 @@ function makeMail(to, from, subject, type, data = {}) {//PR
   // RFC 2047 encoding for UTF-8 characters in email headers
   const encodedSubject = `=?UTF-8?B?${Buffer.from(subject).toString('base64')}?=`;
 
-  const body = '';
+  let body = '';
   switch (type){
     case 'request':
       body = newPasswordRequestEmail(to) 
       break;
     case 'report':
-      body = newReportFixedEmail()
+      body = newReportFixedEmail(data.id, data.Nev, data.Ido, data.Message)
       break;
     default:
-      body = newPasswordFeedbackEmail(
-        data.id, data.Nev, data.Ido, data.Message
-      )
+      body = newPasswordFeedbackEmail()
       break;
   }
   

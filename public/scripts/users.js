@@ -53,7 +53,7 @@ async function userCardClick(id){ //RD
     footer.innerHTML = htmlString;  
                         
     if(ableToBeMoved){
-        footer.children[0].onclick = async () => {await deleteThisUser(item.id); await loadPageData()}
+        footer.children[0].onclick = async () => {await deleteThisUser(userId_ToChangeInstitute); await loadPageData()}
         footer.children[1].onclick = async () => await moveUserClick()
     }
 }

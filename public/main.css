@@ -14,13 +14,14 @@
 
   /* Grays */
   --color-gray-darkest: #1E293B;
-  --color-gray-dark: #464a50;
-  --color-gray-medium: #606979;
+  --color-gray-dark: #404957;
+  --color-gray-medium: #566277;
   --color-gray-light: #959ea8;
   --color-gray-lighter: #c4c4c4;
   --color-gray-lightest: #d6dde4;
+  --color-gray-button: #2b3446;
   --color-gray-trans-light: #6b7d902b;
-  --color-gray-trans-medium: #4a5e7a80;
+  --color-gray-trans-medium: #394e6d80;
   --color-gray-transer-medium: #1226497c;
   --color-gray-trans-dark: #1e293bc5;
   --color-gray-trans-mid: #0b131f7c;

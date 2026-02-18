@@ -10,10 +10,8 @@ task_scripts/load.js ---------------
 
 async function feladatCardClick(dataId){ //PR
     const id = Number(dataId);
-    const asdf = taskById.get(id);
-
-    const adat = JSON.parse(decodeURIComponent(asdf.adat));
-    const felhasznalo = asdf.Felhasznalo;
+    const adat = taskById.get(id);
+    const felhasznalo = adat.Felhasznalo;
 
     await setTaskModalContent(adat, felhasznalo);
 }

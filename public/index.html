@@ -329,6 +329,13 @@
         p.classList.add('text-center')
         p.textContent = `Helyreállító email elküldve a ${mail} címre.`
         form.replaceChildren(p)
+
+        var button = document.createElement('button')
+        button.classList.add("btn", "btn-secondary")
+        button.innerHTML = `<i class="bi bi-arrow-bar-left"></i> Vissza`
+        button.addEventListener("click", () => {window.location.href = "index.html"})
+        
+        form.appendChild(button)
         //toastMsg("Email elküldve", "Ha létezik fiók ezzel az email címmel, küldtünk helyreállító linket.", "success");
       } else {
         form.querySelector('button').disabled = false; 
