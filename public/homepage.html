@@ -195,8 +195,8 @@
         try{
             resetSearchFilter()
             resetFilters()
-            rendezesVissza()
-        } catch{}
+            //rendezesVissza()
+        } catch(err){console.log(err)}
 
         setLocationCookie(AvailablePages[where].pageId, kikapcsId)
         //setPageContent();
@@ -207,9 +207,7 @@
     }
 
     async function updateReport(action, id, javitott) { //BBB
-        console.log("updatereport fut")
         let res = await ajax_post("/update-report", 1, { action: action, id: id }, true);
-        console.log(res)
         if (res.error) {
             toastMsg(`Hiba`, `Hiba történt a hibajelentés frissítésekor`, `danger`);
         } else {
@@ -411,7 +409,6 @@
     }
 
     async function loadPageData(){ //PR, RD
-        console.log("loadpagedata fut")
         let oldal = Object.keys(AvailablePages).indexOf(ActiveLocation).toString()
         
         var SubjectList = await ajax_post("/GetTantargyak", 1, {oldal: oldal}, false)
@@ -659,7 +656,7 @@
         var buttons = $bind(document.getElementById('szuro'), 'buttons').children
         buttons[0].onclick = async () => {
             resetFilters();
-            await loadPageData(); 
+            //await loadPageData(); 
             await applyFilters()
         };
         buttons[1].onclick = async () => await applyFilters()

@@ -447,7 +447,6 @@ function buildFakeFileInput(id, fileName, fileIdentifier){ //PR
 }
 
 function subtaskDelete(id){//PR
-    console.log(id)
     const that = document.getElementById(`${id}`)
     that.replaceChildren()
     that.remove(); 
@@ -472,8 +471,7 @@ async function updateTask(task, subtasks, felhasznalo){//PR
         var cir = $bind(cont, 'felhasznaloCircle')
         szin = cir.style.backgroundColor;
     } 
-    catch(err){console.log(err)}
-
+    catch(err){}
     const container = buildTaskCardPrimaryData(feladatAdatai, felhasznalo, szin, null)
     document.getElementById(`task-${task.id}`).replaceChildren(container.querySelector('div'))         
     

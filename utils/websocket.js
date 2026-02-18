@@ -109,9 +109,6 @@ function createWebsocket() {
 
                     return;
             }
-
-            console.log("websocket sessions:");
-            console.log(sessions);
         });
 
         ws.on("close", () => {

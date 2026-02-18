@@ -345,7 +345,6 @@ app.post("/loginUser", async (req, res) => { //RD, PR
       throw err
     }
     if(results[0]['COUNT(id)'] > 0){
-      console.log(results[0]["id"])      
 
       req.session.userId = results[0]['id'];
       req.session.Jog = results[0]['Jogosultsag']
@@ -364,7 +363,6 @@ app.post("/loginUser", async (req, res) => { //RD, PR
 })
 
 app.post("/sendMailTo", async (req, res) => { //PR  //email
-  console.log("sendmailto fut")
 
   var email = req.body.email;
   var type = req.body.type || 'request'
@@ -700,7 +698,6 @@ app.post("/topHaromTanarData", (req, res) =>{ //RD, statok
 
 app.post("/instituteAmountNotEnough", (req, res) => {
   queryAsync("SELECT COUNT(*) as db FROM Intezmenyek").then((result) => {
-    console.log(result);
     res.send(JSON.stringify({"result": result[0]["db"] <= 1})).end();
   })
 })
@@ -1857,12 +1854,8 @@ async function reportSendEmail(reportId) {
     "SELECT * FROM Hibajelentes WHERE id = ?",
     [reportId], async (err, results) => {
       if (err) {
-        console.log("Hibajelentes adatok lekerese megdoglott")
-        console.log(err)
       } else {
         let data = results[0];  
-        console.log('reportSendEmail')
-        console.log(results)
         await sendMail(data.Email, 'report', data); 
       }
     }

@@ -364,11 +364,7 @@
       checkDarkMode();
 
       const stay = getCookie("stayLoggedIn");
-      console.log(stay)
       if (stay != '0') {
-        console.log("emlekezz")
-        
-        //console.log(utoken)
         var van = await ajax_post("/loginUser", 1, { user: "", passwd: "", userToken: stay || "" }, false);
 
         if(van.error == "ALREADY_LOGGED_IN") {

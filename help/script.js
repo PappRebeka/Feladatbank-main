@@ -163,7 +163,6 @@ function getDocFile(url){
 }
 
 function setEvents(){ 
-  console.log(window.history);
   document.getElementById('visszaBtn').onclick = () => 
     { window.location.href = sessionStorage.getItem("userToken") ? '/homepage.html' : '/index.html' ; };
   document.getElementById('themeBtn') .onclick = () => themeSwitch()

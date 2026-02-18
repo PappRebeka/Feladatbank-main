@@ -131,7 +131,6 @@ async function updateUserAuth(id, from, to, nev){ //PR
 async function moveUserInstitution(){ //RD
     var hova = document.getElementById("ujIntezmenySelect").value
     const result = await ajax_post("/AthelyezUser", 1, { hova: hova, userId: userId_ToChangeInstitute }, false)
-    console.log(hova)
     if (result.ok) {
         toastMsg("Sikeres művelet", "A felhasználó sikeresen áthelyezve", "success")
         if (CurrentUserData.Jogosultsag != 'Főadmin') { // nem tudja a saját intézményébe áthelyezni úgyhogy az nem kell vizsgálni

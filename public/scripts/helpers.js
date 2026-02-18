@@ -82,24 +82,11 @@ function registerWebsocket(url) {
         };
 
         webSocket.onmessage = (event) => {
-            //console.log('jsonData')
-            //console.log(event)
-            //console.log(event.data)
             let jsonData = event.data;
             
-            /*switch (jsonData) {
-                case "userDelete":
-                    window.location = `hiba.html?code=0&info=${encodeURIComponent("A fiók törölve lett.")}`;
-                    break;
-                case "canLogIn":
-                    canLogIn = true;
-                    break;
-            }*/
             console.log(jsonData)
             if (jsonData == 'authenticationOk'){
                 canLogIn = true;
-
-                console.log("auth ok")
 
                 let heartbeatFunction = () => {
                     webSocket.send(JSON.stringify({
@@ -111,14 +98,15 @@ function registerWebsocket(url) {
                 setInterval(() => heartbeatFunction(), 2000)
             } else if (jsonData == 'authenticationBad') {
                 window.location.href = 'hiba.html?code=4'
-                killCookie('stayLoggedIn') //might suck, because kills the cookie in the entire browser. mabe add a temporary blocker instead somewhere
+                killCookie('stayLoggedIn') 
             }
-            
         };
 
         webSocket.onclose = (event) => {
+            console.log("websocket váratlanul bezárult")
             console.log(event.code);
             console.log(event.reason);
+            console.log(event)
         };
     }
 

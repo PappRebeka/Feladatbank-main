@@ -12,6 +12,7 @@ async function feladatCardClick(dataId){ //PR
     const id = Number(dataId);
     const adat = taskById.get(id);
     const felhasznalo = adat.Felhasznalo;
+    document.getElementById("modalFeladatContent").replaceChildren()
 
     await setTaskModalContent(adat, felhasznalo);
 }
@@ -53,8 +54,6 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
     if (felhasznalo){
         $bind(container, 'felhasznaloName').textContent = felhasznalo;
         setBgColor(container, 'felhasznaloCircle', felhasznaloColor);
-
-        console.log('felhasznaloColor', felhasznaloColor)
 
         const icon = document.createElement('span');
         icon.className = `text-${isBackgroundDark(felhasznaloColor) ? "light" : "dark"}-important`;
@@ -111,6 +110,7 @@ async function setTaskModalContent(adat, felhasznalo){ //PR, RD
 
     const modal = document.getElementById("modalFeladatContent")
     modal.innerHTML = taskModalTemplate(); // safe because its pure
+
     $bind(modal, "tantargy").textContent = adat.Tantargy;
     $bind(modal, "tema")    .textContent = adat.Tema;
     $bind(modal, "leiras")  .textContent = adat.Leiras;
