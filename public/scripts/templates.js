@@ -433,14 +433,14 @@ function loginFormTemplate(){
                     </div>
                     
                     <div class="mb-3"> 
-                        <input type="text" placeholder="Felhasználónév / email" maxlength="320" class="form-control border-0" id="user" autocomplete="off" required> 
+                        <input type="text" placeholder="Felhasználónév / email" maxlength="320" class="form-control border-0" id="user" required> 
                     </div> 
                     <div class="mb-3 col-12 position-relative"> 
                         <button type="button" id="passwordButton" class="btn text-secondary position-absolute top-50 translate-middle-y end-0 me-2 p-0"><i class="bi bi-eye"></i></button>
                         <input type="password" placeholder="Jelszó" aria-described-by="passwordButton" class="form-control border-0" id="jelszo" autocomplete="off" required>
                     </div>
                     <div class="form-check mb-2">
-                        <input type="checkbox" class="form-check-input mb-3" id="rememberMe" autocomplete="off">
+                        <input type="checkbox" class="form-check-input mb-3" id="rememberMe">
                         <label for="rememberMe" class="form-check-label mb-2">Emlékezz rám</label>
                     </div>
                     <p class="me-0 text-end"><a class="link link-secondary" data-bind="passReset">Elfelejtett jelszó</a><p>
@@ -472,7 +472,7 @@ function registerFormTemplate(){
 
 function elfelejtettJelszoFormTemplate(){
     const content = `<h3 class="text-center mb-4">Elfelejtett jelszó</h3>
-                    <input type="text" class="form-control mb-3" id="email" placeholder="Emailcím" autocomplete="off" required>
+                    <input type="text" class="form-control mb-3" id="email" placeholder="Emailcím" required>
                     <button type="button" class="btn btn-primary w-100">Jelszó visszaállító link küldése</button>
                     <p class="text-center text-secondary mt-3">
                         Van fiókja?
@@ -517,7 +517,7 @@ function accordionLepesekTemplate(){
     return div
 }
   
-function carouselItemTemplate(){
+function carouselItemTemplate(carouselId){
     
     const div = document.createElement('div')
     div.classList.add('carousel', 'slide')
@@ -530,7 +530,7 @@ function carouselItemTemplate(){
                     <span class="carousel-control-prev-icon"></span>
                     </button>
                     <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>w
+                    <span class="carousel-control-next-icon"></span>
                     </button>`
     return div
 }

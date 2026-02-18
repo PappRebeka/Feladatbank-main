@@ -130,7 +130,7 @@ function newReportFixedEmail(reportId, userName, reportTime, reportMessage) {
                 Ezzel az üzenettel szeretném értesíteni arról, hogy a #${reportId} hibajelentés sikeresen javítva lett.
               </p>
 
-              <div style="width: 100%; margin: 10px 5px; background-color: #222; padding: 16px; border-radius: 14px; margin: 16px ">
+              <div style="width: 100%; background-color: #222; padding: 16px; border-radius: 14px; margin: 16px ">
                 <h3 style="color: #fff">#${reportId} - ${reportTime}</h3>
                 <p style="color: #fff">
                   ${reportMessage}

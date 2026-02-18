@@ -199,7 +199,7 @@
         } catch(err){console.log(err)}
 
         setLocationCookie(AvailablePages[where].pageId, kikapcsId)
-        //setPageContent();
+        //await setPageContent();
         await changeNavigationLocation('vissza', 'összes')
         
         for (const item of document.querySelectorAll(".navOptionButton")) item.classList.remove("disabled") 
@@ -632,8 +632,10 @@
         //kereső
         document.getElementById('keresoButton').onclick = async () => 
             await setSearchFilter(document.getElementById('searchbar_nav').value)
+        document.querySelector('#searchbar_nav').addEventListener('keyup', async () => {if (event.key === 'Enter')await setSearchFilter(document.getElementById('searchbar_nav').value)})
         document.getElementById('keresoButtonOffcanvas').onclick = async () => 
             await setSearchFilter(document.getElementById('searchbar_offcanvas').value)
+        document.querySelector('#searchbar_offcanvas').addEventListener('keyup', async () => {if (event.key === 'Enter')await setSearchFilter(document.getElementById('searchbar_offcanvas').value)})
         
         //fiók lehetőségek
         const optionsDiv = document.getElementById('options').children

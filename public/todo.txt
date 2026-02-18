@@ -15,3 +15,5 @@ Nem feltétlenül hiba csak egy megfigyelés
 Kéne engedni olyan feladatokat ahol nincs kitöltve minden. Pl csak leírás van vagy csak fájl van, de csak pont nem lehet
 
 hearthbeat néha meghal
+
+tooltip a rendezés nyilakhoz (növekvő/csökkenő)

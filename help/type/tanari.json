@@ -28,8 +28,10 @@
   "kerdesekValaszok": [
     {
       "id": "tema-feladatmuveletek",
-      "cim": "Feladatműveletek (áttekintés)",
-      "kepek": [],
+      "cim": "Feladatműveletek   (áttekintés)",
+      "kepek": [
+        "/help/feladatbank-kepek/tema-feladatmuveletek.png"
+      ],
       "lepes": [
         "Ebben a részben a feladatok teljes életciklusát találja: létrehozás, alfeladatok/fájlok, szerkesztés, archiválás és törlés.",
         "A részletes kérdések lejjebb, ugyanebben az oldalon vannak (a címsorokra kattintva nyithatók)."
@@ -38,7 +40,12 @@
     {
       "id": "feladat-letrehozas",
       "cim": "Hogyan hozok létre új feladatot?",
-      "kepek": [],
+      "kepek": [
+        "/help/feladatbank-kepek/homepage_plus_symbol.png",
+        "/help/feladatbank-kepek/new_task_highlighted.png",
+        "/help/feladatbank-kepek/new_task_subtask_highlighted.png",
+        "/help/feladatbank-kepek/new_task_buttons_highlighted.png"
+      ],
       "lepes": [
         "A 'Feladataim' oldalon a felső sávban kattintson a '+' gombra.",
         "Töltse ki a feladat alapadatait: Név, Leírás, Évfolyam, Tantárgy, Téma, Nehézség.",
@@ -50,7 +57,11 @@
     {
       "id": "alfeladatok",
       "cim": "Hogyan kezelem az alfeladatokat és csatolok fájlt?",
-      "kepek": [],
+      "kepek": [
+        "/help/feladatbank-kepek/new_task_subtask_add_highlighted.png",
+        "/help/feladatbank-kepek/new_task_subtask_highlighted.png",
+        "/help/feladatbank-kepek/new_task_buttons_highlighted.png"
+      ],
       "lepes": [
         "Feladat létrehozásakor vagy szerkesztésekor kattintson az 'Alfeladat hozzáadása' gombra.",
         "Minden alfeladathoz adjon meg leírást és pontszámot.",
@@ -62,7 +73,7 @@
     {
       "id": "feladat-szerkesztes",
       "cim": "Hogyan szerkesztek egy meglévő feladatot?",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/archive_task_card_highlighted.png"],
       "lepes": [
         "Kattintson a szerkeszteni kívánt feladat kártyájára.",
         "A felugró ablakban kattintson a 'Szerkesztés' gombra.",
@@ -74,7 +85,7 @@
     {
       "id": "archivalas-torles",
       "cim": "Hogyan archiválok vagy törlök egy feladatot?",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/archive_task_card_highlighted.png"],
       "lepes": [
         "Archiváláshoz: nyissa meg a feladatot (kattintson a kártyára), majd válassza az 'Archiválás' lehetőséget.",
         "Az archivált feladat eltűnik a 'Feladataim' listából, és az 'Archívum' oldalon jelenik meg.",
@@ -86,7 +97,7 @@
     {
       "id": "tema-szures",
       "cim": "Szűrés, keresés, rendezés (áttekintés)",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/archive_task_card_highlighted.png"],
       "lepes": [
         "Ebben a részben a listák kezelése van: keresés, szűrők (évfolyam/tantárgy/nehézség), rendezés és irány.",
         "Tipp: mobilon a kereső a menüben is megjelenhet (kijelzőmérettől függ)."
@@ -95,7 +106,7 @@
     {
       "id": "szures-rendezes",
       "cim": "Hogyan használom a keresést, szűrést és rendezést?",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/archive_task_card_highlighted.png"],
       "lepes": [
         "Keresés: írjon a felső keresősávba, majd kattintson a nagyító ikonra (vagy Enter).",
         "Szűrés: kattintson a szűrő ikonra (jobb felső rész).",
@@ -107,7 +118,7 @@
     {
       "id": "tema-megosztas",
       "cim": "Megosztás és közzététel (áttekintés)",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/archive_task_card_highlighted.png"],
       "lepes": [
         "Feladatot megoszthatsz más tanárral (belső megosztás), illetve közzétehetsz Google Classroomban.",
         "Megosztás után a címzett a 'Velem megosztott' oldalon látja a feladatot."

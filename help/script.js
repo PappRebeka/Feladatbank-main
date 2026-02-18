@@ -75,6 +75,7 @@ function buildAccordion(adat){
   div.replaceChildren()
 
   Array.from(kerdValaszok).forEach(e => {
+    console.log(e);
     div.appendChild(buildAccordionItem(e))
   })
 }
@@ -83,6 +84,7 @@ function buildAccordionItem(item){
   const id = item.id;
   const title = item.cim;
   const kepek = Array.isArray(item.kepek) ? item.kepek : [];
+  console.log(item.kepek)
   const lepes = Array.isArray(item.lepes) ? item.lepes : [];
 
   const accordionItem = accordionItemTemplate()
@@ -144,13 +146,14 @@ function buildAccordionImages(kepek, target){
       inner.push(item)
     }
 
-    const slide = carouselItemTemplate()
+    const slide = carouselItemTemplate(carouselId)
     slide.id = carouselId
-    slide.querySelector('.carousel-indicators').replaceChildren(indicators)
-    slide.querySelector('.carousel-inner').replaceChildren(inner)
+    slide.querySelector('.carousel-indicators').replaceChildren(...indicators)
+    slide.querySelector('.carousel-inner').replaceChildren(...inner)
     slide.querySelector('.carousel-control-prev').setAttribute('data-bs-target', '#'+carouselId)
     slide.querySelector('.carousel-control-next').setAttribute('data-bs-target', '#'+carouselId)
 
+    div.appendChild(slide)
   }
   else div.appendChild(accordionNincsKepTemplate())
   target.appendChild(div)

@@ -1,9 +1,0 @@
-taskshare_homepage.png
-taskshare_menu.png
-taskshare_menu_date.png
-taskshare_menu_filled.png
-
-1. Nyomjunk rá a közzéteendő feladat 'közzétevés' gombjára.
-2. A gomb a közzétevés menüt fogja megnyitni.
-3. Töltsük ki a menü adatait a megfelelő adatokkal.
-4. Nyomjunk rá a 'Közzététel' gombra a menüben a véglegesítéshez.

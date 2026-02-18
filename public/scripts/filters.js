@@ -77,16 +77,17 @@ function resetFilters(){ //PR
     buttons[1].classList.add('active')
 
     // reset all the global filter variables
-    Object.assign(TempFilters, {
-        evfolyam: "",
-        tantargy: "",
-        nehezseg: "",
-        tanar: "",
-        kurzus: "",
-        kereso: "",
-        order: { field: "id", desc: 1 }
-    });
-
+    for (const it of [TempFilters, ActiveFilters]) {
+        Object.assign(it, {
+            evfolyam: "",
+            tantargy: "",
+            nehezseg: "",
+            tanar: "",
+            kurzus: "",
+            kereso: "",
+            order: { field: "id", desc: 1 }
+        });
+    }
 }
 
 function setSortDirection(dir){ //PR
