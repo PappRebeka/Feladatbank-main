@@ -15,5 +15,7 @@ Nem feltétlenül hiba csak egy megfigyelés
 Kéne engedni olyan feladatokat ahol nincs kitöltve minden. Pl csak leírás van vagy csak fájl van, de csak pont nem lehet
 
 hearthbeat néha meghal
+it seems to stop mostly when the window is minimized
+so I'm thinking what if the browser stops/delays the setInterval to save recourses?
 
 tooltip a rendezés nyilakhoz (növekvő/csökkenő)
