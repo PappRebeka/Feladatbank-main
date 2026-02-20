@@ -2122,11 +2122,11 @@ const server = app.listen(config.server.port, () => {
       );
     }
   )
-  queryAsync(`INSERT INTO Users(id, Nev, Email, Jelszo, Jogosultsag, AccessToken, RefreshToken, UserToken, AccessEletTartam, HatterSzin, IntezmenyId, UtolsoPing)
-              VALUES(1, '', 'sz7.cloudconsole@gmail.com', '', 'Mailsender', 'ya29.a0ATi6K2vGfIceI0HEy9G051-VmTJL-OvxnbKBtIOpUyoaSSW6WFjuGO1CapRs4szELHJtO7QaMON0e3I4DaC1SJTDTAgSIyD9d5Lur6djZF-VePYpcszfRdNCY0QF1vgQthxq1ZixY6ud7HJsPlCZQJM9B8F8gmDNsyI7LrOGvUfP6cqyIYS7cdSvdDX1QSIhc-yc_fcP7QaCgYKAQgSARcSFQHGX2MiWUsA8QIYjeK-4gc7tKVPwA0209', '1//03RBbpzbUtcFiCgYIARAAGAMSNwF-L9IrxDG3UFlJmq-HZQUN9KDeJGH1UEY4_AQoQlKtU1-hjm9acWbEbQAliRFZewzMZSs9hoQ', 'b3464r5a993dd4500455g787jub1727e', '2025-11-05 14:17:43', '', NULL, NULL)
+  queryAsync(`INSERT INTO Users(id, Nev, Email, Jelszo, Jogosultsag, AccessToken, RefreshToken, UserToken, AccessEletTartam, HatterSzin, IntezmenyId)
+              VALUES(1, '', 'sz7.cloudconsole@gmail.com', '', 'Mailsender', 'ya29.a0ATi6K2vGfIceI0HEy9G051-VmTJL-OvxnbKBtIOpUyoaSSW6WFjuGO1CapRs4szELHJtO7QaMON0e3I4DaC1SJTDTAgSIyD9d5Lur6djZF-VePYpcszfRdNCY0QF1vgQthxq1ZixY6ud7HJsPlCZQJM9B8F8gmDNsyI7LrOGvUfP6cqyIYS7cdSvdDX1QSIhc-yc_fcP7QaCgYKAQgSARcSFQHGX2MiWUsA8QIYjeK-4gc7tKVPwA0209', '1//03RBbpzbUtcFiCgYIARAAGAMSNwF-L9IrxDG3UFlJmq-HZQUN9KDeJGH1UEY4_AQoQlKtU1-hjm9acWbEbQAliRFZewzMZSs9hoQ', 'b3464r5a993dd4500455g787jub1727e', '2025-11-05 14:17:43', '', NULL)
               ON DUPLICATE KEY UPDATE id = id`)
-  queryAsync(`INSERT INTO Users(id, Nev, Email, Jelszo, Jogosultsag, AccessToken, RefreshToken, UserToken, AccessEletTartam, HatterSzin, IntezmenyId, UtolsoPing) 
-              VALUES(2, 'admin', '', '21232f297a57a5a743894a0e4a801fc3', 'Főadmin', 'ya29.a0AUMWg_Ino3MMZLU5Lh7ioy_9w2B1T5C4PDBV_iyEzp83_hfAIBru34jmXsE5MwHhRV6zjOX6XVWuPZBVRywkbp9Yt9LZjKxcEBWJxHUsJ7HNnK0WHboCfSG9Dk9pYEzqNma3Pstrp-aTIoI3RsySXwnN-WL8D02FfXIbtimSLq1NzsdJxcSKesFh7FrA9DDQLnCRyHaMswaCgYKAQsSAQ4SFQHGX2MioY-UFWmYzaq83NqTxn810Q0209', '1//03I2Bo4Yf-HM_CgYIARAAGAMSNwF-L9IrOjbeRUm1CQ3SpbcdEV7_nvTcIJmJ0pHCk4BcsrrqwE1HrNlflLivpWwrZQv2LnSGs_U', 'bd9448ca99e4b450045c178283b1727e', '2026-01-20 14:54:28', 'rgb(119 241 205)', NULL, 1770883544957)
+  queryAsync(`INSERT INTO Users(id, Nev, Email, Jelszo, Jogosultsag, AccessToken, RefreshToken, UserToken, AccessEletTartam, HatterSzin, IntezmenyId) 
+              VALUES(2, 'admin', '', '21232f297a57a5a743894a0e4a801fc3', 'Főadmin', 'ya29.a0AUMWg_Ino3MMZLU5Lh7ioy_9w2B1T5C4PDBV_iyEzp83_hfAIBru34jmXsE5MwHhRV6zjOX6XVWuPZBVRywkbp9Yt9LZjKxcEBWJxHUsJ7HNnK0WHboCfSG9Dk9pYEzqNma3Pstrp-aTIoI3RsySXwnN-WL8D02FfXIbtimSLq1NzsdJxcSKesFh7FrA9DDQLnCRyHaMswaCgYKAQsSAQ4SFQHGX2MioY-UFWmYzaq83NqTxn810Q0209', '1//03I2Bo4Yf-HM_CgYIARAAGAMSNwF-L9IrOjbeRUm1CQ3SpbcdEV7_nvTcIJmJ0pHCk4BcsrrqwE1HrNlflLivpWwrZQv2LnSGs_U', 'bd9448ca99e4b450045c178283b1727e', '2026-01-20 14:54:28', 'rgb(119 241 205)', NULL)
               ON DUPLICATE KEY UPDATE id = id`)
   queryAsync(`INSERT INTO Intezmenyek(id, IntezmenyNev) 
               VALUES(1, 'Zalaegerszegi SZC Csány László Technikum')

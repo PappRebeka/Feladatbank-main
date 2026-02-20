@@ -107,7 +107,7 @@
     {
       "id": "tema-szures",
       "cim": "Szűrés, keresés, rendezés (áttekintés)",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/tema-szures.png"],
       "lepes": [
         "Ebben a részben a listák kezelése van: keresés, szűrők (évfolyam/tantárgy/nehézség), rendezés és irány.",
         "Tipp: mobilon a kereső a menüben is megjelenhet (kijelzőmérettől függ)."
@@ -116,7 +116,10 @@
     {
       "id": "szures-rendezes",
       "cim": "Hogyan használom a keresést, szűrést és rendezést?",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/homepage_filter_button_highlighted.png",
+                "/help/feladatbank-kepek/homepage_filter_modal_buttons_highlighted.png",
+                "/help/feladatbank-kepek/homepage_filter_modal_highlighted.png"
+      ],
       "lepes": [
         "Keresés: írjon a felső keresősávba, majd kattintson a nagyító ikonra (vagy Enter).",
         "Szűrés: kattintson a szűrő ikonra (jobb felső rész).",
@@ -128,7 +131,7 @@
     {
       "id": "tema-megosztas",
       "cim": "Megosztás és közzététel (áttekintés)",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/tema-megosztas.png"],
       "lepes": [
         "Feladatot megoszthatsz más tanárral (belső megosztás), illetve közzétehetsz Google Classroomban.",
         "Megosztás után a címzett a 'Velem megosztott' oldalon látja a feladatot."
@@ -137,7 +140,8 @@
     {
       "id": "megosztas",
       "cim": "Hogyan osztok meg feladatot egy másik tanárral?",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/share_task_to_other_teacher_highlighted.png",
+                "/help/feladatbank-kepek/share_task_to_teacher_modal.png"],
       "lepes": [
         "Nyissa meg a megosztani kívánt feladatot (kattintson a kártyára).",
         "A felugró ablakban válassza a 'Megosztás' lehetőséget.",
@@ -149,7 +153,11 @@
     {
       "id": "kozzetetel",
       "cim": "Hogyan teszek közzé feladatot Google Classroomban?",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/homepage_task_highlighted.png",
+                "/help/feladatbank-kepek/share_task_to_classroom_highlighted.png",
+                "/help/feladatbank-kepek/share_task_to_classroom_buttons_highlighted.png",
+                "/help/feladatbank-kepek/share_task_to_classroom_modal_highlighted.png"
+    ],
       "lepes": [
         "A 'Feladataim' listában kattintson a feladat kártyáján lévő 'közzétevés' gombra.",
         "Válassza ki a Classroom kurzust/osztályt a listából.",
@@ -161,7 +169,7 @@
     {
       "id": "tema-statisztikak",
       "cim": "Statisztikák (áttekintés)",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/tema-sztatisztikak.png"],
       "lepes": [
         "A statisztikák segítenek átlátni a létrehozott/megosztott/közzétett feladatok mennyiségét és eloszlását.",
         "Ha nincs elég adat, a rendszer 'Még nincsenek adatok!' üzenetet jelenít meg."
@@ -170,7 +178,8 @@
     {
       "id": "statisztikak",
       "cim": "Hol találom a statisztikákat és mit jelentenek?",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/statistics_sidebar_menu_highlighted.png",
+                "/help/feladatbank-kepek/statistics_page.png"],
       "lepes": [
         "Nyissa meg a bal oldali menüt (hamburger ikon).",
         "Kattintson a 'Statisztikák' menüpontra.",
@@ -182,7 +191,7 @@
     {
       "id": "tema-fiok",
       "cim": "Fiókműveletek (áttekintés)",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/tema-fiok.png"],
       "lepes": [
         "Ide tartozik a fiók adatok módosítása, jelszó módosítás (helyreállítás), téma váltás és kijelentkezés.",
         "Ezek a jobb felső felhasználó ikonon keresztül érhetők el."
@@ -191,7 +200,9 @@
     {
       "id": "fiok-beallitasok",
       "cim": "Hogyan módosítom a fiók adataimat vagy a jelszavamat?",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/user_settings_homepage_circle_highlighted.png",
+                "/help/feladatbank-kepek/user_settings_sidebar_settings_highlighted.png",
+                "/help/feladatbank-kepek/user_settings_sidebar_buttons_highlighted.png"],
       "lepes": [
         "Kattintson a jobb felső sarokban lévő felhasználó ikonra (kerek avatar).",
         "Válassza a 'Fiók beállítások' menüpontot.",
@@ -203,7 +214,9 @@
     {
       "id": "tema",
       "cim": "Hogyan váltok témát (világos/sötét mód)?",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/user_settings_homepage_circle_highlighted.png",
+                "/help/feladatbank-kepek/user_settings_sidebar_theme_highlighted.png"
+      ],
       "lepes": [
         "Kattintson a jobb felső sarokban lévő felhasználó ikonra (kerek avatar).",
         "A jobb oldali panelen kattintson a 'Téma' gombra.",
@@ -214,7 +227,9 @@
     {
       "id": "kijelentkezes",
       "cim": "Hogyan jelentkezek ki?",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/user_settings_homepage_circle_highlighted.png",
+                "/help/feladatbank-kepek/user_settings_sidebar_logout_highlighted.png"
+      ],
       "lepes": [
         "Kattintson a jobb felső sarokban lévő felhasználó ikonra (kerek avatar).",
         "A panel alján kattintson a 'Kijelentkezés' gombra.",
@@ -225,7 +240,7 @@
     {
       "id": "tema-hibak",
       "cim": "Hibajelentés és gyakori hibák (áttekintés)",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/tema-hibak.png"],
       "lepes": [
         "Ha hibát találsz, a 'Hibajelentés' oldalon tudod elküldeni. A rendszer a nevedet és e-mail címedet is rögzíti, hogy vissza tudjunk jelezni.",
         "Itt találsz néhány tipikus problémát és gyors megoldást is."
@@ -234,7 +249,9 @@
     {
       "id": "hibajelentes",
       "cim": "Hogyan küldök hibajelentést?",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/error_report_sidebar_highlighted.png",
+                "/help/feladatbank-kepek/error_report_menu_highlighted.png"
+              ],
       "lepes": [
         "Nyissa meg a bal oldali menüt (hamburger ikon).",
         "Kattintson a 'Hibajelentés' menüpontra.",
@@ -246,7 +263,7 @@
     {
       "id": "tanar-gyik",
       "cim": "Gyakori hibák és tippek Tanároknak",
-      "kepek": [],
+      "kepek": ["/help/feladatbank-kepek/gyakori-hibak-es-tippek.png"],
       "lepes": [
         "A kereső/szűrő nem hoz találatot: állítsa vissza a szűrőket, majd próbálja újra.",
         "Nem látszik a 'közzétevés' gomb: a gomb csak a 'Feladataim' oldalon jelenik meg.",

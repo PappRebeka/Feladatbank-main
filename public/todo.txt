@@ -6,8 +6,6 @@ sugo kepek
 
 dokumentálás
 
-
-
 Fájlos feladat létrehozásakor nem jelent meg a popupban a loading bar. Lehet kicsi volt a fájl
 Másik fájl feltöltésekor nagyon rövid ideig jelent meg
 Nem feltétlenül hiba csak egy megfigyelés
@@ -17,7 +15,7 @@ Kéne engedni olyan feladatokat ahol nincs kitöltve minden. Pl csak leírás va
 hearthbeat néha meghal
 it seems to stop mostly when the window is minimized
 so I'm thinking what if the browser stops/delays the setInterval to save recourses?
-a hearthbeat nem egy jó megoldás... megpróbálom megint a session lease cuccot
+a hearthbeat nem egy jó megoldás... meg lehetne próbálni megint a session lease cuccot
 core idea:
     - sikeres loginkor csinálunk egy session id-t (random, like the usertoken) és egy expiry time-ot (pl now + 10 min)
     - backenden (pl database) eltároljuk a session id-t és az expiry time-ot
@@ -27,5 +25,4 @@ core idea:
     - bejelentkezéskor megnézzük hogy annak a user id-nek login ha (session id == null || expiry time < current time)
     - forntenden is figyelhetjük hogy lejárt-e az expiry time és átirányítjuk az index.html-re
     - ha aktív a user akkor folyamatosan toljuk el az expiry time-ot, így nem jelentkeztetjük véletlenül ki munka közben
-
-tooltip a rendezés nyilakhoz (növekvő/csökkenő)
+also remind me what we use the usertoken for

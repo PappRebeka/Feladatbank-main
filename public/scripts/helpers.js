@@ -84,16 +84,20 @@ function registerWebsocket(url) {
         webSocket.onmessage = (event) => {
             let jsonData = event.data;
             
-            console.log(jsonData)
             if (jsonData == 'authenticationOk'){
                 canLogIn = true;
 
                 let heartbeatFunction = () => {
-                    webSocket.send(JSON.stringify({
-                        "event": "heartbeat",
-                        "userToken": userToken
+                    try {
+                        webSocket.send(JSON.stringify({
+                            "event": "heartbeat",
+                            "userToken": userToken
+                        }));
+                    } catch(err) {
+                        // idk what to do
                     }
-                ))}; heartbeatFunction();
+                    
+                }; heartbeatFunction();
 
                 setInterval(() => heartbeatFunction(), 2000)
             } else if (jsonData == 'authenticationBad') {
@@ -103,10 +107,9 @@ function registerWebsocket(url) {
         };
 
         webSocket.onclose = (event) => {
-            console.log("websocket váratlanul bezárult")
-            console.log(event.code);
-            console.log(event.reason);
-            console.log(event)
+            console.log(`websocket: code=${event.code}; reason=${event.reason};`);
+            console.log(`websocket: reconnecting`)
+            setTimeout(() => registerWebsocket(url), 2000)
         };
     }
 
