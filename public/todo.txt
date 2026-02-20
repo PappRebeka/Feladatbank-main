@@ -17,5 +17,15 @@ Kéne engedni olyan feladatokat ahol nincs kitöltve minden. Pl csak leírás va
 hearthbeat néha meghal
 it seems to stop mostly when the window is minimized
 so I'm thinking what if the browser stops/delays the setInterval to save recourses?
+a hearthbeat nem egy jó megoldás... megpróbálom megint a session lease cuccot
+core idea:
+    - sikeres loginkor csinálunk egy session id-t (random, like the usertoken) és egy expiry time-ot (pl now + 10 min)
+    - backenden (pl database) eltároljuk a session id-t és az expiry time-ot
+    - forntenden (pl session storage) eltároljuk a session id-t meg talán az expiry time-ot is
+    - kijelentkezéskor adatbázisba lenullozzuk
+    - oldal elhagyása után magátol elhalálozik (lejár az expiry time)
+    - bejelentkezéskor megnézzük hogy annak a user id-nek login ha (session id == null || expiry time < current time)
+    - forntenden is figyelhetjük hogy lejárt-e az expiry time és átirányítjuk az index.html-re
+    - ha aktív a user akkor folyamatosan toljuk el az expiry time-ot, így nem jelentkeztetjük véletlenül ki munka közben
 
 tooltip a rendezés nyilakhoz (növekvő/csökkenő)
