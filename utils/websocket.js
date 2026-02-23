@@ -116,9 +116,12 @@ function createWebsocket() {
         })
     })
 
-    
-
     cleanUpInterval();
+    return wss;
 }
 
-module.exports = { createWebsocket };
+function getSessions() {
+    return sessions;
+}
+
+module.exports = { createWebsocket, getSessions };

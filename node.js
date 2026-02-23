@@ -15,13 +15,15 @@ const util       = require("util");
 const ansiToHtml = require('ansi-to-html');
 const WebSocket = require('ws');
 
+const uploadDir = path.join(process.cwd(), "uploads");
+
 const multer = require('multer')
 const upload = multer({
   fileFilter: function(req, file, callback) {
     file.originalname = Buffer.from(file.originalname, 'latin1').toString('UTF-8');
     callback(null, true);
   },
-  dest: 'uploads/' 
+  dest: uploadDir 
 });
 
 const app = express();
@@ -43,13 +45,13 @@ const { sendMail } = require("./services/emailsend")
 const { loggerConfig, getLogger, terminal_wss_tokens, startWss } = require("./config/logging");
 const { log } = require("console");
 const { isNumber } = require("util");
-const { createWebsocket } = require("./utils/websocket.js")
+const { createWebsocket, getSessions } = require("./utils/websocket.js")
 
 
 const pad = (s, n) => s.padEnd(n);
 const activeSessions = new Set()
 
-createWebsocket();
+let wss = createWebsocket();
 
 MSG_PAD = 30;
 METHOD_PAD = 16;
@@ -149,7 +151,7 @@ app.get("/reg", async (req, res) => { //PR, RD
         message: `/reg error! Valamelyik session-token hiányzik, vagy nem egyeznek a tokenek`
       });
 
-      return res.status(400).send('Invalid OAuth state').end();
+      return res.status(400).send('Invalid OAuth state').redirect("index.html").end();
     }
 
     const code = req.query.code;
@@ -1013,7 +1015,7 @@ app.post("/deleteUser", (req, res) => { //PR, BBB
 
     wss.clients.forEach((client) => {
       if (client.userToken === userToken[0]["UserToken"]) {
-        client.send(JSON.stringify({ "event": "userDelete" }))
+        client.send("userDelete")
       }
     })
     
@@ -2010,13 +2012,16 @@ app.post("/MentBackup", async (req, res) =>{
 
 app.post("/RestoreBackup", (req, res) =>{
   const fajlNev = req.body.dumpNev
-  var sessionSzamlalo = sessionCounter()
-  if(sessionSzamlalo <= 1){
+
+  // might take 10 seconds to fully detect sessions that are disconnected because
+  // that is how it is coded
+  let activeSessionDb = getSessions().size;
+  if(activeSessionDb <= 1){
     restore("backups", fajlNev)
     res.send(JSON.stringify({"str":"Sikeres visszaállítás"}))
   }
   else{
-    res.send(JSON.stringify({"str":`Jelenleg vannak bejelentkezett felhasználók (${sessionSzamlalo} db), kérjük próbálja újra később`}))
+    res.send(JSON.stringify({"str":`Jelenleg vannak bejelentkezett felhasználók (${activeSessionDb} db), kérjük próbálja újra később`}))
   }
   res.end()
 })
@@ -2092,6 +2097,9 @@ const server = app.listen(config.server.port, () => {
     level: 'info',
     message: `Fut a szerver`,
   });
+
+  console.log(`current working directory: ${process.cwd()}`);
+  console.log(`current directory name: ${__dirname}`);
 
   exec (`mariadb-dump --version`, (error, stdout, stderr) => {
     if (error) {
@@ -2171,7 +2179,7 @@ const server = app.listen(config.server.port, () => {
       break;
       default: //Feladataim, injection: userid
         selectTable = "Feladatok"
-        whereParameters = "Tanar = ?"
+        whereParameters = "Tanar = ? AND Archivalva = 0"
       break;
     }
     

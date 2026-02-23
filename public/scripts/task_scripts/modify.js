@@ -25,6 +25,10 @@ task_scripts/load.js ---------------
 
 // BENETT: Merge uploadFile and uploadSubtaskFile
 
+function createId() {
+    return `${new Date().toString(36)}-progress`;
+}
+
 function progressTemplateBuild(id, infoText) {
     let uploadDiv = document.createElement('div');
     uploadDiv.setAttribute("id", id)
@@ -60,7 +64,7 @@ function progressTemplateBuild(id, infoText) {
 class ProgressBar { //BBB
     constructor(fileName) {
         this.progress = 0;
-        this.id = `${crypto.randomUUID()}-upload`;
+        this.id = createId();
         this.fileName = fileName;
 
         this.span = null;
@@ -118,7 +122,7 @@ class ContinuousProgressBar {
     //this.intervalMs = 250;
 
     //this.progress = this.min;
-    this.id = `${crypto.randomUUID()}-continuous`;
+    this.id = createId();
 
     //this.timer = null;
     this.bar = null;

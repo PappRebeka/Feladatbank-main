@@ -83,7 +83,7 @@ function registerWebsocket(url) {
 
         webSocket.onmessage = (event) => {
             let jsonData = event.data;
-            
+            //console.log(`jsonData: ${jsonData}`)
             if (jsonData == 'authenticationOk'){
                 canLogIn = true;
 
@@ -102,6 +102,9 @@ function registerWebsocket(url) {
                 setInterval(() => heartbeatFunction(), 2000)
             } else if (jsonData == 'authenticationBad') {
                 window.location.href = 'hiba.html?code=4'
+            } 
+             if (jsonData == 'userDelete') {
+                window.location.href = 'hiba.html?code=5'
                 killCookie('stayLoggedIn') 
             }
         };
