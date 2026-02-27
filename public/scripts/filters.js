@@ -76,6 +76,9 @@ function resetFilters(){ //PR
     buttons[0].classList.remove('active')
     buttons[1].classList.add('active')
 
+    document.getElementById("searchbar_nav").value = ''
+    document.getElementById("searchbar_offcanvas").value = ''
+
     // reset all the global filter variables
     for (const it of [TempFilters, ActiveFilters]) {
         Object.assign(it, {

@@ -74,6 +74,9 @@ function ajax_post(urlsor, tipus, data, mutassTolt = true) {
 function registerWebsocket(url) {
         let webSocket = new WebSocket(url);
         let userToken = sessionStorage.getItem("userToken")
+        let heartbeatInterval;
+        let reconnectAttempts = 0;
+
         webSocket.onopen = (event) => {
             webSocket.send(JSON.stringify({
                 "event": "authentication",
@@ -88,18 +91,15 @@ function registerWebsocket(url) {
                 canLogIn = true;
 
                 let heartbeatFunction = () => {
-                    try {
+                    if(webSocket.readyState === webSocket.OPEN) {
                         webSocket.send(JSON.stringify({
                             "event": "heartbeat",
                             "userToken": userToken
                         }));
-                    } catch(err) {
-                        // idk what to do
                     }
-                    
                 }; heartbeatFunction();
 
-                setInterval(() => heartbeatFunction(), 2000)
+                heartbeatInterval = setInterval(heartbeatFunction, 2000)
             } else if (jsonData == 'authenticationBad') {
                 window.location.href = 'hiba.html?code=4'
             } 
@@ -111,8 +111,19 @@ function registerWebsocket(url) {
 
         webSocket.onclose = (event) => {
             console.log(`websocket: code=${event.code}; reason=${event.reason};`);
-            console.log(`websocket: reconnecting`)
-            setTimeout(() => registerWebsocket(url), 2000)
+            if(heartbeatInterval) clearInterval(heartbeatInterval);     
+
+            if(reconnectAttempts < 10) {
+                console.log(`websocket: reconnecting in 4s (attempt ${reconnectAttempts})`);
+                setTimeout(() => registerWebsocket(url), 4000)
+            } else {
+                window.location.href = `hiba.html?code=0`;
+            }
+        };
+
+        webSocket.onerror = (error) => {
+            console.log(`websocket: error ${error}`);
+            webSocket.close()
         };
     }
 

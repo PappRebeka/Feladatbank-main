@@ -331,6 +331,7 @@ app.post("/loginUser", async (req, res) => { //RD, PR
   
   if (noMail) {
     if ( (user_token == "" && (!isNonEmptyString(passwd) || !isNonEmptyString(user)))) {
+      console.log('ANYÁD')
       return res.send(JSON.stringify({ error: 'invalid input' }));
     }
   }
@@ -338,6 +339,9 @@ app.post("/loginUser", async (req, res) => { //RD, PR
              FROM Users 
              ${noMail ? `WHERE (${isEmail(user) ? "Email = ?" : "Nev = ?" } AND Jelszo = MD5(?)) 
              OR UserToken = ?` : `Where Email = ?`}`;
+
+  console.log('sql')
+  console.log(sql)
   conn.query(sql, noMail ? [user, passwd, user_token] : [mail], async (err, results) => {
     if(err){ 
       logger.log({
@@ -346,6 +350,8 @@ app.post("/loginUser", async (req, res) => { //RD, PR
       });
       throw err
     }
+    console.log('results')
+    console.log(results)
     if(results[0]['COUNT(id)'] > 0){
 
       req.session.userId = results[0]['id'];

@@ -57,8 +57,8 @@ function isEmail(v) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 }
 
-function isNonEmptyString(v, maxLen = 24, minLen = 3) {
-  return typeof v === 'string' && v.trim().length >= minLen && v.length <= maxLen;
+function isNonEmptyString(s, maxLen = 24, minLen = 3) {
+  return typeof s === 'string' && s.trim().length >= minLen /*&& s.length <= maxLen*/;
 }
 
 //User token generálása

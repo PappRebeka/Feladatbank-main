@@ -66,8 +66,13 @@ function postJSON(url, data) {
 }
 
 async function postTaskToClassroom() {
+  if(document.getElementById('modeSelect').value == '') {
+    toastMsg( "Kitöltetlen mező.", 'Válasszon fájl megosztási módot', "warning" );
+    return;
+  }
   const pb = new ContinuousProgressBar();
   pb.start();
+
 
   try {
     const feladatModal = $("#shareFeladat");
