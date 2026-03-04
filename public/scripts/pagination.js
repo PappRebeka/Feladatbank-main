@@ -1,14 +1,15 @@
 /* ------ CONTENT ------
 pagination.js ----------
-    - updateNavigationButtons    -RD
-    - changeNavigationLocation   -RD  
-    - changeLimitOffset          -PR
+    - updateNavigationButtons    -RD    Toggle pagination control button disabled state based on current page.
+    - changeNavigationLocation   -RD    Move pagination offset in specified direction.
+    - changeLimitOffset          -PR    Recalculate page size (limit) based on window width and location.
 */
 
 
 
 
-function updateNavigationButtons(){ //RD
+/** Toggle pagination control button disabled state based on current page. */
+function updateNavigationButtons(){
     const elso = document.getElementById("elso")
     const elozo = document.getElementById("elozo")
     const kovetkezo = document.getElementById("kovetkezo")
@@ -23,7 +24,11 @@ function updateNavigationButtons(){ //RD
     kovetkezo.disabled = isUtolso;
 }
 
-async function changeNavigationLocation(merre, mennyit){ //RD
+/** Move pagination offset in specified direction.
+ * @param {string} merre - 'tovabb' or any
+ * @param {string} mennyit - '1' or any
+ */
+async function changeNavigationLocation(merre, mennyit){
     if(merre == "tovabb"){
         if(mennyit == "1"){//következő lap
                 // az oldalszámlálóhoz +1 pl 2.oldalról => 3.oldalra változik
@@ -62,7 +67,10 @@ async function changeNavigationLocation(merre, mennyit){ //RD
     await setPageContent()
 }
 
-function changeLimitOffset(){ //PR
+/** Recalculate page size (limit) based on window width and location.
+ * @returns {boolean} true if limit changed
+ */
+function changeLimitOffset(){
     let width = window.innerWidth
     let sizes = [576 , 768 , 992 , 1200]
     let count = ActiveLocation == "Felhasználók" ? 3 : 6 // count in a row

@@ -24,7 +24,7 @@ A web applikáció indítása nulláról:
     3. A függőségek letöltése:
         `npm ci`
     4. A megfelelő adatok kitöltése:
-        1. a Google Oauth applikáció szerkesztése (FONTOS!!!) 
+        1. a Google Oauth applikáció szerkesztése (FONTOS!!!)         
             Mivel a web applikáció költöztetve van, és emiatt megváltozik
             maga az applikáció url-je, ezt az Oauth Cloud Console-ban is
             frissíteni kell a redirect URI-t, hogy helyesen működjön az

@@ -1,4 +1,10 @@
-function taskCardTemplate(){//PR
+//Stores all of the functions that are responsible for handling the DOM templates which are reused multiple times in the client.
+
+
+/** Create a DOM element for a task card layout.
+ * @returns {HTMLElement}
+ */
+function taskCardTemplate(){
     const div = document.createElement('div');
     div.classList.add('feladatDiv', 'col-12', 'col-sm-6', 'col-md-4', 'col-lg-3', 'col-xl-2', 'p-2', 'm-0');
     div.innerHTML = `<div class="card h-100" data-bind="card" data-bs-toggle="modal" data-bs-target="#editFeladat">
@@ -41,7 +47,10 @@ function taskCardTemplate(){//PR
     return div;
 }
 
-function taskModalTemplate(){//PR
+/** Generate HTML string for the task details modal.
+ * @returns {string}
+ */
+function taskModalTemplate(){
     const content = `<p class="mb-1 felAdat"><strong>Tantárgy:</strong> <span class="tantargyEdit" data-bind="tantargy"></span></p>
                     <p class="mb-1 felAdat"><strong>Téma:</strong> <span class="temaEdit" data-bind="tema"></span></p>
                     <p class="mb-1 felAdat num"><strong>Évfolyam:</strong> <span class="evfolyamEdit" data-bind="evfolyam"></span></p>
@@ -58,7 +67,10 @@ function taskModalTemplate(){//PR
     return content;
 }
 
-function taskModal_AlfeladatTemplate(){//PR
+/** Create a DOM element template for a subtask inside the modal.
+ * @returns {HTMLElement}
+ */
+function taskModal_AlfeladatTemplate(){
     const div = document.createElement('div')
     div.classList.add('alfeladat', 'alfId', 'm-2', 'card')
     div.innerHTML = `<div class="card-body m-1">
@@ -91,7 +103,10 @@ function taskModal_AlfeladatTemplate(){//PR
     return div
 }
 
-function subtaskCardTemplate(){//PR
+/** Construct a card element representing a new subtask for creation forms.
+ * @returns {HTMLElement}
+ */
+function subtaskCardTemplate(){
     const div = document.createElement("div");
     div.classList.add('card', 'm-2', 'alfeladat', 'alf_id')
     div.innerHTML = `<div class="card-body">
@@ -108,7 +123,10 @@ function subtaskCardTemplate(){//PR
     return div
 }
 
-function fakeFileTemplate(){//PR
+/** Generate a fake file input control used in subtask editing.
+ * @returns {HTMLElement}
+ */
+function fakeFileTemplate(){
     const div = document.createElement("div");
     div.classList.add('file-wrapper', 'd-flex', 'align-items-center')
     div.innerHTML = `<label class="btn btn-white fakeFileButton">Fájl kiválasztása</label>
@@ -118,7 +136,10 @@ function fakeFileTemplate(){//PR
     return div
 }
 
-function reportTemplate(){//BBB
+/** Create a template element for displaying a bug report entry.
+ * @returns {HTMLElement}
+ */
+function reportTemplate(){
     const div = document.createElement('div')
     div.classList.add('col', 'p-1')
     div.innerHTML = `<div class="card m-1 p-0 rounded d-flex flex-column">
@@ -156,7 +177,10 @@ function reportTemplate(){//BBB
     return div
 }
 
-function databasePageTemplate(){//BBB, PR
+/** Build the DOM structure for the database administration page.
+ * @returns {HTMLElement}
+ */
+function databasePageTemplate(){
     const div = document.createElement('div')
     div.classList.add('container-fluid', 'h-100')
     div.innerHTML = `<div class="container-fluid bg-light p-3 rounded">
@@ -282,6 +306,9 @@ function databasePageTemplate(){//BBB, PR
 
 }
 
+/** Template for admin view of bug reports list.
+ * @returns {HTMLElement}
+ */
 function hibajelentesFoadminTemplate(){
     const div = document.createElement('div')
     div.classList.add('container-fluid', 'mx-auto', 'bg-light', 'border-light', 'p-0', 'rounded', 'd-flex', 'flex-column')
@@ -307,6 +334,9 @@ function hibajelentesFoadminTemplate(){
     return div
 }
 
+/** Default user-facing bug report form template.
+ * @returns {Promise<HTMLElement>}
+ */
 async function hibajelentesDefaultTemplate(){
     const div = document.createElement('div')
     div.classList.add('container-fluid', 'mx-auto', 'bg-light', 'border-light', 'p-3', 'rounded', 'shadow', 'd-flex', 'flex-column')
@@ -349,11 +379,13 @@ async function hibajelentesDefaultTemplate(){
                             </div>
                             
                         </div>
-                    </div>`
-    //$bind(div, 'sendBtn').onclick = async () => await sendFeedback())
+                    </div>` 
     return div
 }
 
+/** Return a placeholder element when there is no data to show.
+ * @returns {HTMLElement}
+ */
 function nincsAdatTemplate(){
     const div = document.createElement('div')
     div.classList.add('bg-dark', 'border', 'border-dark', 'rounded', 'p-3')
@@ -361,6 +393,9 @@ function nincsAdatTemplate(){
     return div
 }
 
+/** Create a card element designed to hold a chart canvas.
+ * @returns {HTMLElement}
+ */
 function chartCardTemplate(){
     const div = document.createElement('div')
     div.classList.add('col-12', 'col-lg-6', 'p-2',)
@@ -375,6 +410,9 @@ function chartCardTemplate(){
     return div
 }
 
+/** Generate a user card element for listing users.
+ * @returns {HTMLElement}
+ */
 function felhasznaloCardTemplate(){
     const div = document.createElement('div')
     div.classList.add('felhasznaloDiv', 'col-12', 'col-lg-6', 'p-2', 'm-0')
@@ -421,6 +459,9 @@ function felhasznaloCardTemplate(){
     
 }
 
+/** HTML content for the login form view.
+ * @returns {string}
+ */
 function loginFormTemplate(){
 
     const content = `<h3 class="text-center mb-4">Bejelentkezés</h3>
@@ -449,6 +490,9 @@ function loginFormTemplate(){
     return content
 }
 
+/** HTML content for registration form.
+ * @returns {string}
+ */
 function registerFormTemplate(){
     const content = `<h3 class="text-center mb-4" >Regisztráció</h3>
                     <input type="text" placeholder="Felhasználónév" maxlength="320" class="form-control mb-2" id="username" autocomplete="off" required>     
@@ -470,6 +514,9 @@ function registerFormTemplate(){
     return content
 }
 
+/** HTML content for forgotten password form.
+ * @returns {string}
+ */
 function elfelejtettJelszoFormTemplate(){
     const content = `<h3 class="text-center mb-4">Elfelejtett jelszó</h3>
                     <input type="text" class="form-control mb-3" id="email" placeholder="Emailcím" required>
@@ -481,6 +528,9 @@ function elfelejtettJelszoFormTemplate(){
     return content
 }
 
+/** Generate a basic accordion item element for FAQ sections.
+ * @returns {HTMLElement}
+ */
 function accordionItemTemplate(){
     const div = document.createElement('div')
     div.classList.add("accordion-item")
@@ -496,6 +546,9 @@ function accordionItemTemplate(){
     return div
 }
 
+/** Template for a placeholder showing no image available.
+ * @returns {HTMLElement}
+ */
 function accordionNincsKepTemplate(){    
     const div = document.createElement('div')
     div.classList.add("p-4", "text-center", "text-muted", "bg-light")
@@ -504,6 +557,9 @@ function accordionNincsKepTemplate(){
     return div
 }
 
+/** Template for a numbered steps list inside accordion.
+ * @returns {HTMLElement}
+ */
 function accordionLepesekTemplate(){
     const div = document.createElement('div')
     div.classList.add("mt-2","p-2")
@@ -517,6 +573,10 @@ function accordionLepesekTemplate(){
     return div
 }
   
+/** Create a carousel wrapper element with controls.
+ * @param {string} carouselId
+ * @returns {HTMLElement}
+ */
 function carouselItemTemplate(carouselId){
     
     const div = document.createElement('div')
@@ -535,6 +595,9 @@ function carouselItemTemplate(carouselId){
     return div
 }
 
+/** Default offcanvas button for user options panel.
+ * @returns {string}
+ */
 function userOptionsDefaultButton(){
     const content = `<button class="btn ms-3" data-bs-dismiss="offcanvas">
                         <i class="bi bi-caret-right-fill fs-5"></i>
@@ -543,6 +606,9 @@ function userOptionsDefaultButton(){
                 
 }
 
+/** Default option buttons for user settings panel.
+ * @returns {string}
+ */
 function userOptionsDefaultOptions(){
     const content = `<div class="btn btn-light w-100 my-2"><i class="bi bi-gear-fill me-1"></i>Fiók beállítások</div>
                     <div class="btn btn-light w-100 my-2"><i id="themeIndicator" class="bi bi-sun-fill me-1"></i>Téma</div>

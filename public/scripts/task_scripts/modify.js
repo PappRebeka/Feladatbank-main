@@ -1,34 +1,44 @@
 /* ------ CONTENT ------
-task_scripts/load.js ---------------
-    - uploadSubtaskFile         -BBB
-    - saveTask                  -BBB, PR 
-    - isCompleteSubtask         -BBB
-    - getDeletedTasks           -BBB
-    - uploadTasks               -BBB
-    - validateTaskInputs        -BBB
-    - createTaskPayload         -BBB
-    - createSubtaskObjects      -BBB
-    - uploadFile                -BBB
-    - resetCreateNewTask        -PR
-    - createSubtask             -PR+
-    - buildFakeFileInput        -PR
-    - subtaskDelete             -PR
-
-    - updateTask                -PR
-    - archiveTask               -PR
-    - editThisFeladat           -PR
-    - AlfFileChanged            -PR
-    - CancelEditingThisFeladat  -PR
-    - TorolFeladat              -PR?
-    - bookmarkTaskClick         -RD
+task_scripts/modify.js ----------
+    - createId                    -BBB       generate unique id for uploads
+    - progressTemplateBuild       -BBB       build DOM for progress bar element
+    - ProgressBar                 -BBB       class handling file upload progress
+    - ContinuousProgressBar       -BBB       class for indeterminate progress
+    - uploadSubtaskFile           -BBB       upload file with progress support
+    - saveTask                    -BBB, PR   orchestrate save/update of task and subtasks
+    - isCompleteSubtask           -BBB       verify subtask has required fields
+    - getDeletedTasks             -BBB       return array of subtasks flagged for deletion
+    - uploadTasks                 -BBB       POST task payload to server
+    - validateTaskInputs          -BBB       ensure main task fields are nonempty
+    - createTaskPayload           -BBB       assemble payload object for save
+    - createSubtaskObjects        -BBB       gather subtask info and upload files
+    - uploadFile                  -BBB       helper choosing existing or new file id
+    - resetCreateNewTask          -PR        reset modal inputs to defaults
+    - createSubtask               -PR        append new subtask UI section
+    - buildFakeFileInput          -PR        create styled file input for subtasks
+    - subtaskDelete               -PR        remove subtask element and mark deletion
+    - updateTask                  -PR        refresh UI after editing existing task
+    - archiveTask                 -PR        archive/unarchive task on server
+    - addTextInputTo              -PR        helper to replace elements with text inputs
+    - returnEditNehezsegSlider    -PR        create difficulty slider for edit form
+    - editThisFeladat             -PR        switch modal into editing mode
+    - buildDeleteButton           -PR        create delete button for subtasks
+    - AlfFileChanged              -PR        handle change event on file input
+    - CancelEditingThisFeladat    -PR        revert modal back to view state
+    - TorolFeladat                -PR        delete task with confirmation
+    - bookmarkTaskClick           -RD        toggle bookmarked status and update server
 */
 
 // BENETT: Merge uploadFile and uploadSubtaskFile
 
+/**Unique ID fájlfeltöltéseknek dátum alapján
+ * @returns {string}
+ */
 function createId() {
     return `${new Date().toString(36)}-progress`;
 }
 
+/**Feléppíti a prgressbar elemeit a modalban */
 function progressTemplateBuild(id, infoText) {
     let uploadDiv = document.createElement('div');
     uploadDiv.setAttribute("id", id)
@@ -189,6 +199,9 @@ class ContinuousProgressBar {
   }
 }
 
+/**Fájl feltöltése, progressbar frissítés
+ * @param {HTMLInputElement} fajlInput - HTML input element 
+ */
 async function uploadSubtaskFile(fajlInput) {//BBB
     const form = new FormData();
     const file = fajlInput.files[0];
@@ -234,7 +247,11 @@ async function uploadSubtaskFile(fajlInput) {//BBB
     });
 }
 
-async function saveTask(isUjFeladat, feladatId, felhasznalo) {
+/**Feladat, alfeladatok frissítése vagy mentése
+ * @param {bool} isUjfeladat 
+ * @param {string || number} feladatId
+ * @param {string || number} felhasznalo
+ */async function saveTask(isUjFeladat, feladatId, felhasznalo) {
     const containerId = isUjFeladat ? 'alfeladatBox' : 'alfeladatokContainer'; // új feladat vagy egy meglévő szerkesztése
     const slimMode = slim_felAdd ? '-s' : ''; // slim mód // no longer used like that
 
@@ -266,12 +283,16 @@ async function saveTask(isUjFeladat, feladatId, felhasznalo) {
     await uploadTasks(payload, isUjFeladat, feladatId, felhasznalo);
 }
 
-function isCompleteSubtask(alfeladat) { //BBB
+
+/**Mezőellenőrzés az alfeladatoknál
+ * @param {object} alfeladat
+ */function isCompleteSubtask(alfeladat) { //BBB
     return !((alfeladat.leiras === "" || alfeladat.leiras === null) &&
            (alfeladat.pontszam === "" || alfeladat.pontszam === null));
 }
 
-function getDeletedTasks() { //BBB
+
+/**Lezsűri a globális feladatokm listát a törölni ívánt feladatokra */function getDeletedTasks() { //BBB
     try {
         if (Array.isArray(deleteIds) && deleteIds.length > 0) {
             return deleteIds.map(id => (
@@ -289,7 +310,13 @@ function getDeletedTasks() { //BBB
     return [];
 }
 
-async function uploadTasks(payload, ujFeladat, feladatId, felhasznalo) { //BBB
+
+/**Feladat mentés/módosítás
+ * @param {object} payload feladat adatai
+ * @param {bool} ujFeladat
+ * @param {string || number} feladatId
+ * @param {string || number} felhasznalo
+ */async function uploadTasks(payload, ujFeladat, feladatId, felhasznalo) { //BBB
     $.ajax({
         url: '/ment-feladat',
         method: "POST",
@@ -314,11 +341,19 @@ async function uploadTasks(payload, ujFeladat, feladatId, felhasznalo) { //BBB
     //resetCreateNewTask(feladatId, felhasznalo);
 }
 
-function validateTaskInputs(feladatData) {//BBB
+
+/**Feladat hozzáadás/módosítás mezőellenőrzés 
+ * @param {object} feladatData
+*/function validateTaskInputs(feladatData) {//BBB
     return Object.values(feladatData).every(value => value !== "");
 }
 
-function createTaskPayload(feladatData, alfeladatok, ujFeladat) {//BBB
+
+/**Feladat mentésére/módosítására használatos object elkészítése 
+ * @param {object} feladatData
+ * @param {object} alfeladatok
+ * @param {bool} ujFeladat 
+*/function createTaskPayload(feladatData, alfeladatok, ujFeladat) {//BBB
     return {
         "Nev":      feladatData.Nev,
         "Leiras":   feladatData.Leiras,
@@ -335,7 +370,11 @@ function createTaskPayload(feladatData, alfeladatok, ujFeladat) {//BBB
     };
 }
 
-async function createSubtaskObjects(ujFeladat, containerId) {//BBB
+
+/**Alfeladat adatainak kitöltésére szolgáló elementek létrehozása
+ * @param {bool} ujFeladat
+ * @param {string || number} containerId hova legyenek rakva az elementek
+ */async function createSubtaskObjects(ujFeladat, containerId) {//BBB
 
     let alfeladatok = [];
     let items;
@@ -394,6 +433,9 @@ function uploadFile(fileInput) {//BBB
     }
 }
 
+
+
+/**feladat létrehozására szolgáló modal viszzaállítása */
 function resetCreateNewTask(/*feladatId, felhasznalo, felhasznaloColor*/){ //PR
     //var s = slim_felAdd ? "-s" : "";
     
@@ -408,6 +450,7 @@ function resetCreateNewTask(/*feladatId, felhasznalo, felhasznaloColor*/){ //PR
     document.getElementById("alfeladatBox").innerHTML = "";
 }
 
+/**Feladat létrehozásnal alfeladat bemeneti mezők és gombok létrehozása */
 function createSubtask(where){ //PR
     //creates a new subtask box
     const subtask = subtaskCardTemplate()
@@ -426,6 +469,11 @@ function createSubtask(where){ //PR
     pId++;
 }
 
+/**Fájlinput vizuális "fake" felépítése
+ * @param {number} id input id
+ * @param {string} fileName
+ * @param {number} fileIdentifier
+ */
 function buildFakeFileInput(id, fileName, fileIdentifier){ //PR
     const fakeFile = fakeFileTemplate()
 

@@ -1,0 +1,23 @@
+{
+    "server": {
+        "port": 3000,
+        "base_url": "",
+        "session_secret": ""
+    },
+    "websocket": {
+        "port": 3001
+    },
+    "database": {
+        "host": "",
+        "port": 3002,
+        "user": "",
+        "password": "",
+        "name": "",
+        "connectionLimit": 10,
+        "waitForConnections": true
+    },
+    "google": {
+        "client_id": "",
+        "client_secret": ""
+    }
+}

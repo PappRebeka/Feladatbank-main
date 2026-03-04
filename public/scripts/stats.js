@@ -1,24 +1,27 @@
 /* ------ CONTENT ------
 stats.js ---------------
-  - setUserModal         -PR, RD    
-  - statToggle           -PR
-  - selectionReset       -RD?
-  - DefaultStat          -RD
-  - MegosztottStat       -RD
-  - KozzetettStat        -RD
-  - avgNehezsegStat      -RD
-  - isDatasetEmpty       -RD
-  - evfArchivaltStat     -RD
-  - constructArchDataset -RD
-  - top3Data             -RD, PR
-  - createChart          -RD, PR
-  - createStatisticCard  -RD, PR
-  - StatisztikaOnLoad    -RD
+  - setUserModal         -PR, RD   Set up the statistics modal
+  - statToggle           -PR       Handle statistic tab switching
+  - selectionReset       -RD       Reset statistic selection to default
+  - DefaultStat          -RD       Fetch general task statistics
+  - MegosztottStat       -RD       Fetch shared tasks per teacher statistics
+  - KozzetettStat        -RD       Fetch published tasks per course statistics
+  - avgNehezsegStat      -RD       Fetch average difficulty per course statistics
+  - isDatasetEmpty       -RD       Check if dataset contains only zeros
+  - evfArchivaltStat     -RD       Fetch archived vs active statistics per grade level
+  - constructArchDataset -RD       Normalize datasets across fixed year range filling missing with zeros
+  - top3Data             -RD, PR   Prepare data for top‑3 teachers chart
+  - createChart          -RD, PR   Build a Chart.js instance with provided parameters
+  - createStatisticCard  -RD, PR   Generate and append a statistic card to the stats container
+  - StatisztikaOnLoad    -RD       Initialize statistics view on page load
 */ 
 
-async function setUserModal(statLap, id){ //PR, RD
-    if(id != undefined) StatUserId = id
-    //userId_ToChangeInstitute = id
+/** Prepare and display statistics modal for a particular user and view.
+ * @param {number} statLap - view selector
+ * @param {number} [id] 
+ */
+async function setUserModal(statLap, id){
+    if(id != undefined) StatUserId = id 
     const tanarAdatai = document.querySelector("#modalTanarContent")
     tanarAdatai.replaceChildren()
 
@@ -78,7 +81,11 @@ async function setUserModal(statLap, id){ //PR, RD
     }
 }
 
-async function statToggle(chosenOne, page){ //PR
+/** Switch between statistic tabs and trigger modal refresh.
+ * @param {HTMLElement} chosenOne
+ * @param {number} page 
+ */
+async function statToggle(chosenOne, page){
     if(StatPageCounter == page) return; //if the user clicks the same button again, dont do anything
 
     let id = chosenOne.id+"Stat" //get the corresponding label id
@@ -98,11 +105,15 @@ async function statToggle(chosenOne, page){ //PR
     await setUserModal(page) //set the modal content based on the clicked button
 }
 
-async function selectionReset(){//RD?
+/** Reset statistic selection to default. */
+async function selectionReset(){
     await statToggle(document.getElementById("Letrehozott"), 1)
 }
 
-async function DefaultStat(){//RD
+/** Fetch general task statistics.
+ * @returns {Promise<{labels:Array, dataset:Array}>}
+ */
+async function DefaultStat(){
     var generalFeladatok = await ajax_post("/generalFeladatokData", 1, { felhId: StatUserId }, false)
     var Letrehozott = generalFeladatok.FeladatDB
     var Kozzetett = generalFeladatok.KozzetettDB
@@ -115,7 +126,10 @@ async function DefaultStat(){//RD
     return {labels, dataset}
 }
 
-async function MegosztottStat(){//RD
+/** Fetch statistics for shared tasks per teacher.
+ * @returns {Promise<{labels:Array, dataset:Array}>}
+ */
+async function MegosztottStat(){
     //var baseData = await ajax_post("/ChartDataGet?statLap=2&statCaller="+StatUserId).results
     //await ajax_post(`megosztottFeladatokData?felhId=${StatUserId}`)
     var megosztottFeladatok = await ajax_post("/megosztottFeladatokData", 1, { felhId: StatUserId }, false)
@@ -129,7 +143,10 @@ async function MegosztottStat(){//RD
     return {labels, dataset}
 }
 
-async function KozzetettStat(){//RD
+/** Fetch statistics for published tasks per course.
+ * @returns {Promise<{labels:Array, dataset:Array}>}
+ */
+async function KozzetettStat(){
     //var baseData = await ajax_post("/ChartDataGet?statLap=3&statCaller="+StatUserId).results
     var kozzetettFeladatok = await ajax_post("/kozzetettFeladatokData", 1, { felhId: StatUserId }, false)
     var labels = []
@@ -142,7 +159,10 @@ async function KozzetettStat(){//RD
     return {labels, dataset}
 }
 
-async function avgNehezsegStat(){//RD
+/** Retrieve average difficulty statistics per course.
+ * @returns {Promise<{labels:Array, dataset:Array}>}
+ */
+async function avgNehezsegStat(){
     //var baseData = await ajax_post("/ChartDataGet?statLap=3&statCaller="+StatUserId).results
     var avgFeladatok = await ajax_post("/averageNehezsegData", 1, { felhId: StatUserId }, false)
     var labels = []
@@ -155,14 +175,21 @@ async function avgNehezsegStat(){//RD
     return {labels, dataset}
 }
 
-function isDatasetEmpty(dataset){ //RD
+/** Determine if all entries in a dataset are zero.
+ * @param {Array<number>} dataset
+ * @returns {boolean}
+ */
+function isDatasetEmpty(dataset){
     for (const data of dataset) {
         if (data != 0) return false 
     }   
     return true
 }
 
-async function evfArchivaltStat(){//RD
+/** Get grade-level archived vs active statistics.
+ * @returns {Promise<{labels:Array, dataset:Array}>}
+ */
+async function evfArchivaltStat(){
     var evfFeladatok = await ajax_post("/evfolyamArchivaltData", 1, { felhId: StatUserId }, false)
     var labels = []
     var dataset = []
@@ -182,7 +209,12 @@ async function evfArchivaltStat(){//RD
     return {labels, dataset}
 }
 
-function constructArchDataset(evfolyamok, alapDataset){//RD
+/** Normalize datasets across fixed year range filling missing with zeros.
+ * @param {Array<number>} evfolyamok
+ * @param {Array<number>} alapDataset
+ * @returns {Array<number>}
+ */
+function constructArchDataset(evfolyamok, alapDataset){
     var ujDataset = []
     for (let i = 1; i < 14; i++) { //[1, 2, 3, 4, 5]
         if(evfolyamok.includes(i)){//['', '', 3, 4, ''] => //[3, 4]
@@ -195,7 +227,10 @@ function constructArchDataset(evfolyamok, alapDataset){//RD
     return ujDataset
 }
 
-async function top3Data(){//RD, PR
+/** Prepare data for top‑3 teachers chart.
+ * @returns {Promise<{labels:Array, feladatDb:Array, dataset:Array}>}
+ */
+async function top3Data(){
     var labels = []
     var feladatDb = []
     var dataset = [2, 3, 1]
@@ -215,7 +250,20 @@ async function top3Data(){//RD, PR
     return {labels, feladatDb, dataset}
 }
 
-function createChart(hova, errorHova, tipus, cimkek, dataset, subtitleText, x, y, axis, feladatDb){//RD, PR
+/** Build a Chart.js instance with provided parameters.
+ * @param {HTMLCanvasElement} hova
+ * @param {HTMLElement} errorHova
+ * @param {string} tipus
+ * @param {Array} cimkek
+ * @param {Array} dataset
+ * @param {string} subtitleText
+ * @param {string|null} x
+ * @param {string|null} y
+ * @param {string} axis
+ * @param {Array|null} feladatDb
+ * @returns {Chart}
+ */
+function createChart(hova, errorHova, tipus, cimkek, dataset, subtitleText, x, y, axis, feladatDb){
     // create the chart with the data provided. it got complicated quickly
 
     if(isDatasetEmpty(dataset)){ // no data case (issue!) needs a touchup
@@ -292,7 +340,8 @@ function createChart(hova, errorHova, tipus, cimkek, dataset, subtitleText, x, y
     return ujChart
 }
 
-async function createStatisticCard(){ //RD, PR
+/** Generate and append a statistic card to the stats container. */
+async function createStatisticCard(){
     var statAdat
     var tipus = ""
     var title = ""
@@ -361,7 +410,8 @@ async function createStatisticCard(){ //RD, PR
     generatedChartNumber++;
 }
 
-async function StatisztikaOnLoad(){ //RD
+/** Initialize statistics view on page load. */
+async function StatisztikaOnLoad(){
     StatUserId = CurrentUserData.id;
     generatedChartNumber = 0
     for (let i = 0; i < 6; i++) {

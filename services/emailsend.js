@@ -2,7 +2,15 @@ const conn = require("../config/db").connMegszerez();
 const { createClientUsingCredentials, baseUrl, SCOPES } = require("../config/google");
 const { google } = require("googleapis");
 
-async function sendMail(to, type = 'request', data = {}) { // RD, PR
+/**
+ * Send an email using the application Gmail account.
+ * The function looks up stored OAuth tokens, composes a message and posts
+ * it via the Gmail API.
+ * @param {string} to - recipient address
+ * @param {string} [type='request'] - template type ('request','report', etc.)
+ * @param {object} [data={}] - additional data for template
+ */
+async function sendMail(to, type = 'request', data = {}) {
   const senderEmail = 'sz7.cloudconsole@gmail.com'; // mindig innen küldjük az emailt
   SCOPES.push("https://www.googleapis.com/auth/gmail.send");
 
@@ -145,7 +153,16 @@ function newReportFixedEmail(reportId, userName, reportTime, reportMessage) {
         </html>`
 }
 
-function makeMail(to, from, subject, type, data = {}) {//PR
+/**
+ * Construct a raw base64url-encoded email message.
+ * @param {string} to
+ * @param {string} from
+ * @param {string} subject
+ * @param {string} type
+ * @param {object} [data]
+ * @returns {string}
+ */
+function makeMail(to, from, subject, type, data = {}) {
   // RFC 2047 encoding for UTF-8 characters in email headers
   const encodedSubject = `=?UTF-8?B?${Buffer.from(subject).toString('base64')}?=`;
 

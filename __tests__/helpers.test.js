@@ -21,6 +21,8 @@ test('checks if a variable is a non-empty string', () => {
     expect(isNonEmptyString("")).toBe(false);
 });
 
+
+
 // shitty bc it uses a db connection
 /*test('checks if the user token generation is right', () => {
     const token = userTokenCreate();

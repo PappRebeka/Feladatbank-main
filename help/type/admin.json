@@ -21,7 +21,7 @@
     {
       "id": "tema-user",
       "cim": "Felhasználókezelés (áttekintés)",
-      "kepek": [],
+      "kepek": ["tema-user.png"],
       "lepes": [
         "Adminként a 'Felhasználók' oldalon tud tanári fiókokat kezelni az intézményén belül.",
         "Tipikus műveletek: jogosultság váltás (Tanár/Admin), áthelyezés intézménybe, törlés."
@@ -30,7 +30,11 @@
     {
       "id": "felhasznalok",
       "cim": "Hol találom a Felhasználók oldalt?",
-      "kepek": [],
+      "kepek": [
+        "homepage-hamburger-highlighted.png",
+        "homepage-left-menu-users-highlighted.png",
+        "homepage-teachers.png"
+      ],
       "lepes": [
         "Nyissa meg a menüt (bal felső menü ikon).",
         "Kattintson a 'Felhasználók' menüpontra.",
@@ -40,7 +44,10 @@
     {
       "id": "felhasznalok-lapozas",
       "cim": "Hogyan működik a lista és a lapozás?",
-      "kepek": [],
+      "kepek": [
+        "homepage-teacher-highlighted.png",
+        "homepage-offset-buttons-highlighted.png"
+      ],
       "lepes": [
         "A lista kártyákban jelenik meg; a soronkénti elemszám képernyőszélességtől függ.",
         "Az alsó lapozó gombokkal tud első/előző/következő/utolsó oldalra lépni.",
@@ -50,7 +57,11 @@
     {
       "id": "jogosultsag",
       "cim": "Hogyan módosítok jogosultságot (Tanár/Admin)?",
-      "kepek": [],
+      "kepek": [
+        "homepage-hamburger-highlighted.png",
+        "homepage-left-menu-users-highlighted.png",
+        "homepage-user-buttons-highlighted.png"
+      ],
       "lepes": [
         "Menjen a 'Felhasználók' oldalra.",
         "A felhasználó kártyáján kattintson a 'Tanár' vagy 'Admin' gombra.",
@@ -71,7 +82,12 @@
     {
       "id": "athelyezes",
       "cim": "Hogyan helyezek át felhasználót más intézménybe?",
-      "kepek": [],
+      "kepek": [
+        "homepage-hamburger-highlighted.png",
+        "homepage-left-menu-users-highlighted.png",
+        "homepage-user-modal-move-highlighted.png",
+        "homepage-user-move-institute.png"
+      ],
       "lepes": [
         "Menjen a 'Felhasználók' oldalra.",
         "Nyissa meg a felhasználó adatlapját (kattintás a kártyára).",
@@ -82,7 +98,12 @@
     {
       "id": "torles",
       "cim": "Hogyan törlök felhasználót?",
-      "kepek": [],
+      "kepek": [
+        "homepage-hamburger-highlighted.png",
+        "homepage-left-menu-users-highlighted.png",
+        "homepage-teacher-highlighted.png",
+        "homepage-user-modal-delete-highlighted.png"
+      ],
       "lepes": [
         "Menjen a 'Felhasználók' oldalra.",
         "Nyissa meg a felhasználó adatlapját (kattintás a kártyára).",
@@ -103,7 +124,9 @@
     {
       "id": "tema-hibajelentes",
       "cim": "Hibajelentések kezelése (áttekintés)",
-      "kepek": [],
+      "kepek": [
+        "tema-hibajelentes.png"
+      ],
       "lepes": [
         "Az Admin/Főadmin a hibajelentéseket listában látja, és státuszt állíthat: 'Javítva' vagy 'Törlés'.",
         "A hibajelentés tartalmazza a küldő nevét és e-mail címét is (visszajelzéshez)."
@@ -112,7 +135,10 @@
     {
       "id": "hibajelentesek",
       "cim": "Hibajelentések: hogyan kezelem őket?",
-      "kepek": [],
+      "kepek": [
+        "homepage-hamburger-highlighted.png",
+        "homepage-left-menu-reports-highlighted.png"
+      ],
       "lepes": [
         "Nyissa meg a 'Hibajelentés' oldalt a menüből.",
         "Admin/Főadmin esetén megjelenik a hibajelentések listája.",
@@ -123,7 +149,9 @@
     {
       "id": "hibajelentesek-adatok",
       "cim": "Milyen adatokat tartalmaz egy hibajelentés?",
-      "kepek": [],
+      "kepek": [
+        "reports-report-highlighted.png"
+      ],
       "lepes": [
         "Hibajelenség szövege (a felhasználó leírása).",
         "A felhasználó neve és e-mail címe (hogy vissza lehessen jelezni).",
@@ -143,7 +171,9 @@
     {
       "id": "tema-intezmeny",
       "cim": "Intézményi hatókör (áttekintés)",
-      "kepek": [],
+      "kepek": [
+        "tema-intezmeny.png"
+      ],
       "lepes": [
         "Az Admin alapból csak a saját intézményéhez tartozó felhasználókat látja.",
         "Ha valaki 'eltűnik' a listából, gyakran intézményváltás vagy rossz intézménybe léptetés az ok."
@@ -172,7 +202,9 @@
     {
       "id": "tema-foadmin",
       "cim": "Főadmin funkciók (áttekintés)",
-      "kepek": [],
+      "kepek": [
+        "tema-foadmin.png"
+      ],
       "lepes": [
         "Ezek a funkciók csak Főadmin jogosultsággal érhetők el.",
         "Ide tartozik: SQL futtatás, backup készítés/visszaállítás, intézmények központi kezelése."
