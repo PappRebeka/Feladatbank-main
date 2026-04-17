@@ -1,16 +1,21 @@
 /* ------ CONTENT ------
 account.js -------------
-    - setUserData           -PR 
-    - resetUserOptions      -PR 
-    - buildButtonWithIcon   -PR
-    - allowUserDataEdit     -PR
-    - changeFieldToInput    -PR
-    - setFieldToText        -PR, BBB
-    - saveUserData          -PR
-    - deleteThisUser        -PR
-    - getPageOptionsFor     -PR
+    - setUserData           -PR       fetch & render current user info
+    - resetUserOptions      -PR       restore default account panel UI
+    - buildButtonWithIcon   -PR       helper to create icon buttons
+    - allowUserDataEdit     -PR       enable inline editing of name/email
+    - changeFieldToInput    -PR       swap text field for input element
+    - setFieldToText        -PR, BBB  revert input back to text with pencil
+    - saveUserData          -PR       validate and send updated profile
+    - deleteThisUser        -PR       handle user removal with safety checks
+    - getPageOptionsFor     -PR       generate navigation items based on role
 */
 
+/** Load current user data from the server (if not cached),
+ * update session state, and render the profile section with
+ * name, email, initials icon and background color.
+ * Removes extraneous fields to keep CurrentUserData minimal.
+ */
 async function setUserData(){//PR
 
     if (!CurrentUserData.id) {
@@ -41,6 +46,9 @@ async function setUserData(){//PR
     CurrentUserData = {id, Nev, Email, Jogosultsag}
 }
 
+/** Restore the account offcanvas to its default, non-editing state.
+ * Rebuilds the details block and resets buttons/icons accordingly.
+ */
 function resetUserOptions(){//PR
 
     document.getElementById("details").innerHTML = `<div id="jogosultsag" class="big"></div>
@@ -60,6 +68,11 @@ function resetUserOptions(){//PR
     document.getElementById("editUserOptions")?.remove()
 }
   
+/** Convenience factory for a <button> containing a Bootstrap icon.
+ * @param {string} iconType - bi- class for desired icon
+ * @param {string[]} [otherClasses] - additional classes for <i>
+ * @returns {HTMLButtonElement}
+ */
 function buildButtonWithIcon(iconType, otherClasses){//PR
     const button = document.createElement('button')
     button.type = 'button'
@@ -73,6 +86,10 @@ function buildButtonWithIcon(iconType, otherClasses){//PR
     return button
 }
 
+/** Enable inline editing of the user's name/email fields.
+ * Swaps UI elements, adds pencil/cancel buttons and presents
+ * save/delete options in the offcanvas panel.
+ */
 function allowUserDataEdit(){ //PR
     // let the users data to be edited on buttonclick
     
@@ -127,6 +144,10 @@ function allowUserDataEdit(){ //PR
     document.getElementById('userOptions').appendChild(options)
 }
 
+/** Replace a text field (name or email) with a text input so the
+ * user can modify it. Focus is immediately set to the new input.
+ * @param {'usernev'|'emailcim'} which
+ */
 function changeFieldToInput(which){//PR
     // change the name or email field to input field
     const input = document.createElement('input')
@@ -140,6 +161,10 @@ function changeFieldToInput(which){//PR
     document.getElementById('mezo').focus() // force focus
 }
 
+/** Reverse the edit field back to static text when the input
+ * loses focus. Appends the pencil icon again for future edits.
+ * @param {'usernev'|'emailcim'} which
+ */
 function setFieldToText(which){//PR
     // set the now changed name or email field back to normal text
     const target = document.getElementById(which) 
@@ -163,6 +188,12 @@ function setFieldToText(which){//PR
     target.appendChild(button)
 }
 
+/** Validate and persist edited user profile information.
+ * - checks whether name/email actually changed
+ * - verifies email format and uniqueness
+ * - sends update request to server, updates global state
+ * - provides user feedback with toasts or error messages.
+ */
 async function saveUserData(){//PR, BBB
     // update the user data in the database
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ //simple email pattern by BBB
@@ -213,6 +244,11 @@ async function saveUserData(){//PR, BBB
         
 }
 
+/** Request deletion of a user account. Protects the primary admin
+ * from self-deletion and redirects the current user if they delete
+ * their own account.
+ * @param {number} id - user id to remove
+ */
 async function deleteThisUser(id){//PR
     if(id == CurrentUserData.id && CurrentUserData.Jogosultsag == "Főadmin"){  // prevent deleting main admin
         toastMsg("Tiltott művelet!", "A főadmin nem törölhető", "danger")
@@ -236,6 +272,12 @@ async function deleteThisUser(id){//PR
     }
 }
 
+/** Generate navigation option buttons for pages the current user
+ * role is allowed to access. Options close the offcanvas and
+ * call `switchTo` when clicked.
+ * @param {string} jog - user role/permission string
+ * @returns {HTMLElement[]} array of div elements
+ */
 function getPageOptionsFor(jog){ //PR
     var minors = [];
     
@@ -254,7 +296,6 @@ function getPageOptionsFor(jog){ //PR
 
             minors.push(div)
         }
-        
     }
     return minors
 }

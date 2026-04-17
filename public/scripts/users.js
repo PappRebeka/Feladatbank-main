@@ -1,14 +1,17 @@
 /* ------ CONTENT ------
 users.js -------------
-    - userCardClick         -RD
-    - loadUsers             -PR
-    - moveUserClick         -RD
-    - updateUserAuth        -PR
-    - moveUserInstitution   -RD
+    - userCardClick         -RD     Display user details
+    - loadUsers             -PR     Render user cards
+    - moveUserClick         -RD     Show institution move options
+    - updateUserAuth        -PR     Toggle user role and persist change
+    - moveUserInstitution   -RD     Submit institution move request and update UI
 */
 
 
-async function userCardClick(id){ //RD
+/** Display the user details modal and configure action buttons.
+ * @param {number|string} id - user identifier 
+ */
+async function userCardClick(id){
     userId_ToChangeInstitute = id
     await setUserModal(0, id);
     await selectionReset()
@@ -19,16 +22,8 @@ async function userCardClick(id){ //RD
     
     const footer = document.querySelector("#tanarAdatai .modal-footer")
 
-    // Benett: intezmenyValt button will be disabled if this returns true
-    // It checks if there are enough institutes for the admin to be able
-    // to change the user's institute
-    let notEnoughInstitutes = await ajax_post("/instituteAmountNotEnough", 1, {}, false);
-    /*if(notEnough["result"]) { 
-        const instituteButton = footer.querySelector("#intezmenyValt");
-
-        instituteButton.classList.add("disabled");
-        instituteButton.setAttribute("aria-disabled", true);
-    }*/
+    // Benett: intezmenyValt button will be disabled if this returns true 
+    let notEnoughInstitutes = await ajax_post("/instituteAmountNotEnough", 1, {}, false); 
 
     let htmlString = ``
     if (ableToBeMoved) {
@@ -59,7 +54,10 @@ async function userCardClick(id){ //RD
 }
 
 
-async function loadUsers(item){ //PR    
+/** Render a user card element and append it to the list.
+ * @param {Object} item - user record containing id, name, etc. 
+ */
+async function loadUsers(item){
     const div = felhasznaloCardTemplate()
     div.id = 'UserCard_'+item.id
     if (item.id == CurrentUserData.id) {
@@ -105,12 +103,19 @@ async function loadUsers(item){ //PR
     }
 }
 
-async function moveUserClick(){ //RD
+/** Show the institution selection modal by fetching possible targets. */
+async function moveUserClick(){
     var intezmenyek = await ajax_post("/getUserIntezmeny", 1, { uid: userId_ToChangeInstitute }, false)
     autofillOtherInstitutions(intezmenyek.results)
 }
 
-async function updateUserAuth(id, from, to, nev){ //PR
+/** Toggle the authorization button states for a user and persist change.
+ * @param {number|string} id
+ * @param {HTMLElement} from - element whose role is being removed
+ * @param {HTMLElement} to - element whose role is being granted
+ * @param {string} nev - name for toast notification
+ */
+async function updateUserAuth(id, from, to, nev){
     from.classList.remove("btn-primary")
     from.classList.add("btn-dark")
 
@@ -128,7 +133,10 @@ async function updateUserAuth(id, from, to, nev){ //PR
     }
 }
 
-async function moveUserInstitution(){ //RD
+/** Submit a request to move the selected user to another institution.
+ * Removes the user card from the list if appropriate. 
+ */
+async function moveUserInstitution(){
     var hova = document.getElementById("ujIntezmenySelect").value
     const result = await ajax_post("/AthelyezUser", 1, { hova: hova, userId: userId_ToChangeInstitute }, false)
     if (result.ok) {

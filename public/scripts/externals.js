@@ -1,27 +1,41 @@
 /* ------ CONTENT ------
 externals.js ---------------
-  - the same stuff x5   
-  - createSlimSelect       -PR, RD
-  - setFlatPicker          -PR
+  - the same stuff x5               Saving not-yet-applied filters
+  - createSlimSelect       -PR, RD  SlimSelect initialization
+  - setFlatPicker          -PR      Flatpickr initialization
 */ 
 
-
+/** Save the filter (subject) in TempFilters.
+ * @param {Event} e - The event triggered by the change in the select element.
+ */
 function tantargyChanged(e){
     TempFilters.tantargy = e[0].value
 }
 
+/** Save the filter (teacher) in TempFilters.
+ * @param {Event} e - The event triggered by the change in the select element.
+ */
 function tanarChanged(e){
     TempFilters.tanar = e[0].value.substring(3)
 }
 
+/** Save the filter (course) in TempFilters.
+ * @param {Event} e - The event triggered by the change in the select element.
+ */
 function kurzusChanged(e){
     TempFilters.kurzus = e[0].value
 }
 
+/** Save the selected institute in the intezmenyId variable.
+ * @param {Event} e 
+ */
 function IntezmenyChanged(e){
     intezmenyId = e[0].value
 }
 
+/** Save the selected students' IDs in the tanuloIdk array.
+ * @param {Event} e 
+ */
 function tanulokChanged(e){
     tanuloIdk = []
     for (const item of e) {
@@ -29,6 +43,11 @@ function tanulokChanged(e){
     }
 }
 
+/**
+ * Initialize a SlimSelect dropdown with specific settings and event handlers.
+ * @param {string} hovaId - The ID of the select element to initialize as a SlimSelect dropdown.
+ * @param {Function} functionNev - The function to be called after a change in the dropdown.
+ */
 function createSlimSelect(hovaId, functionNev){ //PR, RD
     //document.getElementById(hovaId)?.selectedIndex = -1
     var ss = new SlimSelect({
@@ -63,6 +82,9 @@ function createSlimSelect(hovaId, functionNev){ //PR, RD
     ss.selectedIndex = -1
 }
 
+/** Initialize a Flatpickr date-time picker with specific settings.
+ * @param {string} id 
+ */
 function setFlatPicker(id){ //PR
     flatPicker = $(`#${id}`).flatpickr({
         minDate: "today",

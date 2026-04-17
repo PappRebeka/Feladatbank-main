@@ -7,10 +7,18 @@ const conn = require("../config/db").connMegszerez();
 
 const queryAsync = util.promisify(conn.query).bind(conn); //RD
 
+/** Generate a random integer between `min` and `max` inclusive.
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ */
 function rnd(min, max) {//PR
     return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
 
+/** Return a random rgb color string.
+ * @returns {string}
+ */
 function randomHatterszin(){ //PR
     return `rgb(${rnd(0, 255)} ${rnd(0, 255)} ${rnd(0, 255)})`;
 }
@@ -21,6 +29,11 @@ function randomFajlNev(length) {
                  .slice(0, length);
 }
 
+/** Save base64-encoded image to a file and return generated filename.
+ * @param {string} kep
+ * @param {string} tipus
+ * @returns {Promise<string|null>}
+ */
 async function base64Ment(kep, tipus) { //BBB
     if(kep) { // van kép
       const buffer = Buffer.from(kep, 'base64');
@@ -36,12 +49,16 @@ async function base64Ment(kep, tipus) { //BBB
     }
 }
 
+/** Load image file and return its base64 encoding.
+ * @param {string|null} fajlNev
+ * @returns {Promise<string|null>}
+ */
 async function base64Tolt(fajlNev) { //BBB
     if (fajlNev) { // van kép
       const eleresiUt = path.join(process.cwd(), 'feladat_kepek', fajlNev);
       const buffer = await fs.promises.readFile(eleresiUt);
       return buffer.toString('base64');
-    } else { // nincs kép (fajlNev == null a db-ben)
+    } else { // nincs kép
       return null
     }
 }
@@ -53,12 +70,12 @@ function isPositiveInt(v) {
 
 function isEmail(v) {
   if (!v || typeof v !== 'string') return false;
-  // small, pragmatic regex — good enough for validation (not full RFC)
+  // small regex, good enough for validation
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 }
 
-function isNonEmptyString(v, maxLen = 24, minLen = 3) {
-  return typeof v === 'string' && v.trim().length >= minLen && v.length <= maxLen;
+function isNonEmptyString(s, minLen = 3) {
+  return typeof s === 'string' && s.trim().length >= minLen;
 }
 
 //User token generálása
@@ -67,7 +84,10 @@ const betu = "abcdefghijklmnopqrstuvwxyz"
 const betu_upper = betu.toUpperCase()
 const jelek = ".-_"
 
-function userTokenCreate (){ //RD
+/** Generate a random token and ensure it is unique in the Users table.
+ * @returns {string}
+ */
+function userTokenCreate (){
   let user_token = "";
   while (user_token.length < 17){
     let rndszam = rnd(0, 9)
@@ -89,7 +109,11 @@ function userTokenCreate (){ //RD
 var classroom;
 var drive;
 
-async function classroomGetCourses(userid){ //Nem ez miatt hal meg ha nincs kurzus
+/** Retrieve Google Classroom courses for a user by session id.
+ * @param {string} userid
+ * @returns {Promise<Array>}
+ */
+async function classroomGetCourses(userid){
   results = await getUserDataFromSessionId(userid)
   AccessToken= results["AccessToken"],
   RefreshToken= results["RefreshToken"], 
@@ -104,7 +128,7 @@ async function classroomGetCourses(userid){ //Nem ez miatt hal meg ha nincs kurz
   const client = createClientUsingCredentials(AccessToken, RefreshToken, AccessEletTartam)
 
   classroom = await google.classroom({ version:"v1", auth: client})
-  drive = await google.drive({ version: 'v3', auth: client }); // create authenticated drive client
+  drive = await google.drive({ version: 'v3', auth: client });
   const courses = await classroom.courses.list({ teacherId: "me", pageSize: 5 })
   return courses.data.courses
 }
@@ -115,8 +139,7 @@ function getCroomDrive() {
 
 const config = require("../config/config.js");
 
-// visszaad egy olyan sql lekerdezest amellyel meg lehet
-// nezni hogy a tabla letezik
+/** Return SQL query to check if a table exists */
 function tableExistsSql(tableName) {
   return `SELECT * FROM information_schema.tables
           WHERE table_schema = "${config.database.name}"

@@ -1,12 +1,19 @@
 /* ------ CONTENT ------
-task_scripts/load.js ---------------
-    - kozzeteszButtonClick        -RD, PR
-    - resetKozzetevesModal        -PR
-    - loadAvailableCourses        -RD
-    - postTaskToClassroom         -RD
-    - getCoursesFromClassroomAPI  -RD
+task_scripts/post.js ---------------
+    - kozzeteszButtonClick        -RD, PR   handle share-modal setup
+    - resetKozzetevesModal        -PR       clear modal inputs
+    - loadAvailableCourses        -RD       populate student list
+    - postJSON                    -??       helper for AJAX POSTing JSON
+    - postTaskToClassroom         -RD       send task to Classroom & save
+    - getCoursesFromClassroomAPI  -RD       fetch course list from API
 */ 
 
+/** Initialize and display the "share task" modal.
+ * Loads available Classroom courses then builds a <select>
+ * with options tied to the provided task id. Selecting a course
+ * triggers loading of its student list.
+ * @param {number|string} id - task identifier to share
+ */
 async function kozzeteszButtonClick(id){   //RD, PR
     await getCoursesFromClassroomAPI();
     resetKozzetevesModal();
@@ -29,12 +36,19 @@ async function kozzeteszButtonClick(id){   //RD, PR
     await loadAvailableCourses()
 }
 
+/** Reset fields in the share modal before showing it again.
+ * Clears the date picker and empties the student selection.
+ */
 function resetKozzetevesModal(){ //PR
         // clears the date and students inputs
         flatPicker?.setDate(null)
         $("#tanulkoSelect").empty()
 }
 
+/** After a course is selected, fetch its student roster from
+ * the server and populate the multi-select field.
+ * Also saves data into global tanuloObject arrays.
+ */
 async function loadAvailableCourses(){ //RD
     var chosenOne = document.getElementById("kurzusSelect")?.value
     var kurzusId = chosenOne.split("-")[0]
@@ -55,6 +69,10 @@ async function loadAvailableCourses(){ //RD
     }
 }
 
+/** Simple wrapper for jQuery AJAX POSTing JSON data.
+ * @param {string} url - endpoint
+ * @param {Object} data - payload to send
+ */
 function postJSON(url, data) {
   return $.ajax({
     url: url,
@@ -65,9 +83,20 @@ function postJSON(url, data) {
   });
 }
 
+/**  Perform the actual sharing operation:
+ * 1. validate inputs
+ * 2. call server endpoints to post to Google Classroom
+ * 3. record the shared task in local database
+ * Shows progress bar and handles success/failure toasts.
+ */
 async function postTaskToClassroom() {
+  if(document.getElementById('modeSelect').value == '') {
+    toastMsg( "Kitöltetlen mező.", 'Válasszon fájl megosztási módot', "warning" );
+    return;
+  }
   const pb = new ContinuousProgressBar();
   pb.start();
+
 
   try {
     const feladatModal = $("#shareFeladat");
@@ -121,6 +150,7 @@ async function postTaskToClassroom() {
   }
 }
 
+/** Fetch the list of courses from the server and populate global arrays with their names and IDs. */
 async function getCoursesFromClassroomAPI(){ //RD
         var kurzus = await ajax_post("/sendClassroomCourses", 1, {}, false)
         if (kurzus) {

@@ -1,10 +1,15 @@
 /* ------ CONTENT ------
 task_scripts/share.js ---------------
-    - autocompleteShare_TeacherSelect   -RD
-    - shareTaskWithTeacher              -RD
-    - removeSharedTask                  -PR
+    - autocompleteShare_TeacherSelect   -RD  populate teacher/email autocomplete
+    - shareTaskWithTeacher              -RD  send share request to server
+    - removeSharedTask                  -PR  cancel a previously shared task
+    - megosztSelectTeszt                -placeholder stub
 */ 
 
+/** Build options for the recipient input by fetching a list of
+ * teacher names/emails from the server. The associated datalist
+ * element is emptied then populated with both full names and emails.
+ */
 async function autocompleteShare_TeacherSelect(){ //RD
     const user_email = await ajax_post("/autocompleteArrayTolt", 1, {}, false)
     var tolteniValo = []; 
@@ -27,8 +32,15 @@ async function autocompleteShare_TeacherSelect(){ //RD
         input.appendChild(opt2)
     }
 }
+/** Placeholder function for share select widget.
+ * It won't work without it.
+ */
 function megosztSelectTeszt(){}
 
+/** Submit a request to share the current task with another teacher.
+ * Reads the recipient from an input field and uses the global
+ * feladatAdatai object for the task id. Displays a toast on success or failure.
+ */
 async function shareTaskWithTeacher(){ //RD
     const cimzett = document.getElementById("vevoInputText").value
     const feladatId = feladatAdatai.id
@@ -41,7 +53,10 @@ async function shareTaskWithTeacher(){ //RD
       toastMsg("Hiba történt", "Nem sikerült megosztani a feladatot", "danger")
     }
 }
-
+/** Cancel a previously shared task, removing it from the recipient's view.
+ * @param {number|string} id   - task id
+ * @param {numbet|string} vevo - recipient identifier
+ */
 async function removeSharedTask(id, vevo){ //PR
   const result = await ajax_post('megosztasVisszavon', 1, {id, vevo}, false)
   

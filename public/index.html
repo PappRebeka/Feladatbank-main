@@ -174,7 +174,7 @@
       const form = document.getElementById('form')
       form.innerHTML = elfelejtettJelszoFormTemplate()
 
-      form.querySelector('button').onclick = async () => {form.querySelector('button').disabled = true; await emailCheck()}
+      form.querySelector('button').onclick = async () => {await emailCheck()}
       form.querySelector('a').onclick = async () => await renderLogin()
     }
 
@@ -323,6 +323,7 @@
 
       let isregistered = await ajax_post("/isRegistered", 0, { email: mail }, false)
       if ( isregistered == "true") {
+        form.querySelector('button').disabled = true; 
         await ajax_post("/sendMailTo", 1, { email: mail, type: 'request' }, false);
 
         var p = document.createElement('p')

@@ -38,6 +38,11 @@ $(document).ready(async function() {
   buildAccordion(adat)
 })
 
+/** Build the table of contents from the documentation metadata.
+ * Each TOC entry will scroll to and highlight the corresponding
+ * accordion section when clicked.
+ * @param {Object} adat - parsed JSON content containing "tartalomJegyzek" array
+ */
 function buildToc(adat){
   const toc = Array.isArray(adat.tartalomJegyzek) ? adat.tartalomJegyzek : [];
   if (toc.length === 0) return "";
@@ -67,6 +72,10 @@ function buildToc(adat){
   });
 }
 
+/** Populate the FAQ accordion with entries from the documentation data.
+ * Delegates each item to buildAccordionItem which returns a DOM node.
+ * @param {Object} adat - parsed JSON content containing "kerdesekValaszok" array
+ */
 function buildAccordion(adat){
   const kerdValaszok = Array.isArray(adat.kerdesekValaszok) ? adat.kerdesekValaszok : [];
   if (kerdValaszok.length == 0) return "";
@@ -80,6 +89,10 @@ function buildAccordion(adat){
   })
 }
 
+/** Construct the DOM element representing an accordion entry with a question, answer steps, and images.
+ * @param {Object} item - steps and images for a question
+ * @returns {HTMLElement}
+ */
 function buildAccordionItem(item){
   const id = item.id;
   const title = item.cim;
@@ -114,6 +127,10 @@ function buildAccordionItem(item){
 
 }
 
+/** Append image carousel or placeholder to an accordion entry.
+ * @param {Array<string>} kepek - array of image URLs
+ * @param {HTMLElement} target - element to append the resulting body to
+ */
 function buildAccordionImages(kepek, target){
   const div = document.createElement('div')
   div.classList.add("accordion-body")
@@ -160,11 +177,17 @@ function buildAccordionImages(kepek, target){
 }
 
 
+/** Resolve the documentation JSON file path based on user role.
+ * Defaults to login help if role is unrecognized.
+ * @param {string} url - role identifier from query string
+ * @returns {string} path to JSON file
+ */
 function getDocFile(url){
   const file = Docs[url] || Docs['login']
   return file
 }
 
+/** Attach click handlers for navigation, theme toggle, search, and TOC visibility. */
 function setEvents(){ 
   document.getElementById('visszaBtn').onclick = () => 
     { window.location.href = sessionStorage.getItem("userToken") ? '/homepage.html' : '/index.html' ; };
@@ -173,6 +196,7 @@ function setEvents(){
   document.getElementById('tocToggle').onclick = () => toggleToc()
 }
 
+/** Show or hide the table of contents and update toggle icon. */
 function toggleToc(){
   const toc = document.getElementById('toc');
   const arrow  = document.getElementById('toggleArrow');
@@ -186,6 +210,9 @@ function toggleToc(){
   tocButton.classList.toggle('border-bottom-inherit')
 }
 
+/** Filter the accordion entries based on the search input
+ * and highlight matching text within titles.
+ */
 function sugoKeres(){
   const searchValue = document.getElementById('searchBar').value.toLowerCase()
   const accordionItems = document.querySelectorAll('#regKerdesek .accordion-item')

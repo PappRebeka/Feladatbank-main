@@ -30,7 +30,8 @@
     {
       "id": "bejelentkezes",
       "cim": "Hogyan tudok bejelentkezni?",
-      "kepek": [],
+      "kepek": ["/help/kepek/login-img/login-user-password.png",
+                "/help/kepek/login-img/login-button.png"],
       "lepes": [
         "Nyissa meg az alkalmazás kezdőoldalát.",
         "Adja meg az e-mail címedét vagy felhasználónevét.",
@@ -42,7 +43,11 @@
     {
       "id": "google-belepes",
       "cim": "Hogyan lépek be Google-fiókkal?",
-      "kepek": [],
+      "kepek": ["/help/kepek/login-img/login-google.png",
+                "/help/kepek/login-img/google-account-select.png",
+                "/help/kepek/login-img/google-continue.png",
+                "/help/kepek/login-img/google-continue-2.png",
+                "/help/kepek/login-img/google-continue-3.png"],
       "lepes": [
         "Kattintson a 'Google-fiók használata' gombra.",
         "Válassza ki a Google-fiókot, amellyel be szeretne lépni.",
@@ -54,10 +59,17 @@
     {
       "id": "regisztracio",
       "cim": "Hogyan történik a regisztráció?",
-      "kepek": [],
+      "kepek": ["/help/kepek/login-img/login-google.png",
+                "/help/kepek/login-img/google-account-select.png",
+                "/help/kepek/login-img/google-continue.png",
+                "/help/kepek/login-img/google-continue-2.png",
+                "/help/kepek/login-img/google-continue-3.png",
+                "/help/kepek/login-img/register-name-password.png",
+                "/help/kepek/login-img/register-institution.png"],
       "lepes": [
         "A kezdőlapon kattintson a 'Google-fiók használata' gombra.",
         "Válassza ki azt a Google-fiókot, amellyel regisztrálni szeretne.",
+        "Fogadja el a szükséges jogosultságokat.",
         "Adja meg a kívánt felhasználónevet és jelszót.",
         "Válasszon intézményt.",
         "Sikeres regisztráció után automatikusan bejelentkezik."
@@ -66,7 +78,7 @@
     {
       "id": "emlekezz-ram",
       "cim": "Mit csinál az 'Emlékezz rám' opció?",
-      "kepek": [],
+      "kepek": ["/help/kepek/login-img/remember-me.png"],
       "lepes": [
         "Bekapcsolva a rendszer eltárolhatja a belépési tokenét, hogy legközelebb ne kelljen újra bejelentkeznie.",
         "Ha megosztott gépet használ, javasolt kikapcsolva tartani.",
@@ -85,7 +97,10 @@
     {
       "id": "jelszoVisszaallitas",
       "cim": "Mit tehetek, ha elfelejtettem a jelszavamat?",
-      "kepek": [],
+      "kepek": ["/help/kepek/login-img/forgot-psw-link.png",
+                "/help/kepek/login-img/forgot-psw-email-here.png",
+                "/help/kepek/login-img/forgot-psw-email-button.png",
+                "/help/kepek/login-img/forgot-psw-new-psw.png"],
       "lepes": [
         "A bejelentkezési oldalon kattintson az 'Elfelejtett jelszó' lehetőségre.",
         "Adja meg azt az e-mail címet, amellyel regisztrált.",
@@ -106,7 +121,8 @@
     {
       "id": "kijelentkezes",
       "cim": "Hogyan tudok kijelentkezni?",
-      "kepek": [],
+      "kepek": ["/help/kepek/tanari-img/user_settings_homepage_circle_highlighted.png",
+                "/help/kepek/login-img/user-logout.png"],
       "lepes": [
         "A felső navigációs sávban kattintson a felhasználói ikonra.",
         "Válassza a 'Kijelentkezés' opciót.",
@@ -125,7 +141,10 @@
     {
       "id": "fiokTorles",
       "cim": "Hogyan törölhetem a fiókomat?",
-      "kepek": [],
+      "kepek": ["/help/kepek/tanari-img/user_settings_homepage_circle_highlighted.png",
+                "/help/kepek/tanari-img/user_settings_sidebar_settings_highlighted.png",
+                "/help/kepek/login-img/user-delete.png",
+                "/help/kepek/login-img/user-delete-confirm.png"],
       "lepes": [
         "A felső navigációs sávban kattintson a felhasználói ikonra.",
         "Keresse meg a 'Fiók törlése' lehetőséget.",

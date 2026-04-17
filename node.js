@@ -86,27 +86,12 @@ app.use(sessionMiddleware)
 const sessionStore = sessionMiddleware.store
 // #endregion
 
-
-/* ------------------------------------ - Global variables - --------------------------------------- */
-// #region Global variables
-
-
-//#endregion
-
-/* 
-websocketes frontend terminál:
-GET /wss endpoint -> Helyes admin bejelentkezés esetében visszaküld egy 32 karakteres random wss session tokent
-
-wss: Csak akkor tud az admin bármi terminál logot látni ha a wss csatlakozásban azt a tokent elküldi a kliens
-uxterm: szép terminál format
-*/
-
 /* --------------------------------------- - index.html - ------------------------------------------ */
    
     /* ------ ------------------- ------    Google Auth   ------ ------------------- ------ */
  //#region Google Auth
 // 1.lépés: átirányítani a usert a google bejelentkezési oldalára, az authurl-ben határozzuk meg a jogosultságokat az url átdob a google bejelentkezési felületére
-app.get("/redirect", (req, res) => {  //PR, RD
+app.get("/redirect", (req, res) => {
   //Átirányítás a google bejeentkezés/engedélyadás oldalra
   logger.log({
     level: 'info',
@@ -139,10 +124,10 @@ app.get("/redirect", (req, res) => {  //PR, RD
   }
 });
 
-app.get("/reg", async (req, res) => { //PR, RD
+app.get("/reg", async (req, res) => {
   try{
-    const returnedState = req.query.state || null //google küldte vissza (token)
-    const pendingState = req.session.oauthState || null//mi tároltuk el a sessionbe (token)
+    const returnedState = req.query.state || null // google küldte vissza (token)
+    const pendingState = req.session.oauthState || null // mi tároltuk el a sessionbe (token)
     
     // ha nincs returnState(google nem küld vissza semmit) vagy nincs pendingState(mi nem tárolunk semmit) vagy nem matchelnek a tokenek 
     if(!returnedState || !pendingState || returnedState !== pendingState) {
@@ -331,6 +316,7 @@ app.post("/loginUser", async (req, res) => { //RD, PR
   
   if (noMail) {
     if ( (user_token == "" && (!isNonEmptyString(passwd) || !isNonEmptyString(user)))) {
+      console.log('ANYÁD')
       return res.send(JSON.stringify({ error: 'invalid input' }));
     }
   }
@@ -338,6 +324,9 @@ app.post("/loginUser", async (req, res) => { //RD, PR
              FROM Users 
              ${noMail ? `WHERE (${isEmail(user) ? "Email = ?" : "Nev = ?" } AND Jelszo = MD5(?)) 
              OR UserToken = ?` : `Where Email = ?`}`;
+
+  console.log('sql')
+  console.log(sql)
   conn.query(sql, noMail ? [user, passwd, user_token] : [mail], async (err, results) => {
     if(err){ 
       logger.log({
@@ -346,6 +335,8 @@ app.post("/loginUser", async (req, res) => { //RD, PR
       });
       throw err
     }
+    console.log('results')
+    console.log(results)
     if(results[0]['COUNT(id)'] > 0){
 
       req.session.userId = results[0]['id'];

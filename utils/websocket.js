@@ -4,16 +4,19 @@ const sessions = new Map(); // user token -> time to live
 const HEARTBEAT_MS = 2000;
 const TOKEN_TTL_MS = 6000;
 
-function now() { return Date.now() }
+/** Current timestamp in milliseconds.
+ * @returns {number}
+ */
+function now() { return Date.now() } //RD
 
-// returns true if successful
-// returns false if the ws connection needs to be dropped
-function refreshTTL(userToken) {
+/** Refresh the time‑to‑live for a websocket session token.
+ * @param {string} userToken
+ * @returns {boolean} true if the token was valid and refreshed, false if it expired
+ */
+function refreshTTL(userToken) { //PR
     if (sessions.has(userToken)) {
         let expiresAt = sessions.get(userToken);
-
-        // the value might be undefined, but may never be an issue
-        // nevertheless it is handled here
+        
         if (!expiresAt) return false; 
 
         // checks if the user token has expired
@@ -32,9 +35,11 @@ function refreshTTL(userToken) {
     }
 }
 
-// returns true if successful
-// returns false if not
-function createSession(userToken) {
+/** Create a new websocket session for a given token, or reject if one is active.
+ * @param {string} userToken
+ * @returns {boolean} true if the session was created, false if a session already exists
+ */
+function createSession(userToken) { //RD
     // if the session already exists, that means that
     // we need to check if the session has expired or not
     if (sessions.has(userToken)) {
@@ -55,15 +60,13 @@ function createSession(userToken) {
     return true;
 }
 
-// cleans up sessions that have expired and
-// are not refreshed anymore every 10 seconds
-function cleanUpInterval() {
+/** Periodically clean out expired sessions from the store. */
+function cleanUpInterval() { //RD
     setInterval(() => {
         const currentTime = now();
         for (const [userToken, expiresAt] of sessions.entries()) {
             // if session is expired
             if (expiresAt < currentTime) {
-
                 // delete session
                 sessions.delete(expiresAt);
             }
@@ -71,7 +74,10 @@ function cleanUpInterval() {
     }, 10000);
 }
 
-function createWebsocket() {
+/** Initialize a WebSocket server on port 9091 and handle auth/heartbeat messages.
+ * @returns {WebSocket.Server}
+ */
+function createWebsocket() { //PR
     wss = new WebSocket.Server({ port: 9091 });
 
     wss.on("connection", (ws) => {
@@ -120,7 +126,11 @@ function createWebsocket() {
     return wss;
 }
 
-function getSessions() {
+/**
+ * Return the internal map of active sessions.
+ * @returns {Map<string,number>}
+ */
+function getSessions() { //PR
     return sessions;
 }
 

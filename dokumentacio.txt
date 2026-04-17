@@ -1,0 +1,16 @@
+EZ A FÁJL NINCSEEN FELTÖLTVE A GITHUBRA, A SZENZITIV ADATOK MIATT
+
+Felhasználók felvétele
+    Az oldalra csak olyan email címmel lehet regisztrálni amely a Google Cloudconsole nevű szolgáltatásában engedélyezve lett.
+    Ez a Cloudconsole az "sz7.cloudconsole@gmail.com" fiókon van, a jelszó "CloudConsole_projektSZ7"
+    Új felhasználók engedélyezéséhez a következő lépések szükségesek: 
+        0. CloudConsole oldal felkeresése
+        1. Az oldalsó menüben az APIs & Services pont kiválasztása
+        2. OAuth Consent Screen kiválasztása
+        3. Audience kiválasztása
+        4. Add users gombra kattintás
+        5. A hozzáadni kívánt email címek beírása
+        6. Save gombra kattintás
+    2 db teszt fióknál ezeket a lépéseket már elvégeztük
+        1. email: feladatbank.tesztuser1@gmail.com     jelszó: Teszt1_User
+        2. email: feladatbank.tesztuser2@gmail.com     jelszó: Teszt2_User

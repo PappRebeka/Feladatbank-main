@@ -28,7 +28,7 @@ const PageById = {
   "stat_page": "Statisztikák",
 }
 
-var ActiveLocation = 'Feladataim'; // current active page, default set onload 
+var ActiveLocation = 'Feladataim'; // current active page
 var feladatAdatai = [] // active task data
 
 // user's course data

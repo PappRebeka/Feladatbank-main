@@ -1,13 +1,17 @@
 /* ------ CONTENT ------
 task_scripts/load.js ---------------
-    - feladatCardClick             -PR
-    - buildTaskCard                -PR
-    - setTaskModalContent          -PR, RD
-    - getCorrespondingFileIcon     -BBB
+    - feladatCardClick             -PR       handle click on task card to load modal 
+    - buildTaskCardPrimaryData     -PR       construct the main content of a task card
+    - buildTaskCard                -PR       wrapper for buildTaskCardPrimaryData (kept for compatibility)
+    - setTaskModalContent          -PR, RD   fill the task modal with data retrieved from the server
+    - getCorrespondingFileIcon     -BBB      return an HTML string with an icon class based on file extension
 */ 
 
 
 
+/** Handle click on a task card by loading its data into the modal.
+ * @param {string|number} dataId 
+ */
 async function feladatCardClick(dataId){ //PR
     const id = Number(dataId);
     const adat = taskById.get(id);
@@ -17,7 +21,14 @@ async function feladatCardClick(dataId){ //PR
     await setTaskModalContent(adat, felhasznalo);
 }
 
-function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev){
+/** Construct the DOM element representing a task card with primary information.
+ * @param {Object} adat - task data object
+ * @param {string} [felhasznalo]
+ * @param {string} [felhasznaloColor]
+ * @param {string} [kurzusnev]
+ * @returns {HTMLElement}
+ */
+function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev){ //PR
 
     const container = taskCardTemplate();
     container.id = `task-${adat.id}`;
@@ -29,7 +40,6 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
     
     const card = $bind(container, 'card');
 
-    //card.dataset.adat = encodeURIComponent(JSON.stringify(adat));
     card.dataset.id = String(adat.id);
     card.dataset.felhasznalo = felhasznalo ?? '';
     card.style.border = `4px solid ${borderColor(adat.Nehezseg)}`;
@@ -71,7 +81,6 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
     //Button 
     const which = ActiveLocation == "Archívum" ? '' : 
                   ActiveLocation == "Általam megosztott" ? 'visszaBtn' : 'postBtn'
-    //showElement(container, 'bookmarkTaskButton', Boolean(which));
 
 
     var p = $bind(container, 'postBtn')
@@ -92,16 +101,21 @@ function buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev
     const konyvJelzo = async (e) => { e.stopPropagation(); await bookmarkTaskClick(ezEgyId, b); }
     b.onclick = konyvJelzo;
 
-    taskById.set(adat.id, adat); // i don't know
+    taskById.set(adat.id, adat); // i don't know // tf you mean "I don't know"?
 
     return container
 }
 
-function buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev){//PR
+/** Wrapper for buildTaskCardPrimaryData (kept for compatibility) */
+function buildTaskCard(adat, felhasznalo, felhasznaloColor, kurzusnev){ //PR
     const container = buildTaskCardPrimaryData(adat, felhasznalo, felhasznaloColor, kurzusnev)
     return container;
 }
 
+/** Fill the task modal with data retrieved from the server.
+ * @param {Object} adat - main task object
+ * @param {string} [felhasznalo]
+ */
 async function setTaskModalContent(adat, felhasznalo){ //PR, RD
     feladatAdatai = adat
     var counter = 1;
@@ -127,7 +141,7 @@ async function setTaskModalContent(adat, felhasznalo){ //PR, RD
             var pont = a.Pont
 
             const alfeladatDiv = taskModal_AlfeladatTemplate();
-            alfeladatDiv/*.firstChild*/.id = `ThisIsAlfeladat${a.id}`;
+            alfeladatDiv.id = `ThisIsAlfeladat${a.id}`;
 
             $bind(alfeladatDiv, "alfeladatPont").textContent = pont;
             $bind(alfeladatDiv, "alfeladatLeiras").textContent = leiras;
@@ -154,7 +168,11 @@ async function setTaskModalContent(adat, felhasznalo){ //PR, RD
     }
 }
 
-function getCorrespondingFileIcon(fajl) { // BBB
+/** Choose an icon HTML snippet based on file extension.
+ * @param {Object} fajl
+ * @returns {string}
+ */
+function getCorrespondingFileIcon(fajl) { //BBB
     ext = fajl["nev"].split('.').pop().toLowerCase();
 
     const iconMap = {

@@ -1,15 +1,16 @@
 /* ------ CONTENT ------
 institution.js ---------
-    - addInstitution             -RD
-    - editInstitution            -RD  
-    - deleteInstitution          -RD
-    - toggleInstitutionRadio     -PR
-    - toggleInstitutionOption       -RD, PR
-    - autofillInstitutionSelect       -RD
-    - autofillOtherInstitutions  -RD
+    - addInstitution               -RD      submit a request to add a new institution and refresh UI.
+    - editInstitution              -RD      submit change request for selected institution.
+    - deleteInstitution            -RD      request deletion of the chosen institution.
+    - toggleInstitutionRadio       -PR      visual helper: mark a radio option as selected
+    - toggleInstitutionOption      -RD, PR  show/hide institution management panel section by index
+    - autofillInstitutionSelect    -RD      fill dropdowns with the current list of institutions
+    - autofillOtherInstitutions    -RD      fill the "other institutions" select element with provided list
 */
 
-async function addInstitution(){ //RD
+/** Submit a request to add a new institution and refresh UI.  */
+async function addInstitution(){
     var intezmValue = document.getElementById("intezmenyMezo").value
     await ajax_post("/MentIntezmeny", 1, { intezmeny: intezmValue }, false)
     await toggleInstitutionOption(0)
@@ -20,7 +21,8 @@ async function addInstitution(){ //RD
     }
 }
 
-async function editInstitution(){ //RD
+/** Submit change request for selected institution. */
+async function editInstitution(){
     var intezmValue = document.getElementById("ujIntezmeny").value
     await ajax_post("/modositIntezmeny", 1, { id: intezmenyId, intezmeny: intezmValue }, false)
     await toggleInstitutionOption(1)
@@ -31,7 +33,8 @@ async function editInstitution(){ //RD
     }
 }
 
-async function deleteInstitution(){ //RD
+/** Request deletion of the chosen institution. */
+async function deleteInstitution(){
     await ajax_post("/torolIntezmeny", 1, { id: intezmenyId }, false)
     await toggleInstitutionOption(2)
     toastMsg("Sikeres művelet", `Sikeresen eltávolította az intézmény`, "success")
@@ -41,7 +44,10 @@ async function deleteInstitution(){ //RD
     }
 }
 
-function toggleInstitutionRadio(chosenOne){ //PR
+/** Visual helper: mark a radio option as selected.
+ * @param {HTMLElement} chosenOne
+ */
+function toggleInstitutionRadio(chosenOne){
     let id = chosenOne.id+"_Option"
 
     for (const element of document.querySelector("#IntezmenyOptions").querySelectorAll('label.btn')) {
@@ -57,7 +63,10 @@ function toggleInstitutionRadio(chosenOne){ //PR
     chosenOne.checked = true
 }
 
-async function toggleInstitutionOption(index){ //RD, PR
+/** Show/hide institution management panel section by index.
+ * @param {number} index
+ */
+async function toggleInstitutionOption(index){
     //let html = intezmenyOptionTemplate(index)
     var type = ["", "javit", "torol"][index] || ""
 
@@ -70,7 +79,10 @@ async function toggleInstitutionOption(index){ //RD, PR
     
 }
 
-async function autofillInstitutionSelect(mit, lista){//RD
+/** Fill dropdowns with the current list of institutions.
+ * @param {string} mit - type of select ("javit", "torol", or "") 
+ */
+async function autofillInstitutionSelect(mit){
     var inst = await ajax_post("/SendIntezmeny", 1, {}, false)
     var html = []
     for (const item of inst.results) {
@@ -92,7 +104,10 @@ async function autofillInstitutionSelect(mit, lista){//RD
     }
 }
 
-function autofillOtherInstitutions(lista){//RD
+/** Fill the "other institutions" select element with provided list.
+ * @param {Array} lista
+ */
+function autofillOtherInstitutions(lista){
     document.getElementById("ujIntezmenySelect").innerHTML = "";
     var html = []
     for (const asdf of lista) {
