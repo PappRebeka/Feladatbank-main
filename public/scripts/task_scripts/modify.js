@@ -26,7 +26,7 @@ task_scripts/load.js ---------------
 // BENETT: Merge uploadFile and uploadSubtaskFile
 
 function createId() {
-    return `${new Date().toString(36)}-progress`;
+    return `${Date.now().toString()}-progress`;
 }
 
 function progressTemplateBuild(id, infoText) {

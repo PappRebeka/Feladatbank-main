@@ -120,7 +120,7 @@
                                CurrentUserData.Jogosultsag == "Főadmin" ? "user_page"    : "fel_page")
             }
 
-            registerWebsocket("ws://localhost:9091");
+            registerWebsocket(`ws://${window.location.hostname}:9091`);
 
             await responsivity();
             window.addEventListener("resize", await responsivity);
