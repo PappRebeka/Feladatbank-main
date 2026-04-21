@@ -477,8 +477,8 @@ function loginFormTemplate(){
                         <input type="text" placeholder="Felhasználónév / email" maxlength="320" class="form-control border-0" id="user" required> 
                     </div> 
                     <div class="mb-3 col-12 position-relative"> 
-                        <button type="button" id="passwordButton" class="btn text-secondary position-absolute top-50 translate-middle-y end-0 me-2 p-0"><i class="bi bi-eye"></i></button>
                         <input type="password" placeholder="Jelszó" aria-described-by="passwordButton" class="form-control border-0" id="jelszo" autocomplete="off" required>
+                        <button type="button" id="passwordButton" class="btn text-secondary position-absolute top-50 translate-middle-y end-0 me-2 p-0"><i class="bi bi-eye"></i></button>
                     </div>
                     <div class="form-check mb-2">
                         <input type="checkbox" class="form-check-input mb-3" id="rememberMe">

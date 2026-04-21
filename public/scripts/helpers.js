@@ -91,60 +91,69 @@ function ajax_post(urlsor, tipus, data, mutassTolt = true) {
  * @param {string} url - websocket endpoint
  */
 function registerWebsocket(url) {
-        let webSocket = new WebSocket(url);
-        let userToken = sessionStorage.getItem("userToken")
-        let heartbeatInterval;
-        let reconnectAttempts = 0;
-
-        webSocket.onopen = (event) => {
-            webSocket.send(JSON.stringify({
-                "event": "authentication",
-                "userToken": userToken
-            }))
-        };
-
-        webSocket.onmessage = (event) => {
-            let jsonData = event.data;
-            //console.log(`jsonData: ${jsonData}`)
-            if (jsonData == 'authenticationOk'){
-                canLogIn = true;
-
-                let heartbeatFunction = () => {
-                    if(webSocket.readyState === webSocket.OPEN) {
-                        webSocket.send(JSON.stringify({
-                            "event": "heartbeat",
-                            "userToken": userToken
-                        }));
-                    }
-                }; heartbeatFunction();
-
-                heartbeatInterval = setInterval(heartbeatFunction, 2000)
-            } else if (jsonData == 'authenticationBad') {
-                window.location.href = 'hiba.html?code=4'
-            } 
-             if (jsonData == 'userDelete') {
-                window.location.href = 'hiba.html?code=5'
-                killCookie('stayLoggedIn') 
-            }
-        };
-
-        webSocket.onclose = (event) => {
-            console.log(`websocket: code=${event.code}; reason=${event.reason};`);
-            if(heartbeatInterval) clearInterval(heartbeatInterval);     
-
-            if(reconnectAttempts < 10) {
-                console.log(`websocket: reconnecting in 4s (attempt ${reconnectAttempts})`);
-                setTimeout(() => registerWebsocket(url), 4000)
-            } else {
-                window.location.href = `hiba.html?code=0`;
-            }
-        };
-
-        webSocket.onerror = (error) => {
-            console.log(`websocket: error ${error}`);
-            webSocket.close()
-        };
+    let webSocket = new WebSocket(url);
+    let userToken = sessionStorage.getItem("userToken")
+    if (!userToken) {
+        console.error("Missing userToken");
     }
+    let heartbeatInterval;
+    let reconnectAttempts = 0;
+
+    webSocket.onopen = (event) => {
+        webSocket.send(JSON.stringify({
+            "event": "authentication",
+            "userToken": userToken
+        }))
+    };
+
+    webSocket.onmessage = (event) => {
+        let jsonData = event.data;
+        //console.log(`jsonData: ${jsonData}`)
+        if (jsonData == 'authenticationOk'){
+            console.log(`websocket: authentication OK`);
+
+            canLogIn = true;
+
+            let heartbeatFunction = () => {
+                if(webSocket.readyState === webSocket.OPEN) {
+                    webSocket.send(JSON.stringify({
+                        "event": "heartbeat",
+                        "userToken": userToken
+                    }));
+                }
+            }; heartbeatFunction();
+
+            heartbeatInterval = setInterval(heartbeatFunction, 2000)
+        } else if (jsonData == 'authenticationBad') {
+            window.location.href = 'hiba.html?code=4'
+        } 
+         if (jsonData == 'userDelete') {
+            window.location.href = 'hiba.html?code=5'
+            killCookie('stayLoggedIn') 
+        }
+    };
+
+    webSocket.onclose = (event) => {
+        console.log(`websocket: code=${event.code}; reason=${event.reason};`);
+        if(heartbeatInterval) clearInterval(heartbeatInterval);     
+
+        if(reconnectAttempts < 10) {
+            console.log(`websocket: reconnecting in 4s (attempt ${reconnectAttempts})`);
+            setTimeout(() => registerWebsocket(url), 4000)
+
+            reconnectAttempts++;
+        } else {
+            window.location.href = `hiba.html?code=0`;
+        }
+
+        
+    };
+
+    webSocket.onerror = (error) => {
+        console.log(`websocket: error ${error}`);
+        webSocket.close()
+    };
+}
 
 
     /** Reveal an overlay with optional custom message.

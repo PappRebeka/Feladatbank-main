@@ -316,7 +316,6 @@ app.post("/loginUser", async (req, res) => { //RD, PR
   
   if (noMail) {
     if ( (user_token == "" && (!isNonEmptyString(passwd) || !isNonEmptyString(user)))) {
-      console.log('ANYÁD')
       return res.send(JSON.stringify({ error: 'invalid input' }));
     }
   }
@@ -943,6 +942,10 @@ function checkIfUniqueUserName(newNev) { // BBB
   )
 }
 
+
+
+
+
 //update user data
 app.post("/updateUserdata", (req, res) => { //RD
   var usertoken = req.body.userToken
@@ -980,6 +983,12 @@ app.post("/updateUserdata", (req, res) => { //RD
     res.send(JSON.stringify({ 'ok': true }))
   })
 })
+
+
+
+
+
+
 
 app.post("/deleteUser", (req, res) => { //PR, BBB
   var tanarId = parseInt(req.body.id); 
